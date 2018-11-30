@@ -4,21 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="clickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
+
         <variable
             name="bucket"
-            type="String"/>
+            type="String" />
     </data>
 
     <womenproject.com.mybury.util.SwipeLayout
         android:id="@+id/sample1"
-
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="#fff1f1"
-
         app:clickToClose="true">
 
         <LinearLayout
@@ -59,7 +59,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:onClick="@{clickListener}">
 
 
             <TextView
@@ -73,7 +74,6 @@
 
 
     </womenproject.com.mybury.util.SwipeLayout>
-
 
 
 </layout>
