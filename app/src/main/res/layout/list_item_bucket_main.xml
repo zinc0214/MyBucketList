@@ -6,8 +6,13 @@
     <data>
 
         <variable
-            name="clickListener"
+            name="bucketClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="writeClickListener"
+            type="android.view.View.OnClickListener" />
+
 
         <variable
             name="bucket"
@@ -42,16 +47,17 @@
             android:id="@+id/bottom_wrapper_2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:tag="Bottom4">
+            android:tag="Bottom4"
+            android:onClick="@{writeClickListener}">
 
             <TextView
-                android:id="@+id/magnifier2"
+                android:id="@+id/write"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:background="#ffe4fb"
                 android:gravity="center"
-                android:text="Editt" />
+                android:text="write" />
 
         </LinearLayout>
 
@@ -60,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:onClick="@{clickListener}">
+            android:onClick="@{bucketClickListener}">
 
 
             <TextView

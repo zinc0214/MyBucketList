@@ -18,6 +18,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_main_bucket_to_bucket_write"
+            app:destination="@id/bucket_write_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
 
@@ -29,6 +37,14 @@
         <argument
             android:name="bucketId"
             app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_write_fragment"
+        android:name="womenproject.com.mybury.view.BucketWriteFragment"
+        android:label="Write"
+        tools:layout="@layout/fragment_bucket_write">
     </fragment>
 
 </navigation>

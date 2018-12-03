@@ -2,6 +2,7 @@ package womenproject.com.mybury.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -32,11 +33,11 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
         val bucketList = position
 
         holder.apply {
-            bind(createOnClickListener(bucketList.toString()))
+            bind(createOnClickBucketListener(bucketList.toString()),createOnClickWriteListener())
         }
     }
 
-    private fun createOnClickListener(bucketId: String): View.OnClickListener {
+    private fun createOnClickBucketListener(bucketId: String): View.OnClickListener {
         return View.OnClickListener {
             Toast.makeText(contextM, "count : $bucketId", Toast.LENGTH_SHORT).show()
 
@@ -45,11 +46,18 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
         }
     }
 
+    private fun createOnClickWriteListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
+            it.findNavController().navigate(directions)
+        }
+    }
     class ViewHolder(private val binding: ListItemBucketMainBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(listener: View.OnClickListener) {
+        fun bind(bucketListener: View.OnClickListener, writeListener: View.OnClickListener) {
             binding.apply {
-                clickListener = listener
+                bucketClickListener = bucketListener
+                writeClickListener = writeListener
                 executePendingBindings()
 
                 binding.sample1.addRevealListener(R.id.delete) { child: View, edge: SwipeLayout.DragEdge, fraction: Float, distance: Int -> }
@@ -66,33 +74,3 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
         return 10
     }
 }
-
-
-/*: RecyclerView.Adapter<MainBucketListAdapter.ViewHolder>() {
-
-    private lateinit var swipeLayout: SwipeLayout
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_bucket_main, parent, false)
-        return ViewHolder(layoutView)
-    }
-
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        swipeLayout.addRevealListener(R.id.delete) { child: View, edge: SwipeLayout.DragEdge, fraction: Float, distance: Int -> }
-    }
-
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-
-        init {
-            swipeLayout = mView.findViewById(R.id.sample1)
-
-            swipeLayout.showMode = SwipeLayout.ShowMode.PullOut
-
-            swipeLayout.addDrag(SwipeLayout.DragEdge.Left, swipeLayout.findViewById<LinearLayout>(R.id.bottom_wrapper))
-            swipeLayout.addDrag(SwipeLayout.DragEdge.Right, swipeLayout.findViewById<LinearLayout>(R.id.bottom_wrapper_2))
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return 10
-    }*/
