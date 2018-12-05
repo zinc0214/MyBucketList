@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import womenproject.com.mybury.R
@@ -27,22 +28,22 @@ class BucketWriteFragment : Fragment() {
            viewModel = bucketWriteViewModel
         }
 
-        binding.checkForAdultBtn.setOnClickListener {view ->
-            bucketWriteViewModel.checkGo(binding.bucketTitle.text.toString())
-        }
-
         binding.apply {
-            checkAdultListener = createOnAdultCheckBtnListerner()
+            checkAdultListener = createOnAdultCheckBtnListener()
         }
 
         return binding.root
     }
 
 
-
-    private fun createOnAdultCheckBtnListerner(): View.OnClickListener {
+    private fun createOnAdultCheckBtnListener(): View.OnClickListener {
         return View.OnClickListener {
-            bucketWriteViewModel.checkGo(binding.bucketTitle.text.toString())
+
+            if(binding.bucketTitle.text.toString() == "") {
+                Toast.makeText(context, "Please Write Text First.", Toast.LENGTH_SHORT).show()
+            } else {
+                bucketWriteViewModel.checkGo(binding.bucketTitle.text.toString())
+            }
         }
     }
 

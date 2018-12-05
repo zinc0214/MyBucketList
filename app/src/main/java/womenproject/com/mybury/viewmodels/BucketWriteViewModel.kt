@@ -18,7 +18,7 @@ import womenproject.com.mybury.network.RetrofitInterface
  * Created by HanAYeon on 2018. 12. 3..
  */
 
-class BucketWriteViewModel internal constructor(private val context: Context?) : ViewModel() {
+class BucketWriteViewModel internal constructor(private val context: Context?) : BaseViewModel() {
 
     var adultResult: AdultCheck? = null
     var isEnd = true
@@ -35,7 +35,7 @@ class BucketWriteViewModel internal constructor(private val context: Context?) :
 
         progressVisible.set(View.VISIBLE)
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager.getRetrofitService(RetrofitInterface::class.java)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager("https://openapi.naver.com/").getRetrofitService(RetrofitInterface::class.java)
 
         val adultResultData = restClient.requestAdultResult(adultCheckText)
         adultResultData.enqueue(object : Callback<AdultCheck> {

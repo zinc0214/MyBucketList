@@ -8,6 +8,5 @@ data class BucketList(
         val name : String = "Hi",
         val title : String = "Title"
 ) {
-
     override fun toString() = name
 }

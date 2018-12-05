@@ -14,11 +14,11 @@ import java.util.concurrent.TimeUnit
  * Created by HanAYeon on 2018. 12. 3..
  */
 
-object OkHttp3RetrofitManager {
+class OkHttp3RetrofitManager internal constructor(private var nowUrl : String){
 
 
     private val ALL_TIMEOUT = 10L
-    private val DATA_HOST = "https://openapi.naver.com/"
+    private val DATA_HOST = nowUrl
 
     private var okHttpClient: OkHttpClient
     private var retrofit: Retrofit
