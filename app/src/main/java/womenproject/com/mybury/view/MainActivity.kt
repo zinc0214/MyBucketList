@@ -1,6 +1,7 @@
 package womenproject.com.mybury.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -10,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.ActivityMainBinding
+import womenproject.com.mybury.viewmodels.BaseViewModel
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
@@ -31,13 +33,22 @@ class MainActivity : AppCompatActivity() {
        navController = Navigation.findNavController(this, R.id.nav_fragment)
 
        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+
+       val baseViewModel = BaseViewModel()
+
+       if(baseViewModel.checkNetwork()) {
+           val baseDialogFragment = BaseDialogFragment.Instance("Network Fail")
+           baseDialogFragment.show(supportFragmentManager, "dialog")
+       }
     }
 
     override fun onSupportNavigateUp(): Boolean {
+
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+
     fun showDialog() {
-        BaseDialog().showDialog()
+      //  BaseDialogFragment().showDialog()
     }
 }

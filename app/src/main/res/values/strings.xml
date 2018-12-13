@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyBury</string>
+
+    <string name="network_dialog_title">Network Warning</string>
+    <string name="network_dialog_context">Please Check Your Context</string>
+    <string name="network_dialog_ok">OK</string>
+    <string name="network_dialog_no">NO</string>
 </resources>

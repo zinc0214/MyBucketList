@@ -15,7 +15,7 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
  * Created by HanAYeon on 2018. 12. 3..
  */
 
-class BucketWriteFragment : Fragment() {
+class BucketWriteFragment : BaseFragment() {
 
     lateinit var bucketWriteViewModel : BucketWriteViewModel
     lateinit var binding : FragmentBucketWriteBinding

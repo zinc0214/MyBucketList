@@ -14,7 +14,8 @@ import womenproject.com.mybury.viewmodels.BucketDetailViewModel
  * Created by HanAYeon on 2018. 11. 30..
  */
 
-class BucketDetailFragment : Fragment() {
+class BucketDetailFragment : BaseFragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val bucketId = BucketDetailFragmentArgs.fromBundle(arguments).bucketId

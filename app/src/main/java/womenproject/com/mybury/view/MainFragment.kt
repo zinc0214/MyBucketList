@@ -17,7 +17,7 @@ import womenproject.com.mybury.databinding.FragmentMainBinding
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var bucketList: RecyclerView
