@@ -20,7 +20,6 @@ open class BaseDialogFragment : DialogFragment() {
 
     companion object {
 
-        const val TAG = "BaseDialogFragment"
         const val DIALOG_MSG = "dialog_msg"
 
         fun Instance(mainMsg: String): BaseDialogFragment {
@@ -47,7 +46,7 @@ open class BaseDialogFragment : DialogFragment() {
 
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialog_fragment_width)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
-        dialog.window.setLayout(dialogWidth, dialogHeight)
+        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
