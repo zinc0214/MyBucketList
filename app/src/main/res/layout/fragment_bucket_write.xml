@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -24,26 +26,71 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:text="Check To Title is Adult"
             android:id="@+id/check_for_adult_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{checkAdultListener}"/>
+            android:onClick="@{checkAdultListener}"
+            android:text="Check To Title is Adult" />
 
         <TextView
-            android:text="@{viewModel.resultText}"
             android:id="@+id/check_for_adult_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.resultText}" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.progressVisible}"/>
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.progressVisible}" />
 
         <!-- app:isGone="@{viewModel.progessVisible}"-->
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_horizontal_picker"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:clipToPadding="false" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@color/colorAccent"
+                android:alpha="0.2"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <EditText
+            android:inputType="number"
+            android:layout_gravity="center"
+            android:id="@+id/tv_selected_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="50dp"
+            android:textColor="@color/colorAccent"/>
     </LinearLayout>
+
 
 </layout>
