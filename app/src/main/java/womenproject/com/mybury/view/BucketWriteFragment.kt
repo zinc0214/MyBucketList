@@ -1,8 +1,10 @@
 package womenproject.com.mybury.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -21,10 +23,10 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 
 class BucketWriteFragment : BaseFragment() {
 
-    lateinit var bucketWriteViewModel: BucketWriteViewModel
-    lateinit var binding: FragmentBucketWriteBinding
-    lateinit var sliderLayoutManager: SliderLayoutManager
-    var number = 0
+    private lateinit var bucketWriteViewModel: BucketWriteViewModel
+    private lateinit var binding: FragmentBucketWriteBinding
+    private var number = 0
+    private var string = "_"
     private val data = (1..100).toList().map { it.toString() } as ArrayList<String>
 
 
@@ -38,14 +40,22 @@ class BucketWriteFragment : BaseFragment() {
 
         binding.apply {
             checkAdultListener = createOnAdultCheckBtnListener()
+            numberCheckListener = numberCheckListener()
             setHorizontalPicker()
             setPickerText()
+            setPickerText2()
+            sliderIsScroll()
+            initPosition()
         }
-
 
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initPosition() {
+        binding.rvHorizontalPicker.scrollToPosition(1)
+        binding.currentNum.setText("1")
+    }
 
     private fun createOnAdultCheckBtnListener(): View.OnClickListener {
         return View.OnClickListener {
@@ -58,6 +68,12 @@ class BucketWriteFragment : BaseFragment() {
         }
     }
 
+    private fun numberCheckListener(): View.OnClickListener {
+        return View.OnClickListener {
+            binding.currentNum.setBackgroundColor(context!!.resources.getColor(R.color.testColor))
+            binding.currentNum.isCursorVisible = true
+        }
+    }
 
     private fun setHorizontalPicker() {
         // Setting the padding such that the items will appear in the middle of the screen
@@ -65,22 +81,28 @@ class BucketWriteFragment : BaseFragment() {
         binding.rvHorizontalPicker.setPadding(padding, 0, padding, 0)
 
         // Setting layout manager
-        sliderLayoutManager = SliderLayoutManager(context).apply {
+        binding.rvHorizontalPicker.layoutManager = SliderLayoutManager(context).apply {
             callback = object : SliderLayoutManager.OnItemSelectedListener {
                 override fun onItemSelected(layoutPosition: Int) {
                     binding.tvSelectedItem.setText(data[layoutPosition])
+                    binding.currentNum.setText(data[layoutPosition])
                     binding.tvSelectedItem.setSelection(binding.tvSelectedItem.text.length)
+                    binding.currentNum.setSelection(binding.currentNum.text.length)
+                    binding.currentNum.isCursorVisible = false
+                    if (data[layoutPosition] != string && string != "_") {
+                        binding.rvHorizontalPicker.smoothScrollToPosition(number)
+                        string = "_"
+                    }
+
                 }
             }
         }
-
-        binding.rvHorizontalPicker.layoutManager = sliderLayoutManager
-
         // Setting Adapter
         binding.rvHorizontalPicker.adapter = SliderAdapter().apply {
             setData(data)
             callback = object : SliderAdapter.Callback {
                 override fun onItemClicked(view: View) {
+                    // Log.e("ayhan", "${binding.rvHorizontalPicker.getChildLayoutPosition(view)}")
                     binding.rvHorizontalPicker.smoothScrollToPosition(binding.rvHorizontalPicker.getChildLayoutPosition(view))
                 }
             }
@@ -91,8 +113,8 @@ class BucketWriteFragment : BaseFragment() {
         binding.tvSelectedItem.imeOptions = EditorInfo.IME_ACTION_DONE
 
         binding.tvSelectedItem.setOnEditorActionListener { v, actionId, event ->
-            if(actionId == EditorInfo.IME_ACTION_DONE) {
-                val string : String = binding.tvSelectedItem.text.toString()
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                string = binding.tvSelectedItem.text.toString()
                 number = string.toInt()
                 Log.e("ayhan", "String : " + string + "Number : " + number)
                 binding.rvHorizontalPicker.smoothScrollToPosition(number)
@@ -101,6 +123,31 @@ class BucketWriteFragment : BaseFragment() {
             } else {
                 return@setOnEditorActionListener false
             }
+        }
+    }
+
+    private fun setPickerText2() {
+        binding.currentNum.imeOptions = EditorInfo.IME_ACTION_DONE
+
+        binding.currentNum.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                string = binding.currentNum.text.toString()
+                number = string.toInt()
+                Log.e("ayhan", "String : " + string + "Number : " + number)
+                binding.rvHorizontalPicker.smoothScrollToPosition(number)
+
+                return@setOnEditorActionListener true
+            } else {
+                return@setOnEditorActionListener false
+            }
+        }
+    }
+
+    private fun sliderIsScroll() {
+        binding.rvHorizontalPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            Log.e("ayhan", "isScrollNow")
+            binding.currentNum.setText("")
+            binding.currentNum.setBackgroundColor(context!!.resources.getColor(R.color.textOriColor))
         }
     }
 }
