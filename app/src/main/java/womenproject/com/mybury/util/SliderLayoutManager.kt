@@ -68,7 +68,7 @@ class SliderLayoutManager(context: Context?) : LinearLayoutManager(context) {
             // Find the closest child to the recyclerView center --> this is the selected item.
             val recyclerViewCenterX = getRecyclerViewCenterX()
             var minDistance = recyclerView.width
-            var position = -1
+            var position = 1
             for (i in 0 until recyclerView.childCount) {
                 val child = recyclerView.getChildAt(i)
                 val childCenterX = getDecoratedLeft(child) + (getDecoratedRight(child) - getDecoratedLeft(child)) / 2

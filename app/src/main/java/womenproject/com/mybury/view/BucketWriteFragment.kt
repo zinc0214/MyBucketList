@@ -16,6 +16,15 @@ import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.util.ScreenUtils
 import womenproject.com.mybury.util.SliderLayoutManager
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+import android.app.Activity
+import androidx.core.content.ContextCompat.getSystemService
+
+
+
+
 
 /**
  * Created by HanAYeon on 2018. 12. 3..
@@ -28,7 +37,7 @@ class BucketWriteFragment : BaseFragment() {
     private var number = 0
     private var string = "_"
     private val data = (1..100).toList().map { it.toString() } as ArrayList<String>
-
+    private lateinit var imm : InputMethodManager
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -38,6 +47,8 @@ class BucketWriteFragment : BaseFragment() {
             viewModel = bucketWriteViewModel
         }
 
+        imm = context!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+
         binding.apply {
             checkAdultListener = createOnAdultCheckBtnListener()
             numberCheckListener = numberCheckListener()
@@ -46,6 +57,7 @@ class BucketWriteFragment : BaseFragment() {
             setPickerText2()
             sliderIsScroll()
             initPosition()
+
         }
 
         return binding.root
@@ -126,6 +138,7 @@ class BucketWriteFragment : BaseFragment() {
         }
     }
 
+
     private fun setPickerText2() {
         binding.currentNum.imeOptions = EditorInfo.IME_ACTION_DONE
 
@@ -135,7 +148,7 @@ class BucketWriteFragment : BaseFragment() {
                 number = string.toInt()
                 Log.e("ayhan", "String : " + string + "Number : " + number)
                 binding.rvHorizontalPicker.smoothScrollToPosition(number)
-
+                imm.hideSoftInputFromWindow(binding.currentNum.windowToken, 0)
                 return@setOnEditorActionListener true
             } else {
                 return@setOnEditorActionListener false
