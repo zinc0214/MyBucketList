@@ -1,13 +1,14 @@
 package womenproject.com.mybury.view
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import womenproject.com.mybury.R
@@ -16,14 +17,6 @@ import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.util.ScreenUtils
 import womenproject.com.mybury.util.SliderLayoutManager
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import android.app.Activity
-import androidx.core.content.ContextCompat.getSystemService
-
-
-
 
 
 /**

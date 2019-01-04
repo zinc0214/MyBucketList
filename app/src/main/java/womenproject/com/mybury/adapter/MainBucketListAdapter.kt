@@ -4,13 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.ListItemBucketMainBinding
-import womenproject.com.mybury.util.SwipeLayout
+import womenproject.com.mybury.databinding.BucketItemBaseBinding
+
 import womenproject.com.mybury.view.MainFragmentDirections
 
 /**
@@ -24,7 +22,7 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
     private var contextM: Context = context!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainBucketListAdapter.ViewHolder {
-        return ViewHolder(ListItemBucketMainBinding.inflate(
+        return ViewHolder(BucketItemBaseBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -32,7 +30,7 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
         val bucketList = position
 
         holder.apply {
-            bind(createOnClickBucketListener(bucketList.toString()),createOnClickWriteListener())
+            bind(createOnClickBucketListener(bucketList.toString()))
         }
     }
 
@@ -45,26 +43,13 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
         }
     }
 
-    private fun createOnClickWriteListener() : View.OnClickListener {
-        return View.OnClickListener {
-            val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
-            it.findNavController().navigate(directions)
-        }
-    }
-    class ViewHolder(private val binding: ListItemBucketMainBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(bucketListener: View.OnClickListener, writeListener: View.OnClickListener) {
+    class ViewHolder(private val binding: BucketItemBaseBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(bucketListener: View.OnClickListener) {
             binding.apply {
                 bucketClickListener = bucketListener
-                writeClickListener = writeListener
                 executePendingBindings()
-
-                binding.sample1.addRevealListener(R.id.delete) { child: View, edge: SwipeLayout.DragEdge, fraction: Float, distance: Int -> }
-
-                binding.sample1.showMode = SwipeLayout.ShowMode.PullOut
-                binding.sample1.addDrag(SwipeLayout.DragEdge.Left, binding.sample1.findViewById<LinearLayout>(R.id.bottom_wrapper))
-                binding.sample1.addDrag(SwipeLayout.DragEdge.Right, binding.sample1.findViewById<LinearLayout>(R.id.bottom_wrapper_2))
-
             }
         }
     }

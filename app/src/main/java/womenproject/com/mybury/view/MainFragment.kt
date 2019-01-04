@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
 import womenproject.com.mybury.databinding.FragmentMainBinding
+import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
 
 /**
@@ -19,21 +20,43 @@ import womenproject.com.mybury.databinding.FragmentMainBinding
 
 class MainFragment : BaseFragment() {
 
+    private lateinit var mainFragmentViewModel: MainFragmentViewModel
     private lateinit var binding: FragmentMainBinding
     private lateinit var bucketList: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        mainFragmentViewModel = MainFragmentViewModel()
 
-        val layoutManager = LinearLayoutManager(context)
+        binding = DataBindingUtil.inflate<FragmentMainBinding>(
+                inflater, R.layout.fragment_main, container, false)
 
-        binding.bucketList.layoutManager = layoutManager
-        binding.bucketList.hasFixedSize()
-        binding.bucketList.adapter = MainBucketListAdapter(context)
-        binding.bucketList.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+        binding.apply {
+
+            viewModel = mainFragmentViewModel
+            this@MainFragment.bucketList = binding.bucketList
+            writeClickListener = createOnClickWriteListener()
+
+            initBucketListUI()
+        }
 
         return binding.root
+    }
+
+
+    private fun initBucketListUI () {
+        val layoutManager = LinearLayoutManager(context)
+
+        bucketList.layoutManager = layoutManager
+        bucketList.hasFixedSize()
+        bucketList.adapter = MainBucketListAdapter(context)
+    }
+
+    private fun createOnClickWriteListener(): View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
+            it.findNavController().navigate(directions)
+        }
     }
 
 }

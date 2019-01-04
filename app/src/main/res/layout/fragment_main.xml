@@ -1,45 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-       <variable
-           name="viewModel"
-           type="womenproject.com.mybury.viewmodels.MainFragmentViewModel"/>
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.MainFragmentViewModel" />
+
+        <variable
+            name="writeClickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
-    <FrameLayout
-        android:background="#404040"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolBarTitle"
+            android:layout_alignParentTop="true" />
+
+        <FrameLayout
+            android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="@color/mainBackgroud">
 
-            <ScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="50dp"
                     android:orientation="vertical">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/bucket_list"
+                    <ScrollView
+                        android:id="@+id/bucket_list_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/list_item_bucket_main" />
+                        android:layout_height="match_parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/bucket_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:listitem="@layout/bucket_item_base" />
+
+                    </ScrollView>
 
                 </LinearLayout>
 
-            </ScrollView>
+                <RelativeLayout
+                    android:id="@+id/main_bottom_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/main_bottom_background">
 
-        </LinearLayout>
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="54dp"
+                        android:background="@drawable/main_bottom_list" />
 
-    </FrameLayout>
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="60dp"
+                        android:layout_marginRight="54dp"
+                        android:background="@drawable/main_mypage" />
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/plus"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/main_bucekt_add"
+                    android:onClick="@{writeClickListener}" />
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+    </RelativeLayout>
+
 </layout>
