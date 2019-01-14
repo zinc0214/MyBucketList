@@ -33,14 +33,6 @@ open class BaseDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments != null) {
-            mainMsg = arguments!!.getString(DIALOG_MSG)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
@@ -67,4 +59,10 @@ open class BaseDialogFragment : DialogFragment() {
     private fun dialogDismiss() {
         this.dismiss()
     }
+
+    protected fun setDialogMessage(dialogMessage : String) {
+        mainMsg = dialogMessage
+    }
+
+
 }
