@@ -14,7 +14,7 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="bucket"
+            name="bucketTitleText"
             type="String" />
 
         <variable
@@ -43,11 +43,12 @@
         app:clickToClose="true">
 
         <RelativeLayout
-            android:layout_marginTop="21dp"
-            android:layout_marginBottom="21dp"
+            android:id="@+id/bucket_count_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
             android:onClick="@{bucketClickListener}"
             android:orientation="horizontal">
 
@@ -59,16 +60,16 @@
 
                 <TextView
                     android:id="@+id/bucket_title"
-                    android:layout_marginRight="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_marginRight="70dp"
                     android:maxHeight="44dp"
                     android:minHeight="22dp"
                     android:tag="Hover"
-                    android:text="@{bucket}" />
+                    android:text="@{bucketTitleText}" />
 
                 <LinearLayout
+                    android:id="@+id/progress_bar_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_below="@+id/bucket_title"
@@ -82,11 +83,12 @@
                         android:layout_width="180dp"
                         android:layout_height="6dp"
                         android:layout_gravity="center_vertical"
-                        android:max="100"
+                        android:max="10"
                         android:progress="10"
                         android:progressDrawable="@drawable/horizontal_progressbar_background" />
 
                     <TextView
+                        android:id="@+id/current_num"
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -102,18 +104,19 @@
 
 
             <RelativeLayout
+                android:id="@+id/success_button_layout"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:onClick="@{bucketSuccessListener}">
+                android:layout_marginRight="16dp">
 
                 <womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
                     android:id="@+id/circular_progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/shape_default"
+                    android:onClick="@{bucketSuccessListener}"
                     app:finalCornerAngle="50dp"
                     app:initialCornerAngle="0dp"
                     app:spinning_bar_color="@color/subColor"
@@ -125,8 +128,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/bucket_item_check"
-                    />
+                    android:background="@drawable/bucket_item_check" />
 
             </RelativeLayout>
 

@@ -27,9 +27,9 @@ class MainFragmentViewModel : BaseViewModel() {
         *   */
 
         val bucketItem1 = BucketItem("퇴사하고 한달동안 보드게임하기.", 1, 1, 0)
-        val bucketItem2 = BucketItem("신전떡볶이 오뎅쿠폰 100장 모으기.", 15, 2, 0)
+        val bucketItem2 = BucketItem("신전떡볶이 오뎅쿠폰 100장 모으기.", 9, 2, 0)
         val bucketItem3 = BucketItem("올림픽 공원에서 스케이트 타기", 1, 1, 1)
-        val bucketItem4 = BucketItem("올림픽 공원에서 스케이트 타기", 95, 2, 1)
+        val bucketItem4 = BucketItem("올림픽 공원에서 스케이트 타기", 5, 2, 1)
 
 
 

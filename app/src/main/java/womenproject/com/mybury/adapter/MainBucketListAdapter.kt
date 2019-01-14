@@ -39,9 +39,15 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : Recycle
 
         Log.e("ayhan:ViewType", "$viewType")
 
-        currentViewHolder = CountBucketItemViewHolder(BucketItemCountBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
-        return currentViewHolder as CountBucketItemViewHolder
+        if (viewType == 1) {
+            currentViewHolder = NoneCountBucketItemViewHolder(BucketItemBaseBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            return currentViewHolder as NoneCountBucketItemViewHolder
+        } else {
+            currentViewHolder = CountBucketItemViewHolder(BucketItemCountBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            return currentViewHolder as CountBucketItemViewHolder
+        }
 
     }
 
