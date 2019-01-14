@@ -46,19 +46,20 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
                         postDelayed({
                             doneLoadingAnimation(defaultColor(context), defaultDoneImage(context.resources))
                             bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_success_background)
-                            if(bucektItemInfo.bucketType == 0) {
-                                progressBarVisible = View.GONE
-                                addCurrentValue()
-                            }
+                            progressBarVisible = View.GONE
                             successImgVisible = View.VISIBLE
+                            addCurrentValue()
                         }, 2500)
                         postDelayed({
                             revertAnimation()
-                            bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_background)
-                            if(bucektItemInfo.bucketType == 0) {
+                            bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_successed_background)
+                            bucketTitle.setTextColor(context.resources.getColor(R.color.white))
+
+                            if (bucektItemInfo.bucketType == 1) {
+                                progressBarVisible = View.GONE
+                            } else {
                                 progressBarVisible = View.VISIBLE
                             }
-                            successImgVisible = View.GONE
                         }, 3500)
                     }
                 }

@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_below="@+id/bucket_title"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="2dp"
                     android:gravity="center"
                     android:visibility="@{progressBarVisible}">
 
@@ -80,7 +80,7 @@
                         android:id="@+id/horizontal_progress_bar"
                         style="@android:style/Widget.ProgressBar.Horizontal"
                         android:layout_width="180dp"
-                        android:layout_height="4dp"
+                        android:layout_height="6dp"
                         android:layout_gravity="center_vertical"
                         android:max="100"
                         android:progress="10"
@@ -120,20 +120,13 @@
                     app:spinning_bar_width="1.6dp" />
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bucket_item_check" />
-
-                <ImageView
+                    android:id="@+id/success_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/bucket_item_check"
-                    android:backgroundTint="@color/subColor"
-                    android:visibility="@{successImgVisible}" />
+                    />
 
             </RelativeLayout>
 
