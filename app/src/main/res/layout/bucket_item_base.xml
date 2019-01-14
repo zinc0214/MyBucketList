@@ -15,7 +15,7 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/sample1"
+        android:id="@+id/bucket_item_layout"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginLeft="8dp"
@@ -36,15 +36,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:tag="Hover"
-                android:text="퇴사하고 1달동안 보드게임하깅" />
+                android:text ="@{bucket}" />
 
-            <ImageView
-                android:layout_marginRight="16dp"
-                android:layout_centerVertical="true"
+            <RelativeLayout
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/bucket_item_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_centerVertical="true"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="16dp">
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/bucket_item_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+
 
         </RelativeLayout>
 

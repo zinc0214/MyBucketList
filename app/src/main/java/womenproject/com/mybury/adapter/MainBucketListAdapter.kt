@@ -1,15 +1,22 @@
 package womenproject.com.mybury.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
-
+import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.view.MainFragmentDirections
+import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
+import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
+import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
+
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
@@ -17,26 +24,56 @@ import womenproject.com.mybury.view.MainFragmentDirections
 
 
 // DiffUtil은 support library 24.2.0에서 추가된 클래스이다. 기존에 불편했던 RecyclerView의 효율적인 갱신 처리를 편리하게 다룰 수 있도록 제공하는 util 클래스이다.
-class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucketListAdapter.ViewHolder>() {
+class MainBucketListAdapter(context: Context?, bucketList: BucketList) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var contextM: Context = context!!
+    private var context: Context = context!!
+    private var bucketItemList = bucketList
+    private lateinit var currentViewHolder: BaseBucketItemViewHolder
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainBucketListAdapter.ViewHolder {
-        return ViewHolder(BucketItemBaseBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false))
+
+    override fun getItemViewType(position: Int): Int {
+        return checkBucketType(position)
     }
 
-    override fun onBindViewHolder(holder: MainBucketListAdapter.ViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+        Log.e("ayhan:ViewType", "$viewType")
+
+        if (viewType == 1) {
+            currentViewHolder = NoneCountBucketItemViewHolder(BucketItemBaseBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            return currentViewHolder as NoneCountBucketItemViewHolder
+        } else {
+            currentViewHolder = CountBucketItemViewHolder(BucketItemCountBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            return currentViewHolder as CountBucketItemViewHolder
+        }
+
+
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bucketList = position
 
-        holder.apply {
-            bind(createOnClickBucketListener(bucketList.toString()))
+        val type = checkBucketType(position)
+
+        if (type == 1) {
+            val holder = currentViewHolder
+            holder.apply {
+                bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
+            }
+        } else {
+            val holder = currentViewHolder
+            holder.apply {
+                bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
+            }
         }
     }
 
+
     private fun createOnClickBucketListener(bucketId: String): View.OnClickListener {
         return View.OnClickListener {
-            Toast.makeText(contextM, "count : $bucketId", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
 
             val directions = MainFragmentDirections.ActionMainBucketToBucketDetail(bucketId)
             it.findNavController().navigate(directions)
@@ -44,18 +81,12 @@ class MainBucketListAdapter(context: Context?) : RecyclerView.Adapter<MainBucket
     }
 
 
-    class ViewHolder(private val binding: BucketItemBaseBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(bucketListener: View.OnClickListener) {
-            binding.apply {
-                bucketClickListener = bucketListener
-                executePendingBindings()
-            }
-        }
+    override fun getItemCount(): Int {
+        return bucketItemList.list.size
     }
 
-    override fun getItemCount(): Int {
-        return 10
+    private fun checkBucketType(position: Int): Int {
+        return bucketItemList.list[position].bucketType
     }
 }
 

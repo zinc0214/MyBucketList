@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#D81B60</color>
 
     <color name="testColor">#ffa2a2</color>
@@ -13,4 +13,9 @@
     <color name="mainBackgroud">#f6fcff</color>
     <color name="bucketItemBackground">#e8e8e8</color>
     <color name="transparent">#00ffffff</color>
+
+    <color name="subColor">#a6c6ff</color>
+    <color name="notiColor">#ffca5a</color>
+
+    <color name="circular_progress_background">#e8e8e8</color>
 </resources>

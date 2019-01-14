@@ -49,7 +49,7 @@ class MainFragment : BaseFragment() {
 
         bucketList.layoutManager = layoutManager
         bucketList.hasFixedSize()
-        bucketList.adapter = MainBucketListAdapter(context)
+        bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
