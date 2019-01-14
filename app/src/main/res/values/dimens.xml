@@ -3,6 +3,6 @@
 
     <dimen name="dialog_fragment_width">300dp</dimen>
 
-    <dimen name="toolBarTitle">49dp</dimen>
+    <dimen name="toolBarTitle">64dp</dimen>
 
 </resources>
