@@ -19,13 +19,15 @@ import womenproject.com.mybury.util.loadingbutton.customView.ProgressButton
 abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context)
+    lateinit var initBinding : ViewDataBinding
 
     var initProgressBarVisible = View.VISIBLE
     var previousValue = 0
     var bucketType = 0
+    var bucketDDay = 0
 
 
-    fun onBucketSuccessFinalButtonClickListener(circularProgressBar: CircularProgressButton, bucketLayout : LinearLayout) {
+    fun onBucketSuccessFinalButtonClickListener(circularProgressBar: CircularProgressButton, bucketLayout: LinearLayout) {
         binding.apply {
             circularProgressBar.run {
                 setOnClickListener {
@@ -39,14 +41,14 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         }, 1000)
                         postDelayed({
                             revertAnimation()
-                            if(bucketType == 0 || previousValue >= 9) {
+                            if (bucketType == 0 || previousValue >= 10) {
                                 setFinalSuccessUIBackground()
                             } else {
                                 setDoneSuccessUIButton()
                             }
                         }, 1500)
                         postDelayed({
-                            if(bucketType == 0 || previousValue >= 9) {
+                            if (bucketType == 0 || previousValue >= 10) {
                                 setFinalSucceedUIBackground()
                             }
                         }, 2000)

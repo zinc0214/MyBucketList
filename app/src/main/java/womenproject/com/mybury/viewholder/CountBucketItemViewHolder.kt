@@ -14,16 +14,17 @@ import womenproject.com.mybury.util.loadingbutton.customView.CircularProgressBut
 
 class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : BaseBucketItemViewHolder(binding) {
 
-
     init {
         bucketType = 1
+        initBinding = binding
 
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
+            bucketDDay = bucketItemInfo.dday
             if (bucketItemInfo.dday == 1) {
-                bucketItemLayout.background = context.getDrawable(R.drawable.bucket_dday_item_background)
+                bucketItemLayout.background = context.getDrawable(R.drawable.bucket_item_dday_background)
             }
             previousValue = bucketItemInfo.count
             bucketTitleText = bucketItemInfo.title
@@ -44,6 +45,7 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
 
     override fun setFinalSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_success_btn_background)
+        binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_successing_background)
     }
 
     override fun setFinalSuccessUIBackground() {
@@ -61,6 +63,11 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
 
     override fun setDoneSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
+        if(bucketDDay == 1) {
+            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_dday_background)
+        } else {
+            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+        }
     }
 
 

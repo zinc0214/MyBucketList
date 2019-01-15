@@ -17,7 +17,10 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
         binding.apply {
-            if(bucketItemInfo.dday == 1) { bucketItemLayout.background = context.getDrawable(R.drawable.bucket_dday_item_background)}
+            bucketDDay = bucketItemInfo.dday
+            if(bucketItemInfo.dday == 1) {
+                bucketItemLayout.background = context.getDrawable(R.drawable.bucket_item_dday_background)
+            }
             bucketClickListener = bucketListener
             bucketSuccessListener = createOnClickBucketSuccessListener(circularProgressBar)
             bucketTitleText = bucketItemInfo.title
@@ -33,6 +36,7 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
 
     override fun setFinalSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_success_btn_background)
+        binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_successing_background)
     }
 
     override fun setFinalSuccessUIBackground() {
@@ -40,7 +44,7 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.white)
         binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_success_background)
         binding.bucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color.white))
-        binding.successButtonLayout.isClickable = false
+        binding.circularProgressBar.visibility = View.GONE
     }
 
     override fun setFinalSucceedUIBackground() {
@@ -49,7 +53,13 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
 
     override fun setDoneSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
+        if(bucketDDay == 1) {
+            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_dday_background)
+        } else {
+            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+        }
     }
+
     override fun addCurrentValue() {
 
     }
