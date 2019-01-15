@@ -9,6 +9,10 @@
             name="viewModel"
             type="womenproject.com.mybury.viewmodels.FilterDialogViewModel" />
 
+        <variable
+            name="filterSetClickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
 
@@ -37,46 +41,24 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <CheckBox
+            style="@style/FilterDialogSubTextStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/filter_checkbox" />
-
-            <TextView
-                style="@style/FilterDialogCheckboxTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/doing_bucket" />
-
-        </LinearLayout>
+            android:button="@drawable/filter_checkbox"
+            android:text="@string/doing_bucket" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <CheckBox
+            style="@style/FilterDialogSubTextStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="14dp"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/filter_checkbox" />
-
-            <TextView
-                style="@style/FilterDialogCheckboxTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/done_bucket" />
-
-        </LinearLayout>
+            android:button="@drawable/filter_checkbox"
+            android:text="@string/done_bucket" />
 
 
         <LinearLayout
@@ -86,72 +68,39 @@
             android:background="@color/dialogCategoryBackgroundColor"
             android:orientation="vertical">
 
-
             <TextView
                 style="@style/FilterDialogCategoryTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/filter_standard" />
 
-
         </LinearLayout>
 
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginLeft="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="39dp"
             android:orientation="vertical">
 
-
-            <LinearLayout
+            <RadioButton
+                android:id="@+id/radio_btn_update"
+                style="@style/FilterDialogSubTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="20dp"
+                android:button="@drawable/filter_radio_btn"
+                android:text="@string/sort_by_update" />
 
-                <RadioButton
-                    android:id="@+id/rb_red"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/filter_radiobtn"
-                    android:button="@android:color/transparent"
-                    android:checked="true"
-                    android:padding="0dp" />
-
-
-                <TextView
-                    style="@style/FilterDialogCheckboxTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sort_by_update" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
+            <RadioButton
+                android:id="@+id/radio_btn_written"
+                style="@style/FilterDialogSubTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp">
-
-                <RadioButton
-                    android:id="@+id/rb_blue"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/filter_radiobtn"
-                    android:button="@android:color/transparent"
-                    android:padding="0dp" />
-
-
-                <TextView
-                    style="@style/FilterDialogCheckboxTextStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sort_by_written" />
-
-
-            </LinearLayout>
+                android:layout_height="20dp"
+                android:layout_marginTop="14dp"
+                android:button="@drawable/filter_radio_btn"
+                android:text="@string/sort_by_written" />
 
         </RadioGroup>
 
@@ -161,17 +110,18 @@
             android:background="@drawable/filter_dialog_bottom_binder" />
 
         <LinearLayout
+            android:onClick="@{filterSetClickListener}"
             android:layout_width="match_parent"
             android:layout_height="47dp"
             android:background="@drawable/filter_dialog_bottom_background">
 
             <TextView
-                android:textSize="14sp"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/filter_set"
-                android:textColor="#5a95ff" />
+                android:textColor="#5a95ff"
+                android:textSize="14sp" />
 
         </LinearLayout>
 

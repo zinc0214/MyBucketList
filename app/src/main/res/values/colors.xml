@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="dialogCategoryBackgroundColor">#b3def4</color>
+    <color name="dialogCategoryBackgroundColor">#f6fcff</color>
     <color name="dialogCategoryTextColor">#434343</color>
     <color name="dialogUncheckBoxTextColor">#888888</color>
     <color name="dialogCheckedBoxTextColor">#5a95ff</color>

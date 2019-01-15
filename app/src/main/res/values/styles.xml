@@ -31,11 +31,11 @@
         <item name="android:layout_marginLeft">20dp</item>
     </style>
 
-    <style name="FilterDialogCheckboxTextStyle" parent="Base.Widget.AppCompat.TextView">
+    <style name="FilterDialogSubTextStyle" parent="Base.Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/dialogUncheckBoxTextColor</item>
+        <item name="android:textColor">@color/select_color</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
 
