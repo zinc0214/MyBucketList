@@ -10,36 +10,19 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="bucketSuccessListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
             name="bucketTitleText"
             type="String" />
-
-        <variable
-            name="currentValue"
-            type="String" />
-
-        <variable
-            name="progressBarVisible"
-            type="Integer" />
-
-        <variable
-            name="successImgVisible"
-            type="Integer" />
 
     </data>
 
     <LinearLayout
-        android:onClick="@{bucketClickListener}"
         android:id="@+id/bucket_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/bucket_item_base_background"
+        android:background="@drawable/bucket_item_succeed_background"
         android:minHeight="64dp"
         app:clickToClose="true">
 
@@ -49,10 +32,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="21dp"
             android:layout_marginBottom="21dp"
+            android:onClick="@{bucketClickListener}"
             android:orientation="horizontal">
 
             <TextView
-                android:textColor="@color/bucket_base_text"
+                android:textColor="@color/white"
                 android:id="@+id/bucket_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,16 +55,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="16dp">
 
-                <womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
-                    android:id="@+id/circular_progress_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_default"
-                    android:onClick="@{bucketSuccessListener}"
-                    app:finalCornerAngle="50dp"
-                    app:initialCornerAngle="0dp"
-                    app:spinning_bar_color="@color/subColor"
-                    app:spinning_bar_width="1.6dp" />
 
                 <ImageView
                     android:id="@+id/success_img"
@@ -88,7 +62,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/bucket_item_check" />
+                    android:background="@drawable/check_complete" />
 
             </RelativeLayout>
 

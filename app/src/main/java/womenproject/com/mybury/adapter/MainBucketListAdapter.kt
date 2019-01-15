@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
+import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 import womenproject.com.mybury.view.MainFragmentDirections
 import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
 import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
 import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
+import womenproject.com.mybury.viewholder.SucceedBucketItemViewHolder
 
 
 /**
@@ -43,10 +45,14 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : Recycle
             currentViewHolder = NoneCountBucketItemViewHolder(BucketItemBaseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
             return currentViewHolder as NoneCountBucketItemViewHolder
-        } else {
+        } else if(viewType == 2){
             currentViewHolder = CountBucketItemViewHolder(BucketItemCountBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
             return currentViewHolder as CountBucketItemViewHolder
+        } else {
+            currentViewHolder = SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            return currentViewHolder as SucceedBucketItemViewHolder
         }
 
     }
@@ -54,18 +60,11 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : Recycle
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bucketList = position
 
-        val type = checkBucketType(position)
+       // val viewType = checkBucketType(position)
 
-        if (type == 1) {
-            val holder = currentViewHolder
-            holder.apply {
-                bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
-            }
-        } else {
-            val holder = currentViewHolder
-            holder.apply {
-                bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
-            }
+        val holder = currentViewHolder
+        holder.apply {
+            bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
         }
     }
 

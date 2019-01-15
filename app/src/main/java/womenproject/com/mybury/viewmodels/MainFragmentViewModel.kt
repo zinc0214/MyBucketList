@@ -21,6 +21,8 @@ class MainFragmentViewModel : BaseViewModel() {
         * BucketType
         *   1 : 횟수1번
         *   2 : 횟수n번
+        *   3 : 완료
+        *   4 : 빈 버킷
         * DDay
         *   0 : dday 표기 안함
         *   1 : dday 표기함
@@ -31,7 +33,7 @@ class MainFragmentViewModel : BaseViewModel() {
         val bucketItem3 = BucketItem("올림픽 공원에서 스케이트 타기", 1, 1, 1)
         val bucketItem4 = BucketItem("올림픽 공원에서 스케이트 타기", 5, 2, 0)
         val bucketItem5 = BucketItem("짜장면 10번 먹기", 8, 2, 1)
-        val bucketItem6 = BucketItem("올림픽 공원에서 스케이트 타기2", 1, 1, 0)
+        val bucketItem6 = BucketItem("올림픽 공원에서 스케이트 타기2", 1, 3, 0)
         val bucketItem7 = BucketItem("영화 10번 보기", 6, 2, 0)
         val bucketItem8 = BucketItem("포트폴리오 만들기", 1, 1, 0)
         val bucketItem9 = BucketItem("김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 그렇대요!!", 1, 1, 1)

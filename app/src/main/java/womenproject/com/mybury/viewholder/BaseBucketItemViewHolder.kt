@@ -35,10 +35,11 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                     startAnimation()
                     progressAnimator(this).start()
                     Handler().run {
+                        bucketLayout.isClickable = false
                         postDelayed({
                             setFinalSuccessUIButton()
                             addCurrentValue()
-                        }, 1000)
+                        }, 500)
                         postDelayed({
                             revertAnimation()
                             if (bucketType == 0 || previousValue >= 10) {
@@ -46,12 +47,15 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                             } else {
                                 setDoneSuccessUIButton()
                             }
-                        }, 1500)
+                        }, 1000)
                         postDelayed({
                             if (bucketType == 0 || previousValue >= 10) {
                                 setFinalSucceedUIBackground()
                             }
-                        }, 2000)
+                        }, 1300)
+                        postDelayed({
+                            bucketLayout.isClickable = true
+                        }, 1400)
                     }
                 }
             }
@@ -60,7 +64,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     private fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
-        duration = 1000
+        duration = 500
         startDelay = 0
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)
