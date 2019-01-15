@@ -34,14 +34,7 @@
     <LinearLayout
         android:onClick="@{bucketClickListener}"
         android:id="@+id/bucket_item_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/bucket_item_base_background"
-        android:minHeight="64dp"
-        app:clickToClose="true">
+        style="@style/bucketItemLayoutStyle">
 
         <RelativeLayout
             android:id="@+id/bucket_count_layout"
@@ -59,14 +52,8 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:textColor="@color/bucket_base_text"
+                    style="@style/bucketItemTitleTextStyle"
                     android:id="@+id/bucket_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="70dp"
-                    android:maxHeight="44dp"
-                    android:minHeight="22dp"
-                    android:tag="Hover"
                     android:text="@{bucketTitleText}" />
 
                 <LinearLayout
@@ -109,7 +96,7 @@
                 android:layout_height="32dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="16dp">
+                android:layout_marginEnd="16dp">
 
                 <womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
                     android:id="@+id/circular_progress_bar"
