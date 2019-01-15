@@ -36,6 +36,7 @@ class MainFragment : BaseFragment() {
             viewModel = mainFragmentViewModel
             this@MainFragment.bucketList = binding.bucketList
             writeClickListener = createOnClickWriteListener()
+            filterClickListener = createOnClickFilterListener()
 
             initBucketListUI()
         }
@@ -56,6 +57,14 @@ class MainFragment : BaseFragment() {
         return View.OnClickListener {
             val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
             it.findNavController().navigate(directions)
+        }
+    }
+
+    private fun createOnClickFilterListener() : View.OnClickListener {
+        return View.OnClickListener {
+
+            val filterDialogFragment = FilterDialogFragment.Instance("FilterDailog")
+            filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
 

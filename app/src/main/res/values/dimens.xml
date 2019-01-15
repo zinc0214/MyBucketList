@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="dialog_fragment_width">300dp</dimen>
-
+    <dimen name="toolBarLayout">140dp</dimen>
     <dimen name="toolBarTitle">64dp</dimen>
 
 </resources>

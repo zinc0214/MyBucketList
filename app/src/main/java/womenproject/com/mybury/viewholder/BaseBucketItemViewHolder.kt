@@ -2,15 +2,11 @@ package womenproject.com.mybury.viewholder
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.BitmapFactory
 import android.os.Handler
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.util.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
@@ -34,24 +30,22 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
             circularProgressBar.run {
                 setOnClickListener {
                     progressType = ProgressType.INDETERMINATE
-                    bucketLayout.isClickable = false
                     startAnimation()
                     progressAnimator(this).start()
                     Handler().run {
                         postDelayed({
                             setFinalSuccessUIButton()
                             addCurrentValue()
-
                         }, 1000)
                         postDelayed({
+                            revertAnimation()
                             if(bucketType == 0 || previousValue >= 9) {
                                 setFinalSuccessUIBackground()
                             } else {
-                                setInitSuccuessUIButton()
+                                setDoneSuccessUIButton()
                             }
                         }, 1500)
                         postDelayed({
-                            revertAnimation()
                             if(bucketType == 0 || previousValue >= 9) {
                                 setFinalSucceedUIBackground()
                             }
@@ -64,7 +58,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     private fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
-        duration = 1500
+        duration = 1000
         startDelay = 0
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)
@@ -74,7 +68,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     abstract fun setFinalSuccessUIButton()
     abstract fun setFinalSuccessUIBackground()
     abstract fun setFinalSucceedUIBackground()
-    abstract fun setInitSuccuessUIButton()
+    abstract fun setDoneSuccessUIButton()
     abstract fun addCurrentValue()
 
 }

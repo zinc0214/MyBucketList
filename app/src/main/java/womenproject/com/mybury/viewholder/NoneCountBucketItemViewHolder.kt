@@ -47,7 +47,7 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
         binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_succeed_background)
     }
 
-    override fun setInitSuccuessUIButton() {
+    override fun setDoneSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
     }
     override fun addCurrentValue() {

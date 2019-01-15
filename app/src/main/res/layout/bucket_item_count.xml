@@ -92,7 +92,6 @@
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="4dp"
                         android:text="@{currentValue}"
                         android:textAlignment="center"
                         android:textColor="@color/subColor"

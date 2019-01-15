@@ -51,15 +51,15 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.white)
         binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_success_background)
         binding.bucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color.white))
-        binding.successButtonLayout.isClickable = false
         binding.progressBarLayout.visibility = View.GONE
+        binding.circularProgressBar.visibility = View.GONE
     }
 
     override fun setFinalSucceedUIBackground() {
         binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_succeed_background)
     }
 
-    override fun setInitSuccuessUIButton() {
+    override fun setDoneSuccessUIButton() {
         binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
     }
 
