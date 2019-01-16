@@ -33,6 +33,8 @@ class MainFragment : BaseFragment() {
             viewModel = mainFragmentViewModel
             mainToolbar.filterClickListener = createOnClickFilterListener()
             mainBottomSheet.writeClickListener = createOnClickWriteListener()
+            mainBottomSheet.noneClickListener = createOnClickDdayListener()
+
             initBucketListUI()
         }
 
@@ -62,4 +64,10 @@ class MainFragment : BaseFragment() {
         }
     }
 
+    private fun createOnClickDdayListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MainFragmentDirections.ActionMainBucketToDdayBucket()
+            it.findNavController().navigate(directions)
+        }
+    }
 }

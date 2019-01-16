@@ -9,6 +9,14 @@
             name="writeClickListener"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="myPageClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="noneClickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <RelativeLayout
@@ -29,10 +37,11 @@
                 android:layout_alignParentBottom="true">
 
                 <ImageView
+                    android:onClick="@{noneClickListener}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="54dp"
+                    android:layout_marginStart="54dp"
                     android:background="@drawable/main_bottom_list" />
 
                 <ImageView
@@ -40,8 +49,8 @@
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="54dp"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="54dp"
                     android:background="@drawable/main_mypage" />
 
             </RelativeLayout>

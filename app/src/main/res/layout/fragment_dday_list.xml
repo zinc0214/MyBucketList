@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</LinearLayout>
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.DdayBucketListViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <include
+            android:id="@+id/main_bottom_sheet"
+            layout="@layout/main_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolBarLayout"
+            android:layout_alignParentBottom="true" />
+
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/dday_toolbar"
+                layout="@layout/dday_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolBarLayout"
+                android:layout_alignParentTop="true" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</layout>

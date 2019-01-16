@@ -26,6 +26,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_main_bucket_to_dday_bucket"
+            app:destination="@id/dday_bucket_list_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
     </fragment>
 
 
@@ -45,6 +53,13 @@
         android:name="womenproject.com.mybury.view.BucketWriteFragment"
         android:label="Write"
         tools:layout="@layout/fragment_bucket_write">
+    </fragment>
+
+    <fragment
+        android:id="@+id/dday_bucket_list_fragment"
+        android:name="womenproject.com.mybury.view.DdayBucketListFragment"
+        android:label="DdayBucket"
+        tools:layout="@layout/fragment_dday_list">
     </fragment>
 
 </navigation>
