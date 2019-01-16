@@ -9,15 +9,6 @@
             name="viewModel"
             type="womenproject.com.mybury.viewmodels.MainFragmentViewModel" />
 
-        <variable
-            name="writeClickListener"
-            type="android.view.View.OnClickListener" />
-
-
-        <variable
-            name="filterClickListener"
-            type="android.view.View.OnClickListener" />
-
     </data>
 
     <RelativeLayout
@@ -56,47 +47,12 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/main_bottom_layout"
+                <include
+                    android:id="@+id/main_bottom_sheet"
+                    layout="@layout/main_bottom_sheet"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/main_bottom_background">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_alignParentBottom="true">
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="54dp"
-                            android:background="@drawable/main_bottom_list" />
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="60dp"
-                            android:layout_marginRight="54dp"
-                            android:background="@drawable/main_mypage" />
-
-                    </RelativeLayout>
-
-                </RelativeLayout>
-
-                <ImageView
-                    android:id="@+id/plus"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/main_bucekt_add"
-                    android:onClick="@{writeClickListener}" />
+                    android:layout_height="@dimen/toolBarLayout"
+                    android:layout_alignParentBottom="true" />
 
             </RelativeLayout>
 
@@ -109,26 +65,11 @@
             android:layout_height="wrap_content">
 
             <include
-                android:id="@+id/toolbar"
-                layout="@layout/base_toolbar"
+                android:id="@+id/main_toolbar"
+                layout="@layout/main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolBarLayout"
                 android:layout_alignParentTop="true" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolBarTitle">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/main_filter"
-                    android:onClick="@{filterClickListener}" />
-
-            </RelativeLayout>
 
         </RelativeLayout>
 

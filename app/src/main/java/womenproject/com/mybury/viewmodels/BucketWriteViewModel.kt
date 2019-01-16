@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AdultCheck
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
@@ -20,6 +21,7 @@ import womenproject.com.mybury.network.RetrofitInterface
 
 class BucketWriteViewModel internal constructor(private val context: Context?) : BaseViewModel() {
 
+    private val NAVER_ADULT_API = context!!.resources.getString(R.string.naver_adult_api)
     var adultResult: AdultCheck? = null
     var isEnd = true
     var progressVisible = ObservableInt(View.GONE)
@@ -35,7 +37,7 @@ class BucketWriteViewModel internal constructor(private val context: Context?) :
 
         progressVisible.set(View.VISIBLE)
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager("https://openapi.naver.com/").getRetrofitService(RetrofitInterface::class.java)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(NAVER_ADULT_API).getRetrofitService(RetrofitInterface::class.java)
 
         val adultResultData = restClient.requestAdultResult(adultCheckText)
         adultResultData.enqueue(object : Callback<AdultCheck> {

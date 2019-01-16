@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
 import womenproject.com.mybury.databinding.FragmentMainBinding
@@ -22,7 +21,6 @@ class MainFragment : BaseFragment() {
 
     private lateinit var mainFragmentViewModel: MainFragmentViewModel
     private lateinit var binding: FragmentMainBinding
-    private lateinit var bucketList: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -32,12 +30,9 @@ class MainFragment : BaseFragment() {
                 inflater, R.layout.fragment_main, container, false)
 
         binding.apply {
-
             viewModel = mainFragmentViewModel
-            this@MainFragment.bucketList = binding.bucketList
-            writeClickListener = createOnClickWriteListener()
-            filterClickListener = createOnClickFilterListener()
-
+            mainToolbar.filterClickListener = createOnClickFilterListener()
+            mainBottomSheet.writeClickListener = createOnClickWriteListener()
             initBucketListUI()
         }
 
@@ -48,9 +43,9 @@ class MainFragment : BaseFragment() {
     private fun initBucketListUI () {
         val layoutManager = LinearLayoutManager(context)
 
-        bucketList.layoutManager = layoutManager
-        bucketList.hasFixedSize()
-        bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
+        binding.bucketList.layoutManager = layoutManager
+        binding.bucketList.hasFixedSize()
+        binding.bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
@@ -62,7 +57,6 @@ class MainFragment : BaseFragment() {
 
     private fun createOnClickFilterListener() : View.OnClickListener {
         return View.OnClickListener {
-
             val filterDialogFragment = FilterDialogFragment.instance()
             filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }

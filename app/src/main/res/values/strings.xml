@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MyBury</string>
 
+    <!-- API URL-->
+    <string name="naver_adult_api">https://openapi.naver.com/</string>
     <string name="network_dialog_title">Network Warning</string>
     <string name="network_dialog_context">Please Check Your Context</string>
     <string name="network_dialog_ok">OK</string>
