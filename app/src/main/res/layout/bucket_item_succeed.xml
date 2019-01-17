@@ -16,6 +16,7 @@
     </data>
 
     <LinearLayout
+        android:layout_height="@dimen/baseBucketItemHeight"
         android:id="@+id/bucket_item_layout"
         style="@style/bucketItemLayoutStyle"
         android:onClick="@{bucketClickListener}">
@@ -34,8 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginBottom="21dp"
                 android:orientation="horizontal">
 
                 <TextView

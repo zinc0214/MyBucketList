@@ -14,6 +14,4 @@ class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding)
             executePendingBindings()
         }
     }
-
-    override fun addCurrentValue() { }
 }

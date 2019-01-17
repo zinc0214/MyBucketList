@@ -30,15 +30,15 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var bucketItemLayout: LinearLayout
     lateinit var successImageView: ImageView
     lateinit var bucketItemImage: ImageView
-    lateinit var bucketTitle : TextView
+    lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
 
-
     var initProgressBarVisible = View.VISIBLE
-    var previousValue = 0
+    var currentSuccessCount = 0
     var bucketType = 0
     var bucketDDay = 0
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+
 
     fun onBucketSuccessFinalButtonClickListener() {
         binding.apply {
@@ -51,11 +51,11 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         bucketItemLayout.isClickable = false
                         postDelayed({
                             setFinalSuccessUIButton()
-                            addCurrentValue()
+                            addBucketSuccessCount()
                         }, 500)
                         postDelayed({
                             revertAnimation()
-                            if (bucketType == 0 || previousValue >= 10) {
+                            if (bucketType == 0 || currentSuccessCount >= 10) {
                                 setFinalSuccessUIBackground()
                                 setFinalSuccessWithCountBucket()
                             } else {
@@ -63,20 +63,20 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                             }
                         }, 1000)
                         postDelayed({
-                            if (bucketType == 0 || previousValue >= 10) {
+                            if (bucketType == 0 || currentSuccessCount >= 10) {
                                 animFadeOut.duration = 500
                                 bucketItemImage.startAnimation(animFadeOut)
                             }
-                        }, 1300)
+                        }, 1500)
                         postDelayed({
-                            if (bucketType == 0 || previousValue >= 10) {
+                            if (bucketType == 0 || currentSuccessCount >= 10) {
                                 //set.end()
 
                                 bucketItemImage.visibility = View.GONE
                                 bucketItemLayout.isClickable = true
                             }
 
-                        }, 1800)
+                        }, 2000)
                     }
                 }
             }
@@ -103,11 +103,12 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
         bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
         bucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color.white))
         circularProgressBar.visibility = View.GONE
+        bucketItemLayout.layoutParams.height = context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
     }
 
     private fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
-        if(bucketDDay == 1) {
+        if (bucketDDay == 1) {
             bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_dday_background)
         } else {
             bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
@@ -115,6 +116,6 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     open fun setFinalSuccessWithCountBucket() {}
-    abstract fun addCurrentValue()
+    open fun addBucketSuccessCount() {}
 
 }

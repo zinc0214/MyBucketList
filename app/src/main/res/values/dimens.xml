@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="dialog_fragment_width">300dp</dimen>
+    <dimen name="dialogFragmentWidth">300dp</dimen>
     <dimen name="toolBarLayout">140dp</dimen>
     <dimen name="toolBarTitle">64dp</dimen>
+    <dimen name="minimumBucketItemHeight">64dp</dimen>
+    <dimen name="baseBucketItemHeight">64dp</dimen>
+    <dimen name="countBucketItemHeight">81dp</dimen>
 
 </resources>

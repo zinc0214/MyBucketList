@@ -34,12 +34,21 @@
         </ScrollView>
 
 
-        <include
-            android:id="@+id/main_bottom_sheet"
-            layout="@layout/main_bottom_sheet"
+        <FrameLayout
+            android:id="@+id/container_bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolBarLayout"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <include
+                android:id="@+id/main_bottom_sheet"
+                layout="@layout/main_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolBarLayout"
+                 />
+
+        </FrameLayout>
+
 
 
         <include

@@ -10,10 +10,6 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="bucketSuccessListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
             name="bucketTitleText"
             type="String" />
 
@@ -55,8 +51,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="21dp"
-                android:layout_marginBottom="21dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -64,35 +58,14 @@
                     style="@style/bucketItemTitleTextStyle"
                     android:text="@{bucketTitleText}" />
 
-                <RelativeLayout
+                <include
+                    android:layout_marginEnd="16dp"
                     android:id="@+id/success_button_layout"
+                    layout="@layout/bucket_succeed_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="16dp">
-
-                    <womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
-                        android:id="@+id/circular_progress_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/shape_default"
-                        android:onClick="@{bucketSuccessListener}"
-                        app:finalCornerAngle="50dp"
-                        app:initialCornerAngle="0dp"
-                        app:spinning_bar_color="@color/subColor"
-                        app:spinning_bar_width="1.6dp" />
-
-                    <ImageView
-                        android:id="@+id/success_img"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/bucket_item_check" />
-
-                </RelativeLayout>
-
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 

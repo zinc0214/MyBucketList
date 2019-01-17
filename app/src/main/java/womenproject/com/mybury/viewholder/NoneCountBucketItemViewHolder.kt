@@ -17,10 +17,10 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
 
     init {
         bucketItemLayout = binding.bucketItemLayout
-        successImageView = binding.successImg
+        successImageView = binding.successButtonLayout.successImg
         bucketItemImage = binding.bucketItemImage
         bucketTitle = binding.bucketTitle
-        circularProgressBar = binding.circularProgressBar
+        circularProgressBar = binding.successButtonLayout.circularProgressBar
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
@@ -30,7 +30,7 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
                 bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
             }
             bucketClickListener = bucketListener
-            bucketSuccessListener = createOnClickBucketSuccessListener()
+            successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
             bucketTitleText = bucketItemInfo.title
             executePendingBindings()
         }
@@ -42,7 +42,4 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
         }
     }
 
-    override fun addCurrentValue() {
-
-    }
 }

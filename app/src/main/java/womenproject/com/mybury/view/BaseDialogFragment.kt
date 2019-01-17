@@ -36,7 +36,7 @@ open class BaseDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialog_fragment_width)
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }

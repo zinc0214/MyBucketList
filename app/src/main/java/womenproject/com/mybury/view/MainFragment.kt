@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_dday_list.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
 import womenproject.com.mybury.databinding.FragmentMainBinding
+import womenproject.com.mybury.util.BottomViewBehavior
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
 
