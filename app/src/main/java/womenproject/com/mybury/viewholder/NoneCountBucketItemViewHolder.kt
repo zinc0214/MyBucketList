@@ -15,48 +15,30 @@ import womenproject.com.mybury.util.loadingbutton.customView.CircularProgressBut
 class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) : BaseBucketItemViewHolder(binding) {
 
 
+    init {
+        bucketItemLayout = binding.bucketItemLayout
+        successImageView = binding.successImg
+        bucketItemImage = binding.bucketItemImage
+        bucketTitle = binding.bucketTitle
+        circularProgressBar = binding.circularProgressBar
+    }
+
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
         binding.apply {
             bucketDDay = bucketItemInfo.dday
             if(bucketItemInfo.dday == 1) {
-                bucketItemLayout.background = context.getDrawable(R.drawable.bucket_item_dday_background)
+                bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
             }
             bucketClickListener = bucketListener
-            bucketSuccessListener = createOnClickBucketSuccessListener(circularProgressBar)
+            bucketSuccessListener = createOnClickBucketSuccessListener()
             bucketTitleText = bucketItemInfo.title
             executePendingBindings()
         }
     }
 
-    private fun createOnClickBucketSuccessListener(circularProgressButton: CircularProgressButton): View.OnClickListener {
+    private fun createOnClickBucketSuccessListener(): View.OnClickListener {
         return View.OnClickListener {
-            onBucketSuccessFinalButtonClickListener(circularProgressButton, binding.bucketItemLayout)
-        }
-    }
-
-    override fun setFinalSuccessUIButton() {
-        binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_success_btn_background)
-        binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_successing_background)
-    }
-
-    override fun setFinalSuccessUIBackground() {
-        binding.successImg.setBackgroundResource(R.drawable.check_complete)
-        binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.white)
-        binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_success_background)
-        binding.bucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color.white))
-        binding.circularProgressBar.visibility = View.GONE
-    }
-
-    override fun setFinalSucceedUIBackground() {
-        binding.bucketItemLayout.setBackgroundResource(R.drawable.bucket_item_succeed_background)
-    }
-
-    override fun setDoneSuccessUIButton() {
-        binding.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucket_base_btn_background)
-        if(bucketDDay == 1) {
-            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_dday_background)
-        } else {
-            binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+            onBucketSuccessFinalButtonClickListener()
         }
     }
 

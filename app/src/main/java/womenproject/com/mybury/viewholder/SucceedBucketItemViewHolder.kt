@@ -15,14 +15,5 @@ class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding)
         }
     }
 
-
-    override fun setFinalSuccessUIButton() { }
-
-    override fun setFinalSuccessUIBackground() { }
-
-    override fun setFinalSucceedUIBackground() { }
-
-    override fun setDoneSuccessUIButton() { }
-
     override fun addCurrentValue() { }
 }
