@@ -42,7 +42,4 @@ class NoneCountBucketItemViewHolder(private val binding: BucketItemBaseBinding) 
         }
     }
 
-    override fun addCurrentValue() {
-
-    }
 }

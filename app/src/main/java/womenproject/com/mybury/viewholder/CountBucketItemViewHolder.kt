@@ -8,7 +8,6 @@ import android.widget.ProgressBar
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
 
 
 /**
@@ -26,8 +25,6 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
         bucketItemImage = binding.bucketItemImage
         bucketTitle = binding.bucketTitle
         circularProgressBar = binding.circularProgressBar
-
-
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
@@ -36,13 +33,15 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
             if (bucketItemInfo.dday == 1) {
                 bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
             }
-            previousValue = bucketItemInfo.count
+            currentSuccessCount = bucketItemInfo.count
             bucketTitleText = bucketItemInfo.title
-            currentValue = bucketItemInfo.count.toString()
-
+            originSuccessCount = bucketItemInfo.count.toString()
             horizontalProgressBar.progress = bucketItemInfo.count
+
             bucketClickListener = bucketListener
             bucketSuccessListener = createOnClickBucketSuccessListener()
+            
+
             executePendingBindings()
         }
     }
@@ -53,22 +52,21 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
         }
     }
 
+    private fun setProgressMax(pb: ProgressBar, max: Int) {
+        pb.max = max * 100
+    }
 
     override fun setFinalSuccessWithCountBucket() {
         binding.progressBarLayout.visibility = View.GONE
     }
 
-    override fun addCurrentValue() {
-        binding.currentValue = (previousValue + 1).toString()
-        binding.horizontalProgressBar.progress = previousValue + 1
-        previousValue += 1
+    override fun addBucketSuccessCount() {
+        binding.originSuccessCount = (currentSuccessCount + 1).toString()
+        binding.horizontalProgressBar.progress = currentSuccessCount + 1
+        currentSuccessCount += 1
 
         setProgressMax(binding.horizontalProgressBar, 10)
-        setProgressAnimate(binding.horizontalProgressBar, previousValue)
-    }
-
-    private fun setProgressMax(pb: ProgressBar, max: Int) {
-        pb.max = max * 100
+        setProgressAnimate(binding.horizontalProgressBar, currentSuccessCount)
     }
 
     private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {

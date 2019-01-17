@@ -18,7 +18,7 @@
             type="String" />
 
         <variable
-            name="currentValue"
+            name="originSuccessCount"
             type="String" />
 
         <variable
@@ -97,7 +97,7 @@
                             android:layout_width="30dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:text="@{currentValue}"
+                            android:text="@{originSuccessCount}"
                             android:textAlignment="center"
                             android:textColor="@color/subColor"
                             android:textSize="11sp" />
