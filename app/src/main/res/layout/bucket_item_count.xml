@@ -38,6 +38,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/bucket_succeed_image"
                 android:background="@drawable/bucket_item_succeed_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -85,7 +86,7 @@
                             android:layout_gravity="center_vertical"
                             android:max="10"
                             android:progress="10"
-                            android:progressDrawable="@drawable/horizontal_progressbar_background" />
+                            android:progressDrawable="@drawable/base_horizontal_progressbar" />
 
                         <TextView
                             android:id="@+id/current_num"

@@ -5,7 +5,7 @@ import android.view.View
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 
-class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding) : BaseBucketItemViewHolder(binding) {
+class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding) : BaseBucketItemViewHolder(false, binding) {
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {

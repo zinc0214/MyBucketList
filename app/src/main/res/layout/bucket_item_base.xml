@@ -37,6 +37,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/bucket_succeed_image"
                 android:background="@drawable/bucket_item_succeed_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

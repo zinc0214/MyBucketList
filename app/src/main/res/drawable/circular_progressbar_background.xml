@@ -7,9 +7,9 @@
             android:thickness="1.6dp">
 
             <gradient
-                android:startColor="@color/circular_progress_background"
-                android:endColor="@color/circular_progress_background"
-                android:centerColor="@color/circular_progress_background"
+                android:startColor="@color/circularProgressBackground"
+                android:endColor="@color/circularProgressBackground"
+                android:centerColor="@color/circularProgressBackground"
                 android:type="sweep" />
         </shape>
     </item>

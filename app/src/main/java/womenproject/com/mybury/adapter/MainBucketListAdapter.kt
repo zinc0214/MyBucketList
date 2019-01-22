@@ -3,7 +3,6 @@ package womenproject.com.mybury.adapter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
@@ -13,7 +12,6 @@ import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
-import womenproject.com.mybury.view.MainFragmentDirections
 import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
 import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
 import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
@@ -26,11 +24,7 @@ import womenproject.com.mybury.viewholder.SucceedBucketItemViewHolder
 
 
 // DiffUtil은 support library 24.2.0에서 추가된 클래스이다. 기존에 불편했던 RecyclerView의 효율적인 갱신 처리를 편리하게 다룰 수 있도록 제공하는 util 클래스이다.
-class MainBucketListAdapter(context: Context?, bucketList: BucketList) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var context: Context = context!!
-    private var bucketItemList = bucketList
-    private lateinit var currentViewHolder: BaseBucketItemViewHolder
+class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
 
 
     override fun getItemViewType(position: Int): Int {
@@ -42,11 +36,11 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : Recycle
         Log.e("ayhan:ViewType", "$viewType")
 
         if (viewType == 1) {
-            currentViewHolder = NoneCountBucketItemViewHolder(BucketItemBaseBinding.inflate(
+            currentViewHolder = NoneCountBucketItemViewHolder(false, BucketItemBaseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
             return currentViewHolder as NoneCountBucketItemViewHolder
-        } else if(viewType == 2){
-            currentViewHolder = CountBucketItemViewHolder(BucketItemCountBinding.inflate(
+        } else if(viewType > 1){
+            currentViewHolder = CountBucketItemViewHolder(false, BucketItemCountBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
             return currentViewHolder as CountBucketItemViewHolder
         } else {
@@ -57,36 +51,7 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : Recycle
 
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bucketList = position
-
-       // val viewType = checkBucketType(position)
-
-        val holder = currentViewHolder
-        holder.apply {
-            bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
-        }
-    }
-
-
-    private fun createOnClickBucketListener(bucketId: String): View.OnClickListener {
-        return View.OnClickListener {
-            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
-
-            val directions = MainFragmentDirections.ActionMainBucketToBucketDetail(bucketId)
-            it.findNavController().navigate(directions)
-        }
-    }
-
-
-    override fun getItemCount(): Int {
-        return bucketItemList.list.size
-    }
-
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.list[position].bucketType
+        return bucketItemList.list[position].count
     }
 }
-
-
-// TODO : ListView 의 마지막을 어떻게 다른 레이아웃으로 표시할 것인지 / 다이얼로그는 어떻게 할 것인지.

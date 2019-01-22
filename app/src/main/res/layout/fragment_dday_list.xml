@@ -7,22 +7,28 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.DdayBucketListViewModel" />
+            type="womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel" />
 
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/ddayListBackground">
 
-
-
-        <include
-            android:id="@+id/main_bottom_sheet"
-            layout="@layout/main_bottom_sheet"
+        <ScrollView
+            android:id="@+id/dday_each_list_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolBarLayout"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/toolBarTitle">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dday_each_bucket_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/dday_bucket_list" />
+
+        </ScrollView>
 
         <RelativeLayout
             android:id="@+id/toolbar_layout"

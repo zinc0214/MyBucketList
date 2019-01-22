@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel" />
+
+        <variable
+            name="ddayText"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ddayListBackground"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_marginLeft="12dp"
+            android:layout_width="42dp"
+            android:layout_height="20dp"
+            android:background="@drawable/current_dday_badge">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{ddayText}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dday_each_bucket_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:listitem="@layout/bucket_item_base" />
+
+
+    </LinearLayout>
+
+</layout>

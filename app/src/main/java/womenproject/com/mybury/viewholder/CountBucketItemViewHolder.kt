@@ -8,16 +8,14 @@ import android.widget.ProgressBar
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-
-
+import womenproject.com.mybury.MyBuryApplication.Companion.context
 
 
 /**
  * Created by HanAYeon on 2019. 1. 9..
  */
 
-class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : BaseBucketItemViewHolder(binding) {
+class CountBucketItemViewHolder(private val isDdayView :Boolean, private val binding: BucketItemCountBinding) : BaseBucketItemViewHolder(isDdayView, binding) {
 
     init {
         bucketType = 1
@@ -32,10 +30,7 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            bucketDDay = bucketItemInfo.dday
-            if (bucketItemInfo.dday == 1) {
-                bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
-            }
+            ddayVisible = bucketItemInfo.ddayVisible
             currentSuccessCount = bucketItemInfo.count
             bucketTitleText = bucketItemInfo.title
             originSuccessCount = bucketItemInfo.count.toString()
@@ -44,7 +39,7 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
 
-
+            setDdayColor()
 
             executePendingBindings()
         }
@@ -78,5 +73,17 @@ class CountBucketItemViewHolder(private val binding: BucketItemCountBinding) : B
         animation.duration = 1000
         animation.interpolator = DecelerateInterpolator()
         animation.start()
+    }
+
+    override fun setDdayColor() {
+        if(isDdayView) {
+            binding.horizontalProgressBar.progressDrawable = context.getDrawable(R.drawable.dday_horizontal_progressbar)
+            binding.successButtonLayout.circularProgressBar.spinningBarColor = context.getColor(R.color.notiColor)
+            binding.bucketSucceedImage.background = context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
+            binding.currentNum.setTextColor(context.getColor(R.color.notiColor))
+            bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
+        } else if(ddayVisible) {
+            bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
+        }
     }
 }
