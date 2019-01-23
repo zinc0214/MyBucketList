@@ -1,45 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-       <variable
-           name="viewModel"
-           type="womenproject.com.mybury.viewmodels.MainFragmentViewModel"/>
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.MainFragmentViewModel" />
 
     </data>
 
-    <FrameLayout
-        android:background="#404040"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <ScrollView
+            android:id="@+id/bucket_list_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/toolBarTitle"
+            android:layout_marginBottom="50dp"
+            android:background="@color/mainBackground">
 
-            <ScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bucket_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/bucket_item_base" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+        </ScrollView>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/bucket_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/list_item_bucket_main" />
 
-                </LinearLayout>
+        <FrameLayout
+            android:id="@+id/container_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
-            </ScrollView>
+            <include
+                android:id="@+id/main_bottom_sheet"
+                layout="@layout/main_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolBarLayout"
+                 />
 
-        </LinearLayout>
+        </FrameLayout>
 
-    </FrameLayout>
+
+
+        <include
+            android:id="@+id/main_toolbar"
+            layout="@layout/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolBarLayout"
+            android:layout_alignParentTop="true" />
+
+    </RelativeLayout>
+
 </layout>

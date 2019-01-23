@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bucketClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketTitleText"
+            type="String" />
+
+        <variable
+            name="originSuccessCount"
+            type="String" />
+
+        <variable
+            name="progressBarVisible"
+            type="Integer" />
+
+        <variable
+            name="successImgVisible"
+            type="Integer" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_height="@dimen/countBucketItemHeight"
+        android:onClick="@{bucketClickListener}"
+        android:id="@+id/bucket_item_layout"
+        style="@style/bucketItemLayoutStyle">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/bucket_succeed_image"
+                android:background="@drawable/bucket_item_succeed_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <ImageView
+                android:id="@+id/bucket_item_image"
+                android:background="@drawable/bucket_item_base_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <RelativeLayout
+                android:id="@+id/bucket_count_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/bucketItemTitleTextStyle"
+                        android:id="@+id/bucket_title"
+                        android:text="@{bucketTitleText}" />
+
+                    <LinearLayout
+                        android:id="@+id/progress_bar_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_below="@+id/bucket_title"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:visibility="@{progressBarVisible}">
+
+                        <ProgressBar
+                            android:id="@+id/horizontal_progress_bar"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:layout_width="180dp"
+                            android:layout_height="6dp"
+                            android:layout_gravity="center_vertical"
+                            android:max="10"
+                            android:progress="10"
+                            android:progressDrawable="@drawable/base_horizontal_progressbar" />
+
+                        <TextView
+                            android:id="@+id/current_num"
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:text="@{originSuccessCount}"
+                            android:textAlignment="center"
+                            android:textColor="@color/subColor"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <include
+                    android:layout_marginEnd="16dp"
+                    android:id="@+id/success_button_layout"
+                    layout="@layout/bucket_succeed_button"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</layout>

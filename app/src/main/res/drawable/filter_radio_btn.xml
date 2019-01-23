@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- UNSELECTED -->
+    <item android:state_checked="false">
+        <layer-list>
+            <!-- 배경 -->
+            <item>
+                <shape>
+                    <stroke android:color="@color/dialogRadioBtnUnSelectColor" android:width="1dp" />
+                    <corners android:radius="15dp" />
+                    <solid android:color="@color/white" />
+                </shape>
+            </item>
+            <!-- 이미지 영역 -->
+            <item android:drawable="@drawable/radiobtn_nonselect_background"
+                android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
+        </layer-list>
+    </item>
+    <!-- SELECTED -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- 배경 -->
+            <item>
+                <shape>
+                    <stroke android:color="@color/dialogRadioBtnSelectColor" android:width="1dp" />
+                    <corners android:radius="15dp" />
+                    <solid android:color="#ffffff" />
+                </shape>
+            </item>
+            <!-- 이미지 영역 -->
+            <item android:drawable="@drawable/radiobtn_select_background"
+                android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
+        </layer-list>
+    </item>
+</selector>

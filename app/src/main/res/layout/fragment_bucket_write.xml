@@ -13,6 +13,16 @@
         <variable
             name="checkAdultListener"
             type="android.view.View.OnClickListener" />
+
+
+        <variable
+            name="numberCheckListener"
+            type="android.view.View.OnClickListener" />
+        
+        <variable
+            name="sliderTouchListener"
+            type="android.view.View.OnTouchListener"/>
+
     </data>
 
     <LinearLayout
@@ -48,11 +58,13 @@
         <!-- app:isGone="@{viewModel.progessVisible}"-->
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
-            android:layout_marginLeft="40dp">
+            android:layout_marginLeft="40dp"
+            android:layout_gravity="center"
+            android:gravity="center">
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -60,22 +72,22 @@
                 android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:clipToPadding="false" />
+                android:clipToPadding="false"
+                android:layout_centerInParent="true" />
 
-            <ImageView
-                android:layout_width="50dp"
+            <EditText
+                android:inputType="number"
+                android:textColor="#000000"
+                android:id="@+id/current_num"
+                android:layout_width="70dp"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/colorAccent"
-                android:alpha="0.2"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:background="#3bff9393"
+                android:text="100"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:onClick="@{numberCheckListener}"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
 
 

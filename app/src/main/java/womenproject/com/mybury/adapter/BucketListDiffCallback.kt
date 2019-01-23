@@ -10,7 +10,7 @@ import womenproject.com.mybury.data.BucketList
 class BucketListDiffCallback : DiffUtil.ItemCallback<BucketList>() {
 
     override fun areItemsTheSame(oldItem: BucketList, newItem: BucketList): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.list == newItem.list
     }
 
     override fun areContentsTheSame(oldItem: BucketList, newItem: BucketList): Boolean {
