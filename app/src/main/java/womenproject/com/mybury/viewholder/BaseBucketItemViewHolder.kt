@@ -33,7 +33,6 @@ abstract class BaseBucketItemViewHolder(private val isDdayView: Boolean, private
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
 
-    var initProgressBarVisible = View.VISIBLE
     var currentSuccessCount = 0
     var bucketType = 0
     var ddayVisible = false

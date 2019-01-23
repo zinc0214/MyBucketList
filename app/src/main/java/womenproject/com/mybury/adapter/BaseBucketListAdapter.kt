@@ -24,7 +24,7 @@ import womenproject.com.mybury.viewholder.SucceedBucketItemViewHolder
 open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    private var context: Context = context!!
+    var context: Context = context!!
     var bucketItemList = bucketList
     lateinit var currentViewHolder: BaseBucketItemViewHolder
 
@@ -38,24 +38,18 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val bucketList = position
-
         val holder = currentViewHolder
         holder.apply {
-            bind(createOnClickBucketListener(bucketList.toString()), bucketItemList.list[position], context)
+            bind(createOnClickBucketListener(position), bucketItemList.list[position], context)
         }
     }
 
 
-    private fun createOnClickBucketListener(bucketId: String): View.OnClickListener {
+    open fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
         return View.OnClickListener {
-            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
 
-            val directions = MainFragmentDirections.ActionMainBucketToBucketDetail(bucketId)
-            it.findNavController().navigate(directions)
         }
     }
-
 
     override fun getItemCount(): Int {
         return bucketItemList.list.size

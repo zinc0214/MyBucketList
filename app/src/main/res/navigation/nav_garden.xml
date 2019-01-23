@@ -60,6 +60,16 @@
         android:name="womenproject.com.mybury.view.DdayBucketListFragment"
         android:label="DdayBucket"
         tools:layout="@layout/fragment_dday_list">
+
+        <action
+            android:id="@+id/action_dday_bucket_to_bucket_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
     </fragment>
 
 </navigation>

@@ -3,6 +3,7 @@ package womenproject.com.mybury.adapter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
@@ -12,6 +13,7 @@ import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
+import womenproject.com.mybury.view.MainFragmentDirections
 import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
 import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
 import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
@@ -54,4 +56,14 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
     private fun checkBucketType(position: Int): Int {
         return bucketItemList.list[position].count
     }
+
+    override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
+        return View.OnClickListener {
+            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
+
+            val directions = MainFragmentDirections.ActionMainBucketToBucketDetail(bucketId.toString())
+            it.findNavController().navigate(directions)
+        }
+    }
+
 }
