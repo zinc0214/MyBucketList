@@ -5,8 +5,21 @@ package womenproject.com.mybury.data
  */
 
 data class BucketList(
-        val name : String = "Hi",
-        val title : String = "Title"
-) {
-    override fun toString() = name
-}
+        var list : ArrayList<BucketItem>
+)
+
+data class DdayTotalBucketList(
+        var ddayBucketEachListItem : List<DdayEachBucketGroup>
+)
+
+data class DdayEachBucketGroup(
+        var dday: Int = 0,
+        var ddayBucketItemList: List<BucketItem>
+)
+
+data class BucketItem(
+        var title : String = "Title",
+        var count : Int = 0,
+        var dday : Int = 0,
+        var ddayVisible : Boolean = false
+)

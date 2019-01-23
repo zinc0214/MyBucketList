@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ddayListBackground">
+
+        <ScrollView
+            android:id="@+id/dday_each_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/toolBarTitle">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dday_each_bucket_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/dday_bucket_list" />
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/dday_toolbar"
+                layout="@layout/dday_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolBarLayout"
+                android:layout_alignParentTop="true" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</layout>

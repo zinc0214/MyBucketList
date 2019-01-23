@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bucketClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketTitleText"
+            type="String" />
+
+        <variable
+            name="currentValue"
+            type="String" />
+
+        <variable
+            name="progressBarVisible"
+            type="Integer" />
+
+        <variable
+            name="successImgVisible"
+            type="Integer" />
+
+        <variable
+            name="bucketSuccessListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/bucket_item_layout"
+        style="@style/bucketItemLayoutStyle"
+        android:onClick="@{bucketClickListener}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/bucket_succeed_image"
+                android:background="@drawable/bucket_item_succeed_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/bucket_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bucket_item_base_background" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/bucket_title"
+                    style="@style/bucketItemTitleTextStyle"
+                    android:text="@{bucketTitleText}" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <include
+
+                        android:layout_marginEnd="16dp"
+                        android:id="@+id/success_button_layout"
+                        layout="@layout/bucket_succeed_button"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</layout>

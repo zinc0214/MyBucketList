@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="dialogCategoryBackgroundColor">#f6fcff</color>
+    <color name="dialogCategoryTextColor">#434343</color>
+    <color name="dialogUncheckBoxTextColor">#888888</color>
+    <color name="dialogCheckedBoxTextColor">#5a95ff</color>
+    <color name="dialogRadioBtnSelectColor">#5a95ff</color>
+    <color name="dialogRadioBtnUnSelectColor">#eaeaea</color>
+
+    <color name="filterDialogBottomBinder">#eaeaea</color>
+
+    <color name="testColor">#ffa2a2</color>
+    <color name="trans">#00ffa2a2</color>
+    <color name="textOriColor">#3bff9393</color>
+
+    <color name="white">#ffffff</color>
+
+    <color name="mainBackground">#f6fcff</color>
+    <color name="bucketItemBackground">#e8e8e8</color>
+    <color name="transparent">#00ffffff</color>
+
+    <color name="subColor">#a6c6ff</color>
+    <color name="notiColor">#ffca5a</color>
+
+    <color name="circularProgressBackground">#e8e8e8</color>
+    <color name="bucketSucceedBackground">#66859ecc</color>
+    <color name="bucketBaseBtnBackground">#e8e8e8</color>
+    <color name="bucketSuccessBtnBackground">#a6c6ff</color>
+    <color name="bucketBaseText">#434343</color>
+
+    <color name="ddayListBackground">#f9f9f9</color>
+    <color name="ddayBucketSuccessBtnBackground">#ffca5a</color>
+    <color name="ddayProgressColor">#ffe3a6</color>
+    <color name="ddayBucketSucceedBackground">#33cca248</color>
 </resources>

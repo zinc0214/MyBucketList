@@ -33,18 +33,10 @@ open class BaseDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments != null) {
-            mainMsg = arguments!!.getString(DIALOG_MSG)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
 
-        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialog_fragment_width)
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
@@ -67,4 +59,10 @@ open class BaseDialogFragment : DialogFragment() {
     private fun dialogDismiss() {
         this.dismiss()
     }
+
+    protected fun setDialogMessage(dialogMessage : String) {
+        mainMsg = dialogMessage
+    }
+
+
 }

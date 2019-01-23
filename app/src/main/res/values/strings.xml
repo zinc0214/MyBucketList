@@ -1,8 +1,18 @@
 <resources>
     <string name="app_name">MyBury</string>
 
+    <!-- API URL-->
+    <string name="naver_adult_api">https://openapi.naver.com/</string>
     <string name="network_dialog_title">Network Warning</string>
     <string name="network_dialog_context">Please Check Your Context</string>
     <string name="network_dialog_ok">OK</string>
     <string name="network_dialog_no">NO</string>
+    
+    <string name="visible_bucket">표시할 버킷리스트</string>
+    <string name="doing_bucket">진행중인 버킷리스트</string>
+    <string name="done_bucket">완료된 버킷리스트</string>
+    <string name="filter_standard">정렬 기준</string>
+    <string name="sort_by_update">업데이트 순</string>
+    <string name="sort_by_written">등록 순</string>
+    <string name="filter_set">적용</string>
 </resources>
