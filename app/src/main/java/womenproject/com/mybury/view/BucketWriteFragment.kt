@@ -75,7 +75,7 @@ class BucketWriteFragment : BaseFragment() {
 
     private fun numberCheckListener(): View.OnClickListener {
         return View.OnClickListener {
-            binding.currentNum.setBackgroundColor(context!!.resources.getColor(R.color.testColor))
+            binding.currentNum.setBackgroundColor(context!!.getColor(R.color.testColor))
             binding.currentNum.isCursorVisible = true
         }
     }

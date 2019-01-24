@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/main_fragment">
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="womenproject.com.mybury.view.MainFragment"
+        android:label="mainFragment"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_main_bucket_to_bucket_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_main_bucket_to_bucket_write"
+            app:destination="@id/bucket_write_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_main_bucket_to_dday_bucket"
+            app:destination="@id/dday_bucket_list_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_detail_fragment"
+        android:name="womenproject.com.mybury.view.BucketDetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_bucket_detail">
+        <argument
+            android:name="bucketId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_write_fragment"
+        android:name="womenproject.com.mybury.view.BucketWriteFragment"
+        android:label="Write"
+        tools:layout="@layout/fragment_bucket_write">
+    </fragment>
+
+    <fragment
+        android:id="@+id/dday_bucket_list_fragment"
+        android:name="womenproject.com.mybury.view.DdayBucketListFragment"
+        android:label="DdayBucket"
+        tools:layout="@layout/fragment_dday_list">
+
+        <action
+            android:id="@+id/action_dday_bucket_to_bucket_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
+    </fragment>
+
+</navigation>

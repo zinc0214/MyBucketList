@@ -7,17 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 import womenproject.com.mybury.view.MainFragmentDirections
-import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
-import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
-import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
-import womenproject.com.mybury.viewholder.SucceedBucketItemViewHolder
+import womenproject.com.mybury.viewholder.*
 
 
 /**
@@ -38,13 +34,13 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
         Log.e("ayhan:ViewType", "$viewType")
 
         if (viewType == 1) {
-            currentViewHolder = NoneCountBucketItemViewHolder(false, BucketItemBaseBinding.inflate(
+            currentViewHolder = BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as NoneCountBucketItemViewHolder
+            return currentViewHolder as BaseNormalBucketItemViewHolder
         } else if(viewType > 1){
-            currentViewHolder = CountBucketItemViewHolder(false, BucketItemCountBinding.inflate(
+            currentViewHolder = BaseCountBucketItemViewHolder(BucketItemCountBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as CountBucketItemViewHolder
+            return currentViewHolder as BaseCountBucketItemViewHolder
         } else {
             currentViewHolder = SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))

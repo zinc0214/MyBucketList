@@ -31,7 +31,7 @@
         android:layout_height="@dimen/countBucketItemHeight"
         android:onClick="@{bucketClickListener}"
         android:id="@+id/bucket_item_layout"
-        style="@style/bucketItemLayoutStyle">
+        style="@style/BucketItemLayoutStyle">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/bucketItemTitleTextStyle"
+                        style="@style/BucketItemTitleTextStyle"
                         android:id="@+id/bucket_title"
                         android:text="@{bucketTitleText}" />
 
@@ -89,12 +89,12 @@
                             android:progressDrawable="@drawable/base_horizontal_progressbar" />
 
                         <TextView
+                            android:padding="0dp"
                             android:id="@+id/current_num"
                             android:layout_width="30dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
+                            android:layout_height="18dp"
                             android:text="@{originSuccessCount}"
-                            android:textAlignment="center"
+                            android:gravity="center"
                             android:textColor="@color/subColor"
                             android:textSize="11sp" />
 

@@ -27,7 +27,7 @@
     <color name="notiColor">#ffca5a</color>
 
     <color name="circularProgressBackground">#e8e8e8</color>
-    <color name="bucketSucceedBackground">#66859ecc</color>
+    <color name="bucketSucceedBackground">#33859ecc</color>
     <color name="bucketBaseBtnBackground">#e8e8e8</color>
     <color name="bucketSuccessBtnBackground">#a6c6ff</color>
     <color name="bucketBaseText">#434343</color>

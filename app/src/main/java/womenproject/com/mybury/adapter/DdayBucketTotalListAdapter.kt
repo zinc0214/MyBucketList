@@ -29,7 +29,6 @@ class DdayBucketTotalListAdapter(context: Context?, ddayBucketTotalList: DdayTot
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val bucketList = position
 
         val holder = currentViewHolderTotal
         holder.apply {
