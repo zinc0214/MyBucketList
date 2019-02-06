@@ -4,10 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import io.reactivex.subjects.BehaviorSubject
 import womenproject.com.mybury.MyBuryApplication
-import womenproject.com.mybury.R
-import womenproject.com.mybury.util.ContextContainer
 
 
 /**
@@ -30,7 +27,7 @@ open class BaseViewModel : ViewModel() {
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
 
-        return true
+        return isConnected
     }
 
 

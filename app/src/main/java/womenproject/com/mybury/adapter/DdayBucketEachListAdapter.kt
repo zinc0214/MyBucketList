@@ -10,11 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.view.MainFragmentDirections
-import womenproject.com.mybury.viewholder.CountBucketItemViewHolder
-import womenproject.com.mybury.viewholder.NoneCountBucketItemViewHolder
 import androidx.navigation.findNavController
 import womenproject.com.mybury.view.DdayBucketListFragmentDirections
+import womenproject.com.mybury.viewholder.DdayCountBucketItemViewHolder
+import womenproject.com.mybury.viewholder.DdayNormalBucketItemViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
@@ -27,13 +26,13 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : Bas
         Log.e("ayhan:ViewType", "$viewType")
 
         if (viewType == 1) {
-            currentViewHolder = NoneCountBucketItemViewHolder(true, BucketItemBaseBinding.inflate(
+            currentViewHolder = DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as NoneCountBucketItemViewHolder
+            return currentViewHolder as DdayNormalBucketItemViewHolder
         } else {
-            currentViewHolder = CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(
+            currentViewHolder = DdayCountBucketItemViewHolder(BucketItemCountBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as CountBucketItemViewHolder
+            return currentViewHolder as DdayCountBucketItemViewHolder
         }
 
     }

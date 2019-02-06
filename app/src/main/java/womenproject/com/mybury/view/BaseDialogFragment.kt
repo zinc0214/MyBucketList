@@ -6,8 +6,15 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.databinding.FragmentBaseDialogBinding
+import womenproject.com.mybury.viewmodels.BaseDialogViewModel
 
 /**
  * Created by HanAYeon on 2018. 12. 4..
@@ -20,11 +27,15 @@ open class BaseDialogFragment : DialogFragment() {
 
     companion object {
 
-        const val DIALOG_MSG = "dialog_msg"
+        const val TITLE_MSG = "title"
+        const val CONTENT_MSG = "content"
+        const val BUTTON_VISIBLE = "visible"
 
-        fun Instance(mainMsg: String): BaseDialogFragment {
+        fun Instance(titleMsg: String, contentMsg:String, isCancelBtnVisible:Boolean): BaseDialogFragment {
             val bundle = Bundle()
-            bundle.putString(DIALOG_MSG, mainMsg)
+            bundle.putString(TITLE_MSG, titleMsg)
+            bundle.putString(CONTENT_MSG, contentMsg)
+            bundle.putBoolean(BUTTON_VISIBLE, isCancelBtnVisible)
 
             val fragment = BaseDialogFragment()
             fragment.arguments = bundle
@@ -33,36 +44,43 @@ open class BaseDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
-        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
+        val binding = DataBindingUtil.inflate<FragmentBaseDialogBinding>(
+                inflater, R.layout.fragment_base_dialog, container, false).apply {
+            viewModel = BaseDialogViewModel()
+
+        }
+
+        binding.apply {
+            title = arguments?.getString(TITLE_MSG)
+            content = arguments?.getString(CONTENT_MSG)
+            buttonVisible = if(arguments?.getBoolean(BUTTON_VISIBLE)!!) View.VISIBLE else View.GONE
+        }
+
+        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog!!.setCanceledOnTouchOutside(true)
+
+        return binding.root
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(activity)
-        val view = activity!!.layoutInflater.inflate(R.layout.dialog_message, null)
-
-        builder.setView(view)
-
-        val dialog = builder.create()
-        dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(true)
-
-        return dialog
-
+    private fun createOnClickFilterSetListener() : View.OnClickListener {
+        return View.OnClickListener {
+            dialogDismiss()
+        }
     }
 
     private fun dialogDismiss() {
         this.dismiss()
     }
 
-    protected fun setDialogMessage(dialogMessage : String) {
+    protected fun setDialogMessage(dialogMessage: String) {
         mainMsg = dialogMessage
     }
 
+    fun show(fragmentManager: FragmentManager) {
+        super.show(fragmentManager, "Tag")
+    }
 
 }

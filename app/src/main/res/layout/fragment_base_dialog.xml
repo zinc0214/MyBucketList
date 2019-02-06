@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.BaseDialogViewModel" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="buttonVisible"
+            type="Integer" />
+
+        <variable
+            name="cancelButtonClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="confirmButtonClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/dialog_background"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/textLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="34dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{title}"
+                android:textAlignment="center"
+                android:textColor="@color/dialogTitleText"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:text="@{content}"
+                android:textAlignment="center"
+                android:textColor="@color/dialogContentText"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/dialogBinder" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/base_dialog_bottom_sheet_background"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/baseDialogButtonTextStyle"
+                    android:onClick="@{cancelButtonClickListener}"
+                    android:text="@string/dialog_cancel"
+                    android:textColor="@color/dialogBottomCancelText"
+                    android:visibility="@{buttonVisible}" />
+
+                <TextView
+                    style="@style/baseDialogButtonTextStyle"
+                    android:onClick="@{confirmButtonClickListener}"
+                    android:text="@string/dialog_confirm"
+                    android:textColor="@color/dialogBottomConfirmText" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0.6dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@color/dialogBinder"
+                android:visibility="@{buttonVisible}" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</layout>

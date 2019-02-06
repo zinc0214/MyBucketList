@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:id="@+id/bucket_item_layout"
-        style="@style/bucketItemLayoutStyle"
+        style="@style/BucketItemLayoutStyle"
         android:onClick="@{bucketClickListener}">
 
         <RelativeLayout
@@ -60,7 +60,7 @@
 
                 <TextView
                     android:id="@+id/bucket_title"
-                    style="@style/bucketItemTitleTextStyle"
+                    style="@style/BucketItemTitleTextStyle"
                     android:text="@{bucketTitleText}" />
 
                 <RelativeLayout
@@ -68,7 +68,6 @@
                     android:layout_height="match_parent">
 
                     <include
-
                         android:layout_marginEnd="16dp"
                         android:id="@+id/success_button_layout"
                         layout="@layout/bucket_succeed_button"

@@ -21,7 +21,7 @@ import womenproject.com.mybury.util.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 10..
  */
 
-abstract class BaseBucketItemViewHolder(private val isDdayView: Boolean, private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context)
 
@@ -81,47 +81,34 @@ abstract class BaseBucketItemViewHolder(private val isDdayView: Boolean, private
         }
     }
 
-    private fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
+    open fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
         duration = 500
         startDelay = 0
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)
         }
+        bucketItemImage.setBackgroundResource(R.drawable.bucket_item_successing_background)
     }
 
-    private fun setFinalSuccessUIButton() {
-        if (isDdayView) {
-            successImageView.backgroundTintList = context.getColorStateList(R.color.ddayBucketSuccessBtnBackground)
-            bucketItemImage.setBackgroundResource(R.drawable.bucket_item_dday_background)
-        } else {
-            successImageView.backgroundTintList = context.getColorStateList(R.color.bucketSuccessBtnBackground)
-            bucketItemImage.setBackgroundResource(R.drawable.bucket_item_successing_background)
-        }
+    open fun setFinalSuccessUIButton() {
+        successImageView.backgroundTintList = context.getColorStateList(R.color.bucketSuccessBtnBackground)
     }
 
 
-    private fun setFinalSuccessUIBackground() {
+    open fun setFinalSuccessUIBackground() {
         successImageView.setBackgroundResource(R.drawable.check_complete)
         successImageView.backgroundTintList = context.getColorStateList(R.color.white)
         bucketTitle.setTextColor(context.resources.getColor(R.color.white))
         circularProgressBar.visibility = View.GONE
         bucketItemLayout.layoutParams.height = context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
 
-        if (isDdayView) {
-            bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)
-        } else {
-            bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
-        }
+        bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
     }
 
-    private fun setDoneSuccessUIButton() {
+    open fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = context.getColorStateList(R.color.bucketBaseBtnBackground)
+        bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
 
-        if (isDdayView || ddayVisible) {
-            bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
-        } else {
-            bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_dday_background)
-        }
     }
 
 
