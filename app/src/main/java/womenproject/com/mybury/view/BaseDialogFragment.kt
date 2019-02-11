@@ -1,8 +1,5 @@
 package womenproject.com.mybury.view
 
-import android.app.ActionBar
-import android.app.AlertDialog
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,13 +26,15 @@ open class BaseDialogFragment : DialogFragment() {
 
         const val TITLE_MSG = "title"
         const val CONTENT_MSG = "content"
-        const val BUTTON_VISIBLE = "visible"
+        const val CANCEL_BUTTON_VISIBLE = "cancelBtnVisible"
+        const val GRADIENT_BUTTON_VISIBLE = "gradientBtnVisible"
 
-        fun Instance(titleMsg: String, contentMsg:String, isCancelBtnVisible:Boolean): BaseDialogFragment {
+        fun Instance(titleMsg: String, contentMsg:String, isCancelBtnVisible:Boolean, isGragientBtnVisible:Boolean): BaseDialogFragment {
             val bundle = Bundle()
             bundle.putString(TITLE_MSG, titleMsg)
             bundle.putString(CONTENT_MSG, contentMsg)
-            bundle.putBoolean(BUTTON_VISIBLE, isCancelBtnVisible)
+            bundle.putBoolean(CANCEL_BUTTON_VISIBLE, isCancelBtnVisible)
+            bundle.putBoolean(GRADIENT_BUTTON_VISIBLE, isGragientBtnVisible)
 
             val fragment = BaseDialogFragment()
             fragment.arguments = bundle
@@ -55,17 +54,21 @@ open class BaseDialogFragment : DialogFragment() {
         binding.apply {
             title = arguments?.getString(TITLE_MSG)
             content = arguments?.getString(CONTENT_MSG)
-            buttonVisible = if(arguments?.getBoolean(BUTTON_VISIBLE)!!) View.VISIBLE else View.GONE
+            cancelButtonVisible = if(arguments?.getBoolean(CANCEL_BUTTON_VISIBLE)!!) View.VISIBLE else View.GONE
+            gradientButtonVisible = if(arguments?.getBoolean(GRADIENT_BUTTON_VISIBLE)!!) View.VISIBLE else View.GONE
+            baseButtonVisible = if(arguments?.getBoolean(GRADIENT_BUTTON_VISIBLE)!!) View.GONE else View.VISIBLE
+            cancelButtonClickListener = createOnClickCancelListener()
+            confirmButtonClickListener = createOnClickCancelListener()
         }
 
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
 
         return binding.root
     }
 
 
-    private fun createOnClickFilterSetListener() : View.OnClickListener {
+    private fun createOnClickCancelListener() : View.OnClickListener {
         return View.OnClickListener {
             dialogDismiss()
         }

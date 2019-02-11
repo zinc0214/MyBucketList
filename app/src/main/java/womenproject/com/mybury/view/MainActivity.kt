@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
        val baseViewModel = BaseViewModel()
 
        if(baseViewModel.checkNetwork()) {
-           val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false)
+           val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
            baseDialogFragment.show(supportFragmentManager, "dialog")
        }
     }

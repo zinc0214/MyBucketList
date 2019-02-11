@@ -19,8 +19,17 @@
             type="String" />
 
         <variable
-            name="buttonVisible"
+            name="cancelButtonVisible"
             type="Integer" />
+
+        <variable
+            name="gradientButtonVisible"
+            type="Integer"/>
+
+        <variable
+            name="baseButtonVisible"
+            type="Integer"/>
+
 
         <variable
             name="cancelButtonClickListener"
@@ -81,6 +90,7 @@
 
 
             <LinearLayout
+                android:visibility="@{baseButtonVisible}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/base_dialog_bottom_sheet_background"
@@ -91,13 +101,29 @@
                     android:onClick="@{cancelButtonClickListener}"
                     android:text="@string/dialog_cancel"
                     android:textColor="@color/dialogBottomCancelText"
-                    android:visibility="@{buttonVisible}" />
+                    android:visibility="@{cancelButtonVisible}" />
 
                 <TextView
                     style="@style/baseDialogButtonTextStyle"
                     android:onClick="@{confirmButtonClickListener}"
                     android:text="@string/dialog_confirm"
                     android:textColor="@color/dialogBottomConfirmText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="@{gradientButtonVisible}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/base_dialog_bottom_sheet_background_gradient"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/baseDialogButtonTextStyle"
+                    android:onClick="@{confirmButtonClickListener}"
+                    android:text="@string/dialog_confirm"
+                    android:textColor="@color/white" />
+
             </LinearLayout>
 
             <ImageView
@@ -105,7 +131,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:background="@color/dialogBinder"
-                android:visibility="@{buttonVisible}" />
+                android:visibility="@{cancelButtonVisible}" />
 
         </RelativeLayout>
 

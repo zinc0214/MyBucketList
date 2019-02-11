@@ -43,4 +43,8 @@
     <color name="dialogBottomBackground">#fafafa</color>
     <color name="dialogBottomCancelText">#b4b4b4</color>
     <color name="dialogBottomConfirmText">#5a95ff</color>
+
+    <color name="dialogBottomGradientFir">#4656e8</color>
+    <color name="dialogBottomGradientSec">#5076f4</color>
+    <color name="dialogBottomGradientThr">#5a95ff</color>
 </resources>
