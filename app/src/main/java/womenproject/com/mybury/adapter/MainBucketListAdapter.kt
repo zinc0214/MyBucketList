@@ -33,20 +33,12 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
 
         Log.e("ayhan:ViewType", "$viewType")
 
-        if (viewType == 1) {
-            currentViewHolder = BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as BaseNormalBucketItemViewHolder
-        } else if(viewType > 1){
-            currentViewHolder = BaseCountBucketItemViewHolder(BucketItemCountBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as BaseCountBucketItemViewHolder
-        } else {
-            currentViewHolder = SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as SucceedBucketItemViewHolder
+        currentViewHolder = when (viewType) {
+            0 ->  SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            1 ->  BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> BaseCountBucketItemViewHolder(BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
-
+        return currentViewHolder
     }
 
     private fun checkBucketType(position: Int): Int {

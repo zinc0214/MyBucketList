@@ -13,12 +13,8 @@ import womenproject.com.mybury.data.AdultCheck
 
 interface RetrofitInterface {
 
-    @Headers(
-            "X-Naver-Client-Id: 3HRMQaekNO_olG_nNCHt",
-            "X-Naver-Client-Secret: trOdm5SdqS")
+    @Headers("X-Naver-Client-Id: 3HRMQaekNO_olG_nNCHt", "X-Naver-Client-Secret: trOdm5SdqS")
     @GET("/v1/search/adult.json")
-    fun requestAdultResult(
-            @Query("query") query: String
-    ): Call<AdultCheck>
+    fun requestAdultResult(@Query("query") query: String): Call<AdultCheck>
 
 }

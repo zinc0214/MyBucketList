@@ -25,16 +25,12 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : Bas
 
         Log.e("ayhan:ViewType", "$viewType")
 
-        if (viewType == 1) {
-            currentViewHolder = DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as DdayNormalBucketItemViewHolder
-        } else {
-            currentViewHolder = DdayCountBucketItemViewHolder(BucketItemCountBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
-            return currentViewHolder as DdayCountBucketItemViewHolder
+        currentViewHolder = when(viewType) {
+            1 -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> DdayCountBucketItemViewHolder(BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
 
+        return currentViewHolder
     }
 
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
