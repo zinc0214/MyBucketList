@@ -61,7 +61,7 @@ open class BaseDialogFragment : DialogFragment() {
             confirmButtonClickListener = createOnClickCancelListener()
         }
 
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
 
         return binding.root

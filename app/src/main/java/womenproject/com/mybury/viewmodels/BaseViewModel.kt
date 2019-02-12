@@ -13,21 +13,13 @@ import womenproject.com.mybury.MyBuryApplication
 
 open class BaseViewModel : ViewModel() {
 
-    init {
-        if (checkNetwork()) {
-            Toast.makeText(MyBuryApplication.context, "Network Is Connect", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(MyBuryApplication.context, "Network Is Not Connect", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun checkNetwork(): Boolean {
+    fun isNetworkDisconnect(): Boolean {
         val cm = MyBuryApplication.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
 
-        return isConnected
+        return !isConnected
     }
 
 

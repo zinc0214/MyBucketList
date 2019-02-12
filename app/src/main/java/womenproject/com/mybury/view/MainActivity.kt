@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity() {
 
        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
-       val baseViewModel = BaseViewModel()
+       /*val baseViewModel = BaseViewModel()
 
-       if(baseViewModel.checkNetwork()) {
+       if(baseViewModel.isNetworkDisconnect()) {
            val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
            baseDialogFragment.show(supportFragmentManager, "dialog")
-       }
+       }*/
     }
 
     override fun onSupportNavigateUp(): Boolean {
