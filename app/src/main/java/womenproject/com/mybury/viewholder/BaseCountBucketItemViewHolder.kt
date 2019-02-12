@@ -27,11 +27,11 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            ddayVisible = bucketItemInfo.ddayVisible
-            currentSuccessCount = bucketItemInfo.count
+            ddayVisible = bucketItemInfo.d_day > 0
+            currentSuccessCount = bucketItemInfo.user_count
             bucketTitleText = bucketItemInfo.title
-            originSuccessCount = bucketItemInfo.count.toString()
-            horizontalProgressBar.progress = bucketItemInfo.count
+            originSuccessCount = bucketItemInfo.user_count.toString()
+            horizontalProgressBar.progress = bucketItemInfo.goal_count
 
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()

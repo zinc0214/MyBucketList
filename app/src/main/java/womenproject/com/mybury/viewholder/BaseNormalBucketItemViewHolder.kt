@@ -24,7 +24,7 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
         binding.apply {
-            ddayVisible = bucketItemInfo.ddayVisible
+            ddayVisible = bucketItemInfo.d_day > 0
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
             bucketTitleText = bucketItemInfo.title
