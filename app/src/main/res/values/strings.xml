@@ -3,6 +3,8 @@
 
     <!-- API URL-->
     <string name="naver_adult_api">https://openapi.naver.com/</string>
+    <string name="bucketlist_api">http://10.1.101.161:80/host/</string>
+
     <string name="network_dialog_title">Network Warning</string>
     <string name="network_dialog_context">Please Check Your Context</string>
     <string name="network_dialog_ok">OK</string>

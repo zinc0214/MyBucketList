@@ -44,6 +44,6 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.list[position].count
+        return bucketItemList.list[position].user_count
     }
 }

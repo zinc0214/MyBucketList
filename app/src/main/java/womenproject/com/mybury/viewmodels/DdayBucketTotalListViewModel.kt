@@ -13,14 +13,14 @@ class DdayBucketTotalListViewModel : BaseViewModel() {
 
         var ddayBucketGroupList = ArrayList<DdayEachBucketGroup>()
 
-        getDdayEachBucketItem().groupBy { it.dday }.forEach {
+        getDdayEachBucketItem().groupBy { it.d_day }.forEach {
             val bucketGroup = DdayEachBucketGroup(it.key, it.value)
             ddayBucketGroupList.add(bucketGroup)
         }
 
 
         val ddaySortedByBucketGroupList = ddayBucketGroupList.sortedBy { it.dday }
-        val ddayBucketTotalList = DdayTotalBucketList(ddaySortedByBucketGroupList, false)
+        val ddayBucketTotalList = DdayTotalBucketList(ddaySortedByBucketGroupList)
 
         for (i in 0 until ddaySortedByBucketGroupList.size) {
             Log.e("ayhan", "${ddaySortedByBucketGroupList[i]}")
@@ -29,6 +29,7 @@ class DdayBucketTotalListViewModel : BaseViewModel() {
 
         return ddayBucketTotalList
     }
+
 
     private fun getDdayEachBucketItem(): ArrayList<BucketItem> {
         val category = BucketCategory("id", "운동")

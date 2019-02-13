@@ -28,7 +28,8 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
             ddayVisible = bucketItemInfo.d_day > 0
-            currentSuccessCount = bucketItemInfo.user_count
+            userCount = bucketItemInfo.user_count
+            goalCount = bucketItemInfo.goal_count
             bucketTitleText = bucketItemInfo.title
             originSuccessCount = bucketItemInfo.user_count.toString()
             horizontalProgressBar.progress = bucketItemInfo.goal_count
@@ -57,12 +58,12 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
     }
 
     override fun addBucketSuccessCount() {
-        binding.originSuccessCount = (currentSuccessCount + 1).toString()
-        binding.horizontalProgressBar.progress = currentSuccessCount + 1
-        currentSuccessCount += 1
+        binding.originSuccessCount = (userCount + 1).toString()
+        binding.horizontalProgressBar.progress = userCount + 1
+        userCount += 1
 
-        setProgressMax(binding.horizontalProgressBar, 10)
-        setProgressAnimate(binding.horizontalProgressBar, currentSuccessCount)
+        setProgressMax(binding.horizontalProgressBar, goalCount)
+        setProgressAnimate(binding.horizontalProgressBar, userCount)
     }
 
     private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {

@@ -5,12 +5,12 @@ package womenproject.com.mybury.data
  */
 
 data class BucketList(
-        var list : ArrayList<BucketItem>
+        var list : ArrayList<BucketItem>,
+        val popupYn : Boolean
 )
 
 data class DdayTotalBucketList(
-        var ddayBucketEachListItem : List<DdayEachBucketGroup>,
-        val popupYn : Boolean
+        var ddayBucketEachListItem : List<DdayEachBucketGroup>
 )
 
 data class DdayEachBucketGroup(

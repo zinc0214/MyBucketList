@@ -33,7 +33,8 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
 
-    var currentSuccessCount = 0
+    var userCount = 0
+    var goalCount = 0
     var bucketType = 0
     var ddayVisible = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
@@ -54,7 +55,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         }, 500)
                         postDelayed({
                             revertAnimation()
-                            if (bucketType == 0 || currentSuccessCount >= 10) {
+                            if (bucketType == 0 || userCount >= goalCount) {
                                 setFinalSuccessUIBackground()
                                 setFinalSuccessWithCountBucket()
                             } else {
@@ -62,13 +63,13 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                             }
                         }, 1000)
                         postDelayed({
-                            if (bucketType == 0 || currentSuccessCount >= 10) {
+                            if (bucketType == 0 || userCount >= goalCount) {
                                 animFadeOut.duration = 500
                                 bucketItemImage.startAnimation(animFadeOut)
                             }
                         }, 1500)
                         postDelayed({
-                            if (bucketType == 0 || currentSuccessCount >= 10) {
+                            if (bucketType == 0 || userCount >= goalCount) {
                                 bucketItemImage.visibility = View.GONE
                                 bucketItemLayout.isClickable = true
                             }

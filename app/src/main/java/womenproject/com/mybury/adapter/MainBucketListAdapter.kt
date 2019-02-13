@@ -42,7 +42,7 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.list[position].count
+        return bucketItemList.list[position].user_count
     }
 
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
