@@ -16,7 +16,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <ScrollView
             android:id="@+id/bucket_list_layout"
             android:layout_width="match_parent"
@@ -49,7 +48,12 @@
 
         </FrameLayout>
 
-
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.progressVisible}" />
 
         <include
             android:id="@+id/main_toolbar"

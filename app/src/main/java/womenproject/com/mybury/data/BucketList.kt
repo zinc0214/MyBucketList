@@ -5,8 +5,9 @@ package womenproject.com.mybury.data
  */
 
 data class BucketList(
-        var list : ArrayList<BucketItem>,
-        val popupYn : Boolean
+        var bucketlists : List<BucketItem>,
+        val popupYn : Boolean,
+        val retcode : Int
 )
 
 data class DdayTotalBucketList(
@@ -23,6 +24,7 @@ data class BucketItem(
         var title : String = "Title",
         val open : Boolean = false,
         val pin : Boolean = false,
+        val complete : Boolean = false,
         val category: BucketCategory,
         val user_count : Int = 0,
         val goal_count : Int = 0,

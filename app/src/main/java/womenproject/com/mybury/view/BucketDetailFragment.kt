@@ -17,7 +17,7 @@ class BucketDetailFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val bucketId = BucketDetailFragmentArgs.fromBundle(arguments).bucketId
+        val bucketId = BucketDetailFragmentArgs.fromBundle(this.arguments!!).bucketId
         val binding = DataBindingUtil.inflate<FragmentBucketDetailBinding>(
                 inflater, R.layout.fragment_bucket_detail, container, false).apply {
             viewModel = BucketDetailViewModel(bucketId)

@@ -34,22 +34,22 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
         Log.e("ayhan:ViewType", "$viewType")
 
         currentViewHolder = when (viewType) {
-            0 ->  SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            1 ->  BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            0 -> SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            1 -> BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> BaseCountBucketItemViewHolder(BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
         return currentViewHolder
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.list[position].user_count
+        return bucketItemList.bucketlists[position].user_count
     }
 
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
         return View.OnClickListener {
             Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
 
-            val directions = MainFragmentDirections.ActionMainBucketToBucketDetail(bucketId.toString())
+            val directions = MainFragmentDirections.actionMainBucketToBucketDetail(bucketId.toString())
             it.findNavController().navigate(directions)
         }
     }

@@ -19,7 +19,7 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding) 
         binding.apply {
             ddayText = "D-${ddayEachBucketGroup.dday}"
 
-            val bucketList = BucketList(ddayEachBucketGroup.ddayBucketItemList as ArrayList<BucketItem>, false)
+            val bucketList = BucketList(ddayEachBucketGroup.ddayBucketItemList as ArrayList<BucketItem>, false, 200)
             ddayEachBucketItemList.layoutManager = LinearLayoutManager(context)
             ddayEachBucketItemList.hasFixedSize()
             ddayEachBucketItemList.adapter =  DdayBucketEachListAdapter(context, bucketList)

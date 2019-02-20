@@ -1,6 +1,7 @@
 package womenproject.com.mybury.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +30,8 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val holder = currentViewHolder
         holder.apply {
-            bind(createOnClickBucketListener(position), bucketItemList.list[position], context)
+            Log.e("ayhan:BB", bucketItemList.toString())
+            bind(createOnClickBucketListener(position), bucketItemList.bucketlists[position], context)
         }
     }
 
@@ -40,10 +42,10 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     }
 
     override fun getItemCount(): Int {
-        return bucketItemList.list.size
+        return bucketItemList.bucketlists.size
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.list[position].user_count
+        return bucketItemList.bucketlists[position].user_count
     }
 }

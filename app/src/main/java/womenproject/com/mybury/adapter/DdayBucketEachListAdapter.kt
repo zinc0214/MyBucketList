@@ -36,8 +36,7 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : Bas
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
         return View.OnClickListener {
             Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
-
-            val directions = DdayBucketListFragmentDirections.ActionDdayBucketToBucketDetail(bucketId.toString())
+            val directions = DdayBucketListFragmentDirections.actionDdayBucketToBucketDetail(bucketId.toString())
             it.findNavController().navigate(directions)
         }
     }

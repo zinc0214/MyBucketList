@@ -18,7 +18,7 @@ interface RetrofitInterface {
     @GET("/v1/search/adult.json")
     fun requestAdultResult(@Query("query") query: String): Call<AdultCheck>
 
-    @GET("/home")
+    @GET("/host/home")
     fun requestMainBucketListResult() : Call<BucketList>
 
 }

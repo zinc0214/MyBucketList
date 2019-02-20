@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
@@ -24,7 +25,7 @@ class MainFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        mainFragmentViewModel = MainFragmentViewModel()
+        mainFragmentViewModel = MainFragmentViewModel(context)
 
         binding = DataBindingUtil.inflate<FragmentMainBinding>(
                 inflater, R.layout.fragment_main, container, false)
@@ -47,12 +48,24 @@ class MainFragment : BaseFragment() {
 
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
-        binding.bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
+
+        mainFragmentViewModel.getMainBucketList(object : MainFragmentViewModel.OnBucketListGetEvent{
+            override fun start() {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+
+            override fun finish(bucketList: BucketList?) {
+                if(bucketList != null)  {
+                    binding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
+                }
+            }
+        })
+
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
         return View.OnClickListener {
-            val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
+            val directions = MainFragmentDirections.actionMainBucketToBucketWrite()
             it.findNavController().navigate(directions)
         }
     }
@@ -66,7 +79,7 @@ class MainFragment : BaseFragment() {
 
     private fun createOnClickDdayListener() : View.OnClickListener {
         return View.OnClickListener {
-            val directions = MainFragmentDirections.ActionMainBucketToDdayBucket()
+            val directions = MainFragmentDirections.actionMainBucketToDdayBucket()
             it.findNavController().navigate(directions)
         }
     }
