@@ -42,7 +42,12 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.bucketlists[position].user_count
+        return if(bucketItemList.bucketlists[position].complete) {
+            0
+        } else {
+            bucketItemList.bucketlists[position].goal_count
+        }
+
     }
 
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {

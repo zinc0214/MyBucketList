@@ -30,6 +30,7 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             ddayVisible = bucketItemInfo.d_day > 0
             userCount = bucketItemInfo.user_count
             goalCount = bucketItemInfo.goal_count
+            compelete = bucketItemInfo.complete
             bucketTitleText = bucketItemInfo.title
             originSuccessCount = bucketItemInfo.user_count.toString()
             horizontalProgressBar.progress = bucketItemInfo.goal_count

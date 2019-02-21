@@ -56,6 +56,7 @@ class MainFragment : BaseFragment() {
 
             override fun finish(bucketList: BucketList?) {
                 if(bucketList != null)  {
+                    binding.progressBar.visibility = View.GONE
                     binding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }

@@ -36,6 +36,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     var userCount = 0
     var goalCount = 0
     var bucketType = 0
+    var compelete = false
     var ddayVisible = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
@@ -61,20 +62,20 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                             } else {
                                 setDoneSuccessUIButton()
                             }
-                        }, 1000)
+                        }, 700)
                         postDelayed({
                             if (bucketType == 0 || userCount >= goalCount) {
                                 animFadeOut.duration = 500
                                 bucketItemImage.startAnimation(animFadeOut)
                             }
-                        }, 1500)
+                        }, 800)
                         postDelayed({
                             if (bucketType == 0 || userCount >= goalCount) {
                                 bucketItemImage.visibility = View.GONE
                                 bucketItemLayout.isClickable = true
                             }
 
-                        }, 2000)
+                        }, 1000)
                     }
                 }
             }
