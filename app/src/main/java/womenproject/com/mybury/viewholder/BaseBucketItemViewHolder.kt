@@ -38,6 +38,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     var bucketType = 0
     var compelete = false
     var ddayVisible = false
+    var isLastItem = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
 

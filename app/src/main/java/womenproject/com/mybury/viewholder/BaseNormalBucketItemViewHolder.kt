@@ -1,6 +1,7 @@
 package womenproject.com.mybury.viewholder
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
@@ -28,11 +29,18 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
             userCount = bucketItemInfo.user_count
             goalCount = bucketItemInfo.goal_count
             compelete = bucketItemInfo.complete
+            isLastItem = bucketItemInfo.isLast
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
             bucketTitleText = bucketItemInfo.title
 
-            setDdayColor()
+            Log.e("ayhan", "$isLastItem")
+            lastImgVisible = if(isLastItem) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
 
             executePendingBindings()
         }

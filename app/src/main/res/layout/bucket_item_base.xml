@@ -18,71 +18,84 @@
             type="String" />
 
         <variable
-            name="progressBarVisible"
-            type="Integer" />
+            name="lastImgVisible"
+            type="Integer"/>
 
         <variable
-            name="successImgVisible"
-            type="Integer" />
-
-        <variabl
             name="bucketSuccessListener"
             type="android.view.View.OnClickListener" />
 
     </data>
 
     <LinearLayout
-        android:id="@+id/bucket_item_layout"
-        style="@style/BucketItemLayoutStyle"
-        android:onClick="@{bucketClickListener}">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/bucket_succeed_image"
-                android:background="@drawable/bucket_item_succeed_background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <ImageView
-                android:id="@+id/bucket_item_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bucket_item_base_background" />
+        <LinearLayout
+            android:id="@+id/bucket_item_layout"
+            style="@style/BucketItemLayoutStyle"
+            android:onClick="@{bucketClickListener}">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/bucket_title"
-                    style="@style/BucketItemTitleTextStyle"
-                    android:text="@{bucketTitleText}" />
+                <ImageView
+                    android:id="@+id/bucket_succeed_image"
+                    android:background="@drawable/bucket_item_succeed_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/bucket_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bucket_item_base_background" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:orientation="horizontal">
 
-                    <include
-                        android:layout_marginEnd="16dp"
-                        android:id="@+id/success_button_layout"
-                        layout="@layout/bucket_succeed_button"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true" />
+                    <TextView
+                        android:id="@+id/bucket_title"
+                        style="@style/BucketItemTitleTextStyle"
+                        android:text="@{bucketTitleText}" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <include
+                            android:layout_marginEnd="16dp"
+                            android:id="@+id/success_button_layout"
+                            layout="@layout/bucket_succeed_button"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
-
             </RelativeLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:visibility="@{lastImgVisible}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/list_end" />
     </LinearLayout>
+
 
 
 </layout>

@@ -2,6 +2,7 @@ package womenproject.com.mybury.viewholder
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
@@ -31,6 +32,7 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             userCount = bucketItemInfo.user_count
             goalCount = bucketItemInfo.goal_count
             compelete = bucketItemInfo.complete
+            isLastItem = bucketItemInfo.isLast
             bucketTitleText = bucketItemInfo.title
             originSuccessCount = bucketItemInfo.user_count.toString()
             horizontalProgressBar.progress = bucketItemInfo.goal_count
@@ -38,7 +40,12 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
 
-            setDdayColor()
+            Log.e("ayhan", "$isLastItem")
+            lastImgVisible = if(isLastItem) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
             executePendingBindings()
         }

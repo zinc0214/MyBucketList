@@ -11,6 +11,16 @@ class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding)
         binding.apply {
             bucketTitleText = bucketItemInfo.title
             bucketClickListener = bucketListener
+            compelete = bucketItemInfo.complete
+            isLastItem = bucketItemInfo.isLast
+            bucketClickListener = bucketListener
+            bucketTitleText = bucketItemInfo.title
+
+            lastImgVisible = if(isLastItem) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
             executePendingBindings()
         }
     }

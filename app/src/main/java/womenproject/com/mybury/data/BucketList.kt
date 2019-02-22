@@ -29,7 +29,7 @@ data class BucketItem(
         val user_count : Int = 0,
         val goal_count : Int = 1,
         val d_day : Int = 0,
-        val isLast : Boolean = false
+        var isLast : Boolean = false
 )
 
 data class BucketCategory(

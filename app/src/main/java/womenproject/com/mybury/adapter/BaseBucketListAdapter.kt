@@ -30,7 +30,6 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val holder = currentViewHolder
         holder.apply {
-            Log.e("ayhan:BB", bucketItemList.toString())
             bind(createOnClickBucketListener(position), bucketItemList.bucketlists[position], context)
         }
     }

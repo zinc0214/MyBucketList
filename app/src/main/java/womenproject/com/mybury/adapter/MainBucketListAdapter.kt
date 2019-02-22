@@ -42,6 +42,9 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
     }
 
     private fun checkBucketType(position: Int): Int {
+        if(position == bucketItemList.bucketlists.size-1) {
+            bucketItemList.bucketlists[position].isLast = true
+        }
         return if(bucketItemList.bucketlists[position].complete) {
             0
         } else {
