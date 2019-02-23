@@ -2,6 +2,7 @@ package womenproject.com.mybury.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import womenproject.com.mybury.R
 import womenproject.com.mybury.viewmodels.BaseViewModel
 
 /**
@@ -17,7 +18,10 @@ open class BaseFragment : Fragment() {
 
     private fun checkNetworkConnect(){
         if(BaseViewModel().isNetworkDisconnect()) {
-            val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
+            val baseDialogFragment = BaseDialogFragment.Instance(
+                    resources.getString(R.string.network_fail_title),
+                    resources.getString(R.string.network_fail_msg),
+                    false, true)
             baseDialogFragment.show(childFragmentManager)
         }
     }

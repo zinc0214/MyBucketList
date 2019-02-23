@@ -20,4 +20,10 @@
 
     <string name="dialog_cancel">취소</string>
     <string name="dialog_confirm">확인</string>
+
+
+    <string name="network_fail_title">네트워크 연결 실패</string>
+    <string name="network_fail_msg">네트워크 연결이 끊어졌습니다. 마이버리를 사용하실 이수수 수 없습니다. 데헷</string>
+
+    <string name="dd"> myString.replace(" ", "\u00A0"); </string>
 </resources>
