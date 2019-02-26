@@ -40,7 +40,7 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         binding.bucketClickListener = bucketListener
         binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
 
-        binding.lastImgVisible = if(isLastItem) {
+        binding.lastEndImg.lastImgVisible = if(isLastItem) {
             View.VISIBLE
         } else {
             View.GONE

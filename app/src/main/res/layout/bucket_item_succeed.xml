@@ -13,10 +13,6 @@
             name="bucketTitleText"
             type="String" />
 
-        <variable
-            name="lastImgVisible"
-            type="Integer"/>
-
     </data>
 
     <LinearLayout
@@ -67,14 +63,9 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:visibility="@{lastImgVisible}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/list_end" />
+        <include
+            android:id="@+id/last_end_img"
+            layout="@layout/list_end_layout"/>
 
     </LinearLayout>
 
