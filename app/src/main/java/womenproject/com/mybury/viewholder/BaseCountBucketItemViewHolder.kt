@@ -40,14 +40,16 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             bucketClickListener = bucketListener
             successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
 
-            Log.e("ayhan", "$isLastItem")
+            Log.e(this.toString(), "ayhan : isLastItem : $isLastItem")
             lastImgVisible = if(isLastItem) {
                 View.VISIBLE
             } else {
                 View.GONE
             }
 
+            setDdayColor()
             executePendingBindings()
+
         }
     }
 
