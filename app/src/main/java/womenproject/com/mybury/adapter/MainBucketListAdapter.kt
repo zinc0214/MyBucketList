@@ -25,10 +25,6 @@ import womenproject.com.mybury.viewholder.*
 class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
 
 
-    override fun getItemViewType(position: Int): Int {
-        return checkBucketType(position)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         Log.e("ayhan:ViewType", "$viewType")
@@ -41,17 +37,6 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
         return currentViewHolder
     }
 
-    private fun checkBucketType(position: Int): Int {
-        if(position == bucketItemList.bucketlists.size-1) {
-            bucketItemList.bucketlists[position].isLast = true
-        }
-        return if(bucketItemList.bucketlists[position].complete) {
-            0
-        } else {
-            bucketItemList.bucketlists[position].goal_count
-        }
-
-    }
 
     override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
         return View.OnClickListener {

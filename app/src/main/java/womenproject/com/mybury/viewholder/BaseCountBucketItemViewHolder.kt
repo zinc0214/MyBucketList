@@ -24,40 +24,39 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
         bucketItemImage = binding.bucketItemImage
         bucketTitle = binding.bucketTitle
         circularProgressBar = binding.successButtonLayout.circularProgressBar
+        userCountText = binding.userCount
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            ddayVisible = bucketItemInfo.d_day > 0
-            userCount = bucketItemInfo.user_count
-            goalCount = bucketItemInfo.goal_count
-            compelete = bucketItemInfo.complete
-            isLastItem = bucketItemInfo.isLast
-            bucketTitleText = bucketItemInfo.title
-            originSuccessCount = bucketItemInfo.user_count.toString()
-            horizontalProgressBar.progress = bucketItemInfo.goal_count
 
-            bucketClickListener = bucketListener
-            successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
-
-            Log.e(this.toString(), "ayhan : isLastItem : $isLastItem")
-            lastImgVisible = if(isLastItem) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
+            setBucketData(bucketItemInfo)
+            setUI(bucketItemInfo, bucketListener)
             setDdayColor()
+
             executePendingBindings()
 
         }
     }
 
-    private fun createOnClickBucketSuccessListener(): View.OnClickListener {
-        return View.OnClickListener {
-            onBucketSuccessFinalButtonClickListener()
+    override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+        super.setUI(bucketItemInfo, bucketListener)
+
+        binding.bucketTitleText = bucketItemInfo.title
+        binding.currentUserCount = bucketItemInfo.user_count.toString()
+        binding.horizontalProgressBar.progress = bucketItemInfo.goal_count
+
+        binding.bucketClickListener = bucketListener
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
+
+        binding.lastImgVisible = if(isLastItem) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
+
+
 
     private fun setProgressMax(pb: ProgressBar, max: Int) {
         pb.max = max * 100
@@ -68,7 +67,7 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
     }
 
     override fun addBucketSuccessCount() {
-        binding.originSuccessCount = (userCount + 1).toString()
+        binding.currentUserCount = (userCount + 1).toString()
         binding.horizontalProgressBar.progress = userCount + 1
         userCount += 1
 

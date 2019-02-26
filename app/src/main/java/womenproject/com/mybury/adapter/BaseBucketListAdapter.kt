@@ -1,6 +1,7 @@
 package womenproject.com.mybury.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
 
 
     override fun getItemViewType(position: Int): Int {
+        Log.e(this.toString(), "getItemViewType is Use")
         return checkBucketType(position)
     }
 
@@ -44,6 +46,14 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     }
 
     private fun checkBucketType(position: Int): Int {
-        return bucketItemList.bucketlists[position].user_count
+        if(position == bucketItemList.bucketlists.size-1) {
+            bucketItemList.bucketlists[position].isLast = true
+        }
+        return if(bucketItemList.bucketlists[position].complete) {
+            0
+        } else {
+            bucketItemList.bucketlists[position].goal_count
+        }
+
     }
 }

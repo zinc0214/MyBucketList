@@ -43,6 +43,6 @@ class DdayCountBucketItemViewHolder(private val binding: BucketItemCountBinding)
         binding.horizontalProgressBar.progressDrawable = context.getDrawable(R.drawable.dday_horizontal_progressbar)
         binding.successButtonLayout.circularProgressBar.spinningBarColor = context.getColor(R.color.notiColor)
         binding.bucketSucceedImage.background = context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
-        binding.currentNum.setTextColor(context.getColor(R.color.notiColor))
+        binding.userCount.setTextColor(context.getColor(R.color.notiColor))
     }
 }

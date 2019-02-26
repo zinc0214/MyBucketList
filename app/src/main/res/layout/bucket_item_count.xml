@@ -14,7 +14,7 @@
             type="String" />
 
         <variable
-            name="originSuccessCount"
+            name="currentUserCount"
             type="String" />
 
         <variable
@@ -89,12 +89,12 @@
                                 android:progressDrawable="@drawable/base_horizontal_progressbar" />
 
                             <TextView
-                                android:id="@+id/current_num"
+                                android:id="@+id/user_count"
                                 android:layout_width="30dp"
                                 android:layout_height="18dp"
                                 android:gravity="center"
                                 android:padding="0dp"
-                                android:text="@{originSuccessCount}"
+                                android:text="@{currentUserCount}"
                                 android:textColor="@color/subColor"
                                 android:textSize="11sp" />
 

@@ -32,6 +32,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var bucketItemImage: ImageView
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
+    lateinit var userCountText : TextView
 
     var userCount = 0
     var goalCount = 0
@@ -114,9 +115,24 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
 
     }
 
+    open fun setBucketData(bucketItem : BucketItem) {
+        ddayVisible = bucketItem.d_day > 0
+        userCount = bucketItem.user_count
+        goalCount = bucketItem.goal_count
+        compelete = bucketItem.complete
+        isLastItem = bucketItem.isLast
+    }
+
+    open fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+    }
+
+    open fun createOnClickBucketSuccessListener(): View.OnClickListener {
+        return View.OnClickListener {
+            onBucketSuccessFinalButtonClickListener()
+        }
+    }
 
     open fun setFinalSuccessWithCountBucket() {}
     open fun addBucketSuccessCount() {}
     open fun setDdayColor() {}
-
 }

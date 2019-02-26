@@ -25,31 +25,27 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
         binding.apply {
-            ddayVisible = bucketItemInfo.d_day > 0
-            userCount = bucketItemInfo.user_count
-            goalCount = bucketItemInfo.goal_count
-            compelete = bucketItemInfo.complete
-            isLastItem = bucketItemInfo.isLast
-            bucketClickListener = bucketListener
-            successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
-            bucketTitleText = bucketItemInfo.title
-
-            Log.e("ayhan", "$isLastItem")
-            lastImgVisible = if(isLastItem) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
-
+            setBucketData(bucketItemInfo)
+            setUI(bucketItemInfo, bucketListener)
 
             executePendingBindings()
         }
     }
 
-    private fun createOnClickBucketSuccessListener(): View.OnClickListener {
-        return View.OnClickListener {
-            onBucketSuccessFinalButtonClickListener()
+    override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+        super.setUI(bucketItemInfo, bucketListener)
+
+        binding.bucketTitleText = bucketItemInfo.title
+
+        binding.bucketClickListener = bucketListener
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
+
+        binding.lastImgVisible = if(isLastItem) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
+
 
 }

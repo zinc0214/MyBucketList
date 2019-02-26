@@ -9,19 +9,26 @@ class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding)
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            bucketTitleText = bucketItemInfo.title
-            bucketClickListener = bucketListener
-            compelete = bucketItemInfo.complete
-            isLastItem = bucketItemInfo.isLast
-            bucketClickListener = bucketListener
-            bucketTitleText = bucketItemInfo.title
 
-            lastImgVisible = if(isLastItem) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            setBucketData(bucketItemInfo)
+            setUI(bucketItemInfo, bucketListener)
+
             executePendingBindings()
         }
     }
+
+
+    override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+        super.setUI(bucketItemInfo, bucketListener)
+
+        binding.bucketTitleText = bucketItemInfo.title
+        binding.bucketClickListener = bucketListener
+        binding.lastImgVisible = if(isLastItem) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+
 }

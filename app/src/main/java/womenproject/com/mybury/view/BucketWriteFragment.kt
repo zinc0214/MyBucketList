@@ -59,7 +59,7 @@ class BucketWriteFragment : BaseFragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initPosition() {
         binding.rvHorizontalPicker.scrollToPosition(1)
-        binding.currentNum.setText("1")
+        binding.userCount.setText("1")
     }
 
     private fun createOnAdultCheckBtnListener(): View.OnClickListener {
@@ -75,8 +75,8 @@ class BucketWriteFragment : BaseFragment() {
 
     private fun numberCheckListener(): View.OnClickListener {
         return View.OnClickListener {
-            binding.currentNum.setBackgroundColor(context!!.getColor(R.color.testColor))
-            binding.currentNum.isCursorVisible = true
+            binding.userCount.setBackgroundColor(context!!.getColor(R.color.testColor))
+            binding.userCount.isCursorVisible = true
         }
     }
 
@@ -90,10 +90,10 @@ class BucketWriteFragment : BaseFragment() {
             callback = object : SliderLayoutManager.OnItemSelectedListener {
                 override fun onItemSelected(layoutPosition: Int) {
                     binding.tvSelectedItem.setText(data[layoutPosition])
-                    binding.currentNum.setText(data[layoutPosition])
+                    binding.userCount.setText(data[layoutPosition])
                     binding.tvSelectedItem.setSelection(binding.tvSelectedItem.text.length)
-                    binding.currentNum.setSelection(binding.currentNum.text.length)
-                    binding.currentNum.isCursorVisible = false
+                    binding.userCount.setSelection(binding.userCount.text.length)
+                    binding.userCount.isCursorVisible = false
                     if (data[layoutPosition] != string && string != "_") {
                         binding.rvHorizontalPicker.smoothScrollToPosition(number)
                         string = "_"
@@ -133,15 +133,15 @@ class BucketWriteFragment : BaseFragment() {
 
 
     private fun setPickerText2() {
-        binding.currentNum.imeOptions = EditorInfo.IME_ACTION_DONE
+        binding.userCount.imeOptions = EditorInfo.IME_ACTION_DONE
 
-        binding.currentNum.setOnEditorActionListener { v, actionId, event ->
+        binding.userCount.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                string = binding.currentNum.text.toString()
+                string = binding.userCount.text.toString()
                 number = string.toInt()
                 Log.e("ayhan", "String : " + string + "Number : " + number)
                 binding.rvHorizontalPicker.smoothScrollToPosition(number)
-                imm.hideSoftInputFromWindow(binding.currentNum.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.userCount.windowToken, 0)
                 return@setOnEditorActionListener true
             } else {
                 return@setOnEditorActionListener false
@@ -152,8 +152,8 @@ class BucketWriteFragment : BaseFragment() {
     private fun sliderIsScroll() {
         binding.rvHorizontalPicker.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             Log.e("ayhan", "isScrollNow")
-            binding.currentNum.setText("")
-            binding.currentNum.setBackgroundColor(context!!.resources.getColor(R.color.textOriColor))
+            binding.userCount.setText("")
+            binding.userCount.setBackgroundColor(context!!.resources.getColor(R.color.textOriColor))
         }
     }
 }
