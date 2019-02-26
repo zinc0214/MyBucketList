@@ -21,4 +21,7 @@ interface RetrofitInterface {
     @GET("/host/home")
     fun requestMainBucketListResult() : Call<BucketList>
 
+    @GET("/host/dDay")
+    fun requestDdayBucketListResult() : Call<BucketList>
+
 }

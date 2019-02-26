@@ -20,9 +20,13 @@ import womenproject.com.mybury.viewholder.*
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-
-// DiffUtil은 support library 24.2.0에서 추가된 클래스이다. 기존에 불편했던 RecyclerView의 효율적인 갱신 처리를 편리하게 다룰 수 있도록 제공하는 util 클래스이다.
 class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
+
+    override fun getItemViewType(position: Int): Int {
+        Log.e(this.toString(), "getItemViewType is Use")
+        Log.e(this.toString(), "position : $position")
+        return checkBucketType(position)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,4 +51,15 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
         }
     }
 
+    private fun checkBucketType(position: Int): Int {
+        if (position == bucketItemList.bucketlists.size - 1) {
+            bucketItemList.bucketlists[position].isLast = true
+        }
+        return if (bucketItemList.bucketlists[position].complete) {
+            0
+        } else {
+            bucketItemList.bucketlists[position].goalCount
+        }
+
+    }
 }

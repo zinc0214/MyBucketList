@@ -21,6 +21,11 @@ import womenproject.com.mybury.viewholder.DdayNormalBucketItemViewHolder
 
 class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
 
+    override fun getItemViewType(position: Int): Int {
+        Log.e(this.toString(), "getItemViewType is Use")
+        return checkBucketType(position)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         Log.e("ayhan:ViewType_dday", "$viewType")
@@ -41,5 +46,13 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : Bas
         }
     }
 
+    private fun checkBucketType(position: Int): Int {
+        return if(bucketItemList.bucketlists[position].complete) {
+            0
+        } else {
+            bucketItemList.bucketlists[position].goalCount
+        }
+
+    }
 
 }

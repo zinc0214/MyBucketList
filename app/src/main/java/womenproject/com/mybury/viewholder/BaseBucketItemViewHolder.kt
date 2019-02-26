@@ -116,9 +116,9 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     open fun setBucketData(bucketItem : BucketItem) {
-        ddayVisible = bucketItem.d_day > 0
-        userCount = bucketItem.user_count
-        goalCount = bucketItem.goal_count
+        ddayVisible = bucketItem.dDay > 0
+        userCount = bucketItem.userCount
+        goalCount = bucketItem.goalCount
         compelete = bucketItem.complete
         isLastItem = bucketItem.isLast
     }

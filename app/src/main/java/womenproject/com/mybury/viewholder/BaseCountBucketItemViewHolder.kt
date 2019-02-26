@@ -2,7 +2,6 @@ package womenproject.com.mybury.viewholder
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
@@ -43,8 +42,8 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
         super.setUI(bucketItemInfo, bucketListener)
 
         binding.bucketTitleText = bucketItemInfo.title
-        binding.currentUserCount = bucketItemInfo.user_count.toString()
-        binding.horizontalProgressBar.progress = bucketItemInfo.goal_count
+        binding.currentUserCount = bucketItemInfo.userCount.toString()
+        binding.horizontalProgressBar.progress = bucketItemInfo.goalCount
 
         binding.bucketClickListener = bucketListener
         binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()

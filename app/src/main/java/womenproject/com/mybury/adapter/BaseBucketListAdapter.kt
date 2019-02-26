@@ -19,11 +19,6 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     lateinit var currentViewHolder: BaseBucketItemViewHolder
 
 
-    override fun getItemViewType(position: Int): Int {
-        Log.e(this.toString(), "getItemViewType is Use")
-        return checkBucketType(position)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -45,15 +40,5 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
         return bucketItemList.bucketlists.size
     }
 
-    private fun checkBucketType(position: Int): Int {
-        if(position == bucketItemList.bucketlists.size-1) {
-            bucketItemList.bucketlists[position].isLast = true
-        }
-        return if(bucketItemList.bucketlists[position].complete) {
-            0
-        } else {
-            bucketItemList.bucketlists[position].goal_count
-        }
 
-    }
 }

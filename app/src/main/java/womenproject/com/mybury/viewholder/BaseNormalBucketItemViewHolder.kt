@@ -27,7 +27,7 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         binding.apply {
             setBucketData(bucketItemInfo)
             setUI(bucketItemInfo, bucketListener)
-
+            setDdayColor()
             executePendingBindings()
         }
     }

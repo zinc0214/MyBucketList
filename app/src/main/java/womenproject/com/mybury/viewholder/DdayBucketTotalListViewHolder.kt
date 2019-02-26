@@ -1,6 +1,8 @@
 package womenproject.com.mybury.viewholder
 
 import android.content.Context
+import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.adapter.DdayBucketEachListAdapter
@@ -24,6 +26,12 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding) 
             ddayEachBucketItemList.hasFixedSize()
             ddayEachBucketItemList.adapter =  DdayBucketEachListAdapter(context, bucketList)
 
+            Log.e("ayhan",  "${ddayEachBucketGroup.isLast}")
+            lastEndImg.lastImgVisible = if(ddayEachBucketGroup.isLast) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
             executePendingBindings()
         }
     }
