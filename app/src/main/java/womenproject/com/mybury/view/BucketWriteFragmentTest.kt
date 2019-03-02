@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.SliderAdapter
-import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
+import womenproject.com.mybury.databinding.FragmentBucketWriteTestBinding
 import womenproject.com.mybury.util.ScreenUtils
 import womenproject.com.mybury.util.SliderLayoutManager
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
@@ -23,10 +23,10 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
  * Created by HanAYeon on 2018. 12. 3..
  */
 
-class BucketWriteFragment : BaseFragment() {
+class BucketWriteFragmentTest : BaseFragment() {
 
     private lateinit var bucketWriteViewModel: BucketWriteViewModel
-    private lateinit var binding: FragmentBucketWriteBinding
+    private lateinit var binding: FragmentBucketWriteTestBinding
     private var number = 0
     private var string = "_"
     private val data = (1..100).toList().map { it.toString() } as ArrayList<String>
@@ -35,8 +35,8 @@ class BucketWriteFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         bucketWriteViewModel = BucketWriteViewModel(context)
-        binding = DataBindingUtil.inflate<FragmentBucketWriteBinding>(
-                inflater, R.layout.fragment_bucket_write, container, false).apply {
+        binding = DataBindingUtil.inflate<FragmentBucketWriteTestBinding>(
+                inflater, R.layout.fragment_bucket_write_test, container, false).apply {
             viewModel = bucketWriteViewModel
         }
 

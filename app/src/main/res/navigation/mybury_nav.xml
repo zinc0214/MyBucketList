@@ -50,9 +50,9 @@
 
     <fragment
         android:id="@+id/bucket_write_fragment"
-        android:name="womenproject.com.mybury.view.BucketWriteFragment"
+        android:name="womenproject.com.mybury.view.BucketWriteFragmentTest"
         android:label="Write"
-        tools:layout="@layout/fragment_bucket_write">
+        tools:layout="@layout/fragment_bucket_write_test">
     </fragment>
 
     <fragment
