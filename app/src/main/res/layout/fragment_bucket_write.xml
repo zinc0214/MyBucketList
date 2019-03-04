@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="cancelBtnClickListener"
+            type="android.view.View.OnClickListener" />
+
+
+        <variable
+            name="registerBtnClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="memoImgAddListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="openSettingListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="categorySelectListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="ddayAddListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="goalCountSettingListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp">
+
+            <TextView
+                style="@style/writeTopTextStyle"
+                android:layout_marginStart="20dp"
+                android:enabled="true"
+                android:onClick="@{cancelBtnClickListener}"
+                android:text="취소" />
+
+
+            <TextView
+                style="@style/writeTopTextStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:enabled="false"
+                android:onClick="@{registerBtnClickListener}"
+                android:text="등록" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/dividerColor" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/titleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="새로운 목표를 작성해보세요."
+                android:maxLines="2"
+                android:textColorHint="@color/writeUnusedText"
+                android:textSize="15sp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/write_memo_background">
+
+                <TextView
+                    android:id="@+id/memoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="33dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="신전떡볶이,참치마요,순대,매운맛,중간맛,치즈 추가,김말이,만두,잡채만두,오뎅튀김 다 맛있다!"
+                    android:textColor="@color/writeMemoText"
+                    android:textSize="11sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="90dp"
+            android:layout_height="26dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="26dp"
+            android:background="@drawable/memo_img_add_button_background"
+            android:onClick="@{memoImgAddListener}">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="+ 메모/이미지"
+                android:textColor="@color/mainColor"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/dividerColor" />
+
+        <RelativeLayout
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{openSettingListener}">
+
+            <TextView
+                style="@style/writeSettingListTitleTextStyle"
+                android:text="공개 설정"
+                android:textColor="@color/writeEnableText" />
+
+            <RelativeLayout
+                android:id="@+id/select_switch_layout"
+                style="@style/writeSwitchLayoutStyle"
+                android:visibility="visible">
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/switch_select_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/switch_select_circle" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/unselect_switch_layout"
+                style="@style/writeSwitchLayoutStyle"
+                android:visibility="gone">
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/switch_unselect_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/switch_select_circle" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/dividerColor" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{categorySelectListener}">
+
+            <TextView
+                style="@style/writeSettingListTitleTextStyle"
+                android:text="카테고리"
+                android:textColor="@color/writeEnableText" />
+
+
+            <TextView
+                android:id="@+id/category_text"
+                style="@style/writeSettingListContentStyle"
+                android:enabled="false"
+                android:text="없음" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/dividerColor" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{ddayAddListener}">
+
+            <TextView
+                style="@style/writeSettingListTitleTextStyle"
+                android:text="D-day"
+                android:textColor="@color/writeEnableText" />
+
+
+            <TextView
+                android:id="@+id/dday_text"
+                style="@style/writeSettingListContentStyle"
+                android:enabled="false"
+                android:text="추가" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/dividerColor" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{goalCountSettingListener}">
+
+            <TextView
+                style="@style/writeSettingListTitleTextStyle"
+                android:text="목표 달성 횟수"
+                android:textColor="@color/writeEnableText" />
+
+
+            <TextView
+                android:id="@+id/goal_count_text"
+                style="@style/writeSettingListContentStyle"
+                android:enabled="false"
+                android:text="설정" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</layout>

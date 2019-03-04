@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.BucketWriteViewModel" />
+            type="womenproject.com.mybury.viewmodels.BucketWriteViewModelTest" />
 
         <variable
             name="checkAdultListener"

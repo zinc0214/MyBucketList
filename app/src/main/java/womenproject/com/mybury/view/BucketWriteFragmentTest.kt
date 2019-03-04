@@ -16,7 +16,7 @@ import womenproject.com.mybury.adapter.SliderAdapter
 import womenproject.com.mybury.databinding.FragmentBucketWriteTestBinding
 import womenproject.com.mybury.util.ScreenUtils
 import womenproject.com.mybury.util.SliderLayoutManager
-import womenproject.com.mybury.viewmodels.BucketWriteViewModel
+import womenproject.com.mybury.viewmodels.BucketWriteViewModelTest
 
 
 /**
@@ -25,7 +25,7 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 
 class BucketWriteFragmentTest : BaseFragment() {
 
-    private lateinit var bucketWriteViewModel: BucketWriteViewModel
+    private lateinit var bucketWriteViewModelTest: BucketWriteViewModelTest
     private lateinit var binding: FragmentBucketWriteTestBinding
     private var number = 0
     private var string = "_"
@@ -34,10 +34,10 @@ class BucketWriteFragmentTest : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        bucketWriteViewModel = BucketWriteViewModel(context)
+        bucketWriteViewModelTest = BucketWriteViewModelTest(context)
         binding = DataBindingUtil.inflate<FragmentBucketWriteTestBinding>(
                 inflater, R.layout.fragment_bucket_write_test, container, false).apply {
-            viewModel = bucketWriteViewModel
+            viewModel = bucketWriteViewModelTest
         }
 
         imm = context!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -68,7 +68,7 @@ class BucketWriteFragmentTest : BaseFragment() {
             if (binding.bucketTitle.text.toString() == "") {
                 Toast.makeText(context, "Please Write Text First.", Toast.LENGTH_SHORT).show()
             } else {
-                bucketWriteViewModel.checkGo(binding.bucketTitle.text.toString())
+                bucketWriteViewModelTest.checkGo(binding.bucketTitle.text.toString())
             }
         }
     }

@@ -3,81 +3,53 @@ package womenproject.com.mybury.viewmodels
 import android.content.Context
 import android.util.Log
 import android.view.View
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
-import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.AdultCheck
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
 
-
-/**
- * Created by HanAYeon on 2018. 12. 3..
- */
-
 class BucketWriteViewModel internal constructor(private val context: Context?) : BaseViewModel() {
 
-    private val NAVER_ADULT_API = context!!.resources.getString(R.string.naver_adult_api)
-    var adultResult: AdultCheck? = null
-    var isEnd = true
+    private val MAIN_BUCKETLIST_API = context!!.resources.getString(R.string.bucket_list_api)
+    private var bucketList : BucketList? = null
     var progressVisible = ObservableInt(View.GONE)
-    var resultText = ObservableField<String>()
-    lateinit var errorReason : String
 
 
-    fun checkGo(adultCheckText: String) {
-       checkAdultWithNaver(adultCheckText)
+    interface OnBucketListGetEvent {
+        fun start()
+        fun finish(bucketList: BucketList?)
     }
 
-    private fun checkAdultWithNaver(adultCheckText: String): AdultCheck? {
+    fun getMainBucketList(callback: OnBucketListGetEvent): BucketList? {
 
-        progressVisible.set(View.VISIBLE)
+        callback.start()
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(NAVER_ADULT_API).getRetrofitService(RetrofitInterface::class.java)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(MAIN_BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
 
-        val adultResultData = restClient.requestAdultResult(adultCheckText)
-        adultResultData.enqueue(object : Callback<AdultCheck> {
-            override fun onResponse(call: Call<AdultCheck>?, response: Response<AdultCheck>?) {
+        val bucketListResultData = restClient.requestMainBucketListResult()
+        bucketListResultData.enqueue(object : Callback<BucketList> {
+            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
+
                 if (response != null && response.isSuccessful) {
-                    adultResult = response.body()!!
                     Log.e("ayhan:result", "${response.body()}")
-                } else {
-                    adultResult = null
+                    bucketList = response.body()
+                    Log.e("ayhan:bucketList", "$bucketList")
+                    callback.finish(bucketList)
                 }
-                checkFinish()
             }
 
-            override fun onFailure(call: Call<AdultCheck>?, t: Throwable?) {
+            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
                 Log.e("ayhan2", t.toString())
-                errorReason = t.toString()
-                adultResult = null
-                checkFinish()
+                //progressVisible.set(View.GONE)
+                callback.finish(bucketList)
             }
         })
 
-        return adultResult
+        return bucketList
 
-    }
-
-    private fun checkFinish() {
-        isEnd = true
-        progressVisible.set(View.GONE)
-        resultText.set(resultText())
-    }
-
-    private fun resultText() : String {
-        return if(adultResult==null) {
-            "Can't Checking now : $errorReason"
-        } else {
-            if(adultResult?.adult.equals("1")) {
-                "This is Adult Result"
-            } else {
-                "This is Not Adult Result"
-            }
-        }
     }
 }

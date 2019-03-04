@@ -27,6 +27,7 @@
 
     <color name="subColor">#a6c6ff</color>
     <color name="notiColor">#ffca5a</color>
+    <color name="mainColor">#5a95ff</color>
 
     <color name="circularProgressBackground">#e8e8e8</color>
     <color name="bucketSucceedBackground">#33859ecc</color>
@@ -49,4 +50,15 @@
     <color name="dialogBottomGradientFir">#4656e8</color>
     <color name="dialogBottomGradientSec">#5076f4</color>
     <color name="dialogBottomGradientThr">#5a95ff</color>
+
+    <color name="writeEnableText">#434343</color>
+    <color name="writeDisableText">#b4b4b4</color>
+    <color name="writeUnusedText">#888888</color>
+    <color name="writeMemoText">#888888</color>
+    <color name="writeMemoBackground">#f3f3f3</color>
+
+    <color name="dividerColor">#dddddd</color>
+    <color name="switchUnselectColor">#d8d8d8</color>
+
+    <color name="writeDialogText">#434343</color>
 </resources>
