@@ -64,10 +64,10 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                             } else {
                                 setDoneSuccessUIButton()
                             }
-                        }, 700)
+                        }, 750)
                         postDelayed({
                             if (bucketType == 0 || userCount >= goalCount) {
-                                animFadeOut.duration = 500
+                                animFadeOut.duration = 700
                                 bucketItemImage.startAnimation(animFadeOut)
                             }
                         }, 800)
@@ -77,7 +77,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                                 bucketItemLayout.isClickable = true
                             }
 
-                        }, 1000)
+                        }, 900)
                     }
                 }
             }
@@ -86,7 +86,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     open fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
-        duration = 500
+        duration = 700
         startDelay = 0
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)

@@ -18,11 +18,8 @@ open class BaseFragment : Fragment() {
 
     private fun checkNetworkConnect(){
         if(BaseViewModel().isNetworkDisconnect()) {
-            val baseDialogFragment = BaseDialogFragment.Instance(
-                    resources.getString(R.string.network_fail_title),
-                    resources.getString(R.string.network_fail_msg),
-                    false, true)
-            baseDialogFragment.show(childFragmentManager)
+
+
         }
     }
 

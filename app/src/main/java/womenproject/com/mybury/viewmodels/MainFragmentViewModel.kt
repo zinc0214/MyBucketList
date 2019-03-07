@@ -8,6 +8,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
@@ -54,5 +56,44 @@ class MainFragmentViewModel internal constructor(private val context: Context?) 
 
         return bucketList
 
+    }
+
+
+    fun getMainBucketList(): BucketList {
+
+        /*
+        * BucketType
+        *   1 : 횟수1번
+        *   2 : 횟수n번
+        *   3 : 완료
+        *   4 : 빈 버킷
+        * DDay
+        *   0 : dday 표기 안함
+        *   1 : dday 표기함
+        *   */
+
+        val category = BucketCategory("id", "운동")
+
+
+        val bucketItem1 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, false, category, 4, 5)
+        val bucketItem2 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, false, category, 4, 5)
+        val bucketItem3 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 내 마음...완전 당빠 알자주지 흐듀휴류ㅠ휴ㅠㅠ휼유", false, false, false, category, 4, 5)
+        val bucketItem4 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 내 마음...완전 당빠 알자주지 흐듀휴류ㅠ휴ㅠㅠ휼유", false, false, true, category, 4, 5)
+        val bucketItem5 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무", false, false, true, category, 1, 1)
+        val bucketItem6 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, false, category, 1, 1)
+
+
+        val bucketItemList = ArrayList<BucketItem>()
+
+        bucketItemList.add(bucketItem1)
+        bucketItemList.add(bucketItem2)
+        bucketItemList.add(bucketItem3)
+        bucketItemList.add(bucketItem4)
+        bucketItemList.add(bucketItem5)
+        bucketItemList.add(bucketItem6)
+
+        val bucketList = BucketList(bucketItemList, false, 200)
+
+        return bucketList
     }
 }

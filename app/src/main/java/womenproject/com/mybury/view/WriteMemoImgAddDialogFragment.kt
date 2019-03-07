@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -64,7 +65,7 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        val dialogWidth = ActionBar.LayoutParams.MATCH_PARENT
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
@@ -72,7 +73,6 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        checkPermissions()
 
         binding = DataBindingUtil.inflate<MemoImgAddDialogBinding>(
                 inflater, R.layout.memo_img_add_dialog, container, false).apply {
@@ -89,44 +89,29 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
     }
 
 
-    private fun memoAddOnClickListener() : View.OnClickListener {
+    private fun memoAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
 
         }
     }
 
-    private fun getAlbumImgAndCropOnClickListener() : View.OnClickListener {
+    private fun getAlbumImgAndCropOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            goToAlbum()
+            if (checkPermissions(this.context!!, activity as MainActivity)) {
+                goToAlbum()
+            }
+
         }
     }
 
-    private fun takePictureAndCropOnClickListener() : View.OnClickListener {
+    private fun takePictureAndCropOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            takePhoto()
-        }
-    }
-
-
-    private fun checkPermissions(): Boolean {
-        var result: Int
-        val permissionList: ArrayList<String>? = null
-        for (pm in permissions) {
-            result = ContextCompat.checkSelfPermission(this.context!!, pm)
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                if (permissionList != null) {
-                    permissionList.add(pm)
-                }
+            if (checkPermissions(this.context!!, activity as MainActivity)) {
+                takePhoto()
             }
         }
-        if (permissionList != null) {
-            if (!permissionList.isEmpty()) {
-                ActivityCompat.requestPermissions(this.activity!!, permissionList.toTypedArray(), MULTIPLE_PERMISSIONS)
-                return false
-            }
-        }
-        return true
     }
+
 
     private fun takePhoto() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -167,34 +152,33 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
     }
 
 
+    private fun checkPermissions(context: Context, activity: MainActivity): Boolean {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if ((ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) ||
+                    (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA))) {
+                val permissionDialogFragment = PermissionDialogFragment()
+                permissionDialogFragment.show(activity.supportFragmentManager, "tag")
+            } else {
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA), MULTIPLE_PERMISSIONS)
+            }
+            return false
+        }
+        return true
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             MULTIPLE_PERMISSIONS -> {
-                if (grantResults.isNotEmpty()) {
-                    for (i in permissions.indices) {
-                        if (permissions[i] == this.permissions[0]) {
-                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                                showNoPermissionToastAndFinish()
-                            }
-                        } else if (permissions[i] == this.permissions[1]) {
-                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                                showNoPermissionToastAndFinish()
-
-                            }
-                        } else if (permissions[i] == this.permissions[2]) {
-                            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                                showNoPermissionToastAndFinish()
-
-                            }
-                        }
+                for (i in 0..grantResults.size) {
+                    if (grantResults[i] < 0) {
+                        showNoPermissionToastAndFinish()
+                        return
                     }
-                } else {
-                    showNoPermissionToastAndFinish()
                 }
-                return
             }
         }
     }
+
 
     private fun showNoPermissionToastAndFinish() {
         Toast.makeText(context, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show()

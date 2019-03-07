@@ -79,6 +79,8 @@
             android:orientation="vertical">
 
             <EditText
+                android:lineSpacingExtra="9sp"
+                style="@style/EditTextStyle"
                 android:id="@+id/titleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +99,8 @@
                 android:background="@drawable/write_memo_background">
 
                 <TextView
+                    android:lineSpacingExtra="4sp"
+                    android:lineHeight="15sp"
                     android:id="@+id/memoText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,6 +112,13 @@
                     android:textColor="@color/writeMemoText"
                     android:textSize="11sp" />
 
+                <ImageView
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/close_btn"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -155,43 +166,14 @@
                 style="@style/writeSwitchLayoutStyle"
                 android:visibility="visible">
 
-
-                <ImageView
+                <CheckBox
+                    style="@style/FilterDialogSubTextStyle"
                     android:layout_width="50dp"
                     android:layout_height="25dp"
-                    android:background="@drawable/switch_select_background" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/switch_select_circle" />
+                    android:checked="true"
+                    android:button="@drawable/write_switch" />
 
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/unselect_switch_layout"
-                style="@style/writeSwitchLayoutStyle"
-                android:visibility="gone">
-
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/switch_unselect_background" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="4dp"
-                    android:src="@drawable/switch_select_circle" />
-
-            </RelativeLayout>
-
 
         </RelativeLayout>
 

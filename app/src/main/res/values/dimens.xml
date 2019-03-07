@@ -7,7 +7,13 @@
     <dimen name="minimumBucketItemHeight">64dp</dimen>
     <dimen name="baseBucketItemHeight">64dp</dimen>
     <dimen name="countBucketItemHeight">81dp</dimen>
+    <dimen name="baseBucketMaxHeight">86dp</dimen>
 
     <dimen name="lineSpacingExtra">6sp</dimen>
+
+    <dimen name="titleMargin">22dp</dimen>
+    <dimen name="initDp">0dp</dimen>
+
+    <dimen name="writeFragmentWidth">320dp</dimen>
 
 </resources>

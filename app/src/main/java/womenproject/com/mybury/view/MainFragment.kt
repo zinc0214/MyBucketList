@@ -49,7 +49,11 @@ class MainFragment : BaseFragment() {
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
 
-        mainFragmentViewModel.getMainBucketList(object : MainFragmentViewModel.OnBucketListGetEvent{
+        binding.bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
+
+        binding.progressBar.visibility = View.GONE
+
+       /* mainFragmentViewModel.getMainBucketList(object : MainFragmentViewModel.OnBucketListGetEvent{
             override fun start() {
                 binding.progressBar.visibility = View.VISIBLE
             }
@@ -60,7 +64,7 @@ class MainFragment : BaseFragment() {
                     binding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
-        })
+        })*/
 
     }
 

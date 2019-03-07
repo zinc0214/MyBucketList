@@ -22,7 +22,6 @@
 
 
         <LinearLayout
-            android:layout_height="@dimen/baseBucketItemHeight"
             android:id="@+id/bucket_item_layout"
             style="@style/BucketItemLayoutStyle"
             android:onClick="@{bucketClickListener}">
@@ -38,12 +37,15 @@
                     android:background="@drawable/bucket_item_succeed_background" />
 
                 <RelativeLayout
+                    android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_marginBottom="21dp"
+                        android:layout_marginTop="21dp"
                         android:id="@+id/bucket_title"
                         style="@style/BucketItemTitleTextStyle"
                         android:text="@{bucketTitleText}"
