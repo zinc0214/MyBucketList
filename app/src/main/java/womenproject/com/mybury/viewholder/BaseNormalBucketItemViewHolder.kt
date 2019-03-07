@@ -1,10 +1,8 @@
 package womenproject.com.mybury.viewholder
 
 import android.content.Context
-import android.util.Log
 import android.view.View
-import womenproject.com.mybury.MyBuryApplication.Companion.context
-import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseBucketItemViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 

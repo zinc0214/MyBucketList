@@ -2,6 +2,7 @@ package womenproject.com.mybury.viewholder
 
 import android.content.Context
 import android.view.View
+import womenproject.com.mybury.base.BaseBucketItemViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 

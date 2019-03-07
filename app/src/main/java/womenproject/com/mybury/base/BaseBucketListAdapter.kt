@@ -1,12 +1,10 @@
-package womenproject.com.mybury.adapter
+package womenproject.com.mybury.base
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.viewholder.BaseBucketItemViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..

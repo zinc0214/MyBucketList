@@ -1,4 +1,4 @@
-package womenproject.com.mybury.view
+package womenproject.com.mybury.base
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentBaseDialogBinding
-import womenproject.com.mybury.viewmodels.BaseDialogViewModel
 
 /**
  * Created by HanAYeon on 2018. 12. 4..

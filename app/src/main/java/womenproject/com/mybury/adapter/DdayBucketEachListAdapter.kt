@@ -11,6 +11,7 @@ import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import androidx.navigation.findNavController
+import womenproject.com.mybury.base.BaseBucketListAdapter
 import womenproject.com.mybury.view.DdayBucketListFragmentDirections
 import womenproject.com.mybury.viewholder.DdayCountBucketItemViewHolder
 import womenproject.com.mybury.viewholder.DdayNormalBucketItemViewHolder

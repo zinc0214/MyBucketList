@@ -1,4 +1,4 @@
-package womenproject.com.mybury.viewmodels
+package womenproject.com.mybury.base
 
 import androidx.lifecycle.ViewModel;
 

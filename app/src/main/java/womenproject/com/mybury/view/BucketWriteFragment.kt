@@ -9,56 +9,34 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.DdayBucketTotalListAdapter
+import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel
 
-class BucketWriteFragment : BaseFragment() {
+class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
-    private lateinit var bucketWriteViewwModel: BucketWriteViewModel
-    private lateinit var binding: FragmentBucketWriteBinding
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_bucket_write
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override val viewModel: BucketWriteViewModel
+        get() = BucketWriteViewModel()
 
-        bucketWriteViewwModel = BucketWriteViewModel(context)
-
-        binding = DataBindingUtil.inflate<FragmentBucketWriteBinding>(
-                inflater, R.layout.fragment_bucket_write, container, false)
-
-
-        binding.apply {
-
-            initBucketListUI()
-
-        }
-
-
-        return binding.root
+    override fun initStartView() {
+        viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
     }
 
+    override fun initDataBinding() {
 
-    private fun initBucketListUI() {
-
-        binding.memoImgAddListener = memoImgAddOnClickListener()
-
-        /*bucketWriteViewwModel.getDdayEachBucketList(object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent {
-            override fun start() {
-                binding.progressBar.visibility = View.VISIBLE
-            }
-
-            override fun finish(bucketList: BucketList?) {
-                if (bucketList != null) {
-                    binding.progressBar.visibility = View.GONE
-                    binding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
-                }
-            }
-        })*/
     }
 
+    override fun initAfterBinding() {
 
-    private fun memoImgAddOnClickListener() : View.OnClickListener {
+    }
+
+    private fun memoImgAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             val filterDialogFragment = WriteMemoImgAddDialogFragment.instance()
             filterDialogFragment.show(activity!!.supportFragmentManager, "tag")

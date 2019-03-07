@@ -10,7 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.ActivityMainBinding
-import womenproject.com.mybury.viewmodels.BaseViewModel
 
 /**
  * Created by HanAYeon on 2018. 11. 26..

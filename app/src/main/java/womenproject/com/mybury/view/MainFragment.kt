@@ -1,15 +1,11 @@
 package womenproject.com.mybury.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
-import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
@@ -18,40 +14,39 @@ import womenproject.com.mybury.viewmodels.MainFragmentViewModel
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_main
 
-    private lateinit var mainFragmentViewModel: MainFragmentViewModel
-    private lateinit var binding: FragmentMainBinding
+    override val viewModel: MainFragmentViewModel
+        get() = MainFragmentViewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun initStartView() {
+        viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
+        viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
+        viewDataBinding.mainBottomSheet.noneClickListener = createOnClickDdayListener()
 
-        mainFragmentViewModel = MainFragmentViewModel(context)
+        initBucketListUI()
+    }
 
-        binding = DataBindingUtil.inflate<FragmentMainBinding>(
-                inflater, R.layout.fragment_main, container, false)
+    override fun initDataBinding() {
 
-        binding.apply {
-            viewModel = mainFragmentViewModel
-            mainToolbar.filterClickListener = createOnClickFilterListener()
-            mainBottomSheet.writeClickListener = createOnClickWriteListener()
-            mainBottomSheet.noneClickListener = createOnClickDdayListener()
+    }
 
-            initBucketListUI()
-        }
+    override fun initAfterBinding() {
 
-        return binding.root
     }
 
 
     private fun initBucketListUI () {
         val layoutManager = LinearLayoutManager(context)
 
-        binding.bucketList.layoutManager = layoutManager
-        binding.bucketList.hasFixedSize()
+        viewDataBinding.bucketList.layoutManager = layoutManager
+        viewDataBinding.bucketList.hasFixedSize()
 
-        binding.bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
+        viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
 
-        binding.progressBar.visibility = View.GONE
+        viewDataBinding.progressBar.visibility = View.GONE
 
        /* mainFragmentViewModel.getMainBucketList(object : MainFragmentViewModel.OnBucketListGetEvent{
             override fun start() {

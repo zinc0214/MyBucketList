@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.BaseDialogViewModel" />
+            type="womenproject.com.mybury.base.BaseDialogViewModel" />
 
         <variable
             name="title"

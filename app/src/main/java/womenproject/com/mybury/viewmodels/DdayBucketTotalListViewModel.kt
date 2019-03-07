@@ -1,13 +1,12 @@
 package womenproject.com.mybury.viewmodels
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.*
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
@@ -16,9 +15,9 @@ import womenproject.com.mybury.network.RetrofitInterface
  * Created by HanAYeon on 2019. 1. 16..
  */
 
-class DdayBucketTotalListViewModel internal constructor(private val context: Context?) : BaseViewModel() {
+class DdayBucketTotalListViewModel  : BaseViewModel() {
 
-    private val BUCKETLIST_API = context!!.resources.getString(R.string.bucket_list_api)
+
     private var bucketList : BucketList? = null
     var progressVisible = ObservableInt(View.GONE)
 
@@ -28,11 +27,11 @@ class DdayBucketTotalListViewModel internal constructor(private val context: Con
         fun finish(bucketList: BucketList?)
     }
 
-    fun getDdayEachBucketList(callback: OnDdayBucketListGetEvent): BucketList? {
+    fun getDdayEachBucketList(api:String, callback: OnDdayBucketListGetEvent): BucketList? {
 
         callback.start()
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
 
         val bucketListResultData = restClient.requestDdayBucketListResult()
         bucketListResultData.enqueue(object : Callback<BucketList> {

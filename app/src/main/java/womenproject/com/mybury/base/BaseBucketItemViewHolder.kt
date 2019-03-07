@@ -1,4 +1,4 @@
-package womenproject.com.mybury.viewholder
+package womenproject.com.mybury.base
 
 import android.animation.ValueAnimator
 import android.content.Context

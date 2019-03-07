@@ -10,6 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.AdultCheck
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
@@ -19,9 +20,9 @@ import womenproject.com.mybury.network.RetrofitInterface
  * Created by HanAYeon on 2018. 12. 3..
  */
 
-class BucketWriteViewModelTest internal constructor(private val context: Context?) : BaseViewModel() {
+class BucketWriteViewModelTest : BaseViewModel() {
 
-    private val NAVER_ADULT_API = context!!.resources.getString(R.string.naver_adult_api)
+    private val NAVER_ADULT_API = "https://openapi.naver.com/"
     var adultResult: AdultCheck? = null
     var isEnd = true
     var progressVisible = ObservableInt(View.GONE)

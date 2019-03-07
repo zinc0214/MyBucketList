@@ -1,17 +1,15 @@
 package womenproject.com.mybury.viewholder
 
 import android.animation.ObjectAnimator
-import android.app.ActionBar
 import android.content.Context
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseBucketItemViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 
