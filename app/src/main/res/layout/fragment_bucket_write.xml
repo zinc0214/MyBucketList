@@ -20,6 +20,10 @@
             type="android.view.View.OnClickListener" />
 
         <variable
+            name="memoRemoveListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="openSettingListener"
             type="android.view.View.OnClickListener" />
 
@@ -79,46 +83,51 @@
             android:orientation="vertical">
 
             <EditText
-                android:lineSpacingExtra="9sp"
-                style="@style/EditTextStyle"
                 android:id="@+id/titleText"
+                style="@style/EditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="46dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
                 android:hint="새로운 목표를 작성해보세요."
+                android:lineSpacingExtra="9sp"
                 android:maxLines="2"
                 android:textColorHint="@color/writeUnusedText"
                 android:textSize="15sp" />
 
 
             <RelativeLayout
+                android:visibility="gone"
+                android:onClick="@{memoRemoveListener}"
+                android:id="@+id/memo_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/write_memo_background">
 
-                <TextView
-                    android:lineSpacingExtra="4sp"
-                    android:lineHeight="15sp"
+                <EditText
+                    style="@style/EditTextStyle"
+                    android:maxLines="2"
+                    android:maxHeight="28dp"
+                    android:gravity="top"
+                    android:layout_centerVertical="true"
                     android:id="@+id/memoText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="28dp"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="33dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="신전떡볶이,참치마요,순대,매운맛,중간맛,치즈 추가,김말이,만두,잡채만두,오뎅튀김 다 맛있다!"
+                    android:background="@android:color/transparent"
+                    android:hint="새로운 목표를 작성해보세요."
                     android:textColor="@color/writeMemoText"
                     android:textSize="11sp" />
 
                 <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="6dp"
                     android:layout_marginRight="6dp"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/close_btn"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp" />
+                    android:background="@drawable/close_btn" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -151,9 +160,9 @@
             android:background="@color/dividerColor" />
 
         <RelativeLayout
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:gravity="center_vertical"
             android:onClick="@{openSettingListener}">
 
             <TextView
@@ -170,8 +179,8 @@
                     style="@style/FilterDialogSubTextStyle"
                     android:layout_width="50dp"
                     android:layout_height="25dp"
-                    android:checked="true"
-                    android:button="@drawable/write_switch" />
+                    android:button="@drawable/write_switch"
+                    android:checked="true" />
 
             </RelativeLayout>
 

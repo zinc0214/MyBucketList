@@ -1,20 +1,10 @@
 package womenproject.com.mybury.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
-import womenproject.com.mybury.adapter.DdayBucketTotalListAdapter
 import womenproject.com.mybury.base.BaseFragment
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
-import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
-import womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel
 
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
@@ -26,6 +16,9 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     override fun initStartView() {
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
+        viewDataBinding.memoRemoveListener = memoRemoveListener()
+
+
     }
 
     override fun initDataBinding() {
@@ -37,9 +30,21 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     }
 
     private fun memoImgAddOnClickListener(): View.OnClickListener {
+
+        val memoAddListener: () -> Unit = {
+            viewDataBinding.memoLayout.visibility = View.VISIBLE
+        }
+
         return View.OnClickListener {
-            val filterDialogFragment = WriteMemoImgAddDialogFragment.instance()
+            val filterDialogFragment = WriteMemoImgAddDialogFragment.instance(memoAddListener)
             filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+        }
+    }
+
+    private fun memoRemoveListener() : View.OnClickListener {
+
+        return View.OnClickListener {
+            viewDataBinding.memoLayout.visibility = View.GONE
         }
     }
 }

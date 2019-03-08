@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -22,8 +21,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -39,7 +36,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class WriteMemoImgAddDialogFragment : DialogFragment() {
+@SuppressLint("ValidFragment")
+class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : DialogFragment() {
 
     private lateinit var binding: MemoImgAddDialogBinding
 
@@ -55,8 +53,8 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
         private val CROP_FROM_CAMERA = 3
         private val MULTIPLE_PERMISSIONS = 101
 
-        fun instance(): WriteMemoImgAddDialogFragment {
-            val fragment = WriteMemoImgAddDialogFragment()
+        fun instance(memoAddListener: () -> Unit): WriteMemoImgAddDialogFragment {
+            val fragment = WriteMemoImgAddDialogFragment(memoAddListener)
 
             return fragment
         }
@@ -91,14 +89,18 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
 
     private fun memoAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
+            memoAddListener.invoke()
+            this.dismiss()
 
         }
     }
+
 
     private fun getAlbumImgAndCropOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
                 goToAlbum()
+                this.dismiss()
             }
 
         }
@@ -108,6 +110,7 @@ class WriteMemoImgAddDialogFragment : DialogFragment() {
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
                 takePhoto()
+                this.dismiss()
             }
         }
     }
