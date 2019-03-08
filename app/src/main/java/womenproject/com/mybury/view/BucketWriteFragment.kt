@@ -17,7 +17,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     override fun initStartView() {
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
-
+        viewDataBinding.ddayAddListener = ddayAddListener()
 
     }
 
@@ -45,6 +45,18 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         return View.OnClickListener {
             viewDataBinding.memoLayout.visibility = View.GONE
+        }
+    }
+
+    private fun ddayAddListener(): View.OnClickListener {
+
+        val ddayAddListener: (String) -> Unit = { dday->
+            viewDataBinding.ddayText.text = dday
+        }
+
+        return View.OnClickListener {
+            val calendarDialogFragment = CalendarDialogFragment.instance(ddayAddListener)
+            calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
 }

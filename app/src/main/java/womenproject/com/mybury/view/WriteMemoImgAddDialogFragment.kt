@@ -100,7 +100,6 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
                 goToAlbum()
-                this.dismiss()
             }
 
         }
@@ -110,7 +109,6 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
                 takePhoto()
-                this.dismiss()
             }
         }
     }
@@ -211,6 +209,7 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
             Log.e("$this", "여기에 이미지 넣어야 함")
             //imgMain!!.setImageURI(null)
             //imgMain!!.setImageURI(photoUri)
+            this.dismiss()
         }
     }
 
