@@ -8,23 +8,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import kotlinx.android.synthetic.main.calendar_dialog.*
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.MainFilterDialogBinding
-import womenproject.com.mybury.viewmodels.FilterDialogViewModel
+import womenproject.com.mybury.databinding.CalendarDialogBinding
 
 /**
  * Created by HanAYeon on 2019. 3. 8..
  */
 
 @SuppressLint("ValidFragment")
-open class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : DialogFragment() {
+class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : DialogFragment() {
 
 
     private lateinit var mainMsg: String
+    private lateinit var dday : String
 
     companion object {
 
@@ -48,15 +48,24 @@ open class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val binding = DataBindingUtil.inflate<MainFilterDialogBinding>(
+        val binding = DataBindingUtil.inflate<CalendarDialogBinding>(
                 inflater, R.layout.calendar_dialog, container, false).apply {
-            viewModel = FilterDialogViewModel()
 
+            calendarView.setOnDateChangedListener {
+                widget, date, selected ->
+                Toast.makeText(context!!.getApplicationContext(), date.year.toString() + "-" + date.month + "-" + date.day + "", Toast.LENGTH_SHORT).show()
+                if(date.month+1 < 10) {
+                    dday = "${date.year}/0${date.month+1}/${date.day}"
+                } else {
+                    dday = "${date.year}/${date.month+1}/${date.day}"
+                }
+
+            }
+
+            confirmButtonClickListener = confirmOnClickListener()
+            cancelButtonClickListener = cancelOnClickListener()
         }
 
-        binding.apply {
-
-        }
 
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
@@ -64,8 +73,20 @@ open class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit)
         return binding.root
     }
 
-    private fun dialogDismiss() {
-        this.dismiss()
+
+
+    private fun confirmOnClickListener(): View.OnClickListener {
+        return View.OnClickListener {
+            ddaySetListener.invoke(dday)
+            this.dismiss()
+        }
+    }
+
+
+    private fun cancelOnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            this.dismiss()
+        }
     }
 
     protected fun setDialogMessage(dialogMessage: String) {

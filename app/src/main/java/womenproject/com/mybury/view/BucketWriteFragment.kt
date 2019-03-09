@@ -52,6 +52,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         val ddayAddListener: (String) -> Unit = { dday->
             viewDataBinding.ddayText.text = dday
+            viewDataBinding.ddayText.setTextColor(context!!.resources.getColor(R.color.mainColor))
         }
 
         return View.OnClickListener {
