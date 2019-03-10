@@ -37,7 +37,8 @@ import java.util.*
 
 
 @SuppressLint("ValidFragment")
-class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : DialogFragment() {
+class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, private var checkAddImageListener: () -> Boolean,
+                                    private var imgAddListener: (Uri) -> Unit) : DialogFragment() {
 
     private lateinit var binding: MemoImgAddDialogBinding
 
@@ -53,8 +54,8 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
         private val CROP_FROM_CAMERA = 3
         private val MULTIPLE_PERMISSIONS = 101
 
-        fun instance(memoAddListener: () -> Unit): WriteMemoImgAddDialogFragment {
-            val fragment = WriteMemoImgAddDialogFragment(memoAddListener)
+        fun instance(memoAddListener: () -> Unit, checkAddImageListener: () -> Boolean, imgAddListener: (Uri) -> Unit): WriteMemoImgAddDialogFragment {
+            val fragment = WriteMemoImgAddDialogFragment(memoAddListener, checkAddImageListener, imgAddListener)
 
             return fragment
         }
@@ -99,8 +100,10 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
     private fun getAlbumImgAndCropOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
-                goToAlbum()
-                this.dismiss()
+                if (checkAddImageListener.invoke()) {
+                    goToAlbum()
+                }
+
             }
 
         }
@@ -109,8 +112,9 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
     private fun takePictureAndCropOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             if (checkPermissions(this.context!!, activity as MainActivity)) {
-                takePhoto()
-                this.dismiss()
+                if (checkAddImageListener.invoke()) {
+                    takePhoto()
+                }
             }
         }
     }
@@ -209,8 +213,8 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit) : D
                     })
         } else if (requestCode == CROP_FROM_CAMERA) {
             Log.e("$this", "여기에 이미지 넣어야 함")
-            //imgMain!!.setImageURI(null)
-            //imgMain!!.setImageURI(photoUri)
+            imgAddListener.invoke(this.photoUri!!)
+            this.dismiss()
         }
     }
 

@@ -51,6 +51,7 @@
     <color name="dialogBottomGradientSec">#5076f4</color>
     <color name="dialogBottomGradientThr">#5a95ff</color>
 
+    <color name="writeTitleText">#aaaaaa</color>
     <color name="writeEnableText">#434343</color>
     <color name="writeDisableText">#b4b4b4</color>
     <color name="writeUnusedText">#888888</color>
@@ -61,4 +62,5 @@
     <color name="switchUnselectColor">#d8d8d8</color>
 
     <color name="writeDialogText">#434343</color>
+    <color name="writeImgRemoveCircleColor">#b3ffffff</color>
 </resources>

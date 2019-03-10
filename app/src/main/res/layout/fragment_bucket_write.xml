@@ -90,46 +90,62 @@
                 android:background="@android:color/transparent"
                 android:gravity="top"
                 android:hint="새로운 목표를 작성해보세요."
+                android:inputType="text"
                 android:lineSpacingExtra="9sp"
                 android:maxLines="2"
+                android:textColor="@color/writeTitleText"
                 android:textColorHint="@color/writeUnusedText"
                 android:textSize="15sp" />
 
 
             <RelativeLayout
-                android:visibility="gone"
-                android:onClick="@{memoRemoveListener}"
                 android:id="@+id/memo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/write_memo_background">
+                android:background="@drawable/write_memo_background"
+                android:visibility="gone">
 
                 <EditText
-                    style="@style/EditTextStyle"
-                    android:maxLines="2"
-                    android:maxHeight="28dp"
-                    android:gravity="top"
-                    android:layout_centerVertical="true"
                     android:id="@+id/memoText"
+                    style="@style/EditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="33dp"
                     android:background="@android:color/transparent"
-                    android:hint="새로운 목표를 작성해보세요."
+                    android:gravity="top"
+                    android:hint="메모를 작성해주세요."
+                    android:inputType="text"
+                    android:maxHeight="28dp"
+                    android:maxLines="2"
                     android:textColor="@color/writeMemoText"
                     android:textSize="11sp" />
 
                 <ImageView
+                    android:id="@+id/memo_remove_img"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="6dp"
                     android:layout_marginRight="6dp"
-                    android:background="@drawable/close_btn" />
+                    android:background="@drawable/close_btn"
+                    android:onClick="@{memoRemoveListener}" />
             </RelativeLayout>
 
+
+            <LinearLayout
+                android:id="@+id/img_layout"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/write_img_layout"/>
+
+            </LinearLayout>
         </LinearLayout>
 
 
@@ -166,8 +182,9 @@
             android:onClick="@{openSettingListener}">
 
             <TextView
+                android:id="@+id/open_text"
                 style="@style/writeSettingListTitleTextStyle"
-                android:text="공개 설정"
+                android:text="@string/bucket_open"
                 android:textColor="@color/writeEnableText" />
 
             <RelativeLayout
@@ -176,6 +193,7 @@
                 android:visibility="visible">
 
                 <CheckBox
+                    android:id="@+id/open_switch_btn"
                     style="@style/FilterDialogSubTextStyle"
                     android:layout_width="50dp"
                     android:layout_height="25dp"
