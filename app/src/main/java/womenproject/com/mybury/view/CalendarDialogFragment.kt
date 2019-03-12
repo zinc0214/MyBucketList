@@ -24,11 +24,9 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
 
 
     private lateinit var mainMsg: String
-    private lateinit var dday : String
+    private lateinit var dday: String
 
     companion object {
-
-        const val DIALOG_MSG = "dialog_msg"
 
         fun instance(ddaySetListener: (String) -> Unit): CalendarDialogFragment {
             val fragment = CalendarDialogFragment(ddaySetListener)
@@ -51,14 +49,15 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
         val binding = DataBindingUtil.inflate<CalendarDialogBinding>(
                 inflater, R.layout.calendar_dialog, container, false).apply {
 
-            calendarView.setOnDateChangedListener {
-                widget, date, selected ->
-                Toast.makeText(context!!.getApplicationContext(), date.year.toString() + "-" + date.month + "-" + date.day + "", Toast.LENGTH_SHORT).show()
-                if(date.month+1 < 10) {
-                    dday = "${date.year}/0${date.month+1}/${date.day}"
-                } else {
-                    dday = "${date.year}/${date.month+1}/${date.day}"
-                }
+            calendarView.setOnDateChangedListener { widget, date, selected ->
+                var month = "1"
+                var day = "1"
+
+                if (date.month + 1 < 10) month = "0${date.month + 1}"
+                if (date.day < 10) day = "0${date.day}"
+
+                dday = "${date.year}/$month/$day"
+
 
             }
 
@@ -74,7 +73,6 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
     }
 
 
-
     private fun confirmOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             ddaySetListener.invoke(dday)
@@ -83,7 +81,7 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
     }
 
 
-    private fun cancelOnClickListener() : View.OnClickListener {
+    private fun cancelOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             this.dismiss()
         }
