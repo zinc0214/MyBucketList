@@ -1,20 +1,17 @@
 package womenproject.com.mybury.view
 
 import android.app.Activity
-import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.RelativeLayout
 import android.widget.Toast
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
-import womenproject.com.mybury.viewmodels.BucketWriteViewModel
-import android.content.Context.LAYOUT_INFLATER_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
-import android.view.LayoutInflater
-import androidx.databinding.DataBindingUtil
 import womenproject.com.mybury.ui.WriteImgLayout
+import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 
 
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
@@ -64,7 +61,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         val checkAddImgAbleListener: () -> Boolean = {
-            if (viewDataBinding.imgLayout.childCount > 3) {
+            Log.e("ayhan", ":count ${viewDataBinding.imgLayout.childCount}")
+            if (viewDataBinding.imgLayout.childCount > 2) {
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
                 false
             } else {
@@ -82,22 +80,32 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    lateinit var imgLayout : WriteImgLayout
+    private var addImgList = HashMap<Int, RelativeLayout>()
 
     fun onAddField(uri: Uri) {
 
-        val removeImgListener : (Int) -> Unit = { it ->
-            onDelete(viewDataBinding.imgLayout.getChildAt(it))
+        val removeImgListener : (View) -> Unit = { it ->
+            onDelete(it)
         }
 
-        imgLayout = WriteImgLayout(viewDataBinding.imgLayout.childCount+1, this.context!!,removeImgListener)
-        imgLayout.setUI(uri)
-        viewDataBinding.imgLayout.addView(imgLayout)
+        val writeImgLayout = WriteImgLayout(this.context!!,removeImgListener).setUI(uri)
+        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
+        viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
 
-    fun onDelete(v: View) {
-        viewDataBinding.imgLayout.removeView(v.parent as View)
+    private var deleteImgValue = 0
+
+    fun onDelete(layout: View) {
+        deleteImgValue = 0
+
+        for(i in 0..addImgList.size) {
+            if(layout.equals(addImgList[i])) {
+                deleteImgValue = i
+            }
+        }
+        viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
+        addImgList.remove(deleteImgValue)
     }
 
     private fun memoRemoveListener(): View.OnClickListener {
