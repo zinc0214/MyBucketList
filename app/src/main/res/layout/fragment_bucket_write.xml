@@ -51,6 +51,7 @@
             android:layout_height="64dp">
 
             <TextView
+                android:id="@+id/write_cancel"
                 style="@style/writeTopTextStyle"
                 android:layout_marginStart="20dp"
                 android:enabled="true"
@@ -59,6 +60,7 @@
 
 
             <TextView
+                android:id="@+id/write_regist"
                 style="@style/writeTopTextStyle"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
@@ -86,16 +88,13 @@
                 android:id="@+id/titleText"
                 style="@style/EditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="51dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
                 android:hint="새로운 목표를 작성해보세요."
-                android:inputType="text"
-                android:lineSpacingExtra="9sp"
-                android:maxLines="2"
                 android:textColor="@color/writeTitleText"
                 android:textColorHint="@color/writeUnusedText"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
 
             <RelativeLayout
@@ -117,9 +116,6 @@
                     android:background="@android:color/transparent"
                     android:gravity="top"
                     android:hint="메모를 작성해주세요."
-                    android:inputType="text"
-                    android:maxHeight="28dp"
-                    android:maxLines="2"
                     android:textColor="@color/writeMemoText"
                     android:textSize="11sp" />
 
@@ -137,9 +133,9 @@
 
             <LinearLayout
                 android:id="@+id/img_layout"
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
 

@@ -1,10 +1,11 @@
 package womenproject.com.mybury.view
 
-import android.app.Activity
 import android.net.Uri
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.Toast
 import womenproject.com.mybury.R
@@ -16,6 +17,8 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
+    private var addImgList = HashMap<Int, RelativeLayout>()
+
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
 
@@ -26,6 +29,10 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
         viewDataBinding.ddayAddListener = ddayAddListener()
+
+        viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
+        viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
+
 
         viewDataBinding.memoText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -54,6 +61,48 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     }
 
+
+    private fun titleTextChangedListener(editText : EditText) : TextWatcher {
+
+        return object : TextWatcher {
+            var previousString = ""
+
+            override fun afterTextChanged(s: Editable?) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousString = s.toString()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(editText.lineCount > 2) {
+                    editText.setText(previousString)
+                    editText.setSelection(editText.length())
+                }
+                viewDataBinding.writeRegist.isEnabled = editText.length() >= 1
+            }
+        }
+    }
+
+    private fun memoTextChangedListener(editText : EditText) : TextWatcher {
+
+        return object : TextWatcher {
+            var previousString = ""
+
+            override fun afterTextChanged(s: Editable?) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                previousString = s.toString()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(editText.lineCount > 2) {
+                    editText.setText(previousString)
+                    editText.setSelection(editText.length())
+                }
+            }
+        }
+    }
+
     private fun memoImgAddOnClickListener(): View.OnClickListener {
 
         val memoAddListener: () -> Unit = {
@@ -71,7 +120,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         val imgAddListener: (Uri) -> Unit = {
-            onAddField(it)
+            onAddImgField(it)
         }
 
         return View.OnClickListener {
@@ -80,12 +129,12 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private var addImgList = HashMap<Int, RelativeLayout>()
 
-    fun onAddField(uri: Uri) {
+
+    private fun onAddImgField(uri: Uri) {
 
         val removeImgListener : (View) -> Unit = { it ->
-            onDelete(it)
+            onDeleteImgField(it)
         }
 
         val writeImgLayout = WriteImgLayout(this.context!!,removeImgListener).setUI(uri)
@@ -93,11 +142,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
-
-    private var deleteImgValue = 0
-
-    fun onDelete(layout: View) {
-        deleteImgValue = 0
+    private fun onDeleteImgField(layout: View) {
+        var deleteImgValue = 0
 
         for(i in 0..addImgList.size) {
             if(layout.equals(addImgList[i])) {
@@ -127,10 +173,4 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
-
-    fun hideKeyboardFrom(view: View) {
-        val imm = context!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
 }
