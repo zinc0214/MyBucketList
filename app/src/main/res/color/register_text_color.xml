@@ -1,4 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="true" android:color="@color/writeEnableText"/> <!-- checked -->
-    <item android:color="@color/writeDisableText"/> <!-- anything else -->
+    <item android:state_enabled="true" android:color="@color/writeRegisterEnableText"/> <!-- checked -->
+    <item android:color="@color/writeRegisterDisableText"/> <!-- anything else -->
 </selector>

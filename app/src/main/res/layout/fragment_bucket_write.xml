@@ -54,7 +54,7 @@
                 android:id="@+id/write_cancel"
                 style="@style/writeTopTextStyle"
                 android:layout_marginStart="20dp"
-                android:enabled="true"
+                android:textColor="@color/writeEnableText"
                 android:onClick="@{cancelBtnClickListener}"
                 android:text="취소" />
 
@@ -152,12 +152,20 @@
             android:background="@drawable/memo_img_add_button_background"
             android:onClick="@{memoImgAddListener}">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/memo_img_add" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
                 android:gravity="center"
-                android:text="+ 메모/이미지"
+                android:text="메모/이미지"
                 android:textColor="@color/mainColor"
                 android:textSize="11sp" />
 
@@ -175,6 +183,15 @@
             android:gravity="center_vertical"
             android:onClick="@{openSettingListener}">
 
+            <ImageView
+                android:checked="true"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/open_enable"
+                android:id="@+id/open_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
             <TextView
                 android:id="@+id/open_text"
                 style="@style/writeSettingListTitleTextStyle"
@@ -190,7 +207,7 @@
                     android:id="@+id/open_switch_btn"
                     style="@style/FilterDialogSubTextStyle"
                     android:layout_width="50dp"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:button="@drawable/write_switch"
                     android:checked="true" />
 
@@ -208,6 +225,15 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:onClick="@{categorySelectListener}">
+
+            <ImageView
+                android:clickable="false"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/category_disable"
+                android:id="@+id/category_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
             <TextView
                 style="@style/writeSettingListTitleTextStyle"
@@ -234,6 +260,16 @@
             android:layout_height="48dp"
             android:onClick="@{ddayAddListener}">
 
+            <ImageView
+                android:clickable="false"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/calendar_disable"
+                android:id="@+id/dday_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+
             <TextView
                 style="@style/writeSettingListTitleTextStyle"
                 android:text="D-day"
@@ -258,6 +294,15 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:onClick="@{goalCountSettingListener}">
+
+            <ImageView
+                android:clickable="false"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/target_count_disable"
+                android:id="@+id/count_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
             <TextView
                 style="@style/writeSettingListTitleTextStyle"

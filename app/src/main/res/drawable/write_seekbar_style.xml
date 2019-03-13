@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android= "http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@android:id/background">
+        <shape >
+            <corners
+                android:radius="4dp" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/writeSeekbarBackground1" />
+           <solid
+               android:color="@color/white"/>
+        </shape>
+    </item>
+    <item
+        android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners
+                    android:radius="4dp" />
+                <stroke
+                    android:width="1dp"
+                    android:color="@color/writeSeekbarBackground1" />
+                <solid
+                    android:color="@color/white"/>
+            </shape>
+        </clip>
+    </item>
+    <item
+        android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners
+                    android:radius="4dp" />
+                <stroke
+                    android:width="1dp"
+                    android:color="@color/writeSeekbarBackground1" />
+                <solid
+                    android:color="@color/writeSeekbarBackground2"/>
+            </shape>
+        </clip>
+    </item>
+</layer-list>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;!&ndash;SeekBar 배경1인데요. 테스트해보니 없어도 상관없더라구요 ㅎㅎ&ndash;&gt;
+    <item android:id="@android:id/background">
+        <shape android:shape="line">
+            <solid android:color="@color/white" />
+            <corners android:radius="4dp" />
+            <stroke
+                android:width="4dp"
+                android:color="@color/writeSeekbarBackground1" />
+        </shape>
+    </item>
+
+    &lt;!&ndash; SeekBar 배경2입니다.&ndash;&gt;
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape android:shape="line">
+                <solid android:color="@color/white" />
+                <corners android:radius="4dp" />
+                <stroke
+                    android:width="4dp"
+                    android:color="@color/writeSeekbarBackground1" />
+            </shape>
+        </clip>
+    </item>
+
+    &lt;!&ndash; SeekBar 프로그래스입니다. &ndash;&gt;
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="line">
+                <size android:height="10dp"/>
+                <solid android:color="@color/writeSeekbarBackground2" />
+                <corners android:radius="4dp" />
+                <stroke
+                    android:width="4dp"
+                    android:color="@color/writeSeekbarBackground1" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>-->
+
+
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+
+    <solid android:color="@color/white" />
+    <corners android:radius="4dp" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/writeSeekbarBackground1" />
+
+    <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+        &lt;!&ndash;시크바 배경&ndash;&gt;
+        <item android:id="@android:id/background"
+            android:drawable="@drawable/seekbar_background">
+        </item>
+
+
+        &lt;!&ndash; 시크바 프로그래스 &ndash;&gt;
+        <item android:id="@android:id/progress" >
+            <clip
+                android:drawable="@drawable/seekbar_progress_background"/>
+        </item>
+
+    </layer-list>
+    -->

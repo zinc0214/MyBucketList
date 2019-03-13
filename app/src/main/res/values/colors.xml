@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#5a95ff</color>
 
     <color name="dialogCategoryBackgroundColor">#f6fcff</color>
     <color name="dialogCategoryTextColor">#434343</color>
@@ -52,6 +52,8 @@
     <color name="dialogBottomGradientThr">#5a95ff</color>
 
     <color name="writeTitleText">#aaaaaa</color>
+    <color name="writeRegisterDisableText">#b4b4b4</color>
+    <color name="writeRegisterEnableText">#5A95FF</color>
     <color name="writeEnableText">#434343</color>
     <color name="writeDisableText">#b4b4b4</color>
     <color name="writeUnusedText">#888888</color>
@@ -63,4 +65,7 @@
 
     <color name="writeDialogText">#434343</color>
     <color name="writeImgRemoveCircleColor">#b3ffffff</color>
+
+    <color name="writeSeekbarBackground1">#4cc8cdda</color>
+    <color name="writeSeekbarBackground2">#a6c6ff</color>
 </resources>

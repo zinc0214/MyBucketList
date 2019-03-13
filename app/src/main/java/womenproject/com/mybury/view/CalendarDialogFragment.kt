@@ -24,7 +24,7 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
 
 
     private lateinit var mainMsg: String
-    private lateinit var dday: String
+    private var dday = ""
 
     companion object {
 
@@ -53,16 +53,26 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
                 var month = "1"
                 var day = "1"
 
-                if (date.month + 1 < 10) month = "0${date.month + 1}"
-                if (date.day < 10) day = "0${date.day}"
+                month = if (date.month + 1 < 10) {
+                    "0${date.month + 1}"
+                } else {
+                    date.month.toString()
+                }
+
+
+                day = if (date.day < 10) {
+                    "0${date.day}"
+                } else {
+                    date.day.toString()
+                }
 
                 dday = "${date.year}/$month/$day"
 
 
             }
 
-            confirmButtonClickListener = confirmOnClickListener()
-            cancelButtonClickListener = cancelOnClickListener()
+            bottomSheet.confirmButtonClickListener = confirmOnClickListener()
+            bottomSheet.cancelButtonClickListener = cancelOnClickListener()
         }
 
 
@@ -75,7 +85,9 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
 
     private fun confirmOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            ddaySetListener.invoke(dday)
+            if(!dday.isEmpty()) {
+                ddaySetListener.invoke(dday)
+            }
             this.dismiss()
         }
     }

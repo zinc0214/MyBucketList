@@ -5,9 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.RelativeLayout
-import android.widget.Toast
+import android.widget.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
@@ -26,9 +24,11 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         get() = BucketWriteViewModel()
 
     override fun initStartView() {
+        viewDataBinding.cancelBtnClickListener = writeCancelOnClickListener()
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
         viewDataBinding.ddayAddListener = ddayAddListener()
+        viewDataBinding.goalCountSettingListener = goalCountSetListener()
 
         viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
         viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
@@ -45,8 +45,10 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.openSwitchBtn.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_open)
+                viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
             } else {
                 viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
+                viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
             }
         }
 
@@ -61,6 +63,11 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     }
 
+    private fun writeCancelOnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            activity!!.onBackPressed()
+        }
+    }
 
     private fun titleTextChangedListener(editText : EditText) : TextWatcher {
 
@@ -165,7 +172,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         val ddayAddListener: (String) -> Unit = { dday ->
             viewDataBinding.ddayText.text = dday
-            viewDataBinding.ddayText.setTextColor(context!!.resources.getColor(R.color.mainColor))
+            setTextColor(viewDataBinding.ddayText)
+            viewDataBinding.ddayImg.background = context!!.getDrawable(R.drawable.calendar_enable)
         }
 
         return View.OnClickListener {
@@ -173,4 +181,24 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
+
+    private fun goalCountSetListener() : View.OnClickListener {
+        val goalCountSetListener: (String) -> Unit = { count ->
+            viewDataBinding.goalCountText.text = count
+            setTextColor(viewDataBinding.goalCountText)
+            viewDataBinding.countImg.background = context!!.getDrawable(R.drawable.target_count_enable)
+        }
+
+        return View.OnClickListener {
+            val writeGoalCountDialogFragment = WriteGoalCountDialogFragment.instance(goalCountSetListener)
+            writeGoalCountDialogFragment.show(activity!!.supportFragmentManager, "tag")
+        }
+    }
+
+
+
+    private fun setTextColor(textView : TextView) {
+        textView.setTextColor(context!!.resources.getColor(R.color.mainColor))
+    }
+
 }
