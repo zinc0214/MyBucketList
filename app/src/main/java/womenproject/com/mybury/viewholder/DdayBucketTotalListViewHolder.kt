@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.DdayBucketEachListAdapter
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
@@ -27,6 +28,7 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding) 
             ddayEachBucketItemList.adapter =  DdayBucketEachListAdapter(context, bucketList)
 
             Log.e("ayhan",  "${ddayEachBucketGroup.isLast}")
+            lastEndImg.endImage.background = context.getDrawable(R.drawable.end_character_d_day)
             lastEndImg.lastImgVisible = if(ddayEachBucketGroup.isLast) {
                 View.VISIBLE
             } else {
