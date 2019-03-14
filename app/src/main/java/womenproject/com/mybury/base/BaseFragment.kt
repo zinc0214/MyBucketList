@@ -1,12 +1,16 @@
 package womenproject.com.mybury.base
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import womenproject.com.mybury.MyBuryApplication
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
@@ -63,8 +67,20 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     private fun checkNetworkConnect(){
         if(BaseViewModel().isNetworkDisconnect()) {
 
-            // Dialog호출
+            BaseNetworkFragment().show(activity!!.supportFragmentManager, "tag")
 
+        }
+    }
+
+
+    class BaseNetworkFragment : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "네트워크 알림"
+            CONTENT_MSG = "네트워크 연결이 끊겼습니다."
+            CANCEL_BUTTON_VISIBLE = false
+            GRADIENT_BUTTON_VISIBLE = true
+            CONFIRM_TEXT = "확인"
         }
     }
 

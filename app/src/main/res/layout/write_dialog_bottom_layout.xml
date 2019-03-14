@@ -47,6 +47,7 @@
 
 
             <TextView
+                android:background="@drawable/dialog_bottom_sheet_left_background"
                 android:id="@+id/cancel_text"
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{cancelButtonClickListener}"
@@ -59,6 +60,7 @@
                 android:background="@color/dialogBinder" />
 
             <TextView
+                android:background="@drawable/dialog_bottom_sheet_right_background"
                 android:id="@+id/confirm_text"
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{confirmButtonClickListener}"

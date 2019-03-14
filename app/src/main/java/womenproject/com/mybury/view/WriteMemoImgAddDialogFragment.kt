@@ -29,6 +29,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
 import java.io.File
 import java.io.IOException
@@ -38,14 +39,34 @@ import java.util.*
 
 @SuppressLint("ValidFragment")
 class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, private var checkAddImageListener: () -> Boolean,
-                                    private var imgAddListener: (Uri) -> Unit) : DialogFragment() {
+                                    private var imgAddListener: (Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
 
-    private lateinit var binding: MemoImgAddDialogBinding
 
     private var photoUri: Uri? = null
     private val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
     private var mCurrentPhotoPath: String? = null
+
+
+    override val layoutResourceId: Int
+        get() = R.layout.memo_img_add_dialog
+
+    override fun initStartView() {
+
+    }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
+        viewDataBinding.memoAddClickListener = memoAddOnClickListener()
+        viewDataBinding.getAlbumImgListener = getAlbumImgAndCropOnClickListener()
+        viewDataBinding.takePictureListener = takePictureAndCropOnClickListener()
+
+    }
+
 
     companion object {
 
@@ -54,11 +75,6 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
         private val CROP_FROM_CAMERA = 3
         private val MULTIPLE_PERMISSIONS = 101
 
-        fun instance(memoAddListener: () -> Unit, checkAddImageListener: () -> Boolean, imgAddListener: (Uri) -> Unit): WriteMemoImgAddDialogFragment {
-            val fragment = WriteMemoImgAddDialogFragment(memoAddListener, checkAddImageListener, imgAddListener)
-
-            return fragment
-        }
     }
 
     override fun onResume() {
@@ -67,24 +83,6 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
-    }
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-
-        binding = DataBindingUtil.inflate<MemoImgAddDialogBinding>(
-                inflater, R.layout.memo_img_add_dialog, container, false).apply {
-            memoAddClickListener = memoAddOnClickListener()
-            getAlbumImgListener = getAlbumImgAndCropOnClickListener()
-            takePictureListener = takePictureAndCropOnClickListener()
-        }
-
-
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog!!.setCanceledOnTouchOutside(true)
-
-        return binding.root
     }
 
 
@@ -163,7 +161,7 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if ((ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) ||
                     (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA))) {
-                val permissionDialogFragment = PermissionDialogFragment()
+                val permissionDialogFragment = PermissionNormalDialogFragment()
                 permissionDialogFragment.show(activity.supportFragmentManager, "tag")
             } else {
                 ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA), MULTIPLE_PERMISSIONS)
@@ -281,10 +279,6 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
             i.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
             startActivityForResult(i, CROP_FROM_CAMERA)
         }
-    }
-
-    fun show(fragmentManager: FragmentManager) {
-        super.show(fragmentManager, "Tag")
     }
 
 }

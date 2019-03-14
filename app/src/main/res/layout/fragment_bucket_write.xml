@@ -178,6 +178,7 @@
             android:background="@color/dividerColor" />
 
         <RelativeLayout
+            android:background="@drawable/sub2_basic"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"
@@ -222,6 +223,7 @@
 
 
         <RelativeLayout
+            android:background="@drawable/sub2_basic"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:onClick="@{categorySelectListener}">
@@ -256,6 +258,7 @@
 
 
         <RelativeLayout
+            android:background="@drawable/sub2_basic"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:onClick="@{ddayAddListener}">
@@ -291,6 +294,7 @@
 
 
         <RelativeLayout
+            android:background="@drawable/sub2_basic"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:onClick="@{goalCountSettingListener}">

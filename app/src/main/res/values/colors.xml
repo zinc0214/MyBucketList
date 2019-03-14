@@ -28,6 +28,11 @@
     <color name="subColor">#a6c6ff</color>
     <color name="notiColor">#ffca5a</color>
     <color name="mainColor">#5a95ff</color>
+    <color name="mainPressColor">#b33341c0</color>
+    <color name="subPressColor">#859ecc</color>
+    <color name="ddayPressColor">#cca248</color>
+    <color name="sub2PressColor">#fafafa</color>
+    <color name="bottomPressColor">#E8E8E8</color>
 
     <color name="circularProgressBackground">#e8e8e8</color>
     <color name="bucketSucceedBackground">#66859ecc</color>

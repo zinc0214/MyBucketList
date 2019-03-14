@@ -11,6 +11,7 @@ import android.widget.SeekBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.WriteGoalCountDialogBinding
 import womenproject.com.mybury.ui.EditTextInputFilter
 
@@ -20,19 +21,7 @@ import womenproject.com.mybury.ui.EditTextInputFilter
 
 
 @SuppressLint("ValidFragment")
-class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) -> Unit) : DialogFragment() {
-
-    private lateinit var dday: String
-    private lateinit var binding : WriteGoalCountDialogBinding
-
-    companion object {
-
-        fun instance(goalCountSetListener: (String) -> Unit): WriteGoalCountDialogFragment {
-            val fragment = WriteGoalCountDialogFragment(goalCountSetListener)
-
-            return fragment
-        }
-    }
+class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) -> Unit) : BaseDialogFragment<WriteGoalCountDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -43,30 +32,35 @@ class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) ->
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override val layoutResourceId: Int
+        get() = R.layout.write_goal_count_dialog
 
-        binding = DataBindingUtil.inflate<WriteGoalCountDialogBinding>(
-                inflater, R.layout.write_goal_count_dialog, container, false).apply {
+    override fun initStartView() {
 
-            goalCountSeekbar.setOnSeekBarChangeListener(setOnSeekbarChangedListener())
-            goalCountEditText.setOnKeyListener(setOnEditTextEnterListener())
-            bottomSheet.cancelButtonClickListener = cancelButtonClickListener()
-            bottomSheet.confirmButtonClickListener = confirmButtonClickListener()
-
-            goalCountEditText.isCursorVisible = false
-            goalCountEditText.filters = arrayOf(EditTextInputFilter("1", "100"))
-
-        }
-
-
-        return binding.root
     }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
+        viewDataBinding.goalCountSeekbar.setOnSeekBarChangeListener(setOnSeekbarChangedListener())
+        viewDataBinding.goalCountEditText.setOnKeyListener(setOnEditTextEnterListener())
+        viewDataBinding.bottomSheet.cancelButtonClickListener = cancelButtonClickListener()
+        viewDataBinding.bottomSheet.confirmButtonClickListener = confirmButtonClickListener()
+
+        viewDataBinding.goalCountEditText.isCursorVisible = false
+        viewDataBinding.goalCountEditText.filters = arrayOf(EditTextInputFilter("1", "100"))
+
+    }
+
 
 
     private fun setOnSeekbarChangedListener() : SeekBar.OnSeekBarChangeListener {
         return object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                binding.goalCountEditText.setText("$progress")
+                viewDataBinding.goalCountEditText.setText("$progress")
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) { }
 
@@ -79,7 +73,7 @@ class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) ->
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                 if (event != null) {
                     if((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        binding.goalCountSeekbar.progress = binding.goalCountEditText.text.toString().toInt()
+                        viewDataBinding.goalCountSeekbar.progress = viewDataBinding.goalCountEditText.text.toString().toInt()
                     }
                 }
                 return false
@@ -97,7 +91,7 @@ class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) ->
 
     private fun confirmButtonClickListener() : View.OnClickListener {
         return View.OnClickListener {
-            goalCountSetListener.invoke(binding.goalCountEditText.text.toString())
+            goalCountSetListener.invoke(viewDataBinding.goalCountEditText.text.toString())
             this.dismiss()
         }
     }

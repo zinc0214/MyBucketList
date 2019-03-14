@@ -72,7 +72,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
 
     private fun createOnClickFilterListener() : View.OnClickListener {
         return View.OnClickListener {
-            val filterDialogFragment = FilterDialogFragment.instance()
+            val filterDialogFragment = FilterDialogFragment()
             filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }

@@ -5,13 +5,13 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication
-import womenproject.com.mybury.base.BaseDialogFragment
+import womenproject.com.mybury.base.BaseNormalDialogFragment
 
 /**
  * Created by HanAYeon on 2019. 3. 6..
  */
 
-class PermissionDialogFragment : BaseDialogFragment() {
+class PermissionNormalDialogFragment : BaseNormalDialogFragment() {
 
     init {
         TITLE_MSG = "권한알림"

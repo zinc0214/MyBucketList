@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/white" />
-    <corners android:radius="16dp" />
-    <stroke android:width="0.6dp" android:color="@color/mainColor"/>
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 체크박스 해제상태 -->
+    <item android:drawable="@drawable/memo_img_add_button_normal_background" android:state_pressed="false" />
+    <!-- 체크박스 선택상태 -->
+    <item android:drawable="@drawable/memo_img_add_button_press_background" android:state_pressed="true" />
+    <!-- default state -->
+    <item android:drawable="@drawable/memo_img_add_button_normal_background" />
+</selector>
+

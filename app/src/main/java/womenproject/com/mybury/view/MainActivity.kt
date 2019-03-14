@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
        /*val baseViewModel = BaseViewModel()
 
        if(baseViewModel.isNetworkDisconnect()) {
-           val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
+           val baseDialogFragment = BaseNormalDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
            baseDialogFragment.show(supportFragmentManager, "dialog")
        }*/
     }
@@ -47,6 +47,6 @@ class MainActivity : AppCompatActivity() {
 
 
     fun showDialog() {
-      //  BaseDialogFragment().showDialog()
+      //  BaseNormalDialogFragment().showDialog()
     }
 }

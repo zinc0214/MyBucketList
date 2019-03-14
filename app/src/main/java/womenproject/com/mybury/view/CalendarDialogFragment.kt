@@ -13,27 +13,61 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.CalendarDialogBinding
+import java.util.*
+
 
 /**
  * Created by HanAYeon on 2019. 3. 8..
  */
 
 @SuppressLint("ValidFragment")
-class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : DialogFragment() {
+class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : BaseDialogFragment<CalendarDialogBinding>() {
 
+    override val layoutResourceId: Int
+        get() = R.layout.calendar_dialog
 
-    private lateinit var mainMsg: String
     private var dday = ""
 
-    companion object {
+    override fun initStartView() {
 
-        fun instance(ddaySetListener: (String) -> Unit): CalendarDialogFragment {
-            val fragment = CalendarDialogFragment(ddaySetListener)
-
-            return fragment
-        }
+        val currentTime = Calendar.getInstance().getTime()
+        viewDataBinding.calendarView.setCurrentDate(currentTime)
     }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
+        viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
+            var month = "1"
+            var day = "1"
+
+            month = if (date.month + 1 < 10) {
+                "0${date.month + 1}"
+            } else {
+                date.month.toString()
+            }
+
+
+            day = if (date.day < 10) {
+                "0${date.day}"
+            } else {
+                date.day.toString()
+            }
+
+            dday = "${date.year}/$month/$day"
+
+
+        }
+
+        viewDataBinding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
+        viewDataBinding.bottomSheet.cancelButtonClickListener = cancelOnClickListener()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -42,46 +76,6 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val binding = DataBindingUtil.inflate<CalendarDialogBinding>(
-                inflater, R.layout.calendar_dialog, container, false).apply {
-
-            calendarView.setOnDateChangedListener { widget, date, selected ->
-                var month = "1"
-                var day = "1"
-
-                month = if (date.month + 1 < 10) {
-                    "0${date.month + 1}"
-                } else {
-                    date.month.toString()
-                }
-
-
-                day = if (date.day < 10) {
-                    "0${date.day}"
-                } else {
-                    date.day.toString()
-                }
-
-                dday = "${date.year}/$month/$day"
-
-
-            }
-
-            bottomSheet.confirmButtonClickListener = confirmOnClickListener()
-            bottomSheet.cancelButtonClickListener = cancelOnClickListener()
-        }
-
-
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog!!.setCanceledOnTouchOutside(true)
-
-        return binding.root
-    }
-
 
     private fun confirmOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
@@ -92,19 +86,10 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Di
         }
     }
 
-
     private fun cancelOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             this.dismiss()
         }
-    }
-
-    protected fun setDialogMessage(dialogMessage: String) {
-        mainMsg = dialogMessage
-    }
-
-    fun show(fragmentManager: FragmentManager) {
-        super.show(fragmentManager, "Tag")
     }
 
 }

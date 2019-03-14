@@ -24,6 +24,15 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         get() = BucketWriteViewModel()
 
     override fun initStartView() {
+
+    }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
         viewDataBinding.cancelBtnClickListener = writeCancelOnClickListener()
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
@@ -52,36 +61,27 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             }
         }
 
-
     }
 
-    override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
-    }
-
-    private fun writeCancelOnClickListener() : View.OnClickListener {
+    private fun writeCancelOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             activity!!.onBackPressed()
         }
     }
 
-    private fun titleTextChangedListener(editText : EditText) : TextWatcher {
+    private fun titleTextChangedListener(editText: EditText): TextWatcher {
 
         return object : TextWatcher {
             var previousString = ""
 
-            override fun afterTextChanged(s: Editable?) { }
+            override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 previousString = s.toString()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(editText.lineCount > 2) {
+                if (editText.lineCount > 2) {
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
@@ -90,19 +90,19 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private fun memoTextChangedListener(editText : EditText) : TextWatcher {
+    private fun memoTextChangedListener(editText: EditText): TextWatcher {
 
         return object : TextWatcher {
             var previousString = ""
 
-            override fun afterTextChanged(s: Editable?) { }
+            override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 previousString = s.toString()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(editText.lineCount > 2) {
+                if (editText.lineCount > 2) {
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
@@ -131,20 +131,18 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            val filterDialogFragment = WriteMemoImgAddDialogFragment.instance(memoAddListener, checkAddImgAbleListener, imgAddListener)
-            filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+            WriteMemoImgAddDialogFragment(memoAddListener, checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
 
-
     private fun onAddImgField(uri: Uri) {
 
-        val removeImgListener : (View) -> Unit = { it ->
+        val removeImgListener: (View) -> Unit = { it ->
             onDeleteImgField(it)
         }
 
-        val writeImgLayout = WriteImgLayout(this.context!!,removeImgListener).setUI(uri)
+        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener).setUI(uri)
         addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
@@ -152,8 +150,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private fun onDeleteImgField(layout: View) {
         var deleteImgValue = 0
 
-        for(i in 0..addImgList.size) {
-            if(layout.equals(addImgList[i])) {
+        for (i in 0..addImgList.size) {
+            if (layout.equals(addImgList[i])) {
                 deleteImgValue = i
             }
         }
@@ -177,27 +175,27 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            val calendarDialogFragment = CalendarDialogFragment.instance(ddayAddListener)
+            val calendarDialogFragment = CalendarDialogFragment(ddayAddListener)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
 
-    private fun goalCountSetListener() : View.OnClickListener {
+    private fun goalCountSetListener(): View.OnClickListener {
         val goalCountSetListener: (String) -> Unit = { count ->
             viewDataBinding.goalCountText.text = count
-            setTextColor(viewDataBinding.goalCountText)
-            viewDataBinding.countImg.background = context!!.getDrawable(R.drawable.target_count_enable)
+            if (count.toInt() != 1) {
+                setTextColor(viewDataBinding.goalCountText)
+                viewDataBinding.countImg.background = context!!.getDrawable(R.drawable.target_count_enable)
+
+            }
         }
 
         return View.OnClickListener {
-            val writeGoalCountDialogFragment = WriteGoalCountDialogFragment.instance(goalCountSetListener)
-            writeGoalCountDialogFragment.show(activity!!.supportFragmentManager, "tag")
+            WriteGoalCountDialogFragment(goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
-
-
-    private fun setTextColor(textView : TextView) {
+    private fun setTextColor(textView: TextView) {
         textView.setTextColor(context!!.resources.getColor(R.color.mainColor))
     }
 

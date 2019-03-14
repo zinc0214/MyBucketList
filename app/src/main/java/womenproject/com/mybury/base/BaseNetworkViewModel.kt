@@ -16,5 +16,4 @@ abstract class BaseNetworkViewModel() : BaseViewModel() {
 
     abstract fun getData(api: String, callback: OnBucketListGetEvent) : BucketList?
 
-
 }

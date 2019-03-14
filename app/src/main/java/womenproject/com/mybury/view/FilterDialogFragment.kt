@@ -3,14 +3,9 @@ package womenproject.com.mybury.view
 import android.app.ActionBar
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MainFilterDialogBinding
 import womenproject.com.mybury.viewmodels.FilterDialogViewModel
 
@@ -19,21 +14,22 @@ import womenproject.com.mybury.viewmodels.FilterDialogViewModel
  */
 
 
-open class FilterDialogFragment : DialogFragment() {
+open class FilterDialogFragment : BaseDialogFragment<MainFilterDialogBinding>() {
+    override val layoutResourceId: Int
+        get() = R.layout.main_filter_dialog
 
-
-    private lateinit var mainMsg: String
-
-    companion object {
-
-        const val DIALOG_MSG = "dialog_msg"
-
-        fun instance(): FilterDialogFragment {
-            val fragment = FilterDialogFragment()
-
-            return fragment
-        }
+    override fun initStartView() {
+        viewDataBinding.viewModel = FilterDialogViewModel()
     }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+        viewDataBinding.filterSetClickListener = createOnClickFilterSetListener()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -44,23 +40,6 @@ open class FilterDialogFragment : DialogFragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val binding = DataBindingUtil.inflate<MainFilterDialogBinding>(
-                inflater, R.layout.main_filter_dialog, container, false).apply {
-            viewModel = FilterDialogViewModel()
-
-        }
-
-        binding.apply {
-            filterSetClickListener = createOnClickFilterSetListener()
-        }
-
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog!!.setCanceledOnTouchOutside(true)
-
-        return binding.root
-    }
 
 
     private fun createOnClickFilterSetListener() : View.OnClickListener {
@@ -71,14 +50,6 @@ open class FilterDialogFragment : DialogFragment() {
 
     private fun dialogDismiss() {
         this.dismiss()
-    }
-
-    protected fun setDialogMessage(dialogMessage: String) {
-        mainMsg = dialogMessage
-    }
-
-    fun show(fragmentManager: FragmentManager) {
-        super.show(fragmentManager, "Tag")
     }
 
 }
