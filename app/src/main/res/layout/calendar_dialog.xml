@@ -11,19 +11,56 @@
         android:background="@drawable/write_dialog_background"
         android:orientation="vertical">
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
+        <TextView
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:text="2019년 3월"
+            android:id="@+id/date_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp"
-            android:animationCache="false"
-            app:mcv_allowClickDaysOutsideCurrentMonth="true"
-            app:mcv_calendarMode="month"
-            app:mcv_selectionColor="@color/subColor"
-            app:mcv_showOtherDates="all" />
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:animationCache="false"
+                app:mcv_allowClickDaysOutsideCurrentMonth="true"
+                app:mcv_calendarMode="month"
+                app:mcv_selectionColor="@color/subColor"
+                app:mcv_showOtherDates="all" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/date_picker"
+                android:layout_centerInParent="true"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <DatePicker
+                    android:shadowColor="@color/sub2PressColor"
+                    android:calendarTextColor="@color/writeMemoText"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:datePickerMode="spinner"
+                    android:calendarViewShown="false"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
 
         <include
             android:id="@+id/bottom_sheet"

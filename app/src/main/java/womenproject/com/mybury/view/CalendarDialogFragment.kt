@@ -2,20 +2,13 @@ package womenproject.com.mybury.view
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
+import android.widget.TextView
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.CalendarDialogBinding
-import java.util.*
+import womenproject.com.mybury.ui.CurrentDateDecorator
 
 
 /**
@@ -23,17 +16,20 @@ import java.util.*
  */
 
 @SuppressLint("ValidFragment")
-class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : BaseDialogFragment<CalendarDialogBinding>() {
+class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) -> Unit, private var calendarDay: CalendarDay) : BaseDialogFragment<CalendarDialogBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.calendar_dialog
 
     private var dday = ""
+    private var calendarVisible = true
 
     override fun initStartView() {
 
-        val currentTime = Calendar.getInstance().getTime()
-        viewDataBinding.calendarView.setCurrentDate(currentTime)
+        viewDataBinding.calendarView.selectedDate = calendarDay
+        viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
+        viewDataBinding.calendarView.topbarVisible = false
+        viewDataBinding.dateTitle.setSelectDate(calendarDay.year.toString(), calendarDay.month.toString())
     }
 
     override fun initDataBinding() {
@@ -61,26 +57,23 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Ba
 
             dday = "${date.year}/$month/$day"
 
+        }
 
+        viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
+            viewDataBinding.dateTitle.setSelectDate(date.year.toString(), date.month.toString())
         }
 
         viewDataBinding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
         viewDataBinding.bottomSheet.cancelButtonClickListener = cancelOnClickListener()
+        viewDataBinding.dateTitle.setOnClickListener(selectTypeOnChangeListener())
+
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
-        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
-    }
 
     private fun confirmOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            if(!dday.isEmpty()) {
-                ddaySetListener.invoke(dday)
+            if (!dday.isEmpty()) {
+                ddaySetListener.invoke(dday, viewDataBinding.calendarView.selectedDate)
             }
             this.dismiss()
         }
@@ -91,5 +84,31 @@ class CalendarDialogFragment(private var ddaySetListener: (String) -> Unit) : Ba
             this.dismiss()
         }
     }
+
+    private fun selectTypeOnChangeListener() : View.OnClickListener {
+        return View.OnClickListener {
+            if(calendarVisible) {
+                viewDataBinding.calendarView.visibility = View.GONE
+                viewDataBinding.datePicker.visibility = View.VISIBLE
+                calendarVisible = false
+            }  else {
+                viewDataBinding.calendarView.visibility = View.VISIBLE
+                viewDataBinding.datePicker.visibility = View.GONE
+                calendarVisible = true
+            }
+        }
+    }
+    private fun TextView.setSelectDate(year:String, month:String) {
+        text = "${year}년 ${month}월"
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
+        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
+    }
+
 
 }

@@ -21,7 +21,7 @@ import womenproject.com.mybury.ui.EditTextInputFilter
 
 
 @SuppressLint("ValidFragment")
-class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) -> Unit) : BaseDialogFragment<WriteGoalCountDialogBinding>() {
+class WriteGoalCountDialogFragment(private var currentCount : Int, private var goalCountSetListener: (String) -> Unit) : BaseDialogFragment<WriteGoalCountDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -50,8 +50,11 @@ class WriteGoalCountDialogFragment(private var goalCountSetListener: (String) ->
         viewDataBinding.bottomSheet.cancelButtonClickListener = cancelButtonClickListener()
         viewDataBinding.bottomSheet.confirmButtonClickListener = confirmButtonClickListener()
 
-        viewDataBinding.goalCountEditText.isCursorVisible = false
         viewDataBinding.goalCountEditText.filters = arrayOf(EditTextInputFilter("1", "100"))
+
+        viewDataBinding.goalCountEditText.setText(currentCount.toString())
+        viewDataBinding.goalCountSeekbar.progress = currentCount
+
 
     }
 

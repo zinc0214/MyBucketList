@@ -1,11 +1,13 @@
 package womenproject.com.mybury.view
 
+import android.icu.util.Calendar
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
@@ -16,6 +18,8 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
     private var addImgList = HashMap<Int, RelativeLayout>()
+    private var ddayCount = 1
+    private var currentCalendarDay = CalendarDay.today()
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -168,14 +172,15 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun ddayAddListener(): View.OnClickListener {
 
-        val ddayAddListener: (String) -> Unit = { dday ->
+        val ddayAddListener: (String, CalendarDay) -> Unit = { dday, calendarDay ->
             viewDataBinding.ddayText.text = dday
+            currentCalendarDay = calendarDay
             setTextColor(viewDataBinding.ddayText)
             viewDataBinding.ddayImg.background = context!!.getDrawable(R.drawable.calendar_enable)
         }
 
         return View.OnClickListener {
-            val calendarDialogFragment = CalendarDialogFragment(ddayAddListener)
+            val calendarDialogFragment = CalendarDialogFragment(ddayAddListener, currentCalendarDay)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
@@ -183,6 +188,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private fun goalCountSetListener(): View.OnClickListener {
         val goalCountSetListener: (String) -> Unit = { count ->
             viewDataBinding.goalCountText.text = count
+            ddayCount = count.toInt()
             if (count.toInt() != 1) {
                 setTextColor(viewDataBinding.goalCountText)
                 viewDataBinding.countImg.background = context!!.getDrawable(R.drawable.target_count_enable)
@@ -191,7 +197,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            WriteGoalCountDialogFragment(goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
+            WriteGoalCountDialogFragment(ddayCount, goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
 

@@ -11,7 +11,7 @@ import womenproject.com.mybury.base.BaseNormalDialogFragment
  * Created by HanAYeon on 2019. 3. 6..
  */
 
-class PermissionNormalDialogFragment : BaseNormalDialogFragment() {
+class PermissionDialogFragment : BaseNormalDialogFragment() {
 
     init {
         TITLE_MSG = "권한알림"
