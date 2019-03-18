@@ -1,7 +1,6 @@
 package womenproject.com.mybury.view
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.view.View
 import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -28,6 +27,8 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
 
         viewDataBinding.calendarView.selectedDate = calendarDay
         viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
+        viewDataBinding.calendarView.setDateTextAppearance(R.style.CalendarDate)
+        viewDataBinding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
         viewDataBinding.calendarView.topbarVisible = false
         viewDataBinding.dateTitle.setSelectDate(calendarDay.year.toString(), calendarDay.month.toString())
     }
@@ -60,7 +61,7 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
         }
 
         viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
-            viewDataBinding.dateTitle.setSelectDate(date.year.toString(), date.month.toString())
+            viewDataBinding.dateTitle.setSelectDate(date.year.toString(), (date.month+1).toString())
         }
 
         viewDataBinding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
@@ -101,14 +102,5 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
     private fun TextView.setSelectDate(year:String, month:String) {
         text = "${year}년 ${month}월"
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
-        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
-    }
-
 
 }

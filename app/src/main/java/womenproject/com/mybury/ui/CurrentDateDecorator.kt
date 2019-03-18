@@ -2,6 +2,7 @@ package womenproject.com.mybury.ui
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
@@ -15,7 +16,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
  */
 
 
-class CurrentDateDecorator() : DayViewDecorator {
+class CurrentDateDecorator : DayViewDecorator {
 
 
     override fun shouldDecorate(day: CalendarDay): Boolean {
@@ -24,7 +25,7 @@ class CurrentDateDecorator() : DayViewDecorator {
 
     override fun decorate(view: DayViewFacade) {
 
-        view.addSpan(ForegroundColorSpan(Color.BLACK))
+       // view.addSpan(ForegroundColorSpan(Color.BLACK))
         view.addSpan(StyleSpan(Typeface.BOLD))
         view.addSpan(RelativeSizeSpan(1.2f))
 

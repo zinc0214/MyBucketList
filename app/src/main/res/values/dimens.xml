@@ -15,5 +15,5 @@
     <dimen name="initDp">0dp</dimen>
 
     <dimen name="writeFragmentWidth">320dp</dimen>
-
+    <dimen name="calendarTextSize">12sp</dimen>
 </resources>

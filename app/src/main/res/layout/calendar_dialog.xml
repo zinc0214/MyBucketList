@@ -4,7 +4,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="424dp"
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -12,16 +12,21 @@
         android:orientation="vertical">
 
         <TextView
+            android:layout_marginTop="36dp"
+            android:textColor="@color/dialogTitleText"
             android:textStyle="bold"
-            android:layout_marginTop="20dp"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:text="2019년 3월"
             android:id="@+id/date_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="26dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -30,14 +35,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
                 android:animationCache="false"
                 app:mcv_allowClickDaysOutsideCurrentMonth="true"
                 app:mcv_calendarMode="month"
-                app:mcv_selectionColor="@color/subColor"
-                app:mcv_showOtherDates="all" />
+                app:mcv_selectionColor="@color/mainColor"
+                app:mcv_showOtherDates="defaults" />
 
             <LinearLayout
                 android:visibility="gone"

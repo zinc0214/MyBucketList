@@ -165,5 +165,15 @@
     <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
         <item name="android:textColor">@color/mcv_text_date_dark</item>
     </style>
+
+    <style name="CalendarWeek" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dialogContentText</item>
+    </style>
+
+    <style name="CalendarDate" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/calendar_date_color</item>
+    </style>
 </resources>
 
