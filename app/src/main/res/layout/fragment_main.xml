@@ -32,6 +32,13 @@
 
         </ScrollView>
 
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/blank_img"
+            android:layout_centerInParent="true"
+            android:background="@drawable/blank_mybury"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <FrameLayout
             android:id="@+id/container_bottom_sheet"

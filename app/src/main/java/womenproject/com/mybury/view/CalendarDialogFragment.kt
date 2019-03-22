@@ -1,13 +1,27 @@
 package womenproject.com.mybury.view
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.View
+import android.widget.DatePicker
+import android.widget.NumberPicker
 import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.CalendarDialogBinding
 import womenproject.com.mybury.ui.CurrentDateDecorator
+import java.lang.reflect.AccessibleObject.setAccessible
+import androidx.databinding.adapters.TextViewBindingAdapter.setTextSize
+import android.widget.EditText
+import android.view.ViewGroup
+import java.lang.reflect.AccessibleObject.setAccessible
+
+
 
 
 /**
@@ -39,6 +53,10 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
 
     override fun initAfterBinding() {
 
+        colorizeDatePicker(viewDataBinding.datePicker)
+        dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color.mainColor))
+
+
         viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
             var month = "1"
             var day = "1"
@@ -61,7 +79,7 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
         }
 
         viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
-            viewDataBinding.dateTitle.setSelectDate(date.year.toString(), (date.month+1).toString())
+            viewDataBinding.dateTitle.setSelectDate(date.year.toString(), (date.month + 1).toString())
         }
 
         viewDataBinding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
@@ -86,21 +104,95 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
         }
     }
 
-    private fun selectTypeOnChangeListener() : View.OnClickListener {
+    private fun selectTypeOnChangeListener(): View.OnClickListener {
         return View.OnClickListener {
-            if(calendarVisible) {
+            if (calendarVisible) {
                 viewDataBinding.calendarView.visibility = View.GONE
                 viewDataBinding.datePicker.visibility = View.VISIBLE
                 calendarVisible = false
-            }  else {
+            } else {
                 viewDataBinding.calendarView.visibility = View.VISIBLE
                 viewDataBinding.datePicker.visibility = View.GONE
                 calendarVisible = true
             }
         }
     }
-    private fun TextView.setSelectDate(year:String, month:String) {
+
+    private fun TextView.setSelectDate(year: String, month: String) {
         text = "${year}년 ${month}월"
     }
+
+
+    fun colorizeDatePicker(datePicker: DatePicker) {
+        val system = Resources.getSystem()
+        val dayId = system.getIdentifier("day", "id", "android")
+        val monthId = system.getIdentifier("month", "id", "android")
+        val yearId = system.getIdentifier("year", "id", "android")
+
+        val dayPicker = datePicker.findViewById(dayId) as NumberPicker
+        val monthPicker = datePicker.findViewById(monthId) as NumberPicker
+        val yearPicker = datePicker.findViewById(yearId) as NumberPicker
+
+        setDividerColor(dayPicker)
+        setDividerColor(monthPicker)
+        setDividerColor(yearPicker)
+    }
+
+    private fun setDividerColor(picker: NumberPicker) {
+        val count = picker.getChildCount()
+        for (i in 0 until count) {
+            try {
+                val dividerField = picker::class.java.getDeclaredField("mSelectionDivider")
+                dividerField.setAccessible(true)
+                val colorDrawable = ColorDrawable(picker.getResources().getColor(R.color.writeSeekbarBackground2))
+                val height = resources.getDimensionPixelSize(R.dimen.titleMargin)
+                dividerField.set(picker, colorDrawable)
+                picker.invalidate()
+            } catch (e: Exception) {
+                Log.w("setDividerColor", e)
+            }
+
+        }
+    }
+
+
+    fun dateTimePickerTextColour(`$picker`: ViewGroup, `$color`: Int) {
+
+        var i = 0
+        val j = `$picker`.childCount
+        while (i < j) {
+            val t0 = `$picker`.getChildAt(i) as View
+
+            //NumberPicker는 아까만든 함수로 발라내고
+            if (t0 is NumberPicker) {
+                numberPickerTextColor(t0, `$color`)
+            }
+            else if (t0 is ViewGroup) {
+                dateTimePickerTextColour(t0, `$color`)
+            }//아니면 계속 돌아봐
+            i++
+        }
+    }
+
+    fun numberPickerTextColor(`$v`: NumberPicker, `$c`: Int) {
+        var i = 0
+        val j = `$v`.childCount
+        while (i < j) {
+            val t0 = `$v`.getChildAt(i)
+            if (t0 is EditText) {
+                try {
+                    val t1 = `$v`.javaClass.getDeclaredField("mSelectorWheelPaint")
+                    t1.isAccessible = true
+                    (t1.get(`$v`) as Paint).setColor(`$c`)
+                    t0.setTextColor(`$c`)
+                    `$v`.invalidate()
+                } catch (e: Exception) {
+                }
+
+            }
+            i++
+        }
+    }
+
 
 }

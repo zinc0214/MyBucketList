@@ -66,7 +66,13 @@ dependencies {
 
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
 
+    implementation 'com.github.lany192:DateTimePicker:1.0.5'
+
+    implementation 'com.android.support:cardview-v7:28.0.0'
+
 }
 repositories {
     mavenCentral()
+
+    maven { url 'https://jitpack.io' }
 }

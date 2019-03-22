@@ -5,6 +5,7 @@ import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -13,11 +14,17 @@ import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
+import android.R.attr.button
+import androidx.cardview.widget.CardView
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
-    private var addImgList = HashMap<Int, RelativeLayout>()
+    private var addImgList = HashMap<Int, CardView
+            >()
     private var ddayCount = 1
     private var currentCalendarDay = CalendarDay.today()
 
@@ -45,7 +52,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
         viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
-
+        viewDataBinding.memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
 
         viewDataBinding.memoText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -114,6 +121,21 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
+    private fun memoRemoveOnTouchListener(): View.OnTouchListener {
+
+        return View.OnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    viewDataBinding.memoLayout.background = context!!.getDrawable(R.drawable.write_memo_press_background)
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    viewDataBinding.memoLayout.background = context!!.getDrawable(R.drawable.write_memo_background)
+                }
+            }
+            false
+        }
+    }
+
     private fun memoImgAddOnClickListener(): View.OnClickListener {
 
         val memoAddListener: () -> Unit = {
@@ -147,7 +169,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener).setUI(uri)
-        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
+        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as CardView)
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 

@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="colorControlHighlight">@color/writeMemoPress</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme">
@@ -103,8 +105,8 @@
     </style>
 
     <style name="writeTopTextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/register_text_color</item>
         <item name="android:textSize">16sp</item>
@@ -175,5 +177,16 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/calendar_date_color</item>
     </style>
+
+
+    <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
+    </style>
+
+    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:divider">@color/writeSeekbarBackground2</item>
+        <item name="android:dividerHeight">0.6dp</item>
+    </style>
+
 </resources>
 

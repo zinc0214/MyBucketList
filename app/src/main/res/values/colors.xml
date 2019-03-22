@@ -64,6 +64,8 @@
     <color name="writeUnusedText">#888888</color>
     <color name="writeMemoText">#888888</color>
     <color name="writeMemoBackground">#f3f3f3</color>
+    <color name="writeListPress">#f0f0f0</color>
+    <color name="writeMemoPress">#dfdfdf</color>
 
     <color name="dividerColor">#dddddd</color>
     <color name="switchUnselectColor">#d8d8d8</color>
@@ -73,4 +75,6 @@
 
     <color name="writeSeekbarBackground1">#4cc8cdda</color>
     <color name="writeSeekbarBackground2">#a6c6ff</color>
+
+
 </resources>

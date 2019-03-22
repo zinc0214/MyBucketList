@@ -12,53 +12,77 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginTop="36dp"
-            android:textColor="@color/dialogTitleText"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:text="2019년 3월"
             android:id="@+id/date_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="2019년 3월"
+            android:textAlignment="center"
+            android:textColor="@color/dialogTitleText"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="26dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="26dp">
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:animationCache="false"
+                android:visibility="gone"
                 app:mcv_allowClickDaysOutsideCurrentMonth="true"
                 app:mcv_calendarMode="month"
                 app:mcv_selectionColor="@color/mainColor"
                 app:mcv_showOtherDates="defaults" />
 
             <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/date_picker"
+                android:id="@+id/date_picker_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textSize="15sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
 
                 <DatePicker
-                    android:shadowColor="@color/sub2PressColor"
-                    android:calendarTextColor="@color/writeMemoText"
-                    android:layout_gravity="center"
+                    android:id="@+id/date_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="20sp"
                     android:datePickerMode="spinner"
-                    android:calendarViewShown="false"
-                    />
+                    android:calendarViewShown="false"/>
 
+              <!--  <NumberPicker
+                    style="@style/applicationTheme"
+                    android:id="@+id/year_picker"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <NumberPicker
+                    style="@style/applicationTheme"
+                    android:id="@+id/month_picker"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <NumberPicker
+                    style="@style/applicationTheme"
+                    android:id="@+id/day_picker"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+-->
             </LinearLayout>
 
         </RelativeLayout>
@@ -66,7 +90,7 @@
 
         <include
             android:id="@+id/bottom_sheet"
-            layout="@layout/write_dialog_bottom_layout"/>
+            layout="@layout/write_dialog_bottom_layout" />
     </LinearLayout>
 
 </layout>
