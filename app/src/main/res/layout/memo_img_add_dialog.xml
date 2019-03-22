@@ -3,23 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <data>
-
-        <variable
-            name="memoAddClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="getAlbumImgListener"
-            type="android.view.View.OnClickListener"/>
-
-        <variable
-            name="takePictureListener"
-            type="android.view.View.OnClickListener"/>
-
-    </data>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,25 +15,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="28dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="7dp">
 
-            <TextView
-                style="@style/writeDialogTextStyle"
-                android:onClick="@{memoAddClickListener}"
-                android:text="메모 추가" />
 
-            <TextView
-                style="@style/writeDialogTextStyle"
-                android:layout_marginTop="32dp"
-                android:onClick="@{getAlbumImgListener}"
-                android:text="앨범에서 사진 선택" />
+            <include
+                android:id="@+id/add_memo_layout"
+                layout="@layout/write_dialog_item"/>
 
-            <TextView
-                style="@style/writeDialogTextStyle"
-                android:layout_marginTop="32dp"
-                android:onClick="@{takePictureListener}"
-                android:text="사진 촬영" />
+            <include
+                android:id="@+id/add_album_img_layout"
+                layout="@layout/write_dialog_item" />
+
+
+            <include
+                android:id="@+id/add_cam_img_layout"
+                layout="@layout/write_dialog_item" />
+
         </LinearLayout>
 
     </LinearLayout>

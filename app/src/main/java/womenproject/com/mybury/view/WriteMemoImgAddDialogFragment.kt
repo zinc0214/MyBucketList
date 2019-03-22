@@ -53,9 +53,13 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
 
     override fun initAfterBinding() {
 
-        viewDataBinding.memoAddClickListener = memoAddOnClickListener()
-        viewDataBinding.getAlbumImgListener = getAlbumImgAndCropOnClickListener()
-        viewDataBinding.takePictureListener = takePictureAndCropOnClickListener()
+        viewDataBinding.addMemoLayout.itemClickListener = memoAddOnClickListener()
+        viewDataBinding.addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener()
+        viewDataBinding.addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener()
+
+        viewDataBinding.addMemoLayout.title = "메모 추가"
+        viewDataBinding.addAlbumImgLayout.title = "앨범에서 사진 선택"
+        viewDataBinding.addCamImgLayout.title = "사진 촬영"
 
     }
 

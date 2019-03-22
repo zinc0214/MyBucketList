@@ -140,17 +140,6 @@
     </style>
 
 
-    <style name="writeDialogTextStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/writeDialogText</item>
-    </style>
-
-
-
       <style name="CalenderViewCustom" parent="Theme.AppCompat">
         <item name="colorAccent">@color/red</item>
         <item name="colorPrimary">@color/subColor</item>

@@ -15,6 +15,7 @@ import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import android.R.attr.button
+import android.graphics.Typeface
 import androidx.cardview.widget.CardView
 import java.util.*
 import kotlin.collections.ArrayList
@@ -53,6 +54,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
         viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
         viewDataBinding.memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
+        viewDataBinding.memoImgLayout.setOnTouchListener(memoImgAddOnTouchListener())
 
         viewDataBinding.memoText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -118,6 +120,20 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
                     editText.setSelection(editText.length())
                 }
             }
+        }
+    }
+
+    private fun memoImgAddOnTouchListener() : View.OnTouchListener {
+        return View.OnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    viewDataBinding.memoImgText.setTypeface(Typeface.DEFAULT_BOLD);
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    viewDataBinding.memoImgText.setTypeface(Typeface.DEFAULT);
+                }
+            }
+            false
         }
     }
 

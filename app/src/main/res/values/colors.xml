@@ -66,6 +66,7 @@
     <color name="writeMemoBackground">#f3f3f3</color>
     <color name="writeListPress">#f0f0f0</color>
     <color name="writeMemoPress">#dfdfdf</color>
+    <color name="writeItemTextPress">#99434343</color>
 
     <color name="dividerColor">#dddddd</color>
     <color name="switchUnselectColor">#d8d8d8</color>
