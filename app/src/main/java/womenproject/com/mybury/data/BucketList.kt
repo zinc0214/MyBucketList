@@ -37,3 +37,11 @@ data class BucketCategory(
         val id : String = "",
         val name : String= ""
 )
+
+data class BucketUserCategory (
+        val categoryList : List<String>
+)
+
+enum class CategoryType {
+    notUse, categoryUse, categoryAdd
+}

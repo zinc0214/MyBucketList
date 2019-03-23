@@ -1,23 +1,19 @@
 package womenproject.com.mybury.viewmodels
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.BucketUserCategory
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
 
-class BucketWriteViewModel : BaseViewModel() {
+class WriteCategoryDialogViewModel : BaseViewModel() {
 
-    private var bucketList: BucketList? = null
-    var progressVisible = ObservableInt(View.GONE)
+    private var bucketList : BucketList? = null
 
 
     interface OnBucketListGetEvent {
@@ -25,22 +21,7 @@ class BucketWriteViewModel : BaseViewModel() {
         fun finish(bucketList: BucketList?)
     }
 
-    fun getCategoryList(): BucketUserCategory {
-
-        val cat1 = "여행"
-        val cat2 = "음식"
-
-        val category = ArrayList<String>()
-
-        category.add(cat1)
-        category.add(cat2)
-
-        val bucketUserCategory = BucketUserCategory(category)
-        return bucketUserCategory
-
-    }
-
-    fun getMainBucketList(api: String, callback: OnBucketListGetEvent): BucketList? {
+    fun getMainBucketList(api : String, callback: OnBucketListGetEvent): BucketList? {
 
         callback.start()
 

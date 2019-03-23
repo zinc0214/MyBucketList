@@ -17,6 +17,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/write_item_layout"
         android:onClick="@{itemClickListener}"
         android:layout_width="match_parent"
         android:layout_height="36dp"
@@ -27,6 +28,7 @@
         android:background="@drawable/write_dialog_item_background">
 
         <TextView
+            android:id="@+id/write_item_text"
             android:textColor="@color/write_item_text"
             android:textSize="14sp"
             android:text="@{title}"

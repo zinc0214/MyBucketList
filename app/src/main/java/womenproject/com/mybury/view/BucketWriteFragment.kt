@@ -17,6 +17,7 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import android.R.attr.button
 import android.graphics.Typeface
 import androidx.cardview.widget.CardView
+import womenproject.com.mybury.data.BucketUserCategory
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -24,10 +25,10 @@ import kotlin.collections.HashMap
 
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
-    private var addImgList = HashMap<Int, CardView
-            >()
+    private var addImgList = HashMap<Int, RelativeLayout>()
     private var ddayCount = 1
     private var currentCalendarDay = CalendarDay.today()
+    private lateinit var categoryList : BucketUserCategory
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -36,7 +37,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         get() = BucketWriteViewModel()
 
     override fun initStartView() {
-
+        categoryList = viewModel.getCategoryList()
     }
 
     override fun initDataBinding() {
@@ -50,6 +51,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.memoRemoveListener = memoRemoveListener()
         viewDataBinding.ddayAddListener = ddayAddListener()
         viewDataBinding.goalCountSettingListener = goalCountSetListener()
+        viewDataBinding.categorySelectListener = selectCategoryListener()
 
         viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
         viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
@@ -127,10 +129,10 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoImgText.setTypeface(Typeface.DEFAULT_BOLD);
+                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT_BOLD;
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoImgText.setTypeface(Typeface.DEFAULT);
+                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT;
                 }
             }
             false
@@ -185,7 +187,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener).setUI(uri)
-        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as CardView)
+        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
@@ -239,6 +241,17 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
+    private fun selectCategoryListener() : View.OnClickListener {
+        val categorySetListener : (String) -> Unit = { title ->
+            viewDataBinding.categoryText.text= title
+            setTextColor(viewDataBinding.categoryText)
+            viewDataBinding.categoryImg.background = context!!.getDrawable(R.drawable.category_enable)
+        }
+
+        return View.OnClickListener {
+            WriteCategoryDialogFragment(categoryList, categorySetListener).show(activity!!.supportFragmentManager, "tag")
+        }
+    }
     private fun setTextColor(textView: TextView) {
         textView.setTextColor(context!!.resources.getColor(R.color.mainColor))
     }
