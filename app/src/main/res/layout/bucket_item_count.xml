@@ -17,6 +17,12 @@
             name="currentUserCount"
             type="String" />
 
+
+        <variable
+            name="bucketSuccessClickListener"
+            type="android.view.View.OnClickListener" />
+
+
     </data>
 
 
@@ -121,14 +127,24 @@
 
                     </RelativeLayout>
 
-                    <include
-                        android:id="@+id/success_button_layout"
-                        layout="@layout/bucket_succeed_button"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="16dp" />
+                    <RelativeLayout
+                        android:onClick="@{bucketSuccessClickListener}"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="64dp"
+                        android:layout_height="match_parent">
+
+                        <include
+                            android:layout_marginEnd="16dp"
+                            android:id="@+id/success_button_layout"
+                            layout="@layout/bucket_succeed_button"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+
+
+                    </RelativeLayout>
 
 
                 </RelativeLayout>

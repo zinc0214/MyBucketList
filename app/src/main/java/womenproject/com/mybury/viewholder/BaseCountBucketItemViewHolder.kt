@@ -56,11 +56,18 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
 
         binding.bucketClickListener = bucketListener
         binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener()
 
         binding.lastEndImg.lastImgVisible = if (isLastItem) {
             View.VISIBLE
         } else {
             View.GONE
+        }
+    }
+
+    override fun createOnClickBucketSuccessLayoutListener(): View.OnClickListener {
+        return View.OnClickListener {
+            binding.successButtonLayout.circularProgressBar.callOnClick()
         }
     }
 

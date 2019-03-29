@@ -67,7 +67,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         }, 750)
                         postDelayed({
                             if (bucketType == 0 || userCount >= goalCount) {
-                                animFadeOut.duration = 700
+                                animFadeOut.duration = 750
                                 bucketItemImage.startAnimation(animFadeOut)
                             }
                         }, 800)
@@ -129,6 +129,12 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     open fun createOnClickBucketSuccessListener(): View.OnClickListener {
         return View.OnClickListener {
             onBucketSuccessFinalButtonClickListener()
+        }
+    }
+
+    open fun createOnClickBucketSuccessLayoutListener(): View.OnClickListener {
+        return View.OnClickListener {
+            createOnClickBucketSuccessListener()
         }
     }
 

@@ -76,6 +76,7 @@
 
     <color name="writeSeekbarBackground1">#4cc8cdda</color>
     <color name="writeSeekbarBackground2">#a6c6ff</color>
+    <color name="imgRemoveBtnPressBackground">#33ffffff</color>
 
 
 </resources>

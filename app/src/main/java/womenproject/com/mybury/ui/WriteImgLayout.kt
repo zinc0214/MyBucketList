@@ -42,7 +42,7 @@ class WriteImgLayout internal constructor(context: Context, private var imgRemov
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    cardViewLayout.foreground = context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
+                    cardViewLayout.foreground = context.getDrawable(R.drawable.img_remove_btn_press_background)
 
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {

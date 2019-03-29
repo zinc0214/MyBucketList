@@ -38,22 +38,25 @@
                     android:background="@drawable/dday_bucket_item_success_background" />
 
                 <RelativeLayout
+                    android:layout_alignParentRight="true"
                     android:id="@+id/img_remove_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:onClick="@{imgRemoveBtn}">
 
                     <ImageView
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="4dp"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:background="@drawable/write_img_remove_circle" />
 
                     <ImageView
+                        android:layout_marginRight="6dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:background="@drawable/write_img_remove" />
                 </RelativeLayout>
 
