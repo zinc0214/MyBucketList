@@ -86,6 +86,7 @@
                 android:thumb="@drawable/seekbar_thumb"
                 android:progress="0"
                 android:max="100"
+                android:min="1"
                 android:progressDrawable="@drawable/write_seekbar_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,6 +1,5 @@
 package womenproject.com.mybury.view
 
-import android.icu.util.Calendar
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,12 +13,8 @@ import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
-import android.R.attr.button
 import android.graphics.Typeface
-import androidx.cardview.widget.CardView
 import womenproject.com.mybury.data.BucketUserCategory
-import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -220,7 +215,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            val calendarDialogFragment = CalendarDialogFragment(ddayAddListener, currentCalendarDay)
+            val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }

@@ -4,8 +4,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="424dp"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="126dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/write_dialog_background"
@@ -37,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:animationCache="false"
-                android:visibility="gone"
                 app:mcv_allowClickDaysOutsideCurrentMonth="true"
                 app:mcv_calendarMode="month"
                 app:mcv_selectionColor="@color/mainColor"
@@ -52,6 +52,7 @@
                 android:orientation="horizontal">
 
                 <DatePicker
+                    android:visibility="gone"
                     android:id="@+id/date_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,30 +60,6 @@
                     android:datePickerMode="spinner"
                     android:calendarViewShown="false"/>
 
-              <!--  <NumberPicker
-                    style="@style/applicationTheme"
-                    android:id="@+id/year_picker"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <NumberPicker
-                    style="@style/applicationTheme"
-                    android:id="@+id/month_picker"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
-                <NumberPicker
-                    style="@style/applicationTheme"
-                    android:id="@+id/day_picker"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
--->
             </LinearLayout>
 
         </RelativeLayout>

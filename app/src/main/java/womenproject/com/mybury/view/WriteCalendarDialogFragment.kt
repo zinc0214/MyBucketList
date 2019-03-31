@@ -1,8 +1,8 @@
 package womenproject.com.mybury.view
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -13,15 +13,10 @@ import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseDialogFragment
-import womenproject.com.mybury.databinding.CalendarDialogBinding
+import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
 import womenproject.com.mybury.ui.CurrentDateDecorator
-import java.lang.reflect.AccessibleObject.setAccessible
-import androidx.databinding.adapters.TextViewBindingAdapter.setTextSize
 import android.widget.EditText
 import android.view.ViewGroup
-import java.lang.reflect.AccessibleObject.setAccessible
-
-
 
 
 /**
@@ -29,10 +24,10 @@ import java.lang.reflect.AccessibleObject.setAccessible
  */
 
 @SuppressLint("ValidFragment")
-class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) -> Unit, private var calendarDay: CalendarDay) : BaseDialogFragment<CalendarDialogBinding>() {
+class WriteCalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) -> Unit, private var calendarDay: CalendarDay) : BaseDialogFragment<WriteCalendarDialogBinding>() {
 
     override val layoutResourceId: Int
-        get() = R.layout.calendar_dialog
+        get() = R.layout.write_calendar_dialog
 
     private var dday = ""
     private var calendarVisible = true
@@ -156,25 +151,24 @@ class CalendarDialogFragment(private var ddaySetListener: (String, CalendarDay) 
     }
 
 
-    fun dateTimePickerTextColour(`$picker`: ViewGroup, `$color`: Int) {
+    private fun dateTimePickerTextColour(`$picker`: ViewGroup, `$color`: Int) {
 
         var i = 0
         val j = `$picker`.childCount
         while (i < j) {
             val t0 = `$picker`.getChildAt(i) as View
 
-            //NumberPicker는 아까만든 함수로 발라내고
             if (t0 is NumberPicker) {
                 numberPickerTextColor(t0, `$color`)
             }
             else if (t0 is ViewGroup) {
                 dateTimePickerTextColour(t0, `$color`)
-            }//아니면 계속 돌아봐
+            }
             i++
         }
     }
 
-    fun numberPickerTextColor(`$v`: NumberPicker, `$c`: Int) {
+    private fun numberPickerTextColor(`$v`: NumberPicker, `$c`: Int) {
         var i = 0
         val j = `$v`.childCount
         while (i < j) {
