@@ -50,6 +50,7 @@ class WriteCategoryDialogFragment(private var userCategory : BucketUserCategory,
 
     private fun notUseCategoryListener() : View.OnClickListener {
         return View.OnClickListener {
+            categorySetListener.invoke("없음")
             dismiss()
         }
     }

@@ -14,6 +14,10 @@ import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import womenproject.com.mybury.data.AddBucketItem
+import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketUserCategory
 import kotlin.collections.HashMap
 
@@ -24,6 +28,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private var ddayCount = 1
     private var currentCalendarDay = CalendarDay.today()
     private lateinit var categoryList : BucketUserCategory
+    private var imgList = ArrayList<String>()
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -42,6 +47,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     override fun initAfterBinding() {
 
         viewDataBinding.cancelBtnClickListener = writeCancelOnClickListener()
+        viewDataBinding.registerBtnClickListener = bucketAddOnClickListener()
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
         viewDataBinding.ddayAddListener = ddayAddListener()
@@ -79,6 +85,20 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
+    private fun bucketAddOnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            viewModel.addBucketList(setBucketItemData(),object : BucketWriteViewModel.OnBucketAddEvent {
+                override fun start() {
+
+                }
+
+                override fun finish() {
+
+                }
+
+            })
+        }
+    }
     private fun titleTextChangedListener(editText: EditText): TextWatcher {
 
         return object : TextWatcher {
@@ -183,6 +203,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener).setUI(uri)
         addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
+        imgList.add(uri.toString())
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
@@ -196,6 +217,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
         addImgList.remove(deleteImgValue)
+        imgList.removeAt(deleteImgValue)
     }
 
     private fun memoRemoveListener(): View.OnClickListener {
@@ -210,8 +232,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         val ddayAddListener: (String, CalendarDay) -> Unit = { dday, calendarDay ->
             viewDataBinding.ddayText.text = dday
             currentCalendarDay = calendarDay
-            setTextColor(viewDataBinding.ddayText)
-            viewDataBinding.ddayImg.background = context!!.getDrawable(R.drawable.calendar_enable)
+            viewDataBinding.ddayText.setEnableTextColor()
+            viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
         return View.OnClickListener {
@@ -225,9 +247,11 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             viewDataBinding.goalCountText.text = count
             ddayCount = count.toInt()
             if (count.toInt() != 1) {
-                setTextColor(viewDataBinding.goalCountText)
-                viewDataBinding.countImg.background = context!!.getDrawable(R.drawable.target_count_enable)
-
+                viewDataBinding.goalCountText.setEnableTextColor()
+                viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
+            } else {
+                viewDataBinding.goalCountText.setDisableTextColor()
+                viewDataBinding.countImg.setImage(R.drawable.target_count_disable)
             }
         }
 
@@ -238,17 +262,46 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun selectCategoryListener() : View.OnClickListener {
         val categorySetListener : (String) -> Unit = { title ->
-            viewDataBinding.categoryText.text= title
-            setTextColor(viewDataBinding.categoryText)
-            viewDataBinding.categoryImg.background = context!!.getDrawable(R.drawable.category_enable)
+            if(title.equals("없음")) {
+                viewDataBinding.categoryText.text= title
+                viewDataBinding.categoryText.setDisableTextColor()
+                viewDataBinding.categoryImg.setImage(R.drawable.category_disable)
+            } else {
+                viewDataBinding.categoryText.text= title
+                viewDataBinding.categoryText.setEnableTextColor()
+                viewDataBinding.categoryImg.setImage(R.drawable.calendar_enable)
+                viewDataBinding.categoryImg.background = context!!.getDrawable(R.drawable.category_enable)
+            }
+
         }
 
         return View.OnClickListener {
             WriteCategoryDialogFragment(categoryList, categorySetListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
-    private fun setTextColor(textView: TextView) {
-        textView.setTextColor(context!!.resources.getColor(R.color.mainColor))
+
+
+    private fun setBucketItemData() : AddBucketItem {
+        return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.memoText.text.toString(),
+                imgList, viewDataBinding.openSwitchBtn.isChecked, viewDataBinding.categoryText.text.toString(),
+                viewDataBinding.ddayText.text.toString(), viewDataBinding.goalCountText.text.toString())
+    }
+
+
+    private fun TextView.setEnableTextColor() {
+        this.setTextColor(context!!.resources.getColor(R.color.mainColor))
+    }
+
+    private fun TextView.setDisableTextColor() {
+        this.setTextColor(context!!.resources.getColor(R.color.writeUnusedText))
+    }
+
+    private fun ImageView.setImage(resource: Int) {
+        this.background = resource.getDrawable()
+    }
+
+    private fun Int.getDrawable() : Drawable {
+        return context!!.getDrawable(this)
     }
 
 }

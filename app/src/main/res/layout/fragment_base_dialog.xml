@@ -94,12 +94,14 @@
                     style="@style/baseDialogButtonTextStyle"
                     android:onClick="@{cancelButtonClickListener}"
                     android:text="@string/dialog_cancel"
+                    android:background="@drawable/dialog_bottom_sheet_left_background"
                     android:textColor="@color/dialogBottomCancelText" />
 
                 <TextView
                     android:id="@+id/confirm_text"
                     style="@style/baseDialogButtonTextStyle"
                     android:onClick="@{confirmButtonClickListener}"
+                    android:background="@drawable/dialog_bottom_sheet_right_background"
                     android:text="@string/dialog_confirm"
                     android:textColor="@color/dialogBottomConfirmText" />
 
