@@ -1,11 +1,10 @@
 package womenproject.com.mybury.network
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
+import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.AdultCheck
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 
 /**
@@ -23,5 +22,9 @@ interface RetrofitInterface {
 
     @GET("/host/dDay")
     fun requestDdayBucketListResult() : Call<BucketList>
+
+    @FormUrlEncoded
+    @POST("/host/Write")
+    fun postAddBucketList(@FieldMap params:HashMap<String, String>) : Call<AddBucketItem>
 
 }

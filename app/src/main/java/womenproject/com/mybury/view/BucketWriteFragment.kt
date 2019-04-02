@@ -27,7 +27,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var ddayCount = 1
     private var currentCalendarDay = CalendarDay.today()
-    private lateinit var categoryList : BucketUserCategory
+    private lateinit var categoryList: BucketUserCategory
     private var imgList = ArrayList<String>()
 
     override val layoutResourceId: Int
@@ -85,20 +85,28 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private fun bucketAddOnClickListener() : View.OnClickListener {
+    private fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.addBucketList(setBucketItemData(),object : BucketWriteViewModel.OnBucketAddEvent {
+            viewModel.addBucketList(setBucketItemData(), object : BucketWriteViewModel.OnBucketAddEvent {
                 override fun start() {
+                    viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
 
                 }
 
-                override fun finish() {
+                override fun success() {
+                    viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    activity!!.onBackPressed()
+                }
 
+                override fun fail() {
+                    viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    Toast.makeText(context, "버킷이 등록되지 못했습니다. 흑흑흑", Toast.LENGTH_SHORT).show()
                 }
 
             })
         }
     }
+
     private fun titleTextChangedListener(editText: EditText): TextWatcher {
 
         return object : TextWatcher {
@@ -140,7 +148,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private fun memoImgAddOnTouchListener() : View.OnTouchListener {
+    private fun memoImgAddOnTouchListener(): View.OnTouchListener {
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -171,12 +179,14 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun memoImgAddOnClickListener(): View.OnClickListener {
 
+        val checkMemoAddListener: () -> Boolean = {
+            viewDataBinding.memoLayout.visibility != View.VISIBLE
+        }
         val memoAddListener: () -> Unit = {
             viewDataBinding.memoLayout.visibility = View.VISIBLE
         }
 
         val checkAddImgAbleListener: () -> Boolean = {
-            Log.e("ayhan", ":count ${viewDataBinding.imgLayout.childCount}")
             if (viewDataBinding.imgLayout.childCount > 2) {
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
                 false
@@ -190,7 +200,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            WriteMemoImgAddDialogFragment(memoAddListener, checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
+            WriteMemoImgAddDialogFragment(checkMemoAddListener, memoAddListener, checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
@@ -260,14 +270,14 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private fun selectCategoryListener() : View.OnClickListener {
-        val categorySetListener : (String) -> Unit = { title ->
-            if(title.equals("없음")) {
-                viewDataBinding.categoryText.text= title
+    private fun selectCategoryListener(): View.OnClickListener {
+        val categorySetListener: (String) -> Unit = { title ->
+            if (title.equals("없음")) {
+                viewDataBinding.categoryText.text = title
                 viewDataBinding.categoryText.setDisableTextColor()
                 viewDataBinding.categoryImg.setImage(R.drawable.category_disable)
             } else {
-                viewDataBinding.categoryText.text= title
+                viewDataBinding.categoryText.text = title
                 viewDataBinding.categoryText.setEnableTextColor()
                 viewDataBinding.categoryImg.setImage(R.drawable.calendar_enable)
                 viewDataBinding.categoryImg.background = context!!.getDrawable(R.drawable.category_enable)
@@ -281,7 +291,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     }
 
 
-    private fun setBucketItemData() : AddBucketItem {
+    private fun setBucketItemData(): AddBucketItem {
         return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.memoText.text.toString(),
                 imgList, viewDataBinding.openSwitchBtn.isChecked, viewDataBinding.categoryText.text.toString(),
                 viewDataBinding.ddayText.text.toString(), viewDataBinding.goalCountText.text.toString())
@@ -300,7 +310,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         this.background = resource.getDrawable()
     }
 
-    private fun Int.getDrawable() : Drawable {
+    private fun Int.getDrawable(): Drawable {
         return context!!.getDrawable(this)
     }
 

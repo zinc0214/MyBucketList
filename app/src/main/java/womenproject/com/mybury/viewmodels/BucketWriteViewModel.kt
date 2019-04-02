@@ -1,14 +1,13 @@
 package womenproject.com.mybury.viewmodels
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseViewModel
+import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.BucketUserCategory
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
@@ -16,13 +15,17 @@ import womenproject.com.mybury.network.RetrofitInterface
 
 class BucketWriteViewModel : BaseViewModel() {
 
+
+    private val BUCKETLIST_API = "http://10.1.101.161/host/"
+
     private var bucketList: BucketList? = null
     var progressVisible = ObservableInt(View.GONE)
 
 
-    interface OnBucketListGetEvent {
+    interface OnBucketAddEvent {
         fun start()
-        fun finish(bucketList: BucketList?)
+        fun success()
+        fun fail()
     }
 
     fun getCategoryList(): BucketUserCategory {
@@ -35,37 +38,45 @@ class BucketWriteViewModel : BaseViewModel() {
         category.add(cat1)
         category.add(cat2)
 
-        val bucketUserCategory = BucketUserCategory(category)
-        return bucketUserCategory
+        return BucketUserCategory(category)
 
     }
 
-    fun getMainBucketList(api: String, callback: OnBucketListGetEvent): BucketList? {
+    fun addBucketList(bucketItem: AddBucketItem, callback: OnBucketAddEvent) {
 
         callback.start()
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
 
-        val bucketListResultData = restClient.requestMainBucketListResult()
-        bucketListResultData.enqueue(object : Callback<BucketList> {
-            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
+        val bucketListResultData = restClient.postAddBucketList(setAddBucketParams(bucketItem))
+        bucketListResultData.enqueue(object : Callback<AddBucketItem> {
+            override fun onResponse(call: Call<AddBucketItem>?, response: Response<AddBucketItem>?) {
 
                 if (response != null && response.isSuccessful) {
                     Log.e("ayhan:result", "${response.body()}")
-                    bucketList = response.body()
-                    Log.e("ayhan:bucketList", "$bucketList")
-                    callback.finish(bucketList)
+                    callback.success()
                 }
             }
 
-            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
+            override fun onFailure(call: Call<AddBucketItem>?, t: Throwable?) {
                 Log.e("ayhan2", t.toString())
-                //progressVisible.set(View.GONE)
-                callback.finish(bucketList)
+                callback.fail()
             }
         })
 
-        return bucketList
+    }
 
+
+    private fun setAddBucketParams(bucketItem: AddBucketItem) : HashMap<String, String> {
+        var paramsHaspMap = HashMap<String, String>()
+
+        paramsHaspMap.put("title", bucketItem.title)
+        paramsHaspMap.put("memo", bucketItem.memo)
+        paramsHaspMap.put("img", bucketItem.img.toString())
+        paramsHaspMap.put("category", bucketItem.category)
+        paramsHaspMap.put("dday", bucketItem.dday)
+
+
+        return paramsHaspMap
     }
 }

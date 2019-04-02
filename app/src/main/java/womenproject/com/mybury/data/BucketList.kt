@@ -33,6 +33,16 @@ data class BucketItem(
         var isLast : Boolean = false
 )
 
+data class AddBucketItem(
+        var title : String = "Title",
+        var memo : String = "Memo",
+        var img : List<String>,
+        val open : Boolean = false,
+        val category: String,
+        val dday : String,
+        val goalCount : String
+)
+
 data class BucketCategory(
         val id : String = "",
         val name : String= ""

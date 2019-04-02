@@ -30,7 +30,9 @@ import java.util.*
 
 
 @SuppressLint("ValidFragment")
-class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, private var checkAddImageListener: () -> Boolean,
+class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boolean,
+                                    private var memoAddListener: () -> Unit,
+                                    private var checkAddImageListener: () -> Boolean,
                                     private var imgAddListener: (Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
 
 
@@ -44,7 +46,26 @@ class WriteMemoImgAddDialogFragment(private var memoAddListener: () -> Unit, pri
         get() = R.layout.memo_img_add_dialog
 
     override fun initStartView() {
+        Log.e("ayhan:initStartView1", checkAddImageListener.invoke().toString())
+        Log.e("ayhan:initStartView2", checkMemoAddListener.invoke().toString())
 
+        if(!checkAddImageListener.invoke()) {
+            Log.e("ayhan:checkAddImageListener", "checkAddImageListener is Can't")
+            viewDataBinding.addAlbumImgLayout.writeItemLayout.isClickable = false
+            viewDataBinding.addAlbumImgLayout.writeItemLayout.isPressed = false
+            viewDataBinding.addAlbumImgLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
+
+            viewDataBinding.addCamImgLayout.writeItemLayout.isClickable = false
+            viewDataBinding.addCamImgLayout.writeItemLayout.isPressed = false
+            viewDataBinding.addCamImgLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
+        }
+
+        if(!checkMemoAddListener.invoke()) {
+            Log.e("ayhan:checkMemoAddListener", "checkMemoAddListener is Can't")
+            viewDataBinding.addMemoLayout.writeItemLayout.isClickable = false
+            viewDataBinding.addMemoLayout.writeItemLayout.isPressed = false
+            viewDataBinding.addMemoLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
+        }
     }
 
     override fun initDataBinding() {
