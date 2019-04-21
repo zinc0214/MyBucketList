@@ -16,10 +16,12 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import kotlinx.android.synthetic.main.write_dialog_item.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
@@ -51,20 +53,13 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
 
         if(!checkAddImageListener.invoke()) {
             Log.e("ayhan:checkAddImageListener", "checkAddImageListener is Can't")
-            viewDataBinding.addAlbumImgLayout.writeItemLayout.isClickable = false
-            viewDataBinding.addAlbumImgLayout.writeItemLayout.isPressed = false
-            viewDataBinding.addAlbumImgLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
-
-            viewDataBinding.addCamImgLayout.writeItemLayout.isClickable = false
-            viewDataBinding.addCamImgLayout.writeItemLayout.isPressed = false
-            viewDataBinding.addCamImgLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
+            viewDataBinding.addAlbumImgLayout.writeItemLayout.disableAdd()
+            viewDataBinding.addCamImgLayout.writeItemLayout.disableAdd()
         }
 
         if(!checkMemoAddListener.invoke()) {
             Log.e("ayhan:checkMemoAddListener", "checkMemoAddListener is Can't")
-            viewDataBinding.addMemoLayout.writeItemLayout.isClickable = false
-            viewDataBinding.addMemoLayout.writeItemLayout.isPressed = false
-            viewDataBinding.addMemoLayout.writeItemLayout.setBackgroundColor(context!!.getColor(R.color.writeListPress))
+            viewDataBinding.addMemoLayout.writeItemLayout.disableAdd()
         }
     }
 
@@ -298,4 +293,10 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
         }
     }
 
+    private fun LinearLayout.disableAdd() {
+        this.isClickable = false
+        this.isPressed = false
+        this.isEnabled = false
+        this.write_item_text.setTextColor(context!!.getColor(R.color.disableAdd))
+    }
 }
