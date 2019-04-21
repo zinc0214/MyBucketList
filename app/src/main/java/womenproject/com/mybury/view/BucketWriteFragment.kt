@@ -1,5 +1,7 @@
 package womenproject.com.mybury.view
 
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,18 +9,14 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
+import womenproject.com.mybury.data.AddBucketItem
+import womenproject.com.mybury.data.BucketUserCategory
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
-import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketUserCategory
+import java.util.*
 import kotlin.collections.HashMap
 
 
@@ -26,7 +24,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var ddayCount = 1
-    private var currentCalendarDay = CalendarDay.today()
+    private var currentCalendarDay = Calendar.getInstance().time
     private lateinit var categoryList: BucketUserCategory
     private var imgList = ArrayList<String>()
 
@@ -239,14 +237,17 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun ddayAddListener(): View.OnClickListener {
 
-        val ddayAddListener: (String, CalendarDay) -> Unit = { dday, calendarDay ->
+        val ddayAddListener: (String, Date) -> Unit = { dday, date ->
+
             viewDataBinding.ddayText.text = dday
-            currentCalendarDay = calendarDay
+            currentCalendarDay = date
             viewDataBinding.ddayText.setEnableTextColor()
             viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
         return View.OnClickListener {
+
+            Log.e("ayhan", currentCalendarDay.toString())
             val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
