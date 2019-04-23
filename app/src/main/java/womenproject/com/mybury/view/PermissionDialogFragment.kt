@@ -24,8 +24,9 @@ class PermissionDialogFragment : BaseNormalDialogFragment() {
 
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.parse("pacakge:" + MyBuryApplication.context.packageName)
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + MyBuryApplication.context.packageName))
+            intent.addCategory(Intent.CATEGORY_DEFAULT)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
