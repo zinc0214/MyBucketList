@@ -24,7 +24,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
     override fun initStartView() {
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
-        viewDataBinding.mainBottomSheet.noneClickListener = createOnClickDdayListener()
+        viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
         initBucketListUI()
     }
@@ -84,9 +84,15 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         }
     }
 
+    private fun createOnClickMyPageListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MainFragmentDirections.actionMainBucketToMyPage()
+            it.findNavController().navigate(directions)
+        }
+    }
     private fun createOnClickDdayListener() : View.OnClickListener {
         return View.OnClickListener {
-            val directions = MainFragmentDirections.actionMainBucketToDdayBucket()
+            val directions = MainFragmentDirections.actionMainBucketToMyPage()
             it.findNavController().navigate(directions)
         }
     }
