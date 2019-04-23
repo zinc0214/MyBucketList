@@ -14,7 +14,7 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="noneClickListener"
+            name="homeClickListener"
             type="android.view.View.OnClickListener" />
 
     </data>
@@ -25,7 +25,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/main_bottom_sheet"
+            android:id="@+id/mypage_bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_alignParentBottom="true"
@@ -37,36 +37,36 @@
                 android:layout_alignParentBottom="true">
 
                 <ImageView
-                    android:onClick="@{noneClickListener}"
+                    android:onClick="@{homeClickListener}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="54dp"
-                    android:background="@drawable/main_bottom_list" />
+                    android:background="@drawable/mypage_bottom_list" />
 
                 <ImageView
-                    android:onClick="@{myPageClickListener}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="60dp"
                     android:layout_marginEnd="54dp"
-                    android:background="@drawable/main_mypage" />
+                    android:background="@drawable/mypage_my" />
+
+                <ImageView
+                    android:id="@+id/plus"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/add_bucket_list"
+                    android:onClick="@{writeClickListener}" />
 
             </RelativeLayout>
 
+
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/plus"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/add_bucket_list"
-            android:onClick="@{writeClickListener}" />
+
 
     </RelativeLayout>
 </layout>

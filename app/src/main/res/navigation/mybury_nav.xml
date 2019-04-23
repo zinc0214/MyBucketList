@@ -27,10 +27,10 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_main_bucket_to_dday_bucket"
-            app:destination="@id/dday_bucket_list_fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
+            android:id="@+id/action_main_bucket_to_my_page"
+            app:destination="@id/my_page_fragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
@@ -54,6 +54,31 @@
         android:label="Write"
         tools:layout="@layout/fragment_bucket_write_test">
     </fragment>
+
+    <fragment
+        android:id="@+id/my_page_fragment"
+        android:name="womenproject.com.mybury.view.MyPageFragment"
+        android:label="MyPage"
+        tools:layout="@layout/fragment_my_page">
+
+        <action
+            android:id="@+id/action_my_page_to_home"
+            app:destination="@id/main_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_write"
+            app:destination="@id/bucket_write_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/dday_bucket_list_fragment"

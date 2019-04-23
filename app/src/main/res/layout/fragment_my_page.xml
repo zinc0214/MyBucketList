@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
     </data>
 
     <RelativeLayout
@@ -13,13 +14,19 @@
         android:layout_height="match_parent"
         android:background="@drawable/main_button_normal_background">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="192dp"
+            android:background="@color/mainBackground" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="44dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
 
 
             <RelativeLayout
@@ -27,16 +34,25 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bucket_item_base_background">
 
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/my_page_more" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
                     android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="28dp"
                         android:shadowColor="@android:color/white"
                         app:cardCornerRadius="26dp"
                         app:cardElevation="0dp">
@@ -46,7 +62,7 @@
                             android:layout_height="70dp">
 
                             <ImageView
-                                android:id="@+id/write_img"
+                                android:id="@+id/profile_img"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="@drawable/mypage_profile_img_backgound" />
@@ -63,7 +79,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginRight="38dp"
                         android:gravity="center"
-                        android:text="닉네임데쇼오 "
+                        android:text="닉네임데쇼오"
                         android:textColor="@color/bucketBaseText"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -75,27 +91,97 @@
                         android:layout_marginTop="14dp"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="42dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="100dp"
-                            android:text="27"
-                            android:textColor="@color/subColor"
-                            android:textSize="14sp" />
+                            android:layout_marginBottom="24dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.doingBucketCount}"
+                                android:textAlignment="center"
+                                android:textColor="@color/subColor"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="진행중"
+                                android:textAlignment="center"
+                                android:textColor="@color/subColor"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="42dp"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="100dp"
-                            android:text="31"
-                            android:textColor="@color/subColor"
-                            android:textSize="14sp" />
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.doneBucketCount}"
+                                android:textAlignment="center"
+                                android:textColor="@color/subColor"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="완료"
+                                android:textAlignment="center"
+                                android:textColor="@color/subColor"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
                     </RelativeLayout>
+
                 </LinearLayout>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/mypage_dday_background">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="D-day 버킷리스트"
+                    android:textColor="@color/bucketBaseText"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:text="@{viewModel.ddayCount}"
+                    android:textColor="@color/notiColor" />
+
+            </RelativeLayout>
         </LinearLayout>
+
+        <include
+            android:id="@+id/mypage_bottom_sheet"
+            layout="@layout/mypage_bottom_sheet" />
+
     </RelativeLayout>
 
 </layout>
