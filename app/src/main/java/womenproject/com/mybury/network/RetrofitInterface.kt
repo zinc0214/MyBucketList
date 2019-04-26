@@ -27,4 +27,8 @@ interface RetrofitInterface {
     @POST("/host/Write")
     fun postAddBucketList(@FieldMap params:HashMap<String, String>) : Call<AddBucketItem>
 
+    @Multipart
+    @POST("/host/Write")
+    fun postAddBucketImage(@FieldMap params:Array<String>) : Call<AddBucketItem>
+
 }

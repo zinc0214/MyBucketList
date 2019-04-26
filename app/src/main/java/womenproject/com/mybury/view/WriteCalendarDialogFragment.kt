@@ -43,25 +43,30 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     override fun initStartView() {
 
-        viewDataBinding.calendarView.setCurrentDate(today)
-        viewDataBinding.calendarView.setDateSelected(calendarDay, true)
+
         viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
         viewDataBinding.calendarView.setDateTextAppearance(R.style.CalendarDate)
         viewDataBinding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
         viewDataBinding.calendarView.topbarVisible = false
+
         viewDataBinding.dateTitle.setSelectDate(calendarDay.year, calendarDay.month + 1)
         viewDataBinding.dateTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-        selectDay.year = calendarDay.year + 1900
-        selectDay.month = calendarDay.month
-        selectDay.date = calendarDay.day
 
-
-        Log.e("ayhan", "calendar : ${calendarDay} // ${calendarDay.year}}")
     }
 
     override fun initDataBinding() {
 
+        viewDataBinding.calendarView.setCurrentDate(calendarDay)
+        viewDataBinding.calendarView.setDateSelected(calendarDay, true)
+
+        selectDay.year = viewDataBinding.calendarView.selectedDate.year
+        selectDay.month = viewDataBinding.calendarView.selectedDate.month
+        selectDay.date = viewDataBinding.calendarView.selectedDate.day
+
+
+        Log.e("ayhan", "select : ${selectDay.year}/ ${selectDay.month} / ${selectDay.date}")
+        Log.e("ayhan", "calendar : ${calendarDay} // ${calendarDay.year}}")
     }
 
     override fun initAfterBinding() {
@@ -71,27 +76,15 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
 
         viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
-            Log.e("ayhan", "setOnDateChangedListener")
-
-            Log.e("ayhan", "${date.year}/${date.month}/${date.date}////${date.day}")
-
             if (date.year < 2219) {
                 setCurrentDateTitle(date.year, date.month, date.day)
             }
-
-
         }
 
         viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
-            Log.e("ayhan", "setOnMonthChangedListener")
-
-            Log.e("ayhan", "${date.year}/${date.month}/${date.date}////${date.day}")
-
             if (date.year < 2219) {
                 setCurrentDateTitle(date.year, date.month, date.day)
-
             }
-
         }
 
         yearPicker.setOnValueChangedListener { picker, oldVal, newVal ->
@@ -123,13 +116,11 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
             (dateMonth + 1).toString()
         }
 
-
         day = if (dateDay < 10) {
             "0$dateDay"
         } else {
             dateDay.toString()
         }
-
 
         selectDay.year = dateYear
         selectDay.month = dateMonth
@@ -141,7 +132,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         Log.e("ayhan:cal_setCurrentDateTitle", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
         Log.e("ayhan:dd", dday)
 
-        viewDataBinding.calendarView.setDateSelected(selectDay, true)
 
     }
 
@@ -155,7 +145,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
                 ddaySetListener.invoke(dday, senderDay)
             }
-            setSelectDday()
             this.dismiss()
         }
     }
@@ -168,38 +157,34 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     private fun selectTypeOnChangeListener(): View.OnClickListener {
         return View.OnClickListener {
+
+            Log.e("ayhan", "textClick,SelectDay : ${selectDay.year} / ${selectDay.month} / ${selectDay.date}}")
+
             if (calendarVisible) {
                 viewDataBinding.calendarView.visibility = View.GONE
                 viewDataBinding.datePicker.visibility = View.VISIBLE
+
+                yearPicker.value = selectDay.year
+                monthPicker.value = selectDay.month
+                dayPicker.value = selectDay.date
+
+                Log.e("ayhan:datePickerVisible", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
+
                 calendarVisible = false
             } else {
                 viewDataBinding.calendarView.visibility = View.VISIBLE
                 viewDataBinding.datePicker.visibility = View.GONE
+
+                viewDataBinding.calendarView.setCurrentDate(selectDay)
+                viewDataBinding.calendarView.setDateSelected(selectDay, true)
+
+                Log.e("ayhan:calendarVisible", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
+
                 calendarVisible = true
             }
-            setSelectDday()
         }
     }
 
-    private fun setSelectDday() {
-        if (calendarVisible) {
-
-            viewDataBinding.calendarView.setCurrentDate(selectDay)
-            viewDataBinding.calendarView.setDateSelected(selectDay, true)
-
-            Log.e("ayhan:cal1", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
-        } else {
-
-            yearPicker.value = selectDay.year
-            monthPicker.value = selectDay.month
-            dayPicker.value = selectDay.date
-
-
-            Log.e("ayhan:cal2", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
-        }
-
-        setCurrentDateTitle(selectDay.year, selectDay.month, selectDay.date)
-    }
 
     private fun TextView.setSelectDate(year: Int, month: Int) {
         val realYear = if (year < 1000) {

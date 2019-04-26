@@ -66,8 +66,8 @@ class MainFragmentViewModel : BaseViewModel() {
         *   3 : 완료
         *   4 : 빈 버킷
         * DDay
-        *   0 : dday 표기 안함
-        *   1 : dday 표기함
+        *   0 : dDate 표기 안함
+        *   1 : dDate 표기함
         *   */
 
         val category = BucketCategory("id", "운동")
