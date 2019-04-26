@@ -73,8 +73,8 @@ class BucketWriteViewModel : BaseViewModel() {
         paramsHaspMap.put("title", bucketItem.title)
         paramsHaspMap.put("memo", bucketItem.memo)
         paramsHaspMap.put("img", bucketItem.img.toString())
-        paramsHaspMap.put("category", bucketItem.category)
-        paramsHaspMap.put("dday", bucketItem.dday)
+        paramsHaspMap.put("category", bucketItem.categoryId)
+        paramsHaspMap.put("dday", bucketItem.dDate)
 
 
         return paramsHaspMap

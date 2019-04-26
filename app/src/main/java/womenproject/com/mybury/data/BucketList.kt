@@ -1,5 +1,7 @@
 package womenproject.com.mybury.data
 
+import java.util.*
+
 /**
  * Created by HanAYeon on 2018. 11. 27..
  */
@@ -38,8 +40,8 @@ data class AddBucketItem(
         var memo : String = "Memo",
         var img : List<String>,
         val open : Boolean = false,
-        val category: String,
-        val dday : String,
+        val categoryId: String,
+        val dDate : String,
         val goalCount : String
 )
 
