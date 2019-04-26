@@ -28,7 +28,7 @@
 
         <action
             android:id="@+id/action_main_bucket_to_my_page"
-            app:destination="@id/my_page_fragment"
+            app:destination="@id/scroll_fragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_left"
@@ -78,6 +78,17 @@
             app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
+
+
+    <fragment
+        android:id="@+id/scroll_fragment"
+        android:name="womenproject.com.mybury.view.ScrollingFragment"
+        android:label="Scroll"
+        tools:layout="@layout/activity_scrolling">
+
+    </fragment>
+
+
 
 
     <fragment

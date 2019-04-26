@@ -140,7 +140,7 @@
     </style>
 
 
-      <style name="CalenderViewCustom" parent="Theme.AppCompat">
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
         <item name="colorAccent">@color/red</item>
         <item name="colorPrimary">@color/subColor</item>
     </style>
@@ -153,6 +153,7 @@
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
         <item name="android:textColor">@color/mcv_text_date_dark</item>
     </style>
@@ -176,6 +177,10 @@
         <item name="android:divider">@color/writeSeekbarBackground2</item>
         <item name="android:dividerHeight">0.6dp</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
 
