@@ -45,9 +45,14 @@ data class AddBucketItem(
         val goalCount : String
 )
 
+data class BucketCategoryList(
+        val categoryList : List<BucketCategory>
+)
+
 data class BucketCategory(
         val id : String = "",
-        val name : String= ""
+        val name : String= "",
+        val count : Int = 0
 )
 
 data class BucketUserCategory (

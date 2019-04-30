@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
+
+    </data>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".view.ScrollingFragment"
+        tools:showIn="@layout/activity_scrolling">
+
+        <LinearLayout
+            android:id="@+id/content_scroll_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/mypage_dday_background">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:text="D-day 버킷리스트"
+                    android:textColor="@color/bucketBaseText"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:text="@{viewModel.ddayCount}"
+                    android:textColor="@color/notiColor" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카테고리"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:textColor="@color/mainColor"
+                    android:gravity="center"
+                    android:textSize="11sp"
+                    android:text="편집"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/mypage_category_edit_background"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent" />
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="6dp"
+                android:id="@+id/mypage_category_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/mypage_category_item" />
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
