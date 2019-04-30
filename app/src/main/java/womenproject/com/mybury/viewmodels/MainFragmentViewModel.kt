@@ -70,7 +70,7 @@ class MainFragmentViewModel : BaseViewModel() {
         *   1 : dDate 표기함
         *   */
 
-        val category = BucketCategory("id", "운동")
+        val category = BucketCategory("id", "운동", 20)
 
 
         val bucketItem1 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, false, category, 4, 5)

@@ -30,8 +30,8 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
 
     override fun initAfterBinding() {
 
-        viewDataBinding.appBarLayout.addOnOffsetChangedListener(this)
-        startAlphaAnimation(viewDataBinding.scrollDoneLayout, 0, View.INVISIBLE)
+        viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this)
+        startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
 
     }
 
@@ -48,14 +48,14 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if (!mIsTheTitleVisible) {
-                startAlphaAnimation(viewDataBinding.scrollDoneLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
+                startAlphaAnimation(viewDataBinding.mainTextviewTitle, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
                 mIsTheTitleVisible = true
             }
 
         } else {
 
             if (mIsTheTitleVisible) {
-                startAlphaAnimation(viewDataBinding.scrollDoneLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
+                startAlphaAnimation(viewDataBinding.mainTextviewTitle, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
                 mIsTheTitleVisible = false
             }
         }
@@ -64,14 +64,14 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
     private fun handleAlphaOnTitle(percentage: Float) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.myPageInfoLayout.root, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
+                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
                 mIsTheTitleContainerVisible = false
             }
 
         } else {
 
             if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.myPageInfoLayout.root, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
+                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
                 mIsTheTitleContainerVisible = true
             }
         }
@@ -80,8 +80,8 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
     companion object {
 
         private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.3f
-        private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f
-        private val ALPHA_ANIMATIONS_DURATION = 200
+        private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.5f
+        private val ALPHA_ANIMATIONS_DURATION = 100
 
         fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {
             val alphaAnimation = if (visibility == View.VISIBLE)
