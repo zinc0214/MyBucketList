@@ -58,7 +58,3 @@ data class BucketCategory(
 data class BucketUserCategory (
         val categoryList : List<String>
 )
-
-enum class CategoryType {
-    notUse, categoryUse, categoryAdd
-}

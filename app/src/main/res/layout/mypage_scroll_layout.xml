@@ -9,6 +9,14 @@
             name="viewModel"
             type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
 
+        <variable
+            name="ddayListClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="categoryEditClickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
 
@@ -28,11 +36,12 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:onClick="@{ddayListClickListener}"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/mypage_dday_background">
+                android:background="@drawable/mypage_ddaylist_background">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,6 +77,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:onClick="@{categoryEditClickListener}"
                     android:textColor="@color/mainColor"
                     android:gravity="center"
                     android:textSize="11sp"

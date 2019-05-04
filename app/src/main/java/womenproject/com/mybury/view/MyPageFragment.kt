@@ -33,12 +33,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
 
     override fun initStartView() {
         viewDataBinding.viewModel = viewModel
+        viewDataBinding.mypageTopLayout.viewModel = viewModel
 
     }
 
     override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener()
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener()
+        viewDataBinding.mypageScrollLayout.ddayListClickListener= createOnClickDdayListListener()
+        viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener()
     }
 
     override fun initAfterBinding() {
@@ -68,6 +71,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
     private fun createOnClickHomeListener() : View.OnClickListener {
         return View.OnClickListener {
             activity!!.onBackPressed()
+        }
+    }
+
+    private fun createOnClickDdayListListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MyPageFragmentDirections.actionMyPageToDday()
+
+            it.findNavController().navigate(directions)
+        }
+    }
+
+    private fun createOnClickCategoryEditListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
+
+            it.findNavController().navigate(directions)
         }
     }
 
