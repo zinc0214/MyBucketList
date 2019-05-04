@@ -1,16 +1,29 @@
 package womenproject.com.mybury.view
 
+import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.base.BaseFragment
-import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.R
+import womenproject.com.mybury.adapter.EditCategoryListAdapter
+import womenproject.com.mybury.ui.CategoryItemTouchHelperCallback
+import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.viewmodels.MyPageViewModel
 
-class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, BaseViewModel>() {
+class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(), ItemDragListener {
+
+
+    private lateinit var editCategoryListAdapter: EditCategoryListAdapter
+    private lateinit var itemTouchHelper: ItemTouchHelper
+
     override val layoutResourceId: Int
         get() = R.layout.fragment_category_edit
 
-    override val viewModel: BaseViewModel
-        get() = BaseViewModel()
+    override val viewModel: MyPageViewModel
+        get() = MyPageViewModel()
 
 
     override fun initStartView() {
@@ -18,11 +31,33 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, BaseViewM
     }
 
     override fun initDataBinding() {
-
+        viewDataBinding.backBtnOnClickListener = setOnBackBtnClickListener()
     }
 
     override fun initAfterBinding() {
 
+        editCategoryListAdapter = EditCategoryListAdapter(viewModel.categoryList(), this)
+
+        viewDataBinding.categoryListRecyclerView.apply {
+            adapter = editCategoryListAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+
+
+        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+
+    }
+
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
+    }
+
+    private fun setOnBackBtnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            activity!!.onBackPressed()
+        }
     }
 
 
