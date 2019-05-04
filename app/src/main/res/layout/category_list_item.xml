@@ -14,6 +14,7 @@
 
 
     <LinearLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -23,22 +24,17 @@
             android:layout_width="match_parent"
             android:layout_height="49dp">
 
+
             <CheckBox
                 android:id="@+id/category_remove_box"
+                style="@style/FilterDialogSubTextStyle"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="17dp"
-                android:button="@drawable/category_check_background"
-                android:checked="true" />
-
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="17dp"
-                android:button="@drawable/category_check_img" />
+                android:button="@drawable/category_check_img"
+                android:background="@drawable/category_check_background"
+                android:checked="false" />
 
 
             <TextView
@@ -52,20 +48,30 @@
                 android:textSize="14sp" />
 
 
-            <ImageView
-                android:layout_centerVertical="true"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+            <RelativeLayout
+                android:id="@+id/drag_layout"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="18dp"
-                android:button="@drawable/category_list_change_img" />
+                android:layout_width="50dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/category_list_change_img" />
+
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
-        <LinearLayout
+        <ImageView
             android:background="@color/dividerColor"
             android:layout_width="match_parent"
-            android:layout_height="2dp"/>
+            android:layout_height="0.6dp"/>
 
     </LinearLayout>
 
