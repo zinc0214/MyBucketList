@@ -81,7 +81,7 @@ class MainFragmentViewModel : BaseViewModel() {
         val bucketItem6 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, false, category, 1, 1)
 
 
-        val bucketItemList = ArrayList<BucketItem>()
+        val bucketItemList = mutableListOf<BucketItem>()
 
         bucketItemList.add(bucketItem1)
         bucketItemList.add(bucketItem2)
