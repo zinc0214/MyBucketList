@@ -8,7 +8,7 @@ import womenproject.com.mybury.databinding.LayoutSliderItemBinding
 
 class SliderAdapter : RecyclerView.Adapter<SliderAdapter.SliderItemViewHolder>() {
 
-    private val data: ArrayList<String> = ArrayList()
+    private val data = mutableListOf<String>()
     private lateinit var binding : LayoutSliderItemBinding
     var callback: Callback? = null
     val clickListener = View.OnClickListener { v -> v?.let { callback?.onItemClicked(it) } }

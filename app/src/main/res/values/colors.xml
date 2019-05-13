@@ -25,7 +25,7 @@
     <color name="bucketItemBackground">#e8e8e8</color>
     <color name="transparent">#00ffffff</color>
 
-    <color name="subColor">#a6c6ff</color>
+    <color name="subColor">#A6C6FF</color>
     <color name="notiColor">#ffca5a</color>
     <color name="mainColor">#5a95ff</color>
     <color name="mainPressColor">#b33341c0</color>
