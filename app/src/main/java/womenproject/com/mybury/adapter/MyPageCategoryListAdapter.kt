@@ -4,14 +4,15 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.BucketCategoryList
+import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.databinding.MypageCategoryItemBinding
 import womenproject.com.mybury.viewholder.MyPageCategoryListViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
-class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: BucketCategoryList) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: MutableList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var myPageCategoryListViewHolder: MyPageCategoryListViewHolder
     private val bucketCategory = bucketCategoryList
@@ -23,12 +24,12 @@ class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: BucketCat
     }
 
     override fun getItemCount(): Int {
-        return bucketCategory.categoryList.size
+        return bucketCategory.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        myPageCategoryListViewHolder.bind(bucketCategory.categoryList[position])
+        myPageCategoryListViewHolder.bind(bucketCategory[position])
     }
 
 

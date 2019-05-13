@@ -13,6 +13,8 @@ import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.viewmodels.MyPageViewModel
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
@@ -46,17 +48,38 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
 
     override fun initAfterBinding() {
 
-        viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this)
-        startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
+
+        val categoryList = mutableListOf<String>()
+        categoryList.add("없음")
+
+        viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+            override fun start() {
+
+            }
+
+            override fun success(bucketCategory: BucketCategory) {
+                for(i in 0 until bucketCategory.categoryList.size) {
+                    categoryList.add(bucketCategory.categoryList[i].name)
+                }
+                viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@MyPageFragment)
+                startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
 
 
-        val layoutManager = LinearLayoutManager(context)
+                val layoutManager = LinearLayoutManager(context)
 
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, viewModel.categoryList())
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
 
-        viewDataBinding.executePendingBindings()
+                viewDataBinding.executePendingBindings()
+            }
+
+            override fun fail() {
+
+            }
+
+        })
+
     }
 
 

@@ -57,9 +57,9 @@ class MainFragmentViewModel : BaseViewModel() {
     }
 
 
-    fun getMainBucketList(): BucketList {
+/*    fun getMainBucketList(): BucketList {
 
-        /*
+        *//*
         * BucketType
         *   1 : 횟수1번
         *   2 : 횟수n번
@@ -68,7 +68,7 @@ class MainFragmentViewModel : BaseViewModel() {
         * DDay
         *   0 : dDate 표기 안함
         *   1 : dDate 표기함
-        *   */
+        *   *//*
 
         val category = BucketCategory("id", "운동", 20)
 
@@ -93,5 +93,5 @@ class MainFragmentViewModel : BaseViewModel() {
         val bucketList = BucketList(bucketItemList, false, 200)
 
         return bucketList
-    }
+    }*/
 }

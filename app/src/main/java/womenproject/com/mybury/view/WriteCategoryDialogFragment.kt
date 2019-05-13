@@ -7,13 +7,13 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseDialogFragment
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.base.BaseNormalDialogFragment
-import womenproject.com.mybury.data.BucketUserCategory
+import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.databinding.WriteCategoryDialogBinding
 import womenproject.com.mybury.ui.WriteItemLayout
 
 
 @SuppressLint("ValidFragment")
-class WriteCategoryDialogFragment(private var userCategory : BucketUserCategory, private var categorySetListener : (String) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
+class WriteCategoryDialogFragment(private var userCategory : BucketCategory, private var categorySetListener : (String) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -35,7 +35,7 @@ class WriteCategoryDialogFragment(private var userCategory : BucketUserCategory,
 
 
         for(i in 0 until userCategory.categoryList.size) {
-            addCategoryItem(userCategory.categoryList[i])
+            addCategoryItem(userCategory.categoryList[i].name)
         }
     }
 

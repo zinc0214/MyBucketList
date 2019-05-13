@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.databinding.CategoryListItemBinding
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.viewmodels.CategoryListItemViewModel
@@ -21,10 +22,10 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding, p
         }
     }
 
-    fun bind(bucketCategory: BucketCategory) {
+    fun bind(categoryName: String) {
         binding.apply {
 
-            binding.viewModel = CategoryListItemViewModel(bucketCategory)
+            binding.viewModel = CategoryListItemViewModel(categoryName)
 
             executePendingBindings()
         }

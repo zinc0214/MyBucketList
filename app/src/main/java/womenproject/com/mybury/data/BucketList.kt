@@ -28,7 +28,7 @@ data class BucketItem(
         val open : Boolean = false,
         val pin : Boolean = false,
         val complete : Boolean = false,
-        val category: BucketCategory,
+        val category: CategoryList,
         val userCount : Int = 0,
         val goalCount : Int = 1,
         val dDay : Int = 0,
@@ -37,24 +37,21 @@ data class BucketItem(
 
 data class AddBucketItem(
         var title : String = "Title",
-        var memo : String = "Memo",
-        var img : List<String>,
         val open : Boolean = false,
-        val categoryId: String,
-        val dDate : String,
-        val goalCount : String
+        val dDate : Long,
+        val goalCount : Int = 0,
+        var memo : String = "Memo",
+        val categoryName: String,
+        val userId : String
+
 )
 
-data class BucketCategoryList(
-        val categoryList : List<BucketCategory>
+data class BucketCategory (
+        val categoryList : List<CategoryList>,
+        val retCode : String
+
 )
 
-data class BucketCategory(
-        val id : String = "",
-        val name : String= "",
-        val count : Int = 0
-)
-
-data class BucketUserCategory (
-        val categoryList : List<String>
+data class CategoryList(
+        val name: String
 )

@@ -9,8 +9,10 @@ import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.EditCategoryListAdapter
+import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.ui.CategoryItemTouchHelperCallback
 import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import womenproject.com.mybury.viewmodels.MyPageViewModel
 
 class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(), ItemDragListener {
@@ -36,16 +38,35 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     override fun initAfterBinding() {
 
-        editCategoryListAdapter = EditCategoryListAdapter(viewModel.categoryList(), this)
+        val categoryList = mutableListOf<String>()
+        categoryList.add("없음")
 
-        viewDataBinding.categoryListRecyclerView.apply {
-            adapter = editCategoryListAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
+        viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+            override fun start() {
+
+            }
+
+            override fun success(bucketCategory: BucketCategory) {
+                for(i in 0 until bucketCategory.categoryList.size) {
+                    categoryList.add(bucketCategory.categoryList[i].name)
+                }
+                editCategoryListAdapter = EditCategoryListAdapter(categoryList, this@CategoryEditFragment)
+
+                viewDataBinding.categoryListRecyclerView.apply {
+                    adapter = editCategoryListAdapter
+                    layoutManager = LinearLayoutManager(context)
+                }
 
 
-        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
-        itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+                itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+                itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+            }
+
+            override fun fail() {
+
+            }
+
+        })
 
     }
 
