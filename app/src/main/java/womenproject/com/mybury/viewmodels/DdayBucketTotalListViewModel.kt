@@ -56,20 +56,4 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
     }
 
-    fun getDdayEachBucketItem(): BucketList {
-        val category = BucketCategory("id", "운동", 10)
-        val bucketItem1 = BucketItem("bucketlist02", "퇴사하고 한달동안 보드게임하기.", false, false, false, category, 2, 5, 2)
-        val bucketItem2 = BucketItem("bucketlist02", "신전떡볶이 오뎅쿠폰 10장 모으기.", false, false, false ,category, 0, 1, 2)
-        val bucketItem3 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", false, false, true, category, 2, 5, 4)
-
-
-        val bucketItemList = ArrayList<BucketItem>()
-
-        bucketItemList.add(bucketItem1)
-        bucketItemList.add(bucketItem2)
-        bucketItemList.add(bucketItem3)
-
-        val bucketList = BucketList(bucketItemList, false, 200)
-        return bucketList
-    }
 }

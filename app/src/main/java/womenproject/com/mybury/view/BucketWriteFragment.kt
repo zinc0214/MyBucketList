@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.BucketUserCategory
+import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
@@ -24,9 +23,9 @@ import kotlin.collections.HashMap
 class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
     private var addImgList = HashMap<Int, RelativeLayout>()
-    private var ddayCount = 1
+    private var goalCount = 1
     private var currentCalendarDay = Calendar.getInstance().time
-    private lateinit var categoryList: BucketUserCategory
+    private lateinit var categoryList: BucketCategory
     private var imgList = ArrayList<String>()
 
     override val layoutResourceId: Int
@@ -36,7 +35,26 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         get() = BucketWriteViewModel()
 
     override fun initStartView() {
-        categoryList = viewModel.getCategoryList()
+        viewModel.getCategoryList(object: BucketWriteViewModel.GetBucketListCallBackListener {
+
+
+            override fun start() {
+                viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
+            }
+
+            override fun success(bucketCategory: BucketCategory) {
+                categoryList = bucketCategory
+                viewDataBinding.addBucketProgressBar.visibility = View.GONE
+            }
+
+            override fun fail() {
+                viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                Toast.makeText(context, "카테고리 값을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                activity!!.onBackPressed()
+
+            }
+
+        })
     }
 
     override fun initDataBinding() {
@@ -94,6 +112,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
                 override fun success() {
                     viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    Toast.makeText(context, "버킷이 등록되었습니다", Toast.LENGTH_SHORT).show()
                     activity!!.onBackPressed()
                 }
 
@@ -257,7 +276,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private fun goalCountSetListener(): View.OnClickListener {
         val goalCountSetListener: (String) -> Unit = { count ->
             viewDataBinding.goalCountText.text = count
-            ddayCount = count.toInt()
+            goalCount = count.toInt()
             if (count.toInt() != 1) {
                 viewDataBinding.goalCountText.setEnableTextColor()
                 viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
@@ -268,7 +287,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
         return View.OnClickListener {
-            WriteGoalCountDialogFragment(ddayCount, goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
+            WriteGoalCountDialogFragment(goalCount, goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
@@ -294,9 +313,9 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
 
     private fun setBucketItemData(): AddBucketItem {
-        return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.memoText.text.toString(),
-                imgList, viewDataBinding.openSwitchBtn.isChecked, viewDataBinding.categoryText.text.toString(),
-                viewDataBinding.ddayText.text.toString(), viewDataBinding.goalCountText.text.toString())
+        return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.openSwitchBtn.isChecked,
+                currentCalendarDay.time ,viewDataBinding.goalCountText.text.toString().toInt(),
+                viewDataBinding.memoText.text.toString(),  viewDataBinding.categoryText.text.toString(), "userId1")
     }
 
 

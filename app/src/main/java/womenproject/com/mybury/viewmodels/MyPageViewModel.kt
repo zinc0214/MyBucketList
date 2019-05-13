@@ -1,8 +1,13 @@
 package womenproject.com.mybury.viewmodels
 
+import android.util.Log
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.BucketCategoryList
+import womenproject.com.mybury.network.OkHttp3RetrofitManager
+import womenproject.com.mybury.network.RetrofitInterface
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
@@ -15,25 +20,30 @@ class MyPageViewModel : BaseViewModel() {
     var doneBucketCount = "31"
     var ddayCount = "20"
 
-    fun categoryList() : BucketCategoryList {
+    private val BUCKETLIST_API = "http://10.1.101.161/host/"
 
-        val categoryItem1 = BucketCategory("1", "없음", 1)
-        val categoryItem2 = BucketCategory("2", "음식", 10)
-        val categoryItem3 = BucketCategory("3", "여행", 15)
-        val categoryItem4 = BucketCategory("4", "언어공부", 5)
-        val categoryItem5 = BucketCategory("5", "두룽두울부룽둥", 40)
+    fun getCategoryList(callback: BucketWriteViewModel.GetBucketListCallBackListener) {
 
-        val list = ArrayList<BucketCategory>()
+        callback.start()
 
-        list.add(categoryItem1)
-        list.add(categoryItem2)
-        list.add(categoryItem3)
-        list.add(categoryItem4)
-        list.add(categoryItem5)
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
 
-        val bucketCategory = BucketCategoryList(list)
+        val bucketListResultData = restClient.requestCategoryList()
+        bucketListResultData.enqueue(object : Callback<BucketCategory> {
+            override fun onResponse(call: Call<BucketCategory>, response: Response<BucketCategory>) {
 
-        return bucketCategory
+                if (response != null && response.isSuccessful) {
+                    Log.e("ayhan:result_addBucketList", "${response.body()}")
+                    callback.success(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<BucketCategory>, t: Throwable) {
+                Log.e("ayhan2_addBucketList", t.toString())
+                callback.fail()
+            }
+        })
+
     }
 
 }

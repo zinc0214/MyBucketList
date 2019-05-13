@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
 import womenproject.com.mybury.base.BaseFragment
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
@@ -15,6 +16,10 @@ import womenproject.com.mybury.viewmodels.MainFragmentViewModel
  */
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
+
+    private val BUCKETLIST_API = "http://10.1.101.161/host/"
+
+
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
 
@@ -44,29 +49,29 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        val bucketList = viewModel.getMainBucketList()
+      /*  val bucketList = viewModel.getMainBucketList()
 
         if(bucketList.bucketlists.isNotEmpty()) {
             viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
         } else {
             viewDataBinding.blankImg.visibility = View.VISIBLE
         }
-
+*/
 
         viewDataBinding.progressBar.visibility = View.GONE
 
-       /* mainFragmentViewModel.getMainBucketList(object : MainFragmentViewModel.OnBucketListGetEvent{
+        viewModel.getMainBucketList(BUCKETLIST_API, object : MainFragmentViewModel.OnBucketListGetEvent{
             override fun start() {
-                binding.progressBar.visibility = View.VISIBLE
+                viewDataBinding.progressBar.visibility = View.VISIBLE
             }
 
             override fun finish(bucketList: BucketList?) {
                 if(bucketList != null)  {
-                    binding.progressBar.visibility = View.GONE
-                    binding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
+                    viewDataBinding.progressBar.visibility = View.GONE
+                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
-        })*/
+        })
 
     }
 

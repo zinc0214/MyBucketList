@@ -4,18 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.BucketCategoryList
+import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.databinding.CategoryListItemBinding
 import womenproject.com.mybury.ui.ItemActionListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.viewholder.EditCategoryListViewHolder
 
-class EditCategoryListAdapter(private val bucketCategoryList: BucketCategoryList,
+class EditCategoryListAdapter(private val bucketCategoryList: MutableList<String>,
                               private val listener: ItemDragListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
 
     private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
-    private val categoryList : MutableList<BucketCategory> = bucketCategoryList.categoryList as MutableList<BucketCategory>
+    private val categoryList = bucketCategoryList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -24,12 +24,12 @@ class EditCategoryListAdapter(private val bucketCategoryList: BucketCategoryList
     }
 
     override fun getItemCount(): Int {
-        return bucketCategoryList.categoryList.size
+        return bucketCategoryList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
-        editCategoryListViewHolder.bind(bucketCategoryList.categoryList[position])
+        editCategoryListViewHolder.bind(bucketCategoryList[position])
     }
 
     override fun onItemMoved(from: Int, to: Int) {

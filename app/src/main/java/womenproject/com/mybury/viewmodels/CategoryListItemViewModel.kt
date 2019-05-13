@@ -2,9 +2,9 @@ package womenproject.com.mybury.viewmodels
 
 import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.CategoryList
 
-class CategoryListItemViewModel(bucketCategory: BucketCategory) : BaseViewModel() {
+class CategoryListItemViewModel(categoryName : String) : BaseViewModel() {
 
-    val bucketId = bucketCategory.id
-    val bucketName = bucketCategory.name
+    val bucketName = categoryName
 }

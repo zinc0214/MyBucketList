@@ -11,11 +11,10 @@ import womenproject.com.mybury.databinding.MypageCategoryItemBinding
 
 class MyPageCategoryListViewHolder(private val binding: MypageCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(bucketCategory: BucketCategory) {
+    fun bind(name: String) {
         binding.apply {
 
-            categoryName = bucketCategory.name
-            categroyCount = bucketCategory.count.toString()
+            categoryName = name
 
             executePendingBindings()
         }

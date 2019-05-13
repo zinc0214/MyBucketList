@@ -42,10 +42,10 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
         viewDataBinding.ddayEachBucketList.layoutManager = layoutManager
         viewDataBinding.ddayEachBucketList.hasFixedSize()
-        viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
+       // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
 
 
-       /* viewModel.getDdayEachBucketList(BUCKETLIST_API, object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
+        viewModel.getDdayEachBucketList(BUCKETLIST_API, object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
             }
@@ -56,6 +56,6 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
                     viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
                 }
             }
-        })*/
+        })
     }
 }
