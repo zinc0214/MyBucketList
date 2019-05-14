@@ -28,7 +28,6 @@ class DdayBucketTotalListAdapter(context: Context?, bucketList: BucketList) : Re
 
         val sameCountList = getSameCountBucket(bucketList)
 
-
         for(i in 0 until sameCountList.size) {
 
             val sameDdayBucketList = ArrayList<BucketItem>()

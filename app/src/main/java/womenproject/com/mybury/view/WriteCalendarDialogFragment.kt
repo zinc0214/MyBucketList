@@ -17,6 +17,7 @@ import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
 import womenproject.com.mybury.ui.CurrentDateDecorator
 import android.widget.EditText
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.write_calendar_dialog.*
 import java.util.*
 
 
@@ -34,7 +35,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     private var selectDay = Date(0, 0, 0)
     private var senderDay = Date(0, 0, 0)
-    private var today = CalendarDay.today()
     private var calendarVisible = true
 
     private lateinit var dayPicker: NumberPicker
@@ -63,6 +63,9 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         selectDay.year = viewDataBinding.calendarView.selectedDate.year
         selectDay.month = viewDataBinding.calendarView.selectedDate.month
         selectDay.date = viewDataBinding.calendarView.selectedDate.day
+
+
+        setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
 
 
         Log.e("ayhan", "select : ${selectDay.year}/ ${selectDay.month} / ${selectDay.date}")
@@ -103,7 +106,12 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         viewDataBinding.bottomSheet.cancelButtonClickListener = cancelOnClickListener()
         viewDataBinding.dateTitle.setOnClickListener(selectTypeOnChangeListener())
 
+        viewDataBinding.leftArrowClickListener = leftArrowOnClickListener()
+        viewDataBinding.rightArrowClickListener = rightArrowOnClickListener()
+
+
     }
+
 
 
     private fun setCurrentDateTitle(dateYear: Int, dateMonth: Int, dateDay: Int) {
@@ -151,6 +159,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     private fun cancelOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
+            ddaySetListener.invoke("", calendarDay)
             this.dismiss()
         }
     }
@@ -163,6 +172,8 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
             if (calendarVisible) {
                 viewDataBinding.calendarView.visibility = View.GONE
                 viewDataBinding.datePicker.visibility = View.VISIBLE
+                viewDataBinding.leftArrowImg.visibility = View.GONE
+                viewDataBinding.rightArrowImg.visibility = View.GONE
 
                 yearPicker.value = selectDay.year
                 monthPicker.value = selectDay.month
@@ -174,6 +185,8 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
             } else {
                 viewDataBinding.calendarView.visibility = View.VISIBLE
                 viewDataBinding.datePicker.visibility = View.GONE
+                viewDataBinding.leftArrowImg.visibility = View.VISIBLE
+                viewDataBinding.rightArrowImg.visibility = View.VISIBLE
 
                 viewDataBinding.calendarView.setCurrentDate(selectDay)
                 viewDataBinding.calendarView.setDateSelected(selectDay, true)
@@ -185,6 +198,18 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         }
     }
 
+
+    private fun leftArrowOnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            calendarView.goToPrevious()
+        }
+    }
+
+    private fun rightArrowOnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            calendarView.goToNext()
+        }
+    }
 
     private fun TextView.setSelectDate(year: Int, month: Int) {
         val realYear = if (year < 1000) {

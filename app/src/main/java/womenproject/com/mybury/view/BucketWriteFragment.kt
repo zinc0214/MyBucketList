@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.AddBucketItem
@@ -259,10 +260,17 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
 
-            viewDataBinding.ddayText.text = dday
-            currentCalendarDay = date
-            viewDataBinding.ddayText.setEnableTextColor()
-            viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
+            if(dday.isEmpty()) {
+                viewDataBinding.ddayText.text = "없음"
+                viewDataBinding.ddayText.setDisableTextColor()
+                viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
+            } else {
+                viewDataBinding.ddayText.text = dday
+                currentCalendarDay = date
+                viewDataBinding.ddayText.setEnableTextColor()
+                viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
+            }
+
         }
 
         return View.OnClickListener {
@@ -313,8 +321,14 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
 
     private fun setBucketItemData(): AddBucketItem {
+        if(goal_count_text.text.toString() == "설정") {
+            goalCount = 1
+        } else {
+            goalCount = goal_count_text.text.toString().toInt()
+        }
+
         return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.openSwitchBtn.isChecked,
-                currentCalendarDay.time ,viewDataBinding.goalCountText.text.toString().toInt(),
+                currentCalendarDay.time , goalCount,
                 viewDataBinding.memoText.text.toString(),  viewDataBinding.categoryText.text.toString(), "userId1")
     }
 
