@@ -230,7 +230,13 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             onDeleteImgField(it)
         }
 
-        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener).setUI(uri)
+
+        val imgFieldClickListener: (Uri) -> Unit = {
+            showImgWide(it)
+        }
+
+
+        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setUI(uri)
         addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
         imgList.add(uri.toString())
         viewDataBinding.imgLayout.addView(writeImgLayout)
@@ -247,6 +253,11 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
         addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
+    }
+
+    private fun showImgWide(uri: Uri) {
+        val showImgWideFragment = ShowImgWideFragment(uri)
+        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
 
     private fun memoRemoveListener(): View.OnClickListener {
