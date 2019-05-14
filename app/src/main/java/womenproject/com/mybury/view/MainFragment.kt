@@ -49,17 +49,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-      /*  val bucketList = viewModel.getMainBucketList()
-
-        if(bucketList.bucketlists.isNotEmpty()) {
-            viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
-        } else {
-            viewDataBinding.blankImg.visibility = View.VISIBLE
-        }
-*/
-
-        viewDataBinding.progressBar.visibility = View.GONE
-
         viewModel.getMainBucketList(BUCKETLIST_API, object : MainFragmentViewModel.OnBucketListGetEvent{
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
