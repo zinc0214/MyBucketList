@@ -1,14 +1,11 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-android:width="36dp"
-android:height="36dp"
-android:viewportWidth="36"
-android:viewportHeight="36">
-<path
-    android:pathData="M21,11l-7,7M14,18l7,7"
-    android:strokeLineJoin="round"
-    android:strokeWidth="2"
-    android:fillColor="#00000000"
-    android:strokeColor="#AAA"
-    android:fillType="evenOdd"
-    android:strokeLineCap="round"/>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/calendar_left_arrow_base"
+        android:state_pressed="false" />
+    <item
+        android:drawable="@drawable/calendar_left_arrow_press"
+        android:state_pressed="true" />
+    <item android:drawable="@drawable/calendar_left_arrow_base" />
+</selector>
+

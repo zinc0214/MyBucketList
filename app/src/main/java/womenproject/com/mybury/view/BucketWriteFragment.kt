@@ -261,7 +261,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
 
             if(dday.isEmpty()) {
-                viewDataBinding.ddayText.text = "없음"
+                viewDataBinding.ddayText.text = "추가"
+                currentCalendarDay = date
                 viewDataBinding.ddayText.setDisableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
             } else {
@@ -308,8 +309,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             } else {
                 viewDataBinding.categoryText.text = title
                 viewDataBinding.categoryText.setEnableTextColor()
-                viewDataBinding.categoryImg.setImage(R.drawable.calendar_enable)
-                viewDataBinding.categoryImg.background = context!!.getDrawable(R.drawable.category_enable)
+                viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
             }
 
         }
