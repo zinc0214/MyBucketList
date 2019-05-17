@@ -13,8 +13,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="RtlHardcoded">
+        android:layout_height="match_parent">
 
 
         <androidx.core.widget.NestedScrollView
@@ -105,6 +104,7 @@
 
 
         <com.google.android.material.appbar.AppBarLayout
+            android:layout_marginTop="44dp"
             android:background="@drawable/gradient_background"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -117,7 +117,6 @@
                 android:id="@+id/main_collapsing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="44dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
 
@@ -179,8 +178,6 @@
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
-
-
 
 
         <include

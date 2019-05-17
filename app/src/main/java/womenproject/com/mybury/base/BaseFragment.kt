@@ -56,13 +56,18 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
 
-        initStartView()
-        initDataBinding()
-        initAfterBinding()
 
         return viewDataBinding.root
     }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initStartView()
+        initDataBinding()
+        initAfterBinding()
+    }
 
     private fun checkNetworkConnect(){
         if(BaseViewModel().isNetworkDisconnect()) {
