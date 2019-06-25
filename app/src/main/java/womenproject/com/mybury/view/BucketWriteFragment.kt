@@ -14,6 +14,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel

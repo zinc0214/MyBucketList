@@ -18,7 +18,10 @@ import womenproject.com.mybury.network.RetrofitInterface
 class BucketWriteViewModel : BaseViewModel() {
 
 
-    private val BUCKETLIST_API = "http://10.1.101.161/host/"
+    companion object {
+        private const val BUCKETLIST_API = "http://10.1.101.161/host/"
+    }
+
 
     private var bucketList: BucketList? = null
     var progressVisible = ObservableInt(View.GONE)
@@ -47,7 +50,7 @@ class BucketWriteViewModel : BaseViewModel() {
         bucketListResultData.enqueue(object : Callback<BucketCategory> {
             override fun onResponse(call: Call<BucketCategory>, response: Response<BucketCategory>) {
 
-                if (response != null && response.isSuccessful) {
+                if (response.isSuccessful) {
                     Log.e("ayhan:result_addBucketList", "${response.body()}")
                     callback.success(response.body()!!)
                 }
@@ -73,7 +76,7 @@ class BucketWriteViewModel : BaseViewModel() {
         bucketListResultData.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
-                if (response != null && response.isSuccessful) {
+                if (response.isSuccessful) {
                     Log.e("ayhan:result_addBucketList", "${response.body()}")
                     callback.success()
                 }
