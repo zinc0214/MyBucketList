@@ -189,7 +189,7 @@
                 android:background="@drawable/my_page_more"
                 motion:layout_constraintEnd_toEndOf="@+id/whiteBackground"
                 motion:layout_constraintTop_toTopOf="@+id/whiteBackground" />
-            
+
             <Constraint
                 android:id="@id/name"
                 android:layout_width="wrap_content"
