@@ -35,10 +35,11 @@ import java.util.*
 class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boolean,
                                     private var memoAddListener: () -> Unit,
                                     private var checkAddImageListener: () -> Boolean,
-                                    private var imgAddListener: (Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
+                                    private var imgAddListener: (File, Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
 
 
     private var photoUri: Uri? = null
+    private lateinit var currentImgFile : File
     private val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
     private var mCurrentPhotoPath: String? = null
@@ -223,7 +224,7 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
                     })
         } else if (requestCode == CROP_FROM_CAMERA) {
             Log.e("$this", "여기에 이미지 넣어야 함")
-            imgAddListener.invoke(this.photoUri!!)
+            imgAddListener.invoke(this.currentImgFile, this.photoUri!!)
             this.dismiss()
         }
     }
@@ -267,6 +268,8 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
             val folder = File("${Environment.getExternalStorageDirectory()}/NOSTest/")
             val tempFile = File(folder.toString(), croppedFileName!!.getName())
 
+
+            currentImgFile = tempFile
             photoUri = FileProvider.getUriForFile(context!!,
                     "MyBuryApplication.provider", tempFile)
 

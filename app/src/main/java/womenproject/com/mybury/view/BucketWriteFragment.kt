@@ -14,10 +14,11 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.ui.WriteImgLayout
+import womenproject.com.mybury.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
+import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -28,7 +29,9 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     private var goalCount = 1
     private var currentCalendarDay = Calendar.getInstance().time
     private lateinit var categoryList: BucketCategory
-    private var imgList = ArrayList<String>()
+    private var imgList = ArrayList<File>()
+
+    private val bucketInfoViewModel = BucketInfoViewModel()
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -37,7 +40,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         get() = BucketWriteViewModel()
 
     override fun initStartView() {
-        viewModel.getCategoryList(object: BucketWriteViewModel.GetBucketListCallBackListener {
+
+        bucketInfoViewModel.getCategoryList(object: BucketInfoViewModel.GetBucketListCallBackListener {
 
 
             override fun start() {
@@ -106,7 +110,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.addBucketList(setBucketItemData(), object : BucketWriteViewModel.OnBucketAddEvent {
+            viewModel.addBucketList(setBucketItemInfoData(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
                 override fun start() {
                     viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
 
@@ -215,8 +219,8 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             }
         }
 
-        val imgAddListener: (Uri) -> Unit = {
-            onAddImgField(it)
+        val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
+            onAddImgField(file, uri)
         }
 
         return View.OnClickListener {
@@ -225,7 +229,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     }
 
 
-    private fun onAddImgField(uri: Uri) {
+    private fun onAddImgField(file: File, uri: Uri) {
 
         val removeImgListener: (View) -> Unit = { it ->
             onDeleteImgField(it)
@@ -239,7 +243,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setUI(uri)
         addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
-        imgList.add(uri.toString())
+        imgList.add(file)
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
@@ -332,7 +336,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     }
 
 
-    private fun setBucketItemData(): AddBucketItem {
+    private fun setBucketItemInfoData(): AddBucketItem {
         if(goal_count_text.text.toString() == "설정") {
             goalCount = 1
         } else {
