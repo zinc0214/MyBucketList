@@ -1,30 +1,25 @@
 package womenproject.com.mybury.viewmodels
 
 import android.util.Log
-import android.view.View
-import androidx.databinding.ObservableInt
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
+import java.io.File
 
 class BucketWriteViewModel : BaseViewModel() {
 
+    val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
 
     companion object {
         private const val BUCKETLIST_API = "http://10.1.101.161/host/"
     }
-
-
-    private var bucketList: BucketList? = null
-    var progressVisible = ObservableInt(View.GONE)
 
 
     interface OnBucketAddEvent {
@@ -34,60 +29,69 @@ class BucketWriteViewModel : BaseViewModel() {
     }
 
 
-    interface GetBucketListCallBackListener {
-        fun start()
-        fun success(bucketCategory : BucketCategory)
-        fun fail()
-    }
-
-    fun getCategoryList(callback: GetBucketListCallBackListener) {
-
-        callback.start()
-
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.requestCategoryList()
-        bucketListResultData.enqueue(object : Callback<BucketCategory> {
-            override fun onResponse(call: Call<BucketCategory>, response: Response<BucketCategory>) {
-
-                if (response.isSuccessful) {
-                    Log.e("ayhan:result_addBucketList", "${response.body()}")
-                    callback.success(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<BucketCategory>, t: Throwable) {
-                Log.e("ayhan2_addBucketList", t.toString())
-                callback.fail()
-            }
-        })
 
 
+    fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
 
-    }
+        onBucketAddEvent.start()
 
-    fun addBucketList(bucketItem: AddBucketItem, callback: OnBucketAddEvent) {
-
-        callback.start()
-
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.postAddBucketList(bucketItem)
-        bucketListResultData.enqueue(object : Callback<ResponseBody> {
+        val bucketListAddResult = restClient.postAddBucketList(bucketItem)
+        bucketListAddResult.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
                 if (response.isSuccessful) {
-                    Log.e("ayhan:result_addBucketList", "${response.body()}")
-                    callback.success()
+                    if(imgList.isEmpty()) {
+                        Log.e("ayhan", "addBucketOK1")
+                        onBucketAddEvent.success()
+                    } else {
+                        Log.e("ayhan", "addBucketImgGGO")
+                        addBucketListImg(imgList, onBucketAddEvent)
+                    }
+
                 }
             }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("ayhan2_addBucketFail", t.toString())
+                onBucketAddEvent.fail()
+            }
+        })
+
+    }
+
+
+    private fun addBucketListImg(imgList :MutableList<File>, callback: OnBucketAddEvent) {
+
+        Log.e("ayhan", "list : ${imgList.toString()}")
+
+        for(img in imgList) {
+
+            Log.e("ayhan", "img ::: $img")
+        }
+
+        val bucketListImgAddResult = restClient.postAddBucketImage(imgList)
+        bucketListImgAddResult.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.e("ayhan", "addBucketOK2")
+                    callback.success()
+                } else {
+                    Log.e("ayhan2_fail", "${response}")
+                    callback.fail()
+                }
+            }
+
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e("ayhan2_addBucketList", t.toString())
                 callback.fail()
             }
-        })
 
+
+
+        })
     }
+
+
 
 }
