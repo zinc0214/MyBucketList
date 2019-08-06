@@ -24,15 +24,11 @@ import womenproject.com.mybury.viewholder.*
 class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
-        Log.e(this.toString(), "getItemViewType is Use")
-        Log.e(this.toString(), "position : $position")
         return checkBucketType(position)
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        Log.e("ayhan:ViewType", "$viewType")
 
         currentViewHolder = when (viewType) {
             0 -> SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -42,20 +38,7 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
         return currentViewHolder
     }
 
-
-    override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
-        return View.OnClickListener {
-            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
-
-            val directions = MainFragmentDirections.actionMainBucketToBucketDetail(bucketId.toString())
-            it.findNavController().navigate(directions)
-        }
-    }
-
     private fun checkBucketType(position: Int): Int {
-        if (position == bucketItemList.bucketlists.size - 1) {
-            bucketItemList.bucketlists[position].isLast = true
-        }
         return if (bucketItemList.bucketlists[position].complete) {
             0
         } else {

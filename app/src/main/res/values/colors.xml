@@ -79,5 +79,9 @@
     <color name="writeSeekbarBackground2">#a6c6ff</color>
     <color name="imgRemoveBtnPressBackground">#33ffffff</color>
 
+
+    <color name="detailContextText">#797979</color>
+    <color name="detailInfoText">#a6c6ff</color>
+
     <color name="categoryUnselectBackground">#cccccc</color>
 </resources>
