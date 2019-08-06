@@ -37,6 +37,6 @@ class EditTextInputFilter : InputFilter {
     }
 
     private fun isInRange(a: Int, b: Int, c: Int): Boolean {
-        return if (b > a) c >= a && c <= b else c >= b && c <= a
+        return if (b > a) c in a..b else c in b..a
     }
 }

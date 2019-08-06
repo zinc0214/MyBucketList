@@ -13,7 +13,10 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        android:background="@color/mainBackground"
+        android:fitsSystemWindows="true">
 
 
         <androidx.core.widget.NestedScrollView
@@ -130,10 +133,9 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-          <!--      <include
+                <include
                     android:id="@+id/mypage_top_layout"
                     layout="@layout/mypage_top_layout" />
--->
 
                 <LinearLayout
                     android:background="@color/transparent"

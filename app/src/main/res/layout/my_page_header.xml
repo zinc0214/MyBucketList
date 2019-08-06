@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
+    </data>
+
+    <womenproject.com.mybury.ui.CollapsibleToolbar
+
+        android:background="@color/mainBackground"
+        android:id="@+id/constraintToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:minHeight="128dp"
+        app:layoutDescription="@xml/my_page_header"
+        app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="0dp"
+            android:layout_height="192dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/gradient_background" />
+
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/whiteBackground"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/bucket_item_base_background"
+            app:altSrc="@drawable/bucket_item_base_background" />
+
+
+
+        <ImageButton
+            android:id="@+id/more_btn"
+            app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
+            app:layout_constraintTop_toTopOf="@+id/whiteBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/my_page_more" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_width"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="72dp"
+            android:shadowColor="@android:color/white"
+            app:border_width="2dp"
+            app:cardCornerRadius="26dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/background"
+            app:layout_constraintStart_toStartOf="@+id/background"
+            app:layout_constraintTop_toTopOf="@+id/background"
+            app:layout_constraintVertical_chainStyle="packed">
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/profile_img"
+            android:src="@drawable/mypage_profile_img_backgound"
+            app:altSrc="@drawable/mypage_profile_img_background_small"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_width"
+            app:layout_constraintEnd_toEndOf="@+id/icon"
+            app:layout_constraintStart_toStartOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="@+id/icon"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:text="닉네임이네님네임해"
+            android:textColor="@color/bucketBaseText"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/icon" />
+
+
+        <RelativeLayout
+            android:id="@+id/bucket_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/doingLayout"
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:text="@{viewModel.doingBucketCount}"
+                    android:textAlignment="center"
+                    android:textColor="@color/subColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="진행중"
+                    android:textAlignment="center"
+                    android:textColor="@color/subColor"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="42dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_toRightOf="@+id/doingLayout"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:text="@{viewModel.doneBucketCount}"
+                    android:textAlignment="center"
+                    android:textColor="@color/subColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="완료"
+                    android:textAlignment="center"
+                    android:textColor="@color/subColor"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </womenproject.com.mybury.ui.CollapsibleToolbar>
+
+</layout>

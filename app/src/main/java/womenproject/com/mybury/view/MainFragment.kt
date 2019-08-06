@@ -8,6 +8,7 @@ import womenproject.com.mybury.adapter.MainBucketListAdapter
 import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentMainBinding
+import womenproject.com.mybury.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
 
@@ -19,6 +20,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
 
     private val BUCKETLIST_API = "http://10.1.101.161/host/"
 
+
+    private val bucketInfoViewModel = BucketInfoViewModel()
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
@@ -49,7 +52,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        viewModel.getMainBucketList(BUCKETLIST_API, object : MainFragmentViewModel.OnBucketListGetEvent{
+        /*bucketInfoViewModel.getMainBucketList(BUCKETLIST_API, object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
             }
@@ -60,7 +63,11 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
-        })
+        })*/
+
+
+        viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
+        viewDataBinding.progressBar.visibility = View.GONE
 
     }
 
