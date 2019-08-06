@@ -1,29 +1,55 @@
 package womenproject.com.mybury.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
+import womenproject.com.mybury.adapter.ImageViewPageAdapter
 import womenproject.com.mybury.viewmodels.BucketDetailViewModel
+
 
 /**
  * Created by HanAYeon on 2018. 11. 30..
  */
 
-class BucketDetailFragment : BaseFragment() {
+class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDetailViewModel>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_bucket_detail
+    override val viewModel: BucketDetailViewModel
+        get() = BucketDetailViewModel()
 
-        val bucketId = BucketDetailFragmentArgs.fromBundle(arguments).bucketId
-        val binding = DataBindingUtil.inflate<FragmentBucketDetailBinding>(
-                inflater, R.layout.fragment_bucket_detail, container, false).apply {
-            viewModel = BucketDetailViewModel(bucketId)
+    override fun initStartView() {
 
-        }
+        viewDataBinding.viewModel = viewModel
 
-        return binding.root
+        val uri1 = "https://image.shutterstock.com/image-photo/assortment-fine-chocolates-white-dark-260nw-123360676.jpg"
+        val uri2 = "https://image.shutterstock.com/image-vector/doodle-cake-happy-birthday-vector-600w-1040176828.jpg"
+        val uri3 = "https://image.shutterstock.com/image-photo/road-trip-sign-background-260nw-269296442.jpg"
+
+        val list = ArrayList<String>()
+        list.add(uri1)
+        list.add(uri2)
+        list.add(uri3)
+
+        val viewPager = viewDataBinding.moreImage.viewPager
+        val viewPagerAdapter = ImageViewPageAdapter(this.context!!, list)
+
+        viewPager.adapter = viewPagerAdapter
+
+        viewDataBinding.tabLayout.setupWithViewPager(viewPager)
+
+
+
     }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
+    }
+
+
 }

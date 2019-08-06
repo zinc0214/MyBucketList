@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" android:color="@color/ddayBucketSuccessBtnBackground"/> <!-- checked -->
+    <item android:state_pressed="true" android:color="@color/ddayPressColor"/> <!-- checked -->
+    <item android:color="@color/ddayBucketSuccessBtnBackground"/> <!-- anything else -->
+</selector>

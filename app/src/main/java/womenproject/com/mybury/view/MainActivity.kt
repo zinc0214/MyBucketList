@@ -10,7 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.ActivityMainBinding
-import womenproject.com.mybury.viewmodels.BaseViewModel
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
@@ -33,12 +32,12 @@ class MainActivity : AppCompatActivity() {
 
        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
-       val baseViewModel = BaseViewModel()
+       /*val baseViewModel = BaseViewModel()
 
-       if(baseViewModel.checkNetwork()) {
-           val baseDialogFragment = BaseDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false)
+       if(baseViewModel.isNetworkDisconnect()) {
+           val baseDialogFragment = BaseNormalDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
            baseDialogFragment.show(supportFragmentManager, "dialog")
-       }
+       }*/
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -48,6 +47,6 @@ class MainActivity : AppCompatActivity() {
 
 
     fun showDialog() {
-      //  BaseDialogFragment().showDialog()
+      //  BaseNormalDialogFragment().showDialog()
     }
 }

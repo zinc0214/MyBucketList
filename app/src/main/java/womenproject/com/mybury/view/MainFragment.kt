@@ -1,15 +1,14 @@
 package womenproject.com.mybury.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.MainBucketListAdapter
+import womenproject.com.mybury.base.BaseFragment
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentMainBinding
+import womenproject.com.mybury.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.viewmodels.MainFragmentViewModel
 
 
@@ -17,56 +16,84 @@ import womenproject.com.mybury.viewmodels.MainFragmentViewModel
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainFragment : BaseFragment() {
+class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
 
-    private lateinit var mainFragmentViewModel: MainFragmentViewModel
-    private lateinit var binding: FragmentMainBinding
+    private val BUCKETLIST_API = "http://10.1.101.161/host/"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        mainFragmentViewModel = MainFragmentViewModel()
+    private val bucketInfoViewModel = BucketInfoViewModel()
 
-        binding = DataBindingUtil.inflate<FragmentMainBinding>(
-                inflater, R.layout.fragment_main, container, false)
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_main
 
-        binding.apply {
-            viewModel = mainFragmentViewModel
-            mainToolbar.filterClickListener = createOnClickFilterListener()
-            mainBottomSheet.writeClickListener = createOnClickWriteListener()
-            mainBottomSheet.noneClickListener = createOnClickDdayListener()
+    override val viewModel: MainFragmentViewModel
+        get() = MainFragmentViewModel()
 
-            initBucketListUI()
-        }
+    override fun initStartView() {
+        viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
+        viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
+        viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
-        return binding.root
+        initBucketListUI()
+    }
+
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
     }
 
 
     private fun initBucketListUI () {
         val layoutManager = LinearLayoutManager(context)
 
-        binding.bucketList.layoutManager = layoutManager
-        binding.bucketList.hasFixedSize()
-        binding.bucketList.adapter = MainBucketListAdapter(context, mainFragmentViewModel.getMainBucketList())
+        viewDataBinding.bucketList.layoutManager = layoutManager
+        viewDataBinding.bucketList.hasFixedSize()
+
+        /*bucketInfoViewModel.getMainBucketList(BUCKETLIST_API, object : BucketInfoViewModel.OnBucketListGetEvent {
+            override fun start() {
+                viewDataBinding.progressBar.visibility = View.VISIBLE
+            }
+
+            override fun finish(bucketList: BucketList?) {
+                if(bucketList != null)  {
+                    viewDataBinding.progressBar.visibility = View.GONE
+                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
+                }
+            }
+        })*/
+
+
+        viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
+        viewDataBinding.progressBar.visibility = View.GONE
+
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
         return View.OnClickListener {
-            val directions = MainFragmentDirections.ActionMainBucketToBucketWrite()
+            val directions = MainFragmentDirections.actionMainBucketToBucketWrite()
             it.findNavController().navigate(directions)
         }
     }
 
     private fun createOnClickFilterListener() : View.OnClickListener {
         return View.OnClickListener {
-            val filterDialogFragment = FilterDialogFragment.instance()
+            val filterDialogFragment = FilterDialogFragment()
             filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
 
+    private fun createOnClickMyPageListener() : View.OnClickListener {
+        return View.OnClickListener {
+            val directions = MainFragmentDirections.actionMainBucketToMyPage()
+            it.findNavController().navigate(directions)
+        }
+    }
     private fun createOnClickDdayListener() : View.OnClickListener {
         return View.OnClickListener {
-            val directions = MainFragmentDirections.ActionMainBucketToDdayBucket()
+            val directions = MainFragmentDirections.actionMainBucketToMyPage()
             it.findNavController().navigate(directions)
         }
     }

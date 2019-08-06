@@ -1,13 +1,11 @@
 package womenproject.com.mybury.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.adapter.DdayBucketTotalListAdapter
+import womenproject.com.mybury.base.BaseFragment
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel
 
@@ -15,25 +13,49 @@ import womenproject.com.mybury.viewmodels.DdayBucketTotalListViewModel
  * Created by HanAYeon on 2019. 1. 16..
  */
 
-class DdayBucketListFragment : BaseFragment() {
+class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketTotalListViewModel>() {
 
-    private lateinit var ddayBucketTotalListViewModel: DdayBucketTotalListViewModel
+    private val BUCKETLIST_API = "http://10.1.101.161/host/"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_dday_list
 
-        ddayBucketTotalListViewModel = DdayBucketTotalListViewModel()
-
-        val binding = DataBindingUtil.inflate<FragmentDdayListBinding>(
-                inflater, R.layout.fragment_dday_list, container, false).apply {
-            viewModel = DdayBucketTotalListViewModel()
-            ddayEachBucketList.layoutManager = LinearLayoutManager(context)
-            ddayEachBucketList.hasFixedSize()
-            ddayEachBucketList.adapter =  DdayBucketTotalListAdapter(context, ddayBucketTotalListViewModel.getDdayEachBucketList())
+    override val viewModel: DdayBucketTotalListViewModel
+        get() = DdayBucketTotalListViewModel()
 
 
-        }
-
-        return binding.root
+    override fun initStartView() {
+        initBucketListUI()
     }
 
+    override fun initDataBinding() {
+
+    }
+
+    override fun initAfterBinding() {
+
+    }
+
+
+    private fun initBucketListUI(){
+        val layoutManager = LinearLayoutManager(context)
+
+        viewDataBinding.ddayEachBucketList.layoutManager = layoutManager
+        viewDataBinding.ddayEachBucketList.hasFixedSize()
+       // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
+
+
+        viewModel.getDdayEachBucketList(BUCKETLIST_API, object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
+            override fun start() {
+                viewDataBinding.progressBar.visibility = View.VISIBLE
+            }
+
+            override fun finish(bucketList: BucketList?) {
+                if(bucketList != null)  {
+                    viewDataBinding.progressBar.visibility = View.GONE
+                    viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
+                }
+            }
+        })
+    }
 }

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#5a95ff</color>
 
     <color name="dialogCategoryBackgroundColor">#f6fcff</color>
     <color name="dialogCategoryTextColor">#434343</color>
@@ -17,17 +17,25 @@
     <color name="trans">#00ffa2a2</color>
     <color name="textOriColor">#3bff9393</color>
 
+    <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="red">#fd0505</color>
 
-    <color name="mainBackground">#f6fcff</color>
+    <color name="mainBackground">#fafafa</color>
     <color name="bucketItemBackground">#e8e8e8</color>
     <color name="transparent">#00ffffff</color>
 
-    <color name="subColor">#a6c6ff</color>
+    <color name="subColor">#A6C6FF</color>
     <color name="notiColor">#ffca5a</color>
+    <color name="mainColor">#5a95ff</color>
+    <color name="mainPressColor">#b33341c0</color>
+    <color name="subPressColor">#859ecc</color>
+    <color name="ddayPressColor">#cca248</color>
+    <color name="sub2PressColor">#fafafa</color>
+    <color name="bottomPressColor">#E8E8E8</color>
 
     <color name="circularProgressBackground">#e8e8e8</color>
-    <color name="bucketSucceedBackground">#33859ecc</color>
+    <color name="bucketSucceedBackground">#66859ecc</color>
     <color name="bucketBaseBtnBackground">#e8e8e8</color>
     <color name="bucketSuccessBtnBackground">#a6c6ff</color>
     <color name="bucketBaseText">#434343</color>
@@ -43,4 +51,37 @@
     <color name="dialogBottomBackground">#fafafa</color>
     <color name="dialogBottomCancelText">#b4b4b4</color>
     <color name="dialogBottomConfirmText">#5a95ff</color>
+
+    <color name="dialogBottomGradientFir">#4656e8</color>
+    <color name="dialogBottomGradientSec">#5076f4</color>
+    <color name="dialogBottomGradientThr">#5a95ff</color>
+
+    <color name="writeTitleText">#aaaaaa</color>
+    <color name="writeRegisterDisableText">#b4b4b4</color>
+    <color name="writeRegisterEnableText">#5A95FF</color>
+    <color name="writeEnableText">#434343</color>
+    <color name="writeDisableText">#b4b4b4</color>
+    <color name="writeUnusedText">#888888</color>
+    <color name="writeMemoText">#888888</color>
+    <color name="writeMemoBackground">#f3f3f3</color>
+    <color name="writeListPress">#f0f0f0</color>
+    <color name="writeMemoPress">#dfdfdf</color>
+    <color name="writeItemTextPress">#99434343</color>
+    <color name="disableAdd">#B4B4B4</color>
+
+    <color name="dividerColor">#dddddd</color>
+    <color name="switchUnselectColor">#d8d8d8</color>
+
+    <color name="writeDialogText">#434343</color>
+    <color name="writeImgRemoveCircleColor">#b3ffffff</color>
+
+    <color name="writeSeekbarBackground1">#4cc8cdda</color>
+    <color name="writeSeekbarBackground2">#a6c6ff</color>
+    <color name="imgRemoveBtnPressBackground">#33ffffff</color>
+
+
+    <color name="detailContextText">#797979</color>
+    <color name="detailInfoText">#a6c6ff</color>
+
+    <color name="categoryUnselectBackground">#cccccc</color>
 </resources>

@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="colorControlHighlight">@color/writeMemoPress</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme">
@@ -81,11 +83,13 @@
     </style>
 
     <style name="BucketItemTitleTextStyle">
+        <item name="android:lineHeight">22dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginEnd">70dp</item>
         <item name="android:maxLines">2</item>
+        <item name="android:lineSpacingExtra">8sp</item>
         <item name="android:textColor">@color/bucketBaseText</item>
     </style>
 
@@ -99,5 +103,84 @@
         <item name="android:textSize">14sp</item>
 
     </style>
+
+    <style name="writeTopTextStyle">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/register_text_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="writeSwitchLayoutStyle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">14dp</item>
+    </style>
+
+    <style name="writeSettingListTitleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">36dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+    <style name="writeSettingListContentStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:textColor">@color/write_enable_color</item>
+    </style>
+
+
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/red</item>
+        <item name="colorPrimary">@color/subColor</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:weekNumberColor">@color/red</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@color/mcv_text_date_dark</item>
+    </style>
+
+    <style name="CalendarWeek" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/dialogContentText</item>
+    </style>
+
+    <style name="CalendarDate" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/calendar_date_color</item>
+    </style>
+
+
+    <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
+    </style>
+
+    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:divider">@color/writeSeekbarBackground2</item>
+        <item name="android:dividerHeight">0.6dp</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
 

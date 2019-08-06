@@ -2,8 +2,7 @@ package womenproject.com.mybury.viewholder
 
 import android.content.Context
 import android.view.View
-import womenproject.com.mybury.MyBuryApplication.Companion.context
-import womenproject.com.mybury.R
+import womenproject.com.mybury.base.BaseBucketItemViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 
@@ -24,21 +23,28 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
         binding.apply {
-            ddayVisible = bucketItemInfo.ddayVisible
-            bucketClickListener = bucketListener
-            successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
-            bucketTitleText = bucketItemInfo.title
-
+            setBucketData(bucketItemInfo)
+            setUI(bucketItemInfo, bucketListener)
             setDdayColor()
-
             executePendingBindings()
         }
     }
 
-    private fun createOnClickBucketSuccessListener(): View.OnClickListener {
-        return View.OnClickListener {
-            onBucketSuccessFinalButtonClickListener()
+    override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+        super.setUI(bucketItemInfo, bucketListener)
+
+        binding.bucketTitleText = bucketItemInfo.title
+
+        binding.bucketClickListener = bucketListener
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener()
+
+        binding.lastEndImg.lastImgVisible = if(isLastItem) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
+
 
 }

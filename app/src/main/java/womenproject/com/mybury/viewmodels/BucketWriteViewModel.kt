@@ -1,83 +1,97 @@
 package womenproject.com.mybury.viewmodels
 
-import android.content.Context
 import android.util.Log
-import android.view.View
-import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
-import androidx.lifecycle.ViewModel
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import womenproject.com.mybury.R
-import womenproject.com.mybury.data.AdultCheck
+import womenproject.com.mybury.base.BaseViewModel
+import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.network.RetrofitInterface
+import java.io.File
 
+class BucketWriteViewModel : BaseViewModel() {
 
-/**
- * Created by HanAYeon on 2018. 12. 3..
- */
+    val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
 
-class BucketWriteViewModel internal constructor(private val context: Context?) : BaseViewModel() {
-
-    private val NAVER_ADULT_API = context!!.resources.getString(R.string.naver_adult_api)
-    var adultResult: AdultCheck? = null
-    var isEnd = true
-    var progressVisible = ObservableInt(View.GONE)
-    var resultText = ObservableField<String>()
-    lateinit var errorReason : String
-
-
-    fun checkGo(adultCheckText: String) {
-       checkAdultWithNaver(adultCheckText)
+    companion object {
+        private const val BUCKETLIST_API = "http://10.1.101.161/host/"
     }
 
-    private fun checkAdultWithNaver(adultCheckText: String): AdultCheck? {
 
-        progressVisible.set(View.VISIBLE)
+    interface OnBucketAddEvent {
+        fun start()
+        fun success()
+        fun fail()
+    }
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(NAVER_ADULT_API).getRetrofitService(RetrofitInterface::class.java)
 
-        val adultResultData = restClient.requestAdultResult(adultCheckText)
-        adultResultData.enqueue(object : Callback<AdultCheck> {
-            override fun onResponse(call: Call<AdultCheck>?, response: Response<AdultCheck>?) {
-                if (response != null && response.isSuccessful) {
-                    adultResult = response.body()!!
-                    Log.e("ayhan:result", "${response.body()}")
-                } else {
-                    adultResult = null
+
+
+    fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
+
+        onBucketAddEvent.start()
+
+        val bucketListAddResult = restClient.postAddBucketList(bucketItem)
+        bucketListAddResult.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+
+                if (response.isSuccessful) {
+                    if(imgList.isEmpty()) {
+                        Log.e("ayhan", "addBucketOK1")
+                        onBucketAddEvent.success()
+                    } else {
+                        Log.e("ayhan", "addBucketImgGGO")
+                        addBucketListImg(imgList, onBucketAddEvent)
+                    }
+
                 }
-                checkFinish()
             }
 
-            override fun onFailure(call: Call<AdultCheck>?, t: Throwable?) {
-                Log.e("ayhan2", t.toString())
-                errorReason = t.toString()
-                adultResult = null
-                checkFinish()
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("ayhan2_addBucketFail", t.toString())
+                onBucketAddEvent.fail()
             }
         })
 
-        return adultResult
-
     }
 
-    private fun checkFinish() {
-        isEnd = true
-        progressVisible.set(View.GONE)
-        resultText.set(resultText())
-    }
 
-    private fun resultText() : String {
-        return if(adultResult==null) {
-            "Can't Checking now : $errorReason"
-        } else {
-            if(adultResult?.adult.equals("1")) {
-                "This is Adult Result"
-            } else {
-                "This is Not Adult Result"
-            }
+    private fun addBucketListImg(imgList :MutableList<File>, callback: OnBucketAddEvent) {
+
+        Log.e("ayhan", "list : ${imgList.toString()}")
+
+        for(img in imgList) {
+
+            Log.e("ayhan", "img ::: $img")
         }
+
+        val bucketListImgAddResult = restClient.postAddBucketImage(imgList)
+        bucketListImgAddResult.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.e("ayhan", "addBucketOK2")
+                    callback.success()
+                } else {
+                    Log.e("ayhan2_fail", "${response}")
+                    callback.fail()
+                }
+            }
+
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("ayhan2_addBucketList", t.toString())
+                callback.fail()
+            }
+
+
+
+        })
     }
+
+
+
 }

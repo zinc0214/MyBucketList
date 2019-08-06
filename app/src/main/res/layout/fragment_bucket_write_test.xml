@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.viewmodels.BucketWriteViewModelTest" />
+
+        <variable
+            name="checkAdultListener"
+            type="android.view.View.OnClickListener" />
+
+
+        <variable
+            name="numberCheckListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="sliderTouchListener"
+            type="android.view.View.OnTouchListener" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/bucket_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/check_for_adult_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{checkAdultListener}"
+                android:text="Check To Title is Adult" />
+
+            <TextView
+                android:id="@+id/check_for_adult_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.resultText}" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{viewModel.progressVisible}" />
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/calendarView"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:animationCache="false"
+                app:mcv_allowClickDaysOutsideCurrentMonth="true"
+                app:mcv_calendarMode="month"
+                app:mcv_selectionColor="@color/subColor"
+                app:mcv_showOtherDates="all" />
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/calendarView2"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:animationCache="false"
+                app:mcv_allowClickDaysOutsideCurrentMonth="true"
+                app:mcv_calendarMode="month"
+                app:mcv_selectionColor="@color/subColor"
+                app:mcv_showOtherDates="all" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:gravity="center">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_horizontal_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp"
+                    android:clipToPadding="false" />
+
+                <EditText
+                    android:id="@+id/user_count"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:background="#3bff9393"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:onClick="@{numberCheckListener}"
+                    android:text="100"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+            </RelativeLayout>
+
+
+            <EditText
+                android:id="@+id/tv_selected_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:inputType="number"
+                android:textColor="@color/colorAccent"
+                android:textSize="50dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="5" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

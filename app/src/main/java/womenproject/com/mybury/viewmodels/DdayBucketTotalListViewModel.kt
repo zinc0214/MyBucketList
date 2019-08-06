@@ -1,61 +1,59 @@
 package womenproject.com.mybury.viewmodels
 
 import android.util.Log
+import android.view.View
+import androidx.databinding.ObservableInt
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import womenproject.com.mybury.base.BaseViewModel
 import womenproject.com.mybury.data.*
+import womenproject.com.mybury.network.OkHttp3RetrofitManager
+import womenproject.com.mybury.network.RetrofitInterface
 
 /**
  * Created by HanAYeon on 2019. 1. 16..
  */
 
-class DdayBucketTotalListViewModel : BaseViewModel() {
-
-    fun getDdayEachBucketList(): DdayTotalBucketList {
-
-        var ddayBucketGroupList = ArrayList<DdayEachBucketGroup>()
-
-        getDdayEachBucketItem().groupBy { it.dday }.forEach {
-            val bucketGroup = DdayEachBucketGroup(it.key, it.value)
-            ddayBucketGroupList.add(bucketGroup)
-        }
+class DdayBucketTotalListViewModel  : BaseViewModel() {
 
 
-        val ddaySortedByBucketGroupList = ddayBucketGroupList.sortedBy { it.dday }
-        val ddayBucketTotalList = DdayTotalBucketList(ddaySortedByBucketGroupList)
-
-        for (i in 0 until ddaySortedByBucketGroupList.size) {
-            Log.e("ayhan", "${ddaySortedByBucketGroupList[i]}")
-        }
+    private var bucketList : BucketList? = null
+    var progressVisible = ObservableInt(View.GONE)
 
 
-        return ddayBucketTotalList
+    interface OnDdayBucketListGetEvent {
+        fun start()
+        fun finish(bucketList: BucketList?)
     }
 
-    private fun getDdayEachBucketItem(): ArrayList<BucketItem> {
-        val bucketItem1 = BucketItem("퇴사하고 한달동안 보드게임하기.", 1,  1)
-        val bucketItem2 = BucketItem("신전떡볶이 오뎅쿠폰 10장 모으기.", 9,  5)
-        val bucketItem3 = BucketItem("올림픽 공원에서 스케이트 타기", 0,  5)
-        val bucketItem4 = BucketItem("가나라다", 1,  3)
-        val bucketItem5 = BucketItem("마바사", 0,  3)
-        val bucketItem6 = BucketItem("아자차카", 1,  3)
-        val bucketItem7 = BucketItem("고래고래", 5,  4)
-        val bucketItem8 = BucketItem("아이스크림", 2,  5)
-        val bucketItem9 = BucketItem("둥가둥가", 7,  1)
-        val bucketItem10 = BucketItem("뇸뇸뇸", 1,  7)
+    fun getDdayEachBucketList(api:String, callback: OnDdayBucketListGetEvent): BucketList? {
 
+        callback.start()
 
-        val bucketItemList = ArrayList<BucketItem>()
+        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
 
-        bucketItemList.add(bucketItem1)
-        bucketItemList.add(bucketItem2)
-        bucketItemList.add(bucketItem3)
-        bucketItemList.add(bucketItem4)
-        bucketItemList.add(bucketItem5)
-        bucketItemList.add(bucketItem6)
-        bucketItemList.add(bucketItem7)
-        bucketItemList.add(bucketItem8)
-        bucketItemList.add(bucketItem9)
-        bucketItemList.add(bucketItem10)
+        val bucketListResultData = restClient.requestDdayBucketListResult()
+        bucketListResultData.enqueue(object : Callback<BucketList> {
+            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
 
-        return bucketItemList
+                if (response != null && response.isSuccessful) {
+                    Log.e("ayhan:result", "${response.body()}")
+                    bucketList = response.body()
+                    Log.e("ayhan:bucketList", "$bucketList")
+                    callback.finish(bucketList)
+                }
+            }
+
+            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
+                Log.e("ayhan2", t.toString())
+                //progressVisible.set(View.GONE)
+                callback.finish(bucketList)
+            }
+        })
+
+        return bucketList
+
     }
+
 }
