@@ -37,9 +37,9 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/dday_layout"
                 android:onClick="@{ddayListClickListener}"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/mypage_ddaylist_background">
@@ -67,6 +67,7 @@
 
 
             <RelativeLayout
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="18dp">
 
@@ -94,7 +95,8 @@
                 android:id="@+id/mypage_category_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/mypage_category_item" />
+                tools:listitem="@layout/mypage_category_item"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
         </LinearLayout>
 
 

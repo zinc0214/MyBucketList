@@ -2,9 +2,13 @@ package womenproject.com.mybury.view
 
 
 import android.util.Log
+import android.view.DragEvent
 import android.view.View
 import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.FrameLayout
+import androidx.constraintlayout.widget.ConstraintsChangedListener
+import androidx.core.widget.NestedScrollView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
@@ -16,18 +20,20 @@ import womenproject.com.mybury.viewmodels.MyPageViewModel
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.databinding.ActivityScrollingBinding
+import womenproject.com.mybury.databinding.ScrollBinding
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import javax.security.auth.login.LoginException
+import kotlin.math.max
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
  */
 
-class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel>(), AppBarLayout.OnOffsetChangedListener {
+class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBarLayout.OnOffsetChangedListener {
 
 
     override val layoutResourceId: Int
-        get() = R.layout.activity_scrolling
+        get() = R.layout.scroll
 
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
@@ -38,15 +44,32 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
 
     override fun initStartView() {
         viewDataBinding.viewModel = viewModel
-       // viewDataBinding.mypageTopLayout.viewModel = viewModel
+        viewDataBinding.headerLayout.viewModel = viewModel
 
     }
 
     override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener()
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener()
-        viewDataBinding.mypageScrollLayout.ddayListClickListener= createOnClickDdayListListener()
+        viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener()
         viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener()
+
+        viewDataBinding.appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
+                Log.e("ayhan", "$p1")
+                if(p1 == -384) {
+                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
+                } else if(p1 == 0) {
+                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                }
+            }
+
+        })
+
+        viewDataBinding.headerLayout.constraintToolbar.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            Log.e("ayhan", "$left, $top")
+        }
+
     }
 
     override fun initAfterBinding() {
@@ -68,36 +91,36 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
         viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
 
 
-       /*
-        viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
-            override fun start() {
+        /*
+         viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+             override fun start() {
 
-            }
+             }
 
-            override fun success(bucketCategory: BucketCategory) {
-                for(i in 0 until bucketCategory.categoryList.size) {
-                    categoryList.add(bucketCategory.categoryList[i].name)
-                }
+             override fun success(bucketCategory: BucketCategory) {
+                 for(i in 0 until bucketCategory.categoryList.size) {
+                     categoryList.add(bucketCategory.categoryList[i].name)
+                 }
 
-               // viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@ScrollingFragment)
-               // startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
+                // viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@ScrollingFragment)
+                // startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
 
 
-                val layoutManager = LinearLayoutManager(context)
+                 val layoutManager = LinearLayoutManager(context)
 
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
+                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
 
-                viewDataBinding.executePendingBindings()
-            }
+                 viewDataBinding.executePendingBindings()
+             }
 
-            override fun fail() {
+             override fun fail() {
 
-            }
+             }
 
-        })
-*/
+         })
+ */
     }
 
 
@@ -109,13 +132,13 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
         }
     }
 
-    private fun createOnClickHomeListener() : View.OnClickListener {
+    private fun createOnClickHomeListener(): View.OnClickListener {
         return View.OnClickListener {
             activity!!.onBackPressed()
         }
     }
 
-    private fun createOnClickDdayListListener() : View.OnClickListener {
+    private fun createOnClickDdayListListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MyPageFragmentDirections.actionMyPageToDday()
 
@@ -123,7 +146,7 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
         }
     }
 
-    private fun createOnClickCategoryEditListener() : View.OnClickListener {
+    private fun createOnClickCategoryEditListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
 
@@ -135,11 +158,13 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
         val maxScroll = appBarLayout.totalScrollRange
         val percentage = Math.abs(offset).toFloat() / maxScroll.toFloat()
 
-        handleAlphaOnTitle(percentage)
-        handleToolbarTitleVisibility(percentage)
+        //  handleAlphaOnTitle(percentage)
+        //  handleToolbarTitleVisibility(percentage)
+
+        Log.e("ayhan", "${maxScroll} ,, $percentage")
     }
 
-    private fun handleToolbarTitleVisibility(percentage: Float) {
+/*    private fun handleToolbarTitleVisibility(percentage: Float) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if (!mIsTheTitleVisible) {
@@ -155,41 +180,41 @@ class ScrollingFragment : BaseFragment<ActivityScrollingBinding, MyPageViewModel
                 mIsTheTitleVisible = false
             }
         }
-    }
+    }*/
 
-    private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
-                startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
+    /* private fun handleAlphaOnTitle(percentage: Float) {
+         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+             if (mIsTheTitleContainerVisible) {
+                 startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
+                 startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
 
-                val layout = viewDataBinding.scrollLayout.content_scroll_layout
-                val params = layout.layoutParams as FrameLayout.LayoutParams
-                params.topMargin = 128
-                layout.setLayoutParams(params)
+                 val layout = viewDataBinding.scrollLayout.content_scroll_layout
+                 val params = layout.layoutParams as FrameLayout.LayoutParams
+                 params.topMargin = 128
+                 layout.setLayoutParams(params)
 
-                mIsTheTitleContainerVisible = false
+                 mIsTheTitleContainerVisible = false
 
-                Log.e("ayhan", "handleAlphaOnTitle1")
-            }
+                 Log.e("ayhan", "handleAlphaOnTitle1")
+             }
 
-        } else {
+         } else {
 
-            if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
-                startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
+             if (!mIsTheTitleContainerVisible) {
+                 startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
+                 startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
 
-                val layout = viewDataBinding.scrollLayout.content_scroll_layout
-                val params = layout.layoutParams as FrameLayout.LayoutParams
-                params.topMargin = 0
-                layout.setLayoutParams(params)
+                 val layout = viewDataBinding.scrollLayout.content_scroll_layout
+                 val params = layout.layoutParams as FrameLayout.LayoutParams
+                 params.topMargin = 0
+                 layout.setLayoutParams(params)
 
-                mIsTheTitleContainerVisible = true
+                 mIsTheTitleContainerVisible = true
 
-                Log.e("ayhan", "handleAlphaOnTitle2")
-            }
-        }
-    }
+                 Log.e("ayhan", "handleAlphaOnTitle2")
+             }
+         }
+     }*/
 
     companion object {
 

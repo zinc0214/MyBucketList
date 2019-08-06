@@ -1,6 +1,7 @@
 package womenproject.com.mybury.view
 
 
+import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
@@ -20,7 +21,7 @@ import womenproject.com.mybury.viewmodels.BucketWriteViewModel
  * Created by HanAYeon on 2019. 4. 23..
  */
 
-class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), AppBarLayout.OnOffsetChangedListener {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
 
     override val layoutResourceId: Int
@@ -30,20 +31,35 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
         get() = MyPageViewModel()
 
 
-    private var mIsTheTitleVisible = false
-    private var mIsTheTitleContainerVisible = true
 
     override fun initStartView() {
         viewDataBinding.viewModel = viewModel
-        viewDataBinding.mypageTopLayout.viewModel = viewModel
+        viewDataBinding.headerLayout.viewModel = viewModel
 
     }
 
     override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener()
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener()
-        viewDataBinding.mypageScrollLayout.ddayListClickListener= createOnClickDdayListListener()
+        viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener()
         viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener()
+
+        viewDataBinding.appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
+                Log.e("ayhan", "$p1")
+                if(p1 == -384) {
+                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
+                } else if(p1 == 0) {
+                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                }
+            }
+
+        })
+
+        viewDataBinding.headerLayout.constraintToolbar.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            Log.e("ayhan", "$left, $top")
+        }
+
     }
 
     override fun initAfterBinding() {
@@ -51,8 +67,21 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
 
         val categoryList = mutableListOf<String>()
         categoryList.add("없음")
+        categoryList.add("여행")
+        categoryList.add("서울 맛집")
+        categoryList.add("다이어트")
+        categoryList.add("스터디")
+        categoryList.add("도라에몽 주머니")
 
-        viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+
+        val layoutManager = LinearLayoutManager(context)
+
+        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
+
+
+        /*viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
             override fun start() {
 
             }
@@ -78,7 +107,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
 
             }
 
-        })
+        })*/
 
     }
 
@@ -110,80 +139,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>(), A
             val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
 
             it.findNavController().navigate(directions)
-        }
-    }
-
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, offset: Int) {
-        val maxScroll = appBarLayout.totalScrollRange
-        val percentage = Math.abs(offset).toFloat() / maxScroll.toFloat()
-
-        handleAlphaOnTitle(percentage)
-        handleToolbarTitleVisibility(percentage)
-    }
-
-    private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-
-            if (!mIsTheTitleVisible) {
-                startAlphaAnimation(viewDataBinding.mainTextviewTitle, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
-                mIsTheTitleVisible = true
-            }
-
-        } else {
-
-            if (mIsTheTitleVisible) {
-                startAlphaAnimation(viewDataBinding.mainTextviewTitle, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
-                mIsTheTitleVisible = false
-            }
-        }
-    }
-
-    private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if (mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
-                startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.INVISIBLE)
-
-
-                val layout = viewDataBinding.scrollLayout.content_scroll_layout
-                val params = layout.layoutParams as FrameLayout.LayoutParams
-                params.topMargin = 198
-                layout.setLayoutParams(params)
-
-                mIsTheTitleContainerVisible = false
-            }
-
-        } else {
-
-            if (!mIsTheTitleContainerVisible) {
-                startAlphaAnimation(viewDataBinding.mainLinearlayoutTitle.rootView, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
-                startAlphaAnimation(viewDataBinding.blueLayout, ALPHA_ANIMATIONS_DURATION.toLong(), View.VISIBLE)
-
-                val layout = viewDataBinding.scrollLayout.content_scroll_layout
-                val params = layout.layoutParams as FrameLayout.LayoutParams
-                params.topMargin = 0
-                layout.setLayoutParams(params)
-
-                mIsTheTitleContainerVisible = true
-            }
-        }
-    }
-
-    companion object {
-
-        private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.3f
-        private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.5f
-        private val ALPHA_ANIMATIONS_DURATION = 100
-
-        fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {
-            val alphaAnimation = if (visibility == View.VISIBLE)
-                AlphaAnimation(0f, 1f)
-            else
-                AlphaAnimation(1f, 0f)
-
-            alphaAnimation.duration = duration
-            alphaAnimation.fillAfter = true
-            v.startAnimation(alphaAnimation)
         }
     }
 }

@@ -12,6 +12,7 @@ import womenproject.com.mybury.adapter.EditCategoryListAdapter
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.ui.CategoryItemTouchHelperCallback
 import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.viewmodels.BucketWriteViewModel
 import womenproject.com.mybury.viewmodels.MyPageViewModel
 
@@ -20,6 +21,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     private lateinit var editCategoryListAdapter: EditCategoryListAdapter
     private lateinit var itemTouchHelper: ItemTouchHelper
+
+    private val bucketInfoViewModel = BucketInfoViewModel()
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_category_edit
@@ -41,7 +44,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         val categoryList = mutableListOf<String>()
         categoryList.add("없음")
 
-        viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener {
             override fun start() {
 
             }
