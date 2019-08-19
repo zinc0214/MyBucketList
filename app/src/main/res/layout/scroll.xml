@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
+            type="womenproject.com.mybury.presentation.viewmodels.MyPageViewModel" />
     </data>
 
 

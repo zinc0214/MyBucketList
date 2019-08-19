@@ -1,9 +1,6 @@
 package womenproject.com.mybury.ui
 
-import android.app.Activity
-import android.app.Application
 import android.content.Context
-import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -14,12 +11,8 @@ import android.widget.AbsListView
 import android.widget.ScrollView
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
-import womenproject.com.mybury.MyBuryApplication
-import womenproject.com.mybury.view.MainActivity
+import womenproject.com.mybury.presentation.MainActivity
 
 /**
  * Created by HanAYeon on 2019-05-14.

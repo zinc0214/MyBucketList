@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.MyPageViewModel" />
+            type="womenproject.com.mybury.presentation.viewmodels.MyPageViewModel" />
 
         <variable
             name="ddayListClickListener"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".view.ScrollingFragment"
+        tools:context=".ui.ScrollingFragment"
         tools:showIn="@layout/activity_scrolling">
 
         <LinearLayout

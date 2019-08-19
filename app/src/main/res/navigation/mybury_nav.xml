@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="womenproject.com.mybury.view.MainFragment"
+        android:name="womenproject.com.mybury.presentation.main.MainFragment"
         android:label="mainFragment"
         tools:layout="@layout/fragment_main">
 
@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/bucket_detail_fragment"
-        android:name="womenproject.com.mybury.view.BucketDetailFragment"
+        android:name="womenproject.com.mybury.presentation.detail.BucketDetailFragment"
         android:label="Detail"
         tools:layout="@layout/fragment_bucket_detail">
         <argument
@@ -50,14 +50,14 @@
 
     <fragment
         android:id="@+id/bucket_write_fragment"
-        android:name="womenproject.com.mybury.view.BucketWriteFragment"
+        android:name="womenproject.com.mybury.presentation.write.BucketWriteFragment"
         android:label="Write"
         tools:layout="@layout/fragment_bucket_write_test">
     </fragment>
 
     <fragment
         android:id="@+id/my_page_fragment"
-        android:name="womenproject.com.mybury.view.MyPageFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.MyPageFragment"
         android:label="MyPage"
         tools:layout="@layout/fragment_my_page">
 
@@ -97,7 +97,7 @@
 
     <fragment
         android:id="@+id/scroll_fragment"
-        android:name="womenproject.com.mybury.view.ScrollingFragment"
+        android:name="womenproject.com.mybury.ui.ScrollingFragment"
         android:label="Scroll"
         tools:layout="@layout/activity_scrolling">
 
@@ -107,7 +107,7 @@
 
     <fragment
         android:id="@+id/category_edit_fragment"
-        android:name="womenproject.com.mybury.view.CategoryEditFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.categoryedit.CategoryEditFragment"
         android:label="CategoryEdit"
         tools:layout="@layout/fragment_category_edit">
 
@@ -116,7 +116,7 @@
 
     <fragment
         android:id="@+id/dday_bucket_list_fragment"
-        android:name="womenproject.com.mybury.view.DdayBucketListFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragment"
         android:label="DdayBucket"
         tools:layout="@layout/fragment_dday_list">
 

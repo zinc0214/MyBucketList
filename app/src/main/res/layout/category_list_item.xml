@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.CategoryListItemViewModel" />
+            type="womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel" />
 
 
     </data>
