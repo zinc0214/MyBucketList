@@ -1,13 +1,16 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.annotation.SuppressLint
 import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.data.network.bucketListApi
 
 class WriteCategoryDialogViewModel : BaseViewModel() {
 
@@ -18,6 +21,17 @@ class WriteCategoryDialogViewModel : BaseViewModel() {
         fun start()
         fun finish(bucketList: BucketList?)
     }
+
+
+    @SuppressLint("CheckResult")
+    fun getCategoryList(callback: OnBucketListGetEvent) {
+
+        bucketListApi.requestMainBucketListResult()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
+    }
+/*
 
     fun getMainBucketList(api : String, callback: OnBucketListGetEvent): BucketList? {
 
@@ -46,5 +60,5 @@ class WriteCategoryDialogViewModel : BaseViewModel() {
 
         return bucketList
 
-    }
+    }*/
 }

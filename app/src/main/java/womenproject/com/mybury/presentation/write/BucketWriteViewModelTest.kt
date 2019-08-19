@@ -9,7 +9,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.AdultCheck
-import womenproject.com.mybury.data.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.data.network.RetrofitInterface
 
 
@@ -35,7 +34,7 @@ class BucketWriteViewModelTest : BaseViewModel() {
 
         progressVisible.set(View.VISIBLE)
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(NAVER_ADULT_API).getRetrofitService(RetrofitInterface::class.java)
+       /* val restClient: RetrofitInterface = OkHttp3RetrofitManager(NAVER_ADULT_API).getRetrofitService(RetrofitInterface::class.java)
 
         val adultResultData = restClient.requestAdultResult(adultCheckText)
         adultResultData.enqueue(object : Callback<AdultCheck> {
@@ -56,7 +55,7 @@ class BucketWriteViewModelTest : BaseViewModel() {
                 checkFinish()
             }
         })
-
+*/
         return adultResult
 
     }

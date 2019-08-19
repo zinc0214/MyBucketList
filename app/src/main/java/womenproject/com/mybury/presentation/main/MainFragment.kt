@@ -4,6 +4,7 @@ import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
@@ -63,8 +64,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
-        })*/
-
+        })
+*/
 
         viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
         viewDataBinding.progressBar.visibility = View.GONE

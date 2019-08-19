@@ -1,13 +1,16 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.annotation.SuppressLint
 import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.network.OkHttp3RetrofitManager
 import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019-06-25.
@@ -25,7 +28,20 @@ class BucketInfoViewModel : BaseViewModel() {
     private var bucketList: BucketList? = null
 
 
-    fun getMainBucketList(api: String, callback: OnBucketListGetEvent): BucketList? {
+    @SuppressLint("CheckResult")
+    fun getMainBucketList(api: String, callback: OnBucketListGetEvent) {
+
+        callback.start()
+
+        bucketListApi.requestMainBucketListResult()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
+    }
+
+/*
+
+    fun getMainBucketList2(api: String, callback: OnBucketListGetEvent): BucketList? {
 
         callback.start()
 
@@ -53,6 +69,7 @@ class BucketInfoViewModel : BaseViewModel() {
         return bucketList
 
     }
+*/
 
 
 }

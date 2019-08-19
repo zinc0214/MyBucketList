@@ -1,12 +1,10 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.util.Log
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import android.annotation.SuppressLint
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.network.OkHttp3RetrofitManager
-import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019-08-19.
@@ -21,13 +19,17 @@ class CategoryInfoViewModel {
         fun fail()
     }
 
+    @SuppressLint("CheckResult")
+    fun getCategoryList(callback: GetBucketListCallBackListener) {
 
-    companion object {
-        private const val BUCKETLIST_API = "http://10.1.101.161/host/"
+        bucketListApi.requestCategoryList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { callback.fail() }
+                .subscribe { bucketCategory -> callback.success(bucketCategory)}
     }
 
-
-    fun getCategoryList(callback: GetBucketListCallBackListener) {
+/*    fun getCategoryList2(callback: GetBucketListCallBackListener) {
 
         callback.start()
 
@@ -51,5 +53,5 @@ class CategoryInfoViewModel {
 
 
 
-    }
+    }*/
 }

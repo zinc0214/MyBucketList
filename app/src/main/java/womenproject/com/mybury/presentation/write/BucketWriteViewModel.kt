@@ -1,24 +1,14 @@
 package womenproject.com.mybury.presentation.write
 
-import android.util.Log
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import womenproject.com.mybury.presentation.base.BaseViewModel
+import android.annotation.SuppressLint
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.network.OkHttp3RetrofitManager
-import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import java.io.File
 
 class BucketWriteViewModel : BaseViewModel() {
-
-    val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
-
-    companion object {
-        private const val BUCKETLIST_API = "http://10.1.101.161/host/"
-    }
-
 
     interface OnBucketAddEvent {
         fun start()
@@ -27,8 +17,21 @@ class BucketWriteViewModel : BaseViewModel() {
     }
 
 
+    @SuppressLint("CheckResult")
+    fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
+
+        onBucketAddEvent.start()
+
+        bucketListApi.postAddBucketList(bucketItem)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bucketCategory ->
+                    onBucketAddEvent.success()
+                }
+    }
 
 
+/*
     fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
 
         onBucketAddEvent.start()
@@ -89,6 +92,7 @@ class BucketWriteViewModel : BaseViewModel() {
 
         })
     }
+*/
 
 
 

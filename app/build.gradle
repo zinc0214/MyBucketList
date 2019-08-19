@@ -51,16 +51,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_logging_version"
-
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_converter_version"
-
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-
     implementation 'com.android.support:design:28.0.0'
 
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
@@ -74,7 +64,23 @@ dependencies {
 
     implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta1'
 
+
+    //glid
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.6.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.5.0"
+
+    //rxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    //rxKotlin
+    implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
+
+    //rxJava + Retrofit2
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
 
 }
 repositories {
