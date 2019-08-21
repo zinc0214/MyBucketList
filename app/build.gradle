@@ -13,8 +13,8 @@ android {
         applicationId "womenproject.com.mybury"
         minSdkVersion 25
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

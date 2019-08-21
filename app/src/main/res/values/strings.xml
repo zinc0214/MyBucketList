@@ -27,6 +27,9 @@
 
     <string name="dd"> myString.replace(" ", "\u00A0"); </string>
 
+    <string name="app_current_version">현재 버전 v%s / </string>
+    <string name="app_lately_version">최신버전 v%s</string>
+
     <string name="bucket_open">공개 설정</string>
     <string name="bucket_close">비공개 설정</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>

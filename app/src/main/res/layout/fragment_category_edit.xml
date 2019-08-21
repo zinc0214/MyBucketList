@@ -32,35 +32,11 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolBarLayout"
-            android:background="@drawable/toolbar_background"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="64dp">
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/back_btn_img"
-                    android:onClick="@{backBtnOnClickListener}" />
-
-                <TextView
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="카테고리 편집"
-                    android:textColor="@color/subColor"
-                    android:textSize="18sp" />
-
-
-            </RelativeLayout>
-
+            <include
+                layout="@layout/top_back_btn_layout"
+                android:id="@+id/back_layout"/>
 
         </RelativeLayout>
 

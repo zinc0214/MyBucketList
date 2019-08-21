@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.mypage
+package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
 import android.view.LayoutInflater

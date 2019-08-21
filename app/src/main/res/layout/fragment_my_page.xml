@@ -42,6 +42,12 @@
             android:id="@+id/mypage_bottom_sheet"
             layout="@layout/mypage_bottom_sheet" />
 
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/mypage_more_menu"
+            layout="@layout/my_page_more_menu" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -1,30 +1,31 @@
 package womenproject.com.mybury.presentation.mypage
 
 
-import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.databinding.FragmentMyPageBinding
-import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
+import womenproject.com.mybury.databinding.FragmentMyPageBinding
+import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
+import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
  */
 
-class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
+
+    private var isOpen = false
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_my_page
 
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
-
 
 
     override fun initStartView() {
@@ -34,26 +35,23 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     }
 
     override fun initDataBinding() {
-        viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener()
-        viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener()
-        viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener()
-        viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener()
+        viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener
+        viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener
+        viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
+        viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
+        viewDataBinding.headerLayout.moreClickListener = moreButtonOnClickListener
+        viewDataBinding.mypageMoreMenu.appInfoClickListener = appInfoOnClickListener
 
-        viewDataBinding.appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
-                Log.e("ayhan", "$p1")
-                if(p1 == -384) {
-                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
-                } else if(p1 == 0) {
-                    viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-                }
+
+        viewDataBinding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
+            if (p1 == -384) {
+                viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
+            } else if (p1 == 0) {
+                viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
             }
-
         })
 
-        viewDataBinding.headerLayout.constraintToolbar.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            Log.e("ayhan", "$left, $top")
-        }
+
 
     }
 
@@ -107,33 +105,58 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     }
 
 
-    private fun createOnClickWriteListener(): View.OnClickListener {
-        return View.OnClickListener {
-            val directions = MyPageFragmentDirections.actionMyPageToWrite()
+    private fun popupClickListener()  {
+        if (isOpen) {
+            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.GONE
+            isOpen = false
+        }
+    }
+    private val createOnClickWriteListener = View.OnClickListener {
+        popupClickListener()
+        val directions = MyPageFragmentDirections.actionMyPageToWrite()
+        it.findNavController().navigate(directions)
 
-            it.findNavController().navigate(directions)
+    }
+
+    private val createOnClickHomeListener = View.OnClickListener {
+        popupClickListener()
+        activity!!.onBackPressed()
+    }
+
+    private val createOnClickDdayListListener = View.OnClickListener {
+        popupClickListener()
+        val directions = MyPageFragmentDirections.actionMyPageToDday()
+        it.findNavController().navigate(directions)
+
+    }
+
+    private val createOnClickCategoryEditListener = View.OnClickListener {
+        popupClickListener()
+        val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
+        it.findNavController().navigate(directions)
+    }
+
+
+    private val profileEidtOnClickListener = View.OnClickListener {
+
+    }
+
+    private val appInfoOnClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToAppInfo()
+        it.findNavController().navigate(directions)
+        popupClickListener()
+    }
+
+
+    private val moreButtonOnClickListener = View.OnClickListener {
+
+        isOpen = if (isOpen) {
+            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.GONE
+            false
+        } else {
+            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.VISIBLE
+            true
         }
     }
 
-    private fun createOnClickHomeListener() : View.OnClickListener {
-        return View.OnClickListener {
-            activity!!.onBackPressed()
-        }
-    }
-
-    private fun createOnClickDdayListListener() : View.OnClickListener {
-        return View.OnClickListener {
-            val directions = MyPageFragmentDirections.actionMyPageToDday()
-
-            it.findNavController().navigate(directions)
-        }
-    }
-
-    private fun createOnClickCategoryEditListener() : View.OnClickListener {
-        return View.OnClickListener {
-            val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
-
-            it.findNavController().navigate(directions)
-        }
-    }
 }

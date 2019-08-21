@@ -7,7 +7,7 @@ import android.view.animation.AlphaAnimation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
-import womenproject.com.mybury.presentation.mypage.MyPageCategoryListAdapter
+import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.R

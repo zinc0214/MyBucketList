@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.mypage
+package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.databinding.MypageCategoryItemBinding

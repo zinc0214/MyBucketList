@@ -9,14 +9,19 @@
         <variable
             name="viewModel"
             type="womenproject.com.mybury.presentation.viewmodels.MyPageViewModel" />
+
+
+        <variable
+            name="moreClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <womenproject.com.mybury.ui.CollapsibleToolbar
 
-        android:background="@color/mainBackground"
         android:id="@+id/constraintToolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/mainBackground"
         android:fitsSystemWindows="true"
         android:minHeight="128dp"
         app:layoutDescription="@xml/my_page_header"
@@ -42,17 +47,17 @@
             app:altSrc="@drawable/bucket_item_base_background" />
 
 
-
         <ImageButton
             android:id="@+id/more_btn"
-            app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
-            app:layout_constraintTop_toTopOf="@+id/whiteBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/my_page_more" />
+            android:background="@drawable/my_page_more"
+            android:onClick="@{moreClickListener}"
+            app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
+            app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/icon"
@@ -74,13 +79,13 @@
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/profile_img"
-            android:src="@drawable/mypage_profile_img_backgound"
-            app:altSrc="@drawable/mypage_profile_img_background_small"
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
+            android:src="@drawable/mypage_profile_img_backgound"
+            app:altSrc="@drawable/mypage_profile_img_background_small"
             app:layout_constraintEnd_toEndOf="@+id/icon"
             app:layout_constraintStart_toStartOf="@+id/icon"
-            app:layout_constraintTop_toTopOf="@+id/icon"/>
+            app:layout_constraintTop_toTopOf="@+id/icon" />
 
         <TextView
             android:id="@+id/name"
