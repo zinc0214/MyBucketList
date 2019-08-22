@@ -1,10 +1,13 @@
 package womenproject.com.mybury.presentation.mypage
 
 
+import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.my_page_header.*
+import kotlinx.android.synthetic.main.my_page_more_menu.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -18,15 +21,11 @@ import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
-
-    private var isOpen = false
-
     override val layoutResourceId: Int
         get() = R.layout.fragment_my_page
 
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
-
 
     override fun initStartView() {
         viewDataBinding.viewModel = viewModel
@@ -34,13 +33,15 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
     }
 
+
     override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener
         viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
         viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
         viewDataBinding.headerLayout.moreClickListener = moreButtonOnClickListener
-        viewDataBinding.mypageMoreMenu.appInfoClickListener = appInfoOnClickListener
+        viewDataBinding.mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
+
 
 
         viewDataBinding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
@@ -50,8 +51,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
                 viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
             }
         })
-
-
 
     }
 
@@ -106,9 +105,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
 
     private fun popupClickListener()  {
-        if (isOpen) {
-            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.GONE
-            isOpen = false
+        if (viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.VISIBLE) {
+            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
         }
     }
     private val createOnClickWriteListener = View.OnClickListener {
@@ -150,12 +148,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
     private val moreButtonOnClickListener = View.OnClickListener {
 
-        isOpen = if (isOpen) {
-            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.GONE
-            false
+        if(viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {
+            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.VISIBLE
         } else {
-            viewDataBinding.mypageMoreMenu.moreMenuLayout.visibility = View.VISIBLE
-            true
+            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
         }
     }
 

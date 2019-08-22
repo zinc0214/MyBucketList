@@ -3,8 +3,12 @@ package womenproject.com.mybury.presentation.base
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.presentation.main.MainFragmentDirections
+import womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragmentDirections
 
 /**
  * Created by HanAYeon on 2019. 1. 22..

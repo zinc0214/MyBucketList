@@ -12,43 +12,52 @@
     </data>
 
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/motionLayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/mainBackground"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:background="@color/mainBackground"
-            android:id="@+id/app_bar"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/motionLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="match_parent"
+            android:background="@color/mainBackground"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:background="@color/mainBackground"
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+                <include
+                    android:id="@+id/header_layout"
+                    layout="@layout/my_page_header"/>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
 
             <include
-                android:id="@+id/header_layout"
-                layout="@layout/my_page_header"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
+                android:id="@+id/mypage_scroll_layout"
+                layout="@layout/mypage_scroll_layout" />
 
 
-        <include
-            android:id="@+id/mypage_scroll_layout"
-            layout="@layout/mypage_scroll_layout" />
+            <include
+                android:id="@+id/mypage_bottom_sheet"
+                layout="@layout/mypage_bottom_sheet" />
 
 
-        <include
-            android:id="@+id/mypage_bottom_sheet"
-            layout="@layout/mypage_bottom_sheet" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
         <include
-            android:visibility="gone"
-            android:id="@+id/mypage_more_menu"
-            layout="@layout/my_page_more_menu" />
+            android:id="@+id/mypage_more_menu_large"
+            layout="@layout/my_page_more_menu"
+            android:visibility="gone" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
+
 
 </layout>
 

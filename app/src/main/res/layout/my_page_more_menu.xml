@@ -27,53 +27,63 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <ImageView
+            android:layout_width="224dp"
+            android:layout_height="186dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/mypage_more_back" />
+
         <LinearLayout
+            android:layout_width="168dp"
+            android:layout_height="128dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="84dp"
             android:layout_marginEnd="40dp"
-            android:layout_width="168dp"
-            android:layout_height="128dp"
             android:background="@drawable/bucket_item_base_background"
             android:orientation="vertical">
 
 
             <TextView
-                android:onClick="@{profileEditClickListener}"
                 android:id="@+id/profile_edit"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginLeft="18dp"
                 android:gravity="center_vertical"
+                android:onClick="@{profileEditClickListener}"
                 android:text="프로필 수정"
                 android:textColor="@color/bucketBaseText"
                 android:textSize="14sp" />
 
 
             <TextView
-                android:onClick="@{appInfoClickListener}"
                 android:id="@+id/app_info"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginLeft="18dp"
                 android:gravity="center_vertical"
+                android:onClick="@{appInfoClickListener}"
                 android:text="앱 정보"
                 android:textColor="@color/bucketBaseText"
                 android:textSize="14sp" />
 
 
             <TextView
-                android:onClick="@{logoutClickListener}"
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginLeft="18dp"
                 android:gravity="center_vertical"
+                android:onClick="@{logoutClickListener}"
                 android:text="로그아웃"
                 android:textColor="@color/bucketBaseText"
                 android:textSize="14sp" />
 
 
         </LinearLayout>
+
 
     </RelativeLayout>
 

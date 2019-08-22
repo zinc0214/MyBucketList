@@ -165,6 +165,17 @@
         </RelativeLayout>
 
 
+<!--
+        <include
+            android:layout_marginTop="100dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/mypage_more_menu_small"
+            layout="@layout/my_page_more_menu"
+            android:visibility="visible" />
+-->
+
+
     </womenproject.com.mybury.ui.CollapsibleToolbar>
 
 </layout>
