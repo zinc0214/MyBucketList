@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
@@ -26,7 +27,11 @@ class CategoryInfoViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { callback.fail() }
-                .subscribe { bucketCategory -> callback.success(bucketCategory)}
+                .subscribe({
+                    bucketCategory -> callback.success(bucketCategory)
+                }) {
+                    Log.e("ayhan", it.toString())
+                }
     }
 
 /*    fun getCategoryList2(callback: GetBucketListCallBackListener) {

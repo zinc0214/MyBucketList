@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.write
 
 import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
@@ -25,8 +26,10 @@ class BucketWriteViewModel : BaseViewModel() {
         bucketListApi.postAddBucketList(bucketItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketCategory ->
-                    onBucketAddEvent.success()
+                .subscribe({
+                    response -> Log.e("ayhan", response.string())
+                }) {
+                    Log.e("ayhan", it.toString())
                 }
     }
 

@@ -34,7 +34,7 @@ interface RetrofitInterface {
     fun postAddBucketList(@Body params: AddBucketItem): Observable<ResponseBody>
 
     @Multipart
-    @POST("/host/imageUpload")
+    @PUT("/host/imageUpload")
     fun postAddBucketImage(@Part("img") imgList : MutableList<File>): Observable<ResponseBody>
 
 }
