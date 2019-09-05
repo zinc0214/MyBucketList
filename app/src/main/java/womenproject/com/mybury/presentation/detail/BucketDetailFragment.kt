@@ -4,6 +4,7 @@ import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
+import womenproject.com.mybury.presentation.MainActivity
 
 
 /**
@@ -18,6 +19,11 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         get() = BucketDetailViewModel()
 
     override fun initStartView() {
+
+        arguments?.let {
+            val args = BucketDetailFragmentArgs.fromBundle(it)
+            val bucket = args.bucket
+        }
 
         viewDataBinding.viewModel = viewModel
 
@@ -36,8 +42,6 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewPager.adapter = viewPagerAdapter
 
         viewDataBinding.tabLayout.setupWithViewPager(viewPager)
-
-
 
     }
 

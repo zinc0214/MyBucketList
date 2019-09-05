@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.util
+package womenproject.com.mybury.presentation.base
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -9,7 +9,6 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseBucketItemViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 

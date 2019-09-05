@@ -22,21 +22,25 @@ class BucketInfoViewModel : BaseViewModel() {
     interface OnBucketListGetEvent {
         fun start()
         fun finish(bucketList: BucketList?)
+        fun fail()
     }
 
 
-    private var bucketList: BucketList? = null
-
-
     @SuppressLint("CheckResult")
-    fun getMainBucketList(api: String, callback: OnBucketListGetEvent) {
+    fun getMainBucketList(callback: OnBucketListGetEvent) {
 
         callback.start()
 
         bucketListApi.requestMainBucketListResult()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
+                .subscribe({
+                    bucketList -> callback.finish(bucketList)
+                }) {
+                    Log.e("ayhan", it.toString())
+                    callback.fail()
+                }
+
     }
 
 /*

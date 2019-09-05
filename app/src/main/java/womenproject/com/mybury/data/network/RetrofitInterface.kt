@@ -1,6 +1,7 @@
 package womenproject.com.mybury.data.network
 
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -34,8 +35,8 @@ interface RetrofitInterface {
     fun postAddBucketList(@Body params: AddBucketItem): Observable<ResponseBody>
 
     @Multipart
-    @PUT("/host/imageUpload")
-    fun postAddBucketImage(@Part("img") imgList : MutableList<File>): Observable<ResponseBody>
+    @POST("/host/imageUpload")
+    fun postAddBucketImage(@Part file : MultipartBody.Part): Observable<ResponseBody>
 
 }
 

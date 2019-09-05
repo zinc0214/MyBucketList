@@ -1,6 +1,10 @@
 package womenproject.com.mybury.util
 
 import android.content.res.Resources
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 
 /**
@@ -16,7 +20,6 @@ class Converter {
             return (dp * Resources.getSystem().getDisplayMetrics().density).toInt()
         }
 
-
         fun stringFormat(origin : String, text1 :String): String {
             return String.format(origin, text1)
         }
@@ -25,6 +28,12 @@ class Converter {
             return String.format(origin, text1, text2)
         }
 
-
     }
+}
+
+
+fun File.fileToMultipartFile() : MultipartBody.Part {
+    val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),this)
+    val body = MultipartBody.Part.createFormData("fileName", this.name, requestFile)
+    return body
 }

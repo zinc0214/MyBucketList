@@ -1,5 +1,7 @@
 package womenproject.com.mybury.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**
@@ -22,6 +24,7 @@ data class DdayEachBucketGroup(
         var isLast : Boolean = false
 )
 
+@Parcelize
 data class BucketItem(
         val id : String = "id",
         var title : String = "Title",
@@ -33,7 +36,7 @@ data class BucketItem(
         val goalCount : Int = 1,
         val dDay : Int = 0,
         var isLast : Boolean = false
-)
+) : Parcelable
 
 data class AddBucketItem(
         var title : String = "Title",
@@ -43,7 +46,6 @@ data class AddBucketItem(
         var memo : String = "Memo",
         val categoryName: String,
         val userId : String
-
 )
 
 data class BucketCategory (
@@ -52,6 +54,7 @@ data class BucketCategory (
 
 )
 
+@Parcelize
 data class CategoryList(
         val name: String
-)
+) : Parcelable

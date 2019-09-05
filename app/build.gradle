@@ -27,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -80,7 +83,9 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
     //rxJava + Retrofit2
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0'
 
 }
 repositories {

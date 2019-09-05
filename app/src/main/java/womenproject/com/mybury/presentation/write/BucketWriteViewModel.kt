@@ -7,6 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.network.bucketListApi
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.util.fileToMultipartFile
 import java.io.File
 
 class BucketWriteViewModel : BaseViewModel() {
@@ -19,23 +20,48 @@ class BucketWriteViewModel : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
+    fun uploadBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
 
         onBucketAddEvent.start()
+
+      //  uplaodBucketImage(imgList)
 
         bucketListApi.postAddBucketList(bucketItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    response -> Log.e("ayhan", response.string())
+                .doOnNext {
+                    uplaodBucketImage(imgList)
+                }
+                .subscribe({ response ->
+                    Log.e("ayhan", response.string())
+                    onBucketAddEvent.success()
                 }) {
                     Log.e("ayhan", it.toString())
+                    onBucketAddEvent.fail()
                 }
     }
 
 
+    @SuppressLint("CheckResult")
+    fun uplaodBucketImage(imageList: MutableList<File>) {
+
+        for (i in imageList) {
+            bucketListApi.postAddBucketImage(i.fileToMultipartFile())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ response ->
+                        Log.e("ayhan_res", response.string())
+                    }) {
+                        Log.e("ayhan_throw", it.toString())
+                    }
+
+        }
+
+    }
+
+
 /*
-    fun addBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
+    fun uploadBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
 
         onBucketAddEvent.start()
 
@@ -96,7 +122,6 @@ class BucketWriteViewModel : BaseViewModel() {
         })
     }
 */
-
 
 
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
 import womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragmentDirections
@@ -28,11 +29,11 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val holder = currentViewHolder
         holder.apply {
-            bind(createOnClickBucketListener(position), bucketItemList.bucketlists[position], context)
+            bind(createOnClickBucketListener(bucketItemList.bucketlists[position]), bucketItemList.bucketlists[position], context)
         }
     }
 
-    open fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
+    open fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
         return View.OnClickListener {
 
         }

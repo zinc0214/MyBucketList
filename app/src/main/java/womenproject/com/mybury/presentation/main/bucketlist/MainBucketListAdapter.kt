@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 import womenproject.com.mybury.presentation.base.BaseBucketListAdapter
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
-import womenproject.com.mybury.presentation.util.BaseCountBucketItemViewHolder
+import womenproject.com.mybury.presentation.base.BaseCountBucketItemViewHolder
 
 
 /**
@@ -46,11 +47,12 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
 
     }
 
-    override fun createOnClickBucketListener(bucketId: Int): View.OnClickListener {
+    override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
 
         return View.OnClickListener {
-            Toast.makeText(context, "count : $bucketId", Toast.LENGTH_SHORT).show()
-            val directions = MainFragmentDirections.actionMainBucketToBucketDetail(bucketId.toString())
+            Toast.makeText(context, "count : ${bucket.title}", Toast.LENGTH_SHORT).show()
+            val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
+            directions.bucket = bucket
             it.findNavController().navigate(directions)
 
         }

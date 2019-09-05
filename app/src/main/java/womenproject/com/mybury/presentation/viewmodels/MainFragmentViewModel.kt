@@ -1,17 +1,44 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.annotation.SuppressLint
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.CategoryList
+import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2018. 11. 28..
  */
 class MainFragmentViewModel : BaseViewModel() {
+//ㅇㅇㄴㅇㅇ
 
-    fun getMainBucketList(): BucketList {
+
+    interface OnBucketListGetEvent {
+        fun start()
+        fun finish(bucketList: BucketList?)
+    }
+
+
+    private var bucketList: BucketList? = null
+
+
+    @SuppressLint("CheckResult")
+    fun getMainBucketList(api: String, callback: OnBucketListGetEvent) {
+
+        callback.start()
+
+        bucketListApi.requestMainBucketListResult()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
+    }
+
+
+    fun getDummyMainBucketList(): BucketList {
 
 
         val ca = CategoryList("운동")

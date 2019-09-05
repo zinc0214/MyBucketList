@@ -41,8 +41,10 @@
         android:label="Detail"
         tools:layout="@layout/fragment_bucket_detail">
         <argument
-            android:name="bucketId"
-            app:argType="string" />
+            android:name="bucket"
+            android:defaultValue="@null"
+            app:argType="womenproject.com.mybury.data.BucketItem"
+            app:nullable="true" />
     </fragment>
 
 
@@ -111,7 +113,6 @@
     </fragment>
 
 
-
     <fragment
         android:id="@+id/category_edit_fragment"
         android:name="womenproject.com.mybury.presentation.mypage.categoryedit.CategoryEditFragment"
@@ -119,7 +120,6 @@
         tools:layout="@layout/fragment_category_edit">
 
     </fragment>
-
 
 
     <fragment

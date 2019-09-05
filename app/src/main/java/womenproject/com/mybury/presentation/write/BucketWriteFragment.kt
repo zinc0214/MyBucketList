@@ -110,7 +110,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
     private fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.addBucketList(setBucketItemInfoData(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
+            viewModel.uploadBucketList(setBucketItemInfoData(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
                 override fun start() {
                     viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
 

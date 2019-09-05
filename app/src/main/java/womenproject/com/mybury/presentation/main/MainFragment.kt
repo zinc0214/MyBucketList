@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.main
 
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
@@ -18,9 +19,6 @@ import womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel
  */
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
-
-    private val BUCKETLIST_API = "http://10.1.101.161/host/"
-
 
     private val bucketInfoViewModel = BucketInfoViewModel()
 
@@ -53,7 +51,13 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        /*bucketInfoViewModel.getMainBucketList(BUCKETLIST_API, object : BucketInfoViewModel.OnBucketListGetEvent {
+        bucketInfoViewModel.getMainBucketList(object : BucketInfoViewModel.OnBucketListGetEvent {
+            override fun fail() {
+                viewDataBinding.progressBar.visibility = View.GONE
+                Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
+                viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getDummyMainBucketList())
+            }
+
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
             }
@@ -65,10 +69,9 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
                 }
             }
         })
-*/
 
-        viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
-        viewDataBinding.progressBar.visibility = View.GONE
+     //   viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
+      //  viewDataBinding.progressBar.visibility = View.GONE
 
     }
 
