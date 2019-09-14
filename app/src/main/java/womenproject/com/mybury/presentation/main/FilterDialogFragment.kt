@@ -16,18 +16,10 @@ open class FilterDialogFragment : BaseDialogFragment<MainFilterDialogBinding>() 
     override val layoutResourceId: Int
         get() = R.layout.main_filter_dialog
 
-    override fun initStartView() {
-        viewDataBinding.viewModel = FilterDialogViewModel()
-    }
-
     override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
+        viewDataBinding.viewModel = FilterDialogViewModel()
         viewDataBinding.filterSetClickListener = createOnClickFilterSetListener()
     }
-
 
     override fun onResume() {
         super.onResume()

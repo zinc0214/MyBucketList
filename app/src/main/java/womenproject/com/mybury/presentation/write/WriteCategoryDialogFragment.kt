@@ -25,7 +25,8 @@ class WriteCategoryDialogFragment(private var userCategory : BucketCategory, pri
     override val layoutResourceId: Int
         get() = R.layout.write_category_dialog
 
-    override fun initStartView() {
+
+    override fun initDataBinding() {
         viewDataBinding.addCategory.title = "카테고리 추가"
         viewDataBinding.notUseCategory.title = "없음"
 
@@ -33,17 +34,9 @@ class WriteCategoryDialogFragment(private var userCategory : BucketCategory, pri
         viewDataBinding.addCategory.itemClickListener = addCategoryListener()
 
 
-        for(i in 0 until userCategory.categoryList.size) {
+        for (i in 0 until userCategory.categoryList.size) {
             addCategoryItem(userCategory.categoryList[i].name)
         }
-    }
-
-    override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
     }
 
 

@@ -23,9 +23,7 @@ abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
 
     abstract val layoutResourceId : Int
 
-    abstract fun initStartView()
     abstract fun initDataBinding()
-    abstract fun initAfterBinding()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +37,7 @@ abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
 
-        initStartView()
         initDataBinding()
-        initAfterBinding()
 
         return viewDataBinding.root
     }

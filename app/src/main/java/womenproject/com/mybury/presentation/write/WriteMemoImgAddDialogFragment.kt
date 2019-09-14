@@ -33,15 +33,21 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+enum class AddContentType {
+    MEMO, PROFILE
+}
+
+
 @SuppressLint("ValidFragment")
-class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boolean,
-                                    private var memoAddListener: () -> Unit,
+class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
+                                    private var checkAddTypeAble: () -> Boolean,
+                                    private var addTypeClickListener: () -> Unit,
                                     private var checkAddImageListener: () -> Boolean,
                                     private var imgAddListener: (File, Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
 
 
     private var photoUri: Uri? = null
-    private lateinit var currentImgFile : File
+    private lateinit var currentImgFile: File
     private val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
 
     private var mCurrentPhotoPath: String? = null
@@ -50,36 +56,42 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
     override val layoutResourceId: Int
         get() = R.layout.memo_img_add_dialog
 
-    override fun initStartView() {
-        Log.e("ayhan:initStartView1", checkAddImageListener.invoke().toString())
-        Log.e("ayhan:initStartView2", checkMemoAddListener.invoke().toString())
-
-        if(!checkAddImageListener.invoke()) {
+    private fun initStartView() {
+        if (!checkAddImageListener.invoke()) {
             Log.e("ayhan:checkAddImageListener", "checkAddImageListener is Can't")
             viewDataBinding.addAlbumImgLayout.writeItemLayout.disableAdd()
             viewDataBinding.addCamImgLayout.writeItemLayout.disableAdd()
         }
 
-        if(!checkMemoAddListener.invoke()) {
+        if (!checkAddTypeAble.invoke()) {
             Log.e("ayhan:checkMemoAddListener", "checkMemoAddListener is Can't")
             viewDataBinding.addMemoLayout.writeItemLayout.disableAdd()
+        }
+
+        when (addType) {
+            AddContentType.MEMO -> {
+                viewDataBinding.addMemoLayout.writeItemLayout.visibility = View.VISIBLE
+                viewDataBinding.setBaseProfileImg.writeItemLayout.visibility = View.GONE
+            }
+            AddContentType.PROFILE -> {
+                viewDataBinding.setBaseProfileImg.writeItemLayout.visibility = View.VISIBLE
+                viewDataBinding.addMemoLayout.writeItemLayout.visibility = View.GONE
+            }
         }
     }
 
     override fun initDataBinding() {
+        initStartView()
 
-    }
-
-    override fun initAfterBinding() {
-
-        viewDataBinding.addMemoLayout.itemClickListener = memoAddOnClickListener()
-        viewDataBinding.addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener()
-        viewDataBinding.addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener()
+        viewDataBinding.addMemoLayout.itemClickListener = memoAddOnClickListener
+        viewDataBinding.addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener
+        viewDataBinding.addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener
+        viewDataBinding.setBaseProfileImg.itemClickListener = baseProfileImgClickListener
 
         viewDataBinding.addMemoLayout.title = "메모 추가"
         viewDataBinding.addAlbumImgLayout.title = "앨범에서 사진 선택"
         viewDataBinding.addCamImgLayout.title = "사진 촬영"
-
+        viewDataBinding.setBaseProfileImg.title = "기본 이미지로 변경"
     }
 
 
@@ -101,33 +113,28 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
     }
 
 
-    private fun memoAddOnClickListener(): View.OnClickListener {
-        return View.OnClickListener {
-            memoAddListener.invoke()
-            this.dismiss()
-
-        }
+    private val memoAddOnClickListener = View.OnClickListener {
+        addTypeClickListener.invoke()
+        this.dismiss()
     }
 
+    private val baseProfileImgClickListener = View.OnClickListener {
+        addTypeClickListener.invoke()
+        this.dismiss()
+    }
 
-    private fun getAlbumImgAndCropOnClickListener(): View.OnClickListener {
-        return View.OnClickListener {
-            if (checkPermissions(this.context!!, activity as MainActivity)) {
-                if (checkAddImageListener.invoke()) {
-                    goToAlbum()
-                }
-
+    private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
+        if (checkPermissions(this.context!!, activity as MainActivity)) {
+            if (checkAddImageListener.invoke()) {
+                goToAlbum()
             }
-
         }
     }
 
-    private fun takePictureAndCropOnClickListener(): View.OnClickListener {
-        return View.OnClickListener {
-            if (checkPermissions(this.context!!, activity as MainActivity)) {
-                if (checkAddImageListener.invoke()) {
-                    takePhoto()
-                }
+    private val takePictureAndCropOnClickListener = View.OnClickListener {
+        if (checkPermissions(this.context!!, activity as MainActivity)) {
+            if (checkAddImageListener.invoke()) {
+                takePhoto()
             }
         }
     }
@@ -299,9 +306,8 @@ class WriteMemoImgAddDialogFragment(private var checkMemoAddListener:() -> Boole
     }
 
     private fun LinearLayout.disableAdd() {
-        this.isClickable = false
-        this.isPressed = false
         this.isEnabled = false
         this.write_item_text.setTextColor(context!!.getColor(R.color.disableAdd))
     }
 }
+

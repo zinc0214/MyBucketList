@@ -26,28 +26,17 @@ class ShowImgWideFragment(private val uri: Uri) : BaseDialogFragment<ImgWideLayo
         get() = R.layout.img_wide_layout
 
 
-    override fun initStartView() {
-
-        viewDataBinding.imgView.setImageURI(uri)
-
-
-    }
-
     override fun initDataBinding() {
+        viewDataBinding.imgView.setImageURI(uri)
+        viewDataBinding.swipeLayout.setOnSwipeBackListener(object : SwipeBackLayout.SwipeBackListener {
+            override fun onViewPositionChanged(fractionAnchor: Float, fractionScreen: Float) {
+                Log.e("ayhan", "fractionAnchor : ${fractionAnchor} / fractionScreen : ${fractionScreen}")
+                if(fractionAnchor.toInt()==1 && fractionScreen.toInt()==1) {
+                    dismiss()
+                }
+            }
 
+        })
 
     }
-
-    override fun initAfterBinding() {
-        viewDataBinding.swipeLayout.setOnSwipeBackListener(object : SwipeBackLayout.SwipeBackListener {
-        override fun onViewPositionChanged(fractionAnchor: Float, fractionScreen: Float) {
-            Log.e("ayhan", "fractionAnchor : ${fractionAnchor} / fractionScreen : ${fractionScreen}")
-            if(fractionAnchor.toInt()==1 && fractionScreen.toInt()==1) {
-                dismiss()
-            }
-        }
-
-    })
-}
-
 }

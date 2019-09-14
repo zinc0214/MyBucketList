@@ -30,16 +30,8 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
     override val layoutResourceId: Int
         get() = R.layout.write_goal_count_dialog
 
-    override fun initStartView() {
-
-    }
 
     override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
         viewDataBinding.goalCountSeekbar.setOnSeekBarChangeListener(setOnSeekbarChangedListener())
         viewDataBinding.goalCountEditText.setOnKeyListener(setOnEditTextEnterListener())
         viewDataBinding.bottomSheet.cancelButtonClickListener = cancelButtonClickListener()
@@ -49,9 +41,8 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
 
         viewDataBinding.goalCountEditText.setText(currentCount.toString())
         viewDataBinding.goalCountSeekbar.progress = currentCount
-
-
     }
+
 
 
 

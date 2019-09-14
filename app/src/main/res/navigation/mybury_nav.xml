@@ -93,6 +93,13 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_my_page_to_profile_edit"
+            app:destination="@id/profile_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_my_page_to_app_info"
@@ -120,6 +127,12 @@
         tools:layout="@layout/fragment_category_edit">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/profile_edit_fragment"
+        android:label="ProfileEditFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit"/>
 
 
     <fragment

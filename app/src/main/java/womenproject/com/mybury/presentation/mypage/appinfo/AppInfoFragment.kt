@@ -1,6 +1,8 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
+import android.graphics.Rect
 import android.text.Html
+import android.view.ViewTreeObserver
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -31,9 +33,8 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
         viewDataBinding.openSource.content = "오픈 소스 라이선스"
         viewDataBinding.howToUse.content = "도움말"
 
-
         viewDataBinding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModel.currentVersion)
-        viewDataBinding.latelyVersionInfo.text = stringFormat(getString(R.string.app_lately_version), viewModel.latelyVersion)
+
 
 
         if(viewModel.currentVersion.equals(viewModel.latelyVersion)) {

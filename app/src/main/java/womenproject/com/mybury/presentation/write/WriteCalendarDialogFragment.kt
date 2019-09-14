@@ -39,21 +39,10 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     private lateinit var monthPicker: NumberPicker
     private lateinit var yearPicker: NumberPicker
 
-    override fun initStartView() {
-
-
-        viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
-        viewDataBinding.calendarView.setDateTextAppearance(R.style.CalendarDate)
-        viewDataBinding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
-        viewDataBinding.calendarView.topbarVisible = false
-
-        viewDataBinding.dateTitle.setSelectDate(calendarDay.year, calendarDay.month + 1)
-        viewDataBinding.dateTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-
-    }
 
     override fun initDataBinding() {
+
+        initCalendarDeco()
 
         viewDataBinding.calendarView.setCurrentDate(calendarDay)
         viewDataBinding.calendarView.setDateSelected(calendarDay, true)
@@ -65,12 +54,24 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
         setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
 
+        setCalendarViewListener()
 
         Log.e("ayhan", "select : ${selectDay.year}/ ${selectDay.month} / ${selectDay.date}")
         Log.e("ayhan", "calendar : ${calendarDay} // ${calendarDay.year}}")
     }
 
-    override fun initAfterBinding() {
+    private fun initCalendarDeco() {
+        viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
+        viewDataBinding.calendarView.setDateTextAppearance(R.style.CalendarDate)
+        viewDataBinding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
+        viewDataBinding.calendarView.topbarVisible = false
+
+        viewDataBinding.dateTitle.setSelectDate(calendarDay.year, calendarDay.month + 1)
+        viewDataBinding.dateTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+
+    private fun setCalendarViewListener() {
+
 
         colorizeDatePicker(viewDataBinding.datePicker)
         dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color.mainColor))

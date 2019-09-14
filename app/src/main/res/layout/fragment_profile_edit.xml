@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:background="@drawable/bucket_item_base_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="78dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_width"
+                android:layout_gravity="center"
+                android:layout_marginTop="36dp"
+                android:shadowColor="@android:color/white"
+                app:altSrc="@drawable/mypage_profile_img_background_small"
+                app:border_width="2dp"
+                app:cardCornerRadius="26dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/profile_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/mypage_profile_img_backgound" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:onClick="@{profileImageEditClickListener}"
+                android:textColor="@color/mainColor"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:id="@+id/update_btn"
+                android:layout_width="133dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/memo_img_add_button_background"
+                android:text="프로필 사진 변경" />
+
+            <EditText
+                android:cursorVisible="false"
+                android:background="@drawable/profile_edit_text_background"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:textColorHint="@color/dialogBottomCancelText"
+                android:hint="닉네임을 입력해주세요"
+                android:textColor="@color/writeEnableText"
+                android:id="@+id/nickname_edit_text"
+                android:layout_width="260dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{viewModel.nickname}"
+                android:layout_marginBottom="36dp"
+                android:inputType="text"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolBarLayout"
+            android:background="@drawable/toolbar_background"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="64dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:onClick="@{backBtnOnClickListener}"
+                    android:text="취소"
+                    android:textColor="@color/bucketBaseText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@{viewModel.title}"
+                    android:textColor="@color/subColor"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:enabled="false"
+                    android:id="@+id/profile_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:onClick="@{saveBtnOnClickListener}"
+                    android:text="저장"
+                    android:textColor="@color/register_text_color"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <data>
+
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditViewModel"/>
+
+        <variable
+            name="backBtnOnClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="saveBtnOnClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="profileImageEditClickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+
+</layout>

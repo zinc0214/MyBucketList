@@ -56,13 +56,6 @@
                     android:textColor="@color/dialogContentText"
                     android:textSize="10sp" />
 
-                <TextView
-                    android:id="@+id/lately_version_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_lately_version"
-                    android:textColor="@color/bucketBaseText"
-                    android:textSize="10sp" />
             </LinearLayout>
 
 
