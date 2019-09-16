@@ -33,15 +33,7 @@ class BucketWriteFragmentTest : BaseFragment<FragmentBucketWriteTestBinding, Buc
     override val viewModel: BucketWriteViewModelTest
         get() = BucketWriteViewModelTest()
 
-    override fun initStartView() {
-
-    }
-
     override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
         imm = context!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         viewDataBinding.checkAdultListener = createOnAdultCheckBtnListener()
         viewDataBinding.numberCheckListener = numberCheckListener()
@@ -51,7 +43,6 @@ class BucketWriteFragmentTest : BaseFragment<FragmentBucketWriteTestBinding, Buc
         sliderIsScroll()
         initPosition()
     }
-
 
 
     @SuppressLint("ClickableViewAccessibility")

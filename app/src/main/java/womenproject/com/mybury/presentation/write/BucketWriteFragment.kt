@@ -39,35 +39,10 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     override val viewModel: BucketWriteViewModel
         get() = BucketWriteViewModel()
 
-    override fun initStartView() {
-
-        bucketInfoViewModel.getCategoryList(object: CategoryInfoViewModel.GetBucketListCallBackListener {
-
-
-            override fun start() {
-                viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
-            }
-
-            override fun success(bucketCategory: BucketCategory) {
-                categoryList = bucketCategory
-                viewDataBinding.addBucketProgressBar.visibility = View.GONE
-            }
-
-            override fun fail() {
-                viewDataBinding.addBucketProgressBar.visibility = View.GONE
-                Toast.makeText(context, "카테고리 값을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
-                //activity!!.onBackPressed()
-
-            }
-
-        })
-    }
 
     override fun initDataBinding() {
 
-    }
-
-    override fun initAfterBinding() {
+        setCategoryList()
 
         viewDataBinding.cancelBtnClickListener = writeCancelOnClickListener()
         viewDataBinding.registerBtnClickListener = bucketAddOnClickListener()
@@ -101,6 +76,30 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
     }
+
+    private fun setCategoryList() {
+
+        bucketInfoViewModel.getCategoryList(object: CategoryInfoViewModel.GetBucketListCallBackListener {
+
+            override fun start() {
+                viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
+            }
+
+            override fun success(bucketCategory: BucketCategory) {
+                categoryList = bucketCategory
+                viewDataBinding.addBucketProgressBar.visibility = View.GONE
+            }
+
+            override fun fail() {
+                viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                Toast.makeText(context, "카테고리 값을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                //activity!!.onBackPressed()
+
+            }
+
+        })
+    }
+
 
     private fun writeCancelOnClickListener(): View.OnClickListener {
         return View.OnClickListener {

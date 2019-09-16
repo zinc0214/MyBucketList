@@ -22,21 +22,8 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     override val viewModel: DdayBucketTotalListViewModel
         get() = DdayBucketTotalListViewModel()
 
-
-    override fun initStartView() {
-        initBucketListUI()
-    }
-
     override fun initDataBinding() {
 
-    }
-
-    override fun initAfterBinding() {
-
-    }
-
-
-    private fun initBucketListUI(){
         val layoutManager = LinearLayoutManager(context)
 
         viewDataBinding.ddayEachBucketList.layoutManager = layoutManager

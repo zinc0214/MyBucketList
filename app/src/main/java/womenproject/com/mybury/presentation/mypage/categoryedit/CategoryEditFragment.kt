@@ -1,16 +1,15 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
-import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
+import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import womenproject.com.mybury.ui.ItemDragListener
 
 class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(), ItemDragListener {
 
@@ -27,15 +26,12 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         get() = MyPageViewModel()
 
 
-    override fun initStartView() {
-
-    }
-
     override fun initDataBinding() {
         viewDataBinding.backBtnOnClickListener = setOnBackBtnClickListener()
+        setCategoryList()
     }
 
-    override fun initAfterBinding() {
+    private fun setCategoryList() {
 
         val categoryList = mutableListOf<String>()
         categoryList.add("없음")

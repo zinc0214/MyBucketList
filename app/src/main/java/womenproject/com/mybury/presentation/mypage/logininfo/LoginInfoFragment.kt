@@ -18,16 +18,9 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, LoginInfoViewMo
         get() = LoginInfoViewModel()
 
 
-    override fun initStartView() {
-
-    }
-
     override fun initDataBinding() {
         viewDataBinding.backLayout.title = "로그인 정보"
         viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
     }
 
-    override fun initAfterBinding() {
-
-    }
 }

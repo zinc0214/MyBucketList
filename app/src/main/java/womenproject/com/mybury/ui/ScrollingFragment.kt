@@ -27,17 +27,10 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
-
-    private var mIsTheTitleVisible = false
-    private var mIsTheTitleContainerVisible = true
-
-    override fun initStartView() {
+    override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
         viewDataBinding.headerLayout.viewModel = viewModel
 
-    }
-
-    override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener()
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener()
@@ -59,9 +52,11 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
             Log.e("ayhan", "$left, $top")
         }
 
+        setCategoryList()
+
     }
 
-    override fun initAfterBinding() {
+    private fun setCategoryList() {
 
 
         val categoryList = mutableListOf<String>()

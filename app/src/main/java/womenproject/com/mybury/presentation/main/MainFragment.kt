@@ -28,20 +28,12 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
     override val viewModel: MainFragmentViewModel
         get() = MainFragmentViewModel()
 
-    override fun initStartView() {
+    override fun initDataBinding() {
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
         initBucketListUI()
-    }
-
-    override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
     }
 
 

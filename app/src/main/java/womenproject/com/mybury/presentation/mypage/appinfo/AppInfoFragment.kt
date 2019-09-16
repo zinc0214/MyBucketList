@@ -22,10 +22,6 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
         get() = AppInfoViewModel()
 
 
-    override fun initStartView() {
-
-    }
-
     override fun initDataBinding() {
         viewDataBinding.backLayout.title = "앱 정보"
         viewDataBinding.useEula.content = "이용약관"
@@ -46,11 +42,5 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
 
         viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
     }
-
-    override fun initAfterBinding() {
-
-    }
-
-
 
 }

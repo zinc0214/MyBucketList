@@ -2,9 +2,9 @@ package womenproject.com.mybury.presentation.detail
 
 import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
-import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.base.BaseFragment
 
 
 /**
@@ -18,14 +18,28 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
     override val viewModel: BucketDetailViewModel
         get() = BucketDetailViewModel()
 
-    override fun initStartView() {
+    lateinit var bucketItem : BucketItem
+
+    override fun initDataBinding() {
+        viewDataBinding.viewModel = viewModel
+        viewDataBinding.lifecycleOwner = this
 
         arguments?.let {
             val args = BucketDetailFragmentArgs.fromBundle(it)
             val bucket = args.bucket
+            bucketItem= bucket!!
+
         }
 
-        viewDataBinding.viewModel = viewModel
+
+        viewDataBinding.titleText.text = bucketItem.title
+        viewDataBinding.lockText.text = if(bucketItem.open) "공개" else "비공개"
+        viewDataBinding.categoryText.text = bucketItem.category.name
+        viewDataBinding.dday.text = bucketItem.dDay.toString()
+        viewDataBinding.currentCount.text = "${bucketItem.userCount}/${bucketItem.goalCount}"
+        viewDataBinding.completeText.text = "${bucketItem.userCount}회 완료"
+
+
 
         val uri1 = "https://image.shutterstock.com/image-photo/assortment-fine-chocolates-white-dark-260nw-123360676.jpg"
         val uri2 = "https://image.shutterstock.com/image-vector/doodle-cake-happy-birthday-vector-600w-1040176828.jpg"
@@ -42,16 +56,8 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewPager.adapter = viewPagerAdapter
 
         viewDataBinding.tabLayout.setupWithViewPager(viewPager)
-
     }
 
-    override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
-    }
 
 
 }

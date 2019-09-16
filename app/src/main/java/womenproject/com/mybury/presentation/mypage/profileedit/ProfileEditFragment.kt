@@ -23,8 +23,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, ProfileEdit
     override val viewModel: ProfileEditViewModel
         get() = ProfileEditViewModel()
 
-
-    override fun initStartView() {
+    override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
         viewDataBinding.profileImageEditClickListener = profileImageEditClickLister
         viewDataBinding.backBtnOnClickListener = cancelClickListener
@@ -33,13 +32,6 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, ProfileEdit
         viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
     }
 
-    override fun initDataBinding() {
-
-    }
-
-    override fun initAfterBinding() {
-
-    }
 
     private fun addTextChangedListener(): TextWatcher {
 

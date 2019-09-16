@@ -27,14 +27,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
-    override fun initStartView() {
+    override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
         viewDataBinding.headerLayout.viewModel = viewModel
 
-    }
-
-
-    override fun initDataBinding() {
         viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener
         viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener
         viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
@@ -54,10 +50,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
             }
         })
 
+
+        setCategoryList()
+
     }
 
-    override fun initAfterBinding() {
-
+    private fun setCategoryList() {
 
         val categoryList = mutableListOf<String>()
         categoryList.add("없음")
