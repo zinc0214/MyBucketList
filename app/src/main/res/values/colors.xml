@@ -84,4 +84,5 @@
     <color name="detailInfoText">#a6c6ff</color>
 
     <color name="categoryUnselectBackground">#cccccc</color>
+    <color name="appInfoContent">#666666</color>
 </resources>

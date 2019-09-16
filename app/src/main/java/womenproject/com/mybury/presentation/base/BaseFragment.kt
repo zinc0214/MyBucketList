@@ -85,5 +85,11 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         }
     }
 
+    fun setOnBackBtnClickListener() : View.OnClickListener {
+        return View.OnClickListener {
+            activity!!.onBackPressed()
+        }
+    }
+
 }
 

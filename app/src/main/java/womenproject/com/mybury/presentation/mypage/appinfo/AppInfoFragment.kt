@@ -35,8 +35,6 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
 
         viewDataBinding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModel.currentVersion)
 
-
-
         if(viewModel.currentVersion.equals(viewModel.latelyVersion)) {
             viewDataBinding.versionText = "최신 버전 사용 중"
             viewDataBinding.updateBtn.isEnabled = false
@@ -46,6 +44,7 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
             viewDataBinding.updateBtn.isEnabled = true
         }
 
+        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
     }
 
     override fun initAfterBinding() {

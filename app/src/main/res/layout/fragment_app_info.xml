@@ -6,6 +6,11 @@
         <variable
             name="version_text"
             type="String" />
+
+
+        <variable
+            name="supportClickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <RelativeLayout
@@ -49,6 +54,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:textStyle="bold"
                     android:id="@+id/current_version_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,6 +120,24 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:background="@drawable/app_info_button_background"
+                android:layout_width="133dp"
+                android:layout_height="26dp">
+
+                <TextView
+                    android:textColor="@color/detailContextText"
+                    android:textSize="12sp"
+                    android:onClick="@{supportClickListener}"
+                    android:gravity="center"
+                    android:text="후원하러 가기:)"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
         </LinearLayout>
 
 

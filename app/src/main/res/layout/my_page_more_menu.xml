@@ -20,7 +20,7 @@
 
 
         <variable
-            name="logoutClickListener"
+            name="alarmClickListener"
             type="android.view.View.OnClickListener" />
 
     </data>
@@ -86,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:gravity="center_vertical"
-                android:onClick="@{appInfoClickListener}"
-                android:text="앱 정보"
+                android:onClick="@{alarmClickListener}"
+                android:text="알림"
                 android:textColor="@color/bucketBaseText"
                 android:textSize="14sp" />
 
@@ -100,8 +100,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:gravity="center_vertical"
-                android:onClick="@{logoutClickListener}"
-                android:text="로그아웃"
+                android:onClick="@{appInfoClickListener}"
+                android:text="앱 정보"
+
                 android:textColor="@color/bucketBaseText"
                 android:textSize="14sp" />
 

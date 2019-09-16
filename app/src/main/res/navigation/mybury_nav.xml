@@ -108,6 +108,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_login_info"
+            app:destination="@id/login_info_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
 
@@ -140,6 +148,14 @@
         android:name="womenproject.com.mybury.presentation.mypage.appinfo.AppInfoFragment"
         android:label="AppInfoFragment"
         tools:layout="@layout/fragment_app_info">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/login_info_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment"
+        android:label="LoginInfoFragment"
+        tools:layout="@layout/fragment_login_info">
 
     </fragment>
 

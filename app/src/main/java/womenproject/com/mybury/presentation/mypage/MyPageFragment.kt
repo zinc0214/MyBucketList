@@ -42,6 +42,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         viewDataBinding.headerLayout.moreClickListener = moreButtonOnClickListener
         viewDataBinding.mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
         viewDataBinding.mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
+        viewDataBinding.mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
 
 
 
@@ -144,6 +145,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
     private val appInfoOnClickListener = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToAppInfo()
+        it.findNavController().navigate(directions)
+        popupClickListener()
+    }
+
+    private val loginInfoClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToLoginInfo()
         it.findNavController().navigate(directions)
         popupClickListener()
     }

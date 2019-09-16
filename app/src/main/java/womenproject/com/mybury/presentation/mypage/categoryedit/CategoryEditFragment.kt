@@ -74,11 +74,4 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         itemTouchHelper.startDrag(viewHolder)
     }
 
-    private fun setOnBackBtnClickListener() : View.OnClickListener {
-        return View.OnClickListener {
-            activity!!.onBackPressed()
-        }
-    }
-
-
 }
