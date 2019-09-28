@@ -38,7 +38,8 @@
             app:tabIndicator="@null"
             app:tabPaddingStart="4dp"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"/>
+            app:tabIndicatorHeight="0dp"
+            android:visibility="@{viewModel.moreImageVisible}"/>
 
 
         <RelativeLayout

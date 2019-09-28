@@ -31,14 +31,12 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
         }
 
-
         viewDataBinding.titleText.text = bucketItem.title
         viewDataBinding.lockText.text = if(bucketItem.open) "공개" else "비공개"
         viewDataBinding.categoryText.text = bucketItem.category.name
         viewDataBinding.dday.text = bucketItem.dDay.toString()
         viewDataBinding.currentCount.text = "${bucketItem.userCount}/${bucketItem.goalCount}"
         viewDataBinding.completeText.text = "${bucketItem.userCount}회 완료"
-
 
 
         val uri1 = "https://image.shutterstock.com/image-photo/assortment-fine-chocolates-white-dark-260nw-123360676.jpg"

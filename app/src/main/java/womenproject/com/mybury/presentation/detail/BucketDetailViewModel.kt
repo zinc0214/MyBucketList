@@ -13,7 +13,7 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketDetailViewModel : BaseViewModel() {
 
-    var oneImageVisible = View.GONE
-    var moreImageVisible = View.VISIBLE
+    var oneImageVisible = View.VISIBLE
+    var moreImageVisible = View.INVISIBLE
 
 }
