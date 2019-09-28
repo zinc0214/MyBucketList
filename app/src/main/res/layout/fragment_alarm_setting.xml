@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="version_text"
+            type="String" />
+
+
+        <variable
+            name="supportClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <RelativeLayout
+        android:background="@color/mainBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/back_layout"
+            layout="@layout/top_back_btn_layout" />
+
+
+        <LinearLayout
+            android:layout_marginTop="64dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/dday_alram"
+                layout="@layout/alram_option"/>
+
+            <include
+                android:id="@+id/event_alarm"
+                layout="@layout/alram_option"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</layout>

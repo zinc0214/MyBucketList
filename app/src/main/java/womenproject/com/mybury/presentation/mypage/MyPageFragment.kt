@@ -39,6 +39,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         viewDataBinding.mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
         viewDataBinding.mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
         viewDataBinding.mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
+        viewDataBinding.mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
 
 
 
@@ -153,7 +154,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         popupClickListener()
     }
 
-
+    private val alarmSettingClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToAlarmSetting()
+        it.findNavController().navigate(directions)
+        popupClickListener()
+    }
     private val moreButtonOnClickListener = View.OnClickListener {
 
         if(viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {

@@ -85,4 +85,6 @@
 
     <color name="categoryUnselectBackground">#cccccc</color>
     <color name="appInfoContent">#666666</color>
+
+    <color name="alarmBackground">#dfdfdf</color>
 </resources>
