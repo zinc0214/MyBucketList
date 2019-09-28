@@ -27,7 +27,6 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
         viewDataBinding.useEula.content = "이용약관"
         viewDataBinding.privacyEula.content = "개인 정보 처리 방침"
         viewDataBinding.openSource.content = "오픈 소스 라이선스"
-        viewDataBinding.howToUse.content = "도움말"
 
         viewDataBinding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModel.currentVersion)
 

@@ -46,8 +46,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         viewDataBinding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
             if (p1 == -384) {
                 viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
+                viewDataBinding.headerLayout.moreBtn.visibility = View.GONE
+                popupClickListener()
             } else if (p1 == 0) {
                 viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                viewDataBinding.headerLayout.moreBtn.visibility = View.VISIBLE
             }
         })
 
