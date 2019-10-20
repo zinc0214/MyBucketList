@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/bucket_item_layout"
-            style="@style/BucketItemLayoutStyle"
+            style="@style/BucketItemLayoutStyleForENd"
             android:onClick="@{bucketClickListener}">
 
             <RelativeLayout

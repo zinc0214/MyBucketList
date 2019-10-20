@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="logoutClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="activity"
+            type="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment" />
     </data>
 
     <RelativeLayout
@@ -58,7 +63,7 @@
                 <TextView
                     android:textColor="@color/detailContextText"
                     android:textSize="14sp"
-                    android:onClick="@{logoutClickListener}"
+                    android:onClick="@{()->activity.accountDeleteClickListener()}"
                     android:gravity="center"
                     android:text="로그아웃"
                     android:layout_width="match_parent"
@@ -67,6 +72,7 @@
             </LinearLayout>
 
             <TextView
+                android:onClick="@{()->activity.accountDeleteClickListener()}"
                 android:textSize="11sp"
                 android:textColor="@color/detailContextText"
                 android:text="@string/account_delete"

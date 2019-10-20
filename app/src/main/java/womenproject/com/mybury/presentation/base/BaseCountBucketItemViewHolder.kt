@@ -52,6 +52,7 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
         binding.succeedBucketTitle.text = bucketItemInfo.title
         binding.currentUserCount = bucketItemInfo.userCount.toString()
         binding.horizontalProgressBar.progress = bucketItemInfo.userCount
+        binding.horizontalProgressBar.max = bucketItemInfo.goalCount
 
         binding.bucketClickListener = bucketListener
         binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()

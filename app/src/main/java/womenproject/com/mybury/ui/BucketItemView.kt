@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.base
+package womenproject.com.mybury.ui
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -21,62 +21,52 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 10..
  */
 
-abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context)
-
-    lateinit var initBinding: ViewDataBinding
+class BucketItemView(private val binding: ViewDataBinding) {
 
     lateinit var bucketItemLayout: LinearLayout
     lateinit var successImageView: ImageView
     lateinit var bucketItemImage: ImageView
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
-    lateinit var userCountText: TextView
+    lateinit var userCountText : TextView
 
     var userCount = 0
     var goalCount = 0
     var bucketType = 0
-    var compelete = false
-    var ddayVisible = false
-    var isLastItem = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
 
-    fun onBucketSuccessFinalButtonClickListener() {
+    private fun onBucketSuccessFinalButtonClickListener() {
         binding.apply {
             circularProgressBar.run {
-                progressType = ProgressType.INDETERMINATE
-                startAnimation()
-                progressAnimator(this).start()
-                Handler().run {
-                    bucketItemLayout.isClickable = false
-                    postDelayed({
-                        setFinalSuccessUIButton()
-                        addBucketSuccessCount()
-                    }, 500)
-                    postDelayed({
-                        revertAnimation()
-                        if (bucketType == 0 || userCount >= goalCount) {
-                            setFinalSuccessUIBackground()
-                            setFinalSuccessWithCountBucket()
-                        } else {
-                            setDoneSuccessUIButton()
-                        }
-                    }, 750)
-                    postDelayed({
-                        if (bucketType == 0 || userCount >= goalCount) {
+                setOnClickListener {
+                    progressType = ProgressType.INDETERMINATE
+                    startAnimation()
+                    progressAnimator(this).start()
+                    Handler().run {
+                        bucketItemLayout.isClickable = false
+                        postDelayed({
+                            setFinalSuccessUIButton()
+                            addBucketSuccessCount()
+                        }, 500)
+                        postDelayed({
+                            revertAnimation()
+                            if (bucketType == 0 || userCount >= goalCount) {
+                                setFinalSuccessUIBackground()
+                                setFinalSuccessWithCountBucket()
+                            } else {
+                                setDoneSuccessUIButton()
+                            }
+                        }, 750)
+                        postDelayed({
                             animFadeOut.duration = 750
                             bucketItemImage.startAnimation(animFadeOut)
-                        }
-                    }, 800)
-                    postDelayed({
-                        if (bucketType == 0 || userCount >= goalCount) {
+                        }, 800)
+                        postDelayed({
                             bucketItemImage.visibility = View.GONE
                             bucketItemLayout.isClickable = true
-                        }
-
-                    }, 900)
+                        }, 900)
+                    }
                 }
             }
             executePendingBindings()
@@ -110,15 +100,9 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     open fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = context.getColorStateList(R.color.bucketBaseBtnBackground)
         bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
+
     }
 
-    open fun setBucketData(bucketItem: BucketItem) {
-        ddayVisible = bucketItem.dDay > 0
-        userCount = bucketItem.userCount
-        goalCount = bucketItem.goalCount
-        compelete = bucketItem.complete
-        isLastItem = bucketItem.isLast
-    }
 
     open fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
     }

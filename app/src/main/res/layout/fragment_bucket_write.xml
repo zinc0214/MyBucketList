@@ -106,6 +106,7 @@
                         android:gravity="top"
                         android:hint="새로운 목표를 작성해보세요."
                         android:minHeight="52dp"
+                        android:maxLength="30"
                         android:textColor="@color/writeTitleText"
                         android:textColorHint="@color/writeUnusedText"
                         android:textSize="18sp" />
@@ -232,13 +233,32 @@
                     style="@style/writeSwitchLayoutStyle"
                     android:visibility="visible">
 
-                    <CheckBox
+                    <androidx.constraintlayout.motion.widget.MotionLayout
                         android:id="@+id/open_switch_btn"
-                        style="@style/FilterDialogSubTextStyle"
                         android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:button="@drawable/write_switch"
-                        android:checked="true" />
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        app:layoutDescription="@xml/custom_switch_button">
+
+                        <androidx.constraintlayout.utils.widget.ImageFilterView
+                            android:id="@+id/switch_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/custom_switch_on"
+                            app:altSrc="@drawable/custom_switch_off" />
+
+                        <ImageView
+                            android:id="@+id/switch_circle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_marginStart="4dp"
+                            android:background="@drawable/custom_switch_circle"
+                            app:layout_constraintBottom_toBottomOf="@+id/switch_background"
+                            app:layout_constraintStart_toStartOf="@+id/switch_background"
+                            app:layout_constraintTop_toTopOf="@+id/switch_background" />
+                    </androidx.constraintlayout.motion.widget.MotionLayout>
 
                 </RelativeLayout>
 

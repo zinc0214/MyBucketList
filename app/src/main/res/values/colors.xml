@@ -24,6 +24,7 @@
     <color name="mainBackground">#fafafa</color>
     <color name="bucketItemBackground">#e8e8e8</color>
     <color name="transparent">#00ffffff</color>
+    <color name="transparent_black">#4D000000</color>
 
     <color name="subColor">#A6C6FF</color>
     <color name="notiColor">#ffca5a</color>

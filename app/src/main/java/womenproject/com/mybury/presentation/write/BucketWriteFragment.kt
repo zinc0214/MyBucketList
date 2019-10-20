@@ -65,7 +65,12 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             }
         }
 
-        viewDataBinding.openSwitchBtn.setOnCheckedChangeListener { buttonView, isChecked ->
+
+        viewDataBinding.openSwitchBtn.setOnGenericMotionListener { v, event ->
+            Log.e("ayhan", "${viewDataBinding.openSwitchBtn.constraintSetIds.toString()}, ${viewDataBinding.openSwitchBtn.currentState}")
+            return@setOnGenericMotionListener false
+        }
+/*        viewDataBinding.openSwitchBtn.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_open)
                 viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
@@ -73,7 +78,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
                 viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
                 viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
             }
-        }
+        }*/
 
     }
 
@@ -342,7 +347,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
             goalCount = goal_count_text.text.toString().toInt()
         }
 
-        return AddBucketItem(viewDataBinding.titleText.text.toString(), viewDataBinding.openSwitchBtn.isChecked,
+        return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
                 currentCalendarDay.time , goalCount,
                 viewDataBinding.memoText.text.toString(),  viewDataBinding.categoryText.text.toString(), "userId1")
     }

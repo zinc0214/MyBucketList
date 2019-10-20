@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.mypage.logininfo
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentLoginInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.main.FilterDialogFragment
 
 /**
  * Created by HanAYeon on 2019-09-16.
@@ -21,6 +22,11 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, LoginInfoViewMo
     override fun initDataBinding() {
         viewDataBinding.backLayout.title = "로그인 정보"
         viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.activity = this
     }
 
+    fun accountDeleteClickListener() {
+        val accountDeleteDialog = AccountDeleteDialogFragment()
+        accountDeleteDialog.show(activity!!.supportFragmentManager, "tag")
+    }
 }

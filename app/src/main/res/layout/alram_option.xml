@@ -42,8 +42,8 @@
         </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
@@ -57,11 +57,11 @@
                 app:altSrc="@drawable/custom_switch_off" />
 
             <ImageView
-                android:layout_marginStart="3dp"
                 android:id="@+id/switch_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_margin="4dp"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/custom_switch_circle"
                 app:layout_constraintBottom_toBottomOf="@+id/switch_background"
                 app:layout_constraintStart_toStartOf="@+id/switch_background"

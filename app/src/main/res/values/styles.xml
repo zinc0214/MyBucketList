@@ -82,6 +82,16 @@
         <item name="android:animateLayoutChanges">true</item>
     </style>
 
+
+    <style name="BucketItemLayoutStyleForENd">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/minimumBucketItemHeight</item>
+        <item name="android:animateLayoutChanges">true</item>
+    </style>
+
+
+
     <style name="BucketItemTitleTextStyle">
         <item name="android:lineHeight">22dp</item>
         <item name="android:layout_width">match_parent</item>
