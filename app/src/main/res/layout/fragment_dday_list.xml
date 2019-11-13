@@ -37,7 +37,7 @@
 
             <include
                 android:id="@+id/dday_toolbar"
-                layout="@layout/base_toolbar"
+                layout="@layout/top_back_btn_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolBarLayout"
                 android:layout_alignParentTop="true" />

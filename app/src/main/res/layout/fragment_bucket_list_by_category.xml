@@ -32,7 +32,7 @@
 
         <include
             android:id="@+id/header_layout"
-            layout="@layout/base_toolbar"/>
+            layout="@layout/top_back_btn_layout"/>
 
     </RelativeLayout>
 
