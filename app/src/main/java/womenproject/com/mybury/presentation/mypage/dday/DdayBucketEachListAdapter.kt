@@ -20,7 +20,7 @@ import womenproject.com.mybury.presentation.mypage.dday.DdayNormalBucketItemView
  * Created by HanAYeon on 2019. 1. 22..
  */
 
-class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
+class DdayBucketEachListAdapter(context: Context?, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
         Log.e(this.toString(), "getItemViewType is Use")
@@ -49,10 +49,10 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: BucketList) : Bas
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if(bucketItemList.bucketlists[position].complete) {
+        return if(bucketItemList[position].complete) {
             0
         } else {
-            bucketItemList.bucketlists[position].goalCount
+            bucketItemList[position].goalCount
         }
 
     }

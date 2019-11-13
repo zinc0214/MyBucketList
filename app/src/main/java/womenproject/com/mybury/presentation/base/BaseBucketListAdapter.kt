@@ -14,7 +14,7 @@ import womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragmentDi
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
-open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+open class BaseBucketListAdapter(context: Context?, bucketList: List<BucketItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     var context: Context = context!!
@@ -29,7 +29,7 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val holder = currentViewHolder
         holder.apply {
-            bind(createOnClickBucketListener(bucketItemList.bucketlists[position]), bucketItemList.bucketlists[position], context)
+            bind(createOnClickBucketListener(bucketItemList[position]), bucketItemList[position], context)
         }
     }
 
@@ -40,7 +40,7 @@ open class BaseBucketListAdapter(context: Context?, bucketList: BucketList) : Re
     }
 
     override fun getItemCount(): Int {
-        return bucketItemList.bucketlists.size
+        return bucketItemList.size
     }
 
 

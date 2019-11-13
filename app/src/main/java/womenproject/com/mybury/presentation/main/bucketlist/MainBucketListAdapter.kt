@@ -21,7 +21,7 @@ import womenproject.com.mybury.presentation.base.BaseCountBucketItemViewHolder
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBucketListAdapter(context, bucketList) {
+open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
         return checkBucketType(position)
@@ -39,10 +39,10 @@ class MainBucketListAdapter(context: Context?, bucketList: BucketList) : BaseBuc
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if (bucketItemList.bucketlists[position].complete) {
+        return if (bucketItemList[position].complete) {
             0
         } else {
-            bucketItemList.bucketlists[position].goalCount
+            bucketItemList[position].goalCount
         }
 
     }

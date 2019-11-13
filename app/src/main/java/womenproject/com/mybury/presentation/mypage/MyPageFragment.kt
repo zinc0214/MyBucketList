@@ -13,7 +13,7 @@ import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
-
+import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 
 /**
  * Created by HanAYeon on 2019. 4. 23..

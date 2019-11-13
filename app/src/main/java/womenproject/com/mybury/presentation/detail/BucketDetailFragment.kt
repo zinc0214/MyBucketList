@@ -75,5 +75,9 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     }
 
+    override fun setOnBackBtnClickListener(): View.OnClickListener {
+        return super.setOnBackBtnClickListener()
+    }
+
 
 }

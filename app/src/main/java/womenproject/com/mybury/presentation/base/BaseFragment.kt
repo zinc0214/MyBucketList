@@ -34,8 +34,8 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
             Log.e("ayhan", "backBtn")
-            setOnBackBtnClickListener();
-            true
+            setOnBackBtnClickListener()
+            false
         })
         checkNetworkConnect()
     }

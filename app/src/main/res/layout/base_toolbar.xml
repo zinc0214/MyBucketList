@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="backClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="title"
+            type="String" />
 
     </data>
 
@@ -28,11 +33,15 @@
                 android:layout_marginStart="20dp"
                 android:background="@drawable/toolbar_back" />
 
-            <ImageView
+            <TextView
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textSize="20sp"
+                tools:text="타이틀"
                 android:layout_width="92dp"
                 android:layout_height="36dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/dday_icon" />
+                android:text="@{title}"/>
 
 
         </RelativeLayout>

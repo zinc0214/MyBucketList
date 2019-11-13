@@ -38,20 +38,21 @@ class MainFragmentViewModel : BaseViewModel() {
     }
 
 
-    fun getDummyMainBucketList(): BucketList {
+    fun getDummyMainBucketList(): List<BucketItem> {
 
 
-        val ca = CategoryList("운동")
+        val ca = CategoryList("없음")
+        val ca2 = CategoryList("여행")
         val list = mutableListOf<CategoryList>(ca)
         val category = BucketCategory(list,"20")
 
 
         val bucketItem1 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", "메모메모", false, false, false, ca, 2, 5, 0,false)
-        val bucketItem2 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", "", false, false, false, ca, 3, 10, 10)
-        val bucketItem3 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 내 마음...완전 당빠 알자주지 흐듀휴류ㅠ휴ㅠㅠ휼유", "메모메모", false, false, false, ca, 4, 5, 3)
+        val bucketItem2 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", "", false, false, false, ca2, 3, 10, 10)
+        val bucketItem3 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 내 마음...완전 당빠 알자주지 흐듀휴류ㅠ휴ㅠㅠ휼유", "메모메모", false, false, false, ca2, 4, 5, 3)
         val bucketItem4 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무 이쁘고 착하고 내가 진짜 너무 좋아해! 내 마음...완전 당빠 알자주지 흐듀휴류ㅠ휴ㅠㅠ휼유", "", false, false, true, ca, 9, 15, 10)
-        val bucketItem5 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무", "", false, false, true, ca, 1, 1, 0)
-        val bucketItem6 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", "", false, false, false, ca, 1, 1, 1, true)
+        val bucketItem5 = BucketItem("bucketlist02", "김가은,한아연,조지원,안예지 다들 너무", "", false, false, true, ca2, 1, 1, 0)
+        val bucketItem6 = BucketItem("bucketlist02", "올림픽 공원에서 스케이트 타기", "", false, false, false, ca2, 1, 1, 1)
 
 
         val bucketItemList = mutableListOf<BucketItem>()
@@ -65,6 +66,6 @@ class MainFragmentViewModel : BaseViewModel() {
 
         val bucketList = BucketList(bucketItemList, false, 200)
 
-        return bucketList
+        return bucketList.bucketlists
     }
 }

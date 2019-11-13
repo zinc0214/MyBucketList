@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:id="@+id/bucket_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/toolBarTitle"
+            android:layout_marginBottom="50dp"
+            android:background="@color/mainBackground">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bucket_list"
+                tools:listitem="@layout/bucket_item_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <include
+            android:id="@+id/header_layout"
+            layout="@layout/base_toolbar"/>
+
+    </RelativeLayout>
+
+
+
+</layout>

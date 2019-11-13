@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentMainBinding
@@ -47,14 +48,16 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
             override fun fail() {
                 viewDataBinding.progressBar.visibility = View.GONE
                 Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
-                viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getDummyMainBucketList())
+                val list = viewModel.getDummyMainBucketList()
+                list.last().isLast = true
+                viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, list)
             }
 
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
             }
 
-            override fun finish(bucketList: BucketList?) {
+            override fun finish(bucketList: List<BucketItem>) {
                 if(bucketList != null)  {
                     viewDataBinding.progressBar.visibility = View.GONE
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)

@@ -7,6 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.network.RetrofitInterface
@@ -21,7 +22,7 @@ class BucketInfoViewModel : BaseViewModel() {
 
     interface OnBucketListGetEvent {
         fun start()
-        fun finish(bucketList: BucketList?)
+        fun finish(bucketList: List<BucketItem>)
         fun fail()
     }
 
@@ -35,13 +36,34 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    bucketList -> callback.finish(bucketList)
+                    bucketList -> callback.finish(bucketList.bucketlists)
                 }) {
                     Log.e("ayhan", it.toString())
                     callback.fail()
                 }
 
     }
+
+    @SuppressLint("CheckResult")
+    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, categoryName : String) {
+
+        callback.start()
+
+        bucketListApi.requestMainBucketListResult()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { response -> response.bucketlists}
+                .subscribe({
+                    bucketItemList -> bucketItemList.filter { it.category.name  ==  categoryName }
+                    callback.finish(bucketItemList)
+                }) {
+                    Log.e("ayhan", it.toString())
+                    callback.fail()
+                }
+
+
+    }
+
 
 /*
 

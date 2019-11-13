@@ -13,10 +13,15 @@
             name="categroy_count"
             type="String" />
 
+        <variable
+            name="itemOnClickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
 
     <RelativeLayout
+        android:onClick="@{itemOnClickListener}"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/mypage_category_background"

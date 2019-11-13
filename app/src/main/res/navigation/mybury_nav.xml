@@ -148,6 +148,39 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_bucket_item_by_category"
+            app:destination="@id/bucket_list_by_category_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_list_by_category_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.BucketListByCategoryFragment"
+        android:label="CategoryBucketist"
+        tools:layout="@layout/fragment_bucket_list_by_category">
+
+        <argument
+            android:name="category"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+
+        <action
+            android:id="@+id/action_category_bucket_list_to_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
     </fragment>
 
 
