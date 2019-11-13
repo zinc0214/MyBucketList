@@ -20,13 +20,20 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.MainActivity">
+
+        <activity android:name=".presentation.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="com.application.activity.MainActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
             </intent-filter>
         </activity>
 

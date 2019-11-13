@@ -57,6 +57,13 @@
     <color name="dialogBottomGradientSec">#5076f4</color>
     <color name="dialogBottomGradientThr">#5a95ff</color>
 
+
+    <color name="lightGradientFir">#d2d5ff</color>
+    <color name="lightGradientSec">#d2e5ff</color>
+    <color name="lightGradientThr">#5a95ff</color>
+
+
+
     <color name="writeTitleText">#aaaaaa</color>
     <color name="writeRegisterDisableText">#b4b4b4</color>
     <color name="writeRegisterEnableText">#5A95FF</color>
@@ -88,4 +95,5 @@
     <color name="appInfoContent">#666666</color>
 
     <color name="alarmBackground">#dfdfdf</color>
+    <color name="_ccffffff">#ccffffff</color>
 </resources>
