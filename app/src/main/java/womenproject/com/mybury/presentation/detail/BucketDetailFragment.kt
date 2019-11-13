@@ -1,5 +1,10 @@
 package womenproject.com.mybury.presentation.detail
 
+import android.util.Log
+import android.view.View
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
@@ -18,7 +23,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
     override val viewModel: BucketDetailViewModel
         get() = BucketDetailViewModel()
 
-    lateinit var bucketItem : BucketItem
+    lateinit var bucketItem: BucketItem
 
     override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
@@ -27,16 +32,17 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         arguments?.let {
             val args = BucketDetailFragmentArgs.fromBundle(it)
             val bucket = args.bucket
-            bucketItem= bucket!!
-
+            bucketItem = bucket!!
         }
 
         viewDataBinding.titleText.text = bucketItem.title
-        viewDataBinding.lockText.text = if(bucketItem.open) "공개" else "비공개"
+        viewDataBinding.lockText.text = if (bucketItem.open) "공개" else "비공개"
         viewDataBinding.categoryText.text = bucketItem.category.name
         viewDataBinding.dday.text = bucketItem.dDay.toString()
         viewDataBinding.currentCount.text = "${bucketItem.userCount}/${bucketItem.goalCount}"
         viewDataBinding.completeText.text = "${bucketItem.userCount}회 완료"
+
+        viewDataBinding.bucketUpdateOnClickListener = createOnClickBucketUpdateListener()
 
 
         val uri1 = "https://image.shutterstock.com/image-photo/assortment-fine-chocolates-white-dark-260nw-123360676.jpg"
@@ -56,6 +62,18 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.tabLayout.setupWithViewPager(viewPager)
     }
 
+
+    public fun createOnClickBucketUpdateListener() : View.OnClickListener {
+        return View.OnClickListener {
+            Log.e("ayham", "gpgin")
+            val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
+
+            Log.e("ayhan", " Bucket??? ${bucketItem.title}" )
+            directions.bucket = bucketItem
+            this.findNavController().navigate(directions)
+        }
+
+    }
 
 
 }

@@ -45,6 +45,29 @@
             android:defaultValue="@null"
             app:argType="womenproject.com.mybury.data.BucketItem"
             app:nullable="true" />
+
+        <action
+            android:id="@+id/action_detail_to_update"
+            app:destination="@id/bucket_update_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_update_fragment"
+        android:name="womenproject.com.mybury.presentation.update.BucketUpdateFragment"
+        android:label="Update"
+        tools:layout="@layout/fragment_bucket_write">
+
+        <argument
+            android:name="bucket"
+            android:defaultValue="@null"
+            app:argType="womenproject.com.mybury.data.BucketItem"
+            app:nullable="true" />
+
     </fragment>
 
 

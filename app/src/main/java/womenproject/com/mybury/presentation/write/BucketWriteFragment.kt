@@ -9,12 +9,15 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.motion.widget.MotionScene
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
@@ -23,7 +26,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
+open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>()  {
 
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
@@ -44,7 +47,7 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
         setCategoryList()
 
-        viewDataBinding.cancelBtnClickListener = writeCancelOnClickListener()
+        viewDataBinding.cancelBtnClickListener = setOnBackBtnClickListener()
         viewDataBinding.registerBtnClickListener = bucketAddOnClickListener()
         viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
         viewDataBinding.memoRemoveListener = memoRemoveListener()
@@ -66,25 +69,44 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
 
 
-        viewDataBinding.openSwitchBtn.setOnGenericMotionListener { v, event ->
-            Log.e("ayhan", "${viewDataBinding.openSwitchBtn.constraintSetIds.toString()}, ${viewDataBinding.openSwitchBtn.currentState}")
-            return@setOnGenericMotionListener false
-        }
-/*        viewDataBinding.openSwitchBtn.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_open)
-                viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
-            } else {
-                viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
-                viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
-            }
-        }*/
+        viewDataBinding.openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+                if(p0!!.targetPosition.toString().equals("0.0")) {
+                    Log.e("ayhan", "111")
+                    viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_open)
+                    viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
+                } else {
 
+
+                    Log.e("ayhan", "222")
+                    viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
+                    viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
+                }
+               Log.e("ayhan", "tran  :" + p0!!.id + ","+ p0.targetPosition + "," + p0.transitionName)
+            }
+
+            override fun allowsTransition(p0: MotionScene.Transition?): Boolean {
+                return true
+            }
+
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+            }
+
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+            }
+
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+            }
+
+        })
+
+
+        initForUpdate()
     }
 
     private fun setCategoryList() {
 
-        bucketInfoViewModel.getCategoryList(object: CategoryInfoViewModel.GetBucketListCallBackListener {
+        bucketInfoViewModel.getCategoryList(object : CategoryInfoViewModel.GetBucketListCallBackListener {
 
             override fun start() {
                 viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
@@ -106,9 +128,36 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
     }
 
 
-    private fun writeCancelOnClickListener(): View.OnClickListener {
+    class CancelDialog : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "버킷리스트 등록"
+            CONTENT_MSG = "진짜 지울겁니까???"
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "등록 안함"
+            CANCEL_TEXT = "취소"
+        }
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+            }
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                activity!!.onBackPressed()
+            }
+        }
+
+    }
+
+    override fun setOnBackBtnClickListener(): View.OnClickListener {
+        Log.e("ayhan", "writeBack")
         return View.OnClickListener {
-            activity!!.onBackPressed()
+            CancelDialog().show(activity!!.supportFragmentManager, "tag")
         }
     }
 
@@ -276,11 +325,11 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
         }
     }
 
-    private fun ddayAddListener(): View.OnClickListener {
+    fun ddayAddListener(): View.OnClickListener {
 
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
 
-            if(dday.isEmpty()) {
+            if (dday.isEmpty()) {
                 viewDataBinding.ddayText.text = "추가"
                 currentCalendarDay = date
                 viewDataBinding.ddayText.setDisableTextColor()
@@ -341,32 +390,35 @@ class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWrite
 
 
     private fun setBucketItemInfoData(): AddBucketItem {
-        if(goal_count_text.text.toString() == "설정") {
+        if (goal_count_text.text.toString() == "설정") {
             goalCount = 1
         } else {
             goalCount = goal_count_text.text.toString().toInt()
         }
 
         return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
-                currentCalendarDay.time , goalCount,
-                viewDataBinding.memoText.text.toString(),  viewDataBinding.categoryText.text.toString(), "userId1")
+                currentCalendarDay.time, goalCount,
+                viewDataBinding.memoText.text.toString(), viewDataBinding.categoryText.text.toString(), "userId1")
     }
 
 
-    private fun TextView.setEnableTextColor() {
+    protected fun TextView.setEnableTextColor() {
         this.setTextColor(context!!.resources.getColor(R.color.mainColor))
     }
 
-    private fun TextView.setDisableTextColor() {
+    protected fun TextView.setDisableTextColor() {
         this.setTextColor(context!!.resources.getColor(R.color.writeUnusedText))
     }
 
-    private fun ImageView.setImage(resource: Int) {
+    protected fun ImageView.setImage(resource: Int) {
         this.background = resource.getDrawable()
     }
 
     private fun Int.getDrawable(): Drawable {
         return context!!.getDrawable(this)
     }
+
+
+    open fun initForUpdate() {}
 
 }

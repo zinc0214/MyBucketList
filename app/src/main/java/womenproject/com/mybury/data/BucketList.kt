@@ -26,8 +26,9 @@ data class DdayEachBucketGroup(
 
 @Parcelize
 data class BucketItem(
-        val id : String = "id",
-        var title : String = "Title",
+        val id : String,
+        var title : String,
+        val memo  : String,
         val open : Boolean = false,
         val pin : Boolean = false,
         val complete : Boolean = false,

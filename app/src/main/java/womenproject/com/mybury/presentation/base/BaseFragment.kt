@@ -1,9 +1,11 @@
 package womenproject.com.mybury.presentation.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -30,6 +32,11 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            Log.e("ayhan", "backBtn")
+            setOnBackBtnClickListener();
+            true
+        })
         checkNetworkConnect()
     }
 
@@ -67,11 +74,10 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         }
     }
 
-    fun setOnBackBtnClickListener() : View.OnClickListener {
+    open fun setOnBackBtnClickListener() : View.OnClickListener {
         return View.OnClickListener {
             activity!!.onBackPressed()
         }
     }
 
 }
-

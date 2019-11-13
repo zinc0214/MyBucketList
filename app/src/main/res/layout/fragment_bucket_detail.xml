@@ -9,6 +9,15 @@
         <variable
             name="viewModel"
             type="womenproject.com.mybury.presentation.detail.BucketDetailViewModel" />
+
+        <variable
+            name="activity"
+            type="womenproject.com.mybury.presentation.detail.BucketDetailFragment" />
+
+        <variable
+            name="bucketUpdateOnClickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <RelativeLayout
@@ -97,6 +106,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:onClick="@{bucketUpdateOnClickListener}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

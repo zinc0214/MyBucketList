@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -9,7 +8,6 @@
         <variable
             name="cancelBtnClickListener"
             type="android.view.View.OnClickListener" />
-
 
         <variable
             name="registerBtnClickListener"
@@ -38,6 +36,15 @@
         <variable
             name="goalCountSettingListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.presentation.write.BucketWriteViewModel" />
+
+        <variable
+            name="activity"
+            type="womenproject.com.mybury.presentation.write.BucketWriteFragment" />
+
     </data>
 
     <RelativeLayout

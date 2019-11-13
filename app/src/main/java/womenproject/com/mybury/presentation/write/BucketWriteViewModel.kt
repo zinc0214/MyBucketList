@@ -5,6 +5,7 @@ import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.network.bucketListApi
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
@@ -12,12 +13,13 @@ import java.io.File
 
 class BucketWriteViewModel : BaseViewModel() {
 
+    var bucketItem : BucketItem  ? = null
+
     interface OnBucketAddEvent {
         fun start()
         fun success()
         fun fail()
     }
-
 
     @SuppressLint("CheckResult")
     fun uploadBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
@@ -59,7 +61,14 @@ class BucketWriteViewModel : BaseViewModel() {
 
     }
 
+    fun getBucketDetailInfo() {
 
+    }
+
+
+    fun isDateNotNull() : Boolean {
+        return bucketItem != null
+    }
 /*
     fun uploadBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
 

@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,22 +23,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
 
-   override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-       drawerLayout = binding.drawerLayout
-       navController = Navigation.findNavController(this, R.id.nav_fragment)
+        drawerLayout = binding.drawerLayout
+        navController = Navigation.findNavController(this, R.id.nav_fragment)
 
-       appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
-       /*val baseViewModel = BaseViewModel()
+        /*val baseViewModel = BaseViewModel()
 
-       if(baseViewModel.isNetworkDisconnect()) {
-           val baseDialogFragment = BaseNormalDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
-           baseDialogFragment.show(supportFragmentManager, "dialog")
-       }*/
+        if(baseViewModel.isNetworkDisconnect()) {
+            val baseDialogFragment = BaseNormalDialogFragment.Instance("Network Fail", "Network is Fail, Please Check", false, true)
+            baseDialogFragment.show(supportFragmentManager, "dialog")
+        }*/
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun showDialog() {
-      //  BaseNormalDialogFragment().showDialog()
+        //  BaseNormalDialogFragment().showDialog()
     }
+
 }
