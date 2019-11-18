@@ -21,7 +21,7 @@
 
 
     <androidx.core.widget.NestedScrollView
-        android:background="@color/mainBackground"
+        android:background="@color/_fafafa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -60,7 +60,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
                     android:text="@{viewModel.ddayCount}"
-                    android:textColor="@color/notiColor" />
+                    android:textColor="@color/_ffca5a" />
 
 
             </RelativeLayout>
@@ -75,12 +75,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="카테고리"
-                    android:textColor="@color/mainColor"
+                    android:textColor="@color/_5a95ff"
                     android:textSize="12sp" />
 
                 <TextView
                     android:onClick="@{categoryEditClickListener}"
-                    android:textColor="@color/mainColor"
+                    android:textColor="@color/_5a95ff"
                     android:gravity="center"
                     android:textSize="11sp"
                     android:text="편집"

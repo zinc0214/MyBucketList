@@ -20,11 +20,11 @@
             android:id="@+id/motionLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/mainBackground"
+            android:background="@color/_fafafa"
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:background="@color/mainBackground"
+                android:background="@color/_fafafa"
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{title}"
                 android:textAlignment="center"
-                android:textColor="@color/dialogTitleText"
+                android:textColor="@color/_222222"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -65,7 +65,7 @@
                 android:layout_marginTop="17dp"
                 android:text="@{content}"
                 android:textAlignment="center"
-                android:textColor="@color/dialogContentText"
+                android:textColor="@color/_888888"
                 android:textSize="14sp" />
 
 
@@ -74,7 +74,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.6dp"
-            android:background="@color/dialogBinder" />
+            android:background="@color/_dbdbdb" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                     android:onClick="@{cancelButtonClickListener}"
                     android:text="@string/dialog_cancel"
                     android:background="@drawable/dialog_bottom_sheet_left_background"
-                    android:textColor="@color/dialogBottomCancelText" />
+                    android:textColor="@color/_b4b4b4" />
 
                 <TextView
                     android:id="@+id/confirm_text"
@@ -103,7 +103,7 @@
                     android:onClick="@{confirmButtonClickListener}"
                     android:background="@drawable/dialog_bottom_sheet_right_background"
                     android:text="@string/dialog_confirm"
-                    android:textColor="@color/dialogBottomConfirmText" />
+                    android:textColor="@color/_5a95ff" />
 
             </LinearLayout>
 
@@ -127,7 +127,7 @@
                 android:layout_width="0.6dp"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:background="@color/dialogBinder" />
+                android:background="@color/_dbdbdb" />
 
         </RelativeLayout>
 

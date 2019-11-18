@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        android:background="@color/mainBackground"
+        android:background="@color/_fafafa"
         android:fitsSystemWindows="true">
 
 

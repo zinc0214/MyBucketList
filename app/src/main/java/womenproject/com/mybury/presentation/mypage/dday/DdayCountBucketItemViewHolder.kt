@@ -26,7 +26,7 @@ class DdayCountBucketItemViewHolder(private val binding: BucketItemCountBinding)
     }
 
     override fun setFinalSuccessUIButton() {
-        successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.ddayBucketSuccessBtnBackground)
+        successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._ffca5a)
     }
 
     override fun setFinalSuccessUIBackground() {
@@ -35,15 +35,15 @@ class DdayCountBucketItemViewHolder(private val binding: BucketItemCountBinding)
     }
 
     override fun setDoneSuccessUIButton() {
-        successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucketBaseBtnBackground)
+        successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._e8e8e8)
         bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
 
     }
 
     override fun setDdayColor() {
         binding.horizontalProgressBar.progressDrawable = context.getDrawable(R.drawable.dday_horizontal_progressbar)
-        binding.successButtonLayout.circularProgressBar.spinningBarColor = context.getColor(R.color.notiColor)
+        binding.successButtonLayout.circularProgressBar.spinningBarColor = context.getColor(R.color._ffca5a)
         binding.bucketSucceedImage.background = context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
-        binding.userCount.setTextColor(context.getColor(R.color.notiColor))
+        binding.userCount.setTextColor(context.getColor(R.color._ffca5a))
     }
 }

@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_current_version"
-                    android:textColor="@color/dialogContentText"
+                    android:textColor="@color/_888888"
                     android:textSize="10sp" />
 
             </LinearLayout>
@@ -98,7 +98,7 @@
 
             <TextView
                 android:textSize="10sp"
-                android:textColor="@color/writeTitleText"
+                android:textColor="@color/_aaaaaa"
                 android:text="마비어리 개발자"
                 android:layout_marginTop="45dp"
                 android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
 
             <TextView
                 android:textSize="10sp"
-                android:textColor="@color/writeTitleText"
+                android:textColor="@color/_aaaaaa"
                 android:text="김가은, 안예지, 이명선, 한아연"
                 android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"

@@ -14,7 +14,7 @@
     </data>
 
     <RelativeLayout
-        android:background="@color/mainBackground"
+        android:background="@color/_fafafa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">

@@ -30,7 +30,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dialogBinder"
+            android:background="@color/_dbdbdb"
             android:orientation="horizontal">
 
             <ImageView
@@ -52,12 +52,12 @@
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{cancelButtonClickListener}"
                 android:text="@string/dialog_cancel"
-                android:textColor="@color/dialogBottomCancelText" />
+                android:textColor="@color/_b4b4b4" />
 
             <ImageView
                 android:layout_width="0.6dp"
                 android:layout_height="match_parent"
-                android:background="@color/dialogBinder" />
+                android:background="@color/_dbdbdb" />
 
             <TextView
                 android:background="@drawable/dialog_bottom_sheet_right_background"
@@ -65,7 +65,7 @@
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{confirmButtonClickListener}"
                 android:text="@string/dialog_confirm"
-                android:textColor="@color/dialogBottomConfirmText" />
+                android:textColor="@color/_5a95ff" />
 
         </LinearLayout>
 

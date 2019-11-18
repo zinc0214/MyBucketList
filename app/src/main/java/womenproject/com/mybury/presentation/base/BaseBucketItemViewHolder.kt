@@ -108,7 +108,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     open fun setDoneSuccessUIButton() {
-        successImageView.backgroundTintList = context.getColorStateList(R.color.bucketBaseBtnBackground)
+        successImageView.backgroundTintList = context.getColorStateList(R.color._e8e8e8)
         bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
     }
 

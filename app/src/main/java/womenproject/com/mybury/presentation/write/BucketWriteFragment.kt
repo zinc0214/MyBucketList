@@ -403,11 +403,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     protected fun TextView.setEnableTextColor() {
-        this.setTextColor(context!!.resources.getColor(R.color.mainColor))
+        this.setTextColor(context!!.resources.getColor(R.color._5a95ff))
     }
 
     protected fun TextView.setDisableTextColor() {
-        this.setTextColor(context!!.resources.getColor(R.color.writeUnusedText))
+        this.setTextColor(context!!.resources.getColor(R.color._888888))
     }
 
     protected fun ImageView.setImage(resource: Int) {

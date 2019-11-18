@@ -44,7 +44,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, ProfileEdit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(viewModel.nickname == viewDataBinding.nicknameEditText.text.toString()) {
-                    viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color.dialogUncheckBoxTextColor))
+                    viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
                     viewDataBinding.profileSave.isEnabled = false
                 } else {
                     viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color.bucketBaseText))

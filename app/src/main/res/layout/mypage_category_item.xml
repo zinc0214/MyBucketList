@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:text="@{categroy_count}"
-            android:textColor="@color/mainColor" />
+            android:textColor="@color/_5a95ff" />
 
 
     </RelativeLayout>

@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ddayListBackground">
+        android:background="@color/_f9f9f9">
 
         <ScrollView
             android:id="@+id/dday_each_list_layout"

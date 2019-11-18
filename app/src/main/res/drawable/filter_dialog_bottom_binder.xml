@@ -2,5 +2,5 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/filterDialogBottomBinder" />
+    <solid android:color="@color/_eaeaea" />
 </shape>

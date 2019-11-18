@@ -41,7 +41,7 @@
 
             <TextView
                 android:onClick="@{profileImageEditClickListener}"
-                android:textColor="@color/mainColor"
+                android:textColor="@color/_5a95ff"
                 android:textSize="12sp"
                 android:gravity="center"
                 android:id="@+id/update_btn"
@@ -56,9 +56,9 @@
                 android:background="@drawable/profile_edit_text_background"
                 android:textSize="14sp"
                 android:layout_gravity="center"
-                android:textColorHint="@color/dialogBottomCancelText"
+                android:textColorHint="@color/_b4b4b4"
                 android:hint="닉네임을 입력해주세요"
-                android:textColor="@color/writeEnableText"
+                android:textColor="@color/_434343"
                 android:id="@+id/nickname_edit_text"
                 android:layout_width="260dp"
                 android:layout_height="37dp"

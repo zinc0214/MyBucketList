@@ -307,7 +307,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private fun LinearLayout.disableAdd() {
         this.isEnabled = false
-        this.write_item_text.setTextColor(context!!.getColor(R.color.disableAdd))
+        this.write_item_text.setTextColor(context!!.getColor(R.color._b4b4b4))
     }
 }
 

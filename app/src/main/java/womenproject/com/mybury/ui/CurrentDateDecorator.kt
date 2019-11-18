@@ -25,7 +25,7 @@ class CurrentDateDecorator : DayViewDecorator {
 
     override fun decorate(view: DayViewFacade) {
 
-       // view.addSpan(ForegroundColorSpan(Color.BLACK))
+       // view.addSpan(ForegroundColorSpan(Color._000000))
         view.addSpan(StyleSpan(Typeface.BOLD))
         view.addSpan(RelativeSizeSpan(1.2f))
 

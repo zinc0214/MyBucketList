@@ -74,7 +74,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
 
         colorizeDatePicker(viewDataBinding.datePicker)
-        dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color.mainColor))
+        dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color._5a95ff))
 
 
         viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->

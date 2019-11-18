@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="192dp"
-            android:background="@color/mainBackground" />
+            android:background="@color/_fafafa" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                         android:layout_marginRight="38dp"
                         android:gravity="center"
                         android:text="닉네임데쇼오"
-                        android:textColor="@color/bucketBaseText"
+                        android:textColor="@color/_434343"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 

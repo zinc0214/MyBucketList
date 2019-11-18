@@ -69,7 +69,7 @@
                     android:layout_marginStart="20dp"
                     android:onClick="@{cancelBtnClickListener}"
                     android:text="취소"
-                    android:textColor="@color/writeEnableText" />
+                    android:textColor="@color/_434343" />
 
 
                 <TextView
@@ -114,8 +114,8 @@
                         android:hint="새로운 목표를 작성해보세요."
                         android:minHeight="52dp"
                         android:maxLength="30"
-                        android:textColor="@color/writeTitleText"
-                        android:textColorHint="@color/writeUnusedText"
+                        android:textColor="@color/_aaaaaa"
+                        android:textColorHint="@color/_888888"
                         android:textSize="18sp" />
 
 
@@ -138,7 +138,7 @@
                             android:background="@android:color/transparent"
                             android:gravity="top"
                             android:hint="메모를 작성해주세요."
-                            android:textColor="@color/writeMemoText"
+                            android:textColor="@color/_888888"
                             android:textSize="11sp" />
 
                         <RelativeLayout
@@ -203,7 +203,7 @@
                     android:layout_marginBottom="6dp"
                     android:gravity="center"
                     android:text="메모/이미지"
-                    android:textColor="@color/mainColor"
+                    android:textColor="@color/_5a95ff"
                     android:textSize="11sp" />
 
             </LinearLayout>
@@ -233,7 +233,7 @@
                     android:id="@+id/open_text"
                     style="@style/writeSettingListTitleTextStyle"
                     android:text="@string/bucket_open"
-                    android:textColor="@color/writeEnableText" />
+                    android:textColor="@color/_434343" />
 
                 <RelativeLayout
                     android:id="@+id/select_switch_layout"
@@ -295,7 +295,7 @@
                 <TextView
                     style="@style/writeSettingListTitleTextStyle"
                     android:text="카테고리"
-                    android:textColor="@color/writeEnableText" />
+                    android:textColor="@color/_434343" />
 
 
                 <TextView
@@ -331,7 +331,7 @@
                 <TextView
                     style="@style/writeSettingListTitleTextStyle"
                     android:text="D-day"
-                    android:textColor="@color/writeEnableText" />
+                    android:textColor="@color/_434343" />
 
 
                 <TextView
@@ -366,7 +366,7 @@
                 <TextView
                     style="@style/writeSettingListTitleTextStyle"
                     android:text="목표 달성 횟수"
-                    android:textColor="@color/writeEnableText" />
+                    android:textColor="@color/_434343" />
 
 
                 <TextView

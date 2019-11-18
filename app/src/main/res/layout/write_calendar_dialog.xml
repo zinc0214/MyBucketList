@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
-                android:textColor="@color/dialogTitleText"
+                android:textColor="@color/_222222"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                 android:animationCache="false"
                 app:mcv_allowClickDaysOutsideCurrentMonth="true"
                 app:mcv_calendarMode="month"
-                app:mcv_selectionColor="@color/mainColor"
+                app:mcv_selectionColor="@color/_5a95ff"
                 app:mcv_showOtherDates="defaults" />
 
             <LinearLayout
