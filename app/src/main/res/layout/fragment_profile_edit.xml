@@ -25,7 +25,7 @@
                 android:layout_height="@dimen/image_width"
                 android:layout_gravity="center"
                 android:layout_marginTop="36dp"
-                android:shadowColor="@android:color/white"
+                android:shadowColor="@color/_ffffff"
                 app:altSrc="@drawable/mypage_profile_img_background_small"
                 app:border_width="2dp"
                 app:cardCornerRadius="26dp"
@@ -90,7 +90,7 @@
                     android:layout_marginStart="20dp"
                     android:onClick="@{backBtnOnClickListener}"
                     android:text="취소"
-                    android:textColor="@color/bucketBaseText"
+                    android:textColor="@color/_434343"
                     android:textSize="16sp" />
 
                 <TextView
@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:text="@{viewModel.title}"
-                    android:textColor="@color/subColor"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

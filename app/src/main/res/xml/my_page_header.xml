@@ -94,7 +94,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="울고싶어요"
-                android:textColor="@color/bucketBaseText"
+                android:textColor="@color/_434343"
                 android:textSize="14sp"
                 motion:autoSizeTextType="uniform"
                 motion:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +104,7 @@
 
                 <CustomAttribute
                     motion:attributeName="textColor"
-                    motion:customColorValue="@color/bucketBaseText" />
+                    motion:customColorValue="@color/_434343" />
                 <CustomAttribute
                     app:attributeName="textSize"
                     app:customFloatValue="14" />
@@ -124,7 +124,7 @@
                 motion:layout_constraintEnd_toEndOf="@+id/background"
                 motion:layout_constraintStart_toStartOf="@+id/background"
                 motion:layout_constraintTop_toTopOf="@+id/background"
-                motion:layout_constraintVertical_chainStyle="packed"></Constraint>
+                motion:layout_constraintVertical_chainStyle="packed"/>
 
 
             <Constraint
@@ -207,7 +207,7 @@
                     app:customFloatValue="12" />
                 <CustomAttribute
                     motion:attributeName="textColor"
-                    motion:customColorValue="@color/bucketBaseText" />
+                    motion:customColorValue="@color/_434343" />
             </Constraint>
 
             <Constraint

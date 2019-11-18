@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
 
-        <item name="colorControlHighlight">@color/writeMemoPress</item>
+        <item name="colorControlHighlight">@color/_dfdfdf</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme">
@@ -151,13 +151,13 @@
 
 
     <style name="CalenderViewCustom" parent="Theme.AppCompat">
-        <item name="colorAccent">@color/red</item>
-        <item name="colorPrimary">@color/subColor</item>
+        <item name="colorAccent">@color/_fd0505</item>
+        <item name="colorPrimary">@color/_a6c6ff</item>
     </style>
 
     <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
         <item name="android:textColor">@color/_000000</item>
-        <item name="android:weekNumberColor">@color/red</item>
+        <item name="android:weekNumberColor">@color/_fd0505</item>
     </style>
 
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
@@ -184,7 +184,7 @@
     </style>
 
     <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
-        <item name="android:divider">@color/writeSeekbarBackground2</item>
+        <item name="android:divider">@color/_a6c6ff</item>
         <item name="android:dividerHeight">0.6dp</item>
     </style>
 

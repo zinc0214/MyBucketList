@@ -65,7 +65,7 @@
             android:layout_height="@dimen/image_width"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="72dp"
-            android:shadowColor="@android:color/white"
+            android:shadowColor="@color/_ffffff"
             app:border_width="2dp"
             app:cardCornerRadius="26dp"
             app:cardElevation="0dp"
@@ -93,7 +93,7 @@
             android:layout_height="24dp"
             android:gravity="center"
             android:text="닉네임이네님네임해"
-            android:textColor="@color/bucketBaseText"
+            android:textColor="@color/_434343"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/icon" />
 
@@ -120,7 +120,7 @@
                     android:layout_height="24dp"
                     android:text="@{viewModel.doingBucketCount}"
                     android:textAlignment="center"
-                    android:textColor="@color/subColor"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="14sp" />
 
                 <TextView
@@ -129,7 +129,7 @@
                     android:layout_marginTop="4dp"
                     android:text="진행중"
                     android:textAlignment="center"
-                    android:textColor="@color/subColor"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_height="24dp"
                     android:text="@{viewModel.doneBucketCount}"
                     android:textAlignment="center"
-                    android:textColor="@color/subColor"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="14sp" />
 
                 <TextView
@@ -157,7 +157,7 @@
                     android:layout_marginTop="4dp"
                     android:text="완료"
                     android:textAlignment="center"
-                    android:textColor="@color/subColor"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="12sp" />
 
             </LinearLayout>

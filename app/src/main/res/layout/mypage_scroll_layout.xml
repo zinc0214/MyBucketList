@@ -50,7 +50,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:text="D-day 버킷리스트"
-                    android:textColor="@color/bucketBaseText"
+                    android:textColor="@color/_434343"
                     android:textSize="14sp" />
 
                 <TextView

@@ -88,7 +88,7 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
     }
 
     open fun setFinalSuccessUIButton() {
-        viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color.bucketSuccessBtnBackground)
+        viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._a6c6ff)
     }
 
 

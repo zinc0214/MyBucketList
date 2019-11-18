@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:textColor="@color/white"
+                android:textColor="@color/_ffffff"
                 android:textSize="14sp" />
         </RelativeLayout>
 
@@ -130,7 +130,7 @@
                     android:maxLines="2"
                     android:minHeight="40dp"
                     android:id="@+id/memo"
-                    android:textColor="@color/detailContextText"
+                    android:textColor="@color/_797979"
                     android:textSize="12sp" />
 
 
@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="64dp"
                     android:text="상세정보"
-                    android:textColor="@color/detailInfoText"
+                    android:textColor="@color/_a6c6ff"
                     android:textSize="12sp" />
 
                 <RelativeLayout
@@ -152,7 +152,7 @@
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:text="카테고리"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
 
                     <TextView
@@ -160,7 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/category_text"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
                 </RelativeLayout>
 
@@ -174,7 +174,7 @@
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:text="목표날짜"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
 
                     <TextView
@@ -182,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/dday"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
                 </RelativeLayout>
 
@@ -196,7 +196,7 @@
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:text="진행상황"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
 
                     <TextView
@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:id="@+id/current_count"
-                        android:textColor="@color/detailContextText"
+                        android:textColor="@color/_797979"
                         android:textSize="12sp" />
                 </RelativeLayout>
             </LinearLayout>

@@ -241,7 +241,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
             try {
                 val dividerField = picker::class.java.getDeclaredField("mSelectionDivider")
                 dividerField.setAccessible(true)
-                val colorDrawable = ColorDrawable(picker.getResources().getColor(R.color.writeSeekbarBackground2))
+                val colorDrawable = ColorDrawable(picker.getResources().getColor(R.color._a6c6ff))
                 val height = resources.getDimensionPixelSize(R.dimen.titleMargin)
                 dividerField.set(picker, colorDrawable)
                 picker.invalidate()

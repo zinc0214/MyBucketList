@@ -118,7 +118,7 @@
                 <TextView
                     style="@style/baseDialogButtonTextStyle"
                     android:text="@string/dialog_confirm"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/_ffffff" />
 
             </LinearLayout>
 

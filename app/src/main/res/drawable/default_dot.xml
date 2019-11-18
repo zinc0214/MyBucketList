@@ -3,6 +3,6 @@
     android:shape="ring"
     android:thickness="5dp"
     android:useLevel="false">
-    <solid android:color="@color/transparent" />
-    <stroke android:color="@color/white" android:width="0.3dp"/>
+    <solid android:color="@color/_00ffffff" />
+    <stroke android:color="@color/_ffffff" android:width="0.3dp"/>
 </shape>

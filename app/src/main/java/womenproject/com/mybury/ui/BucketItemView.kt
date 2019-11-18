@@ -83,14 +83,14 @@ class BucketItemView(private val binding: ViewDataBinding) {
     }
 
     open fun setFinalSuccessUIButton() {
-        successImageView.backgroundTintList = context.getColorStateList(R.color.bucketSuccessBtnBackground)
+        successImageView.backgroundTintList = context.getColorStateList(R.color._a6c6ff)
     }
 
 
     open fun setFinalSuccessUIBackground() {
         successImageView.setBackgroundResource(R.drawable.check_complete)
-        successImageView.backgroundTintList = context.getColorStateList(R.color.white)
-        bucketTitle.setTextColor(context.resources.getColor(R.color.white))
+        successImageView.backgroundTintList = context.getColorStateList(R.color._ffffff)
+        bucketTitle.setTextColor(context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
         bucketItemLayout.layoutParams.height = context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
 

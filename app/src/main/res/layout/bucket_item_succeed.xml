@@ -49,7 +49,7 @@
                         android:id="@+id/bucket_title"
                         style="@style/BucketItemTitleTextStyle"
                         android:text="@{bucketTitleText}"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/_ffffff" />
 
                     <ImageView
                         android:id="@+id/success_img"

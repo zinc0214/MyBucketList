@@ -47,7 +47,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, ProfileEdit
                     viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
                     viewDataBinding.profileSave.isEnabled = false
                 } else {
-                    viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color.bucketBaseText))
+                    viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
                     viewDataBinding.profileSave.isEnabled = true
                 }
             }

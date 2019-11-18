@@ -85,7 +85,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.doingBucketCount}"
                                 android:textAlignment="center"
-                                android:textColor="@color/subColor"
+                                android:textColor="@color/_a6c6ff"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -94,7 +94,7 @@
                                 android:layout_marginTop="4dp"
                                 android:text="진행중"
                                 android:textAlignment="center"
-                                android:textColor="@color/subColor"
+                                android:textColor="@color/_a6c6ff"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -113,7 +113,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.doneBucketCount}"
                                 android:textAlignment="center"
-                                android:textColor="@color/subColor"
+                                android:textColor="@color/_a6c6ff"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -122,7 +122,7 @@
                                 android:layout_marginTop="4dp"
                                 android:text="완료"
                                 android:textAlignment="center"
-                                android:textColor="@color/subColor"
+                                android:textColor="@color/_a6c6ff"
                                 android:textSize="12sp" />
 
                         </LinearLayout>

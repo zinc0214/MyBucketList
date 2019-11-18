@@ -15,7 +15,7 @@
                 android:bottom="1dp">
                 <shape android:shape="rectangle">
                     <corners android:radius="4dp"/>
-                    <solid android:color="@android:color/white"/>
+                    <solid android:color="@color/_ffffff"/>
                 </shape>
             </item>
         </layer-list>
@@ -28,7 +28,7 @@
         <scale android:scaleWidth="100%">
             <shape android:shape="rectangle">
                 <corners android:radius="4dp" />
-                <solid android:color="@color/subColor" />
+                <solid android:color="@color/_a6c6ff" />
             </shape>
         </scale>
     </item>

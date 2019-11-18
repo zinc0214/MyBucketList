@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="28dp"
-            android:background="@color/dialogCategoryBackgroundColor"
+            android:background="@color/_f6fcff"
             android:orientation="vertical">
 
             <TextView

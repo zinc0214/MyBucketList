@@ -13,7 +13,7 @@
         android:layout_marginBottom="16dp"
         android:letterSpacing="-0.05"
         android:text="당신의 버킷리스트를 응원합니다."
-        android:textColor="@color/white"
+        android:textColor="@color/_ffffff"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/logo_layout"
         app:layout_constraintEnd_toEndOf="parent"

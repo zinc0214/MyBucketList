@@ -4,64 +4,13 @@
     <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#5a95ff</color>
 
-    <color name="dialogCategoryBackgroundColor">#f6fcff</color>
-
-
     <color name="testColor">#ffa2a2</color>
     <color name="trans">#00ffa2a2</color>
     <color name="textOriColor">#3bff9393</color>
 
-    <color name="white">#ffffff</color>
-    <color name="red">#fd0505</color>
-
-    <color name="mainBackground">#fafafa</color>
-    <color name="transparent">#00ffffff</color>
-    <color name="transparent_black">#4D000000</color>
-
-    <color name="subColor">#A6C6FF</color>
-    <color name="mainPressColor">#b33341c0</color>
-    <color name="subPressColor">#859ecc</color>
-    <color name="ddayPressColor">#cca248</color>
-
-    <color name="bucketSucceedBackground">#66859ecc</color>
-    <color name="bucketSuccessBtnBackground">#a6c6ff</color>
-    <color name="bucketBaseText">#434343</color>
-
-    <color name="ddayProgressColor">#ffe3a6</color>
-    <color name="ddayBucketSucceedBackground">#33cca248</color>
-
-    <color name="dialogBottomGradientFir">#4656e8</color>
-    <color name="dialogBottomGradientSec">#5076f4</color>
-
-
-    <color name="lightGradientFir">#d2d5ff</color>
-    <color name="lightGradientSec">#d2e5ff</color>
-
-    <color name="writeMemoBackground">#f3f3f3</color>
-    <color name="writeListPress">#f0f0f0</color>
-    <color name="writeMemoPress">#dfdfdf</color>
-    <color name="writeItemTextPress">#99434343</color>
-
-    <color name="dividerColor">#dddddd</color>
-    <color name="switchUnselectColor">#d8d8d8</color>
-
-    <color name="writeImgRemoveCircleColor">#b3ffffff</color>
-
-    <color name="writeSeekbarBackground1">#4cc8cdda</color>
-    <color name="writeSeekbarBackground2">#a6c6ff</color>
-    <color name="imgRemoveBtnPressBackground">#33ffffff</color>
-
-
-    <color name="detailContextText">#797979</color>
-    <color name="detailInfoText">#a6c6ff</color>
-
-    <color name="categoryUnselectBackground">#cccccc</color>
-    <color name="appInfoContent">#666666</color>
-
-    <color name="alarmBackground">#dfdfdf</color>
-
     <color name="_000000">#000000</color>
-    <color name="_ccffffff">#ccffffff</color>
+    <color name="_ffffff">#ffffff</color>
+    <color name="_fd0505">#fd0505</color>
     <color name="_578afb">#578afb</color>
     <color name="_e8e8e8">#e8e8e8</color>
     <color name="_434343">#434343</color>
@@ -75,4 +24,33 @@
     <color name="_aaaaaa">#aaaaaa</color>
     <color name="_f9f9f9">#f9f9f9</color>
     <color name="_ffca5a">#ffca5a</color>
+    <color name="_ffe3a6">#ffe3a6</color>
+    <color name="_a6c6ff">#a6c6ff</color>
+    <color name="_797979">#797979</color>
+    <color name="_d2d5ff">#d2d5ff</color>
+    <color name="_d2e5ff">#d2e5ff</color>
+    <color name="_f3f3f3">#f3f3f3</color>
+    <color name="_f0f0f0">#f0f0f0</color>
+    <color name="_dddddd">#dddddd</color>
+    <color name="_dfdfdf">#dfdfdf</color>
+    <color name="_cccccc">#cccccc</color>
+    <color name="_cca248">#cca248</color>
+    <color name="_859ecc">#859ecc</color>
+    <color name="_f6fcff">#f6fcff</color>
+    <color name="_4656e8">#4656e8</color>
+    <color name="_5076f4">#5076f4</color>
+    <color name="_d8d8d8">#d8d8d8</color>
+    <color name="_666666">#666666</color>
+
+
+    <color name="_33cca248">#33cca248</color>
+    <color name="_99434343">#99434343</color>
+    <color name="_33ffffff">#33ffffff</color>
+    <color name="_66859ecc">#66859ecc</color>
+    <color name="_b33341c0">#b33341c0</color>
+    <color name="_00ffffff">#00ffffff</color>
+    <color name="_4D000000">#4D000000</color>
+    <color name="_b3ffffff">#b3ffffff</color>
+    <color name="_4cc8cdda">#4cc8cdda</color>
+    <color name="_ccffffff">#ccffffff</color>
 </resources>

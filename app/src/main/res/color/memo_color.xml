@@ -1,5 +1,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="false" android:color="@color/writeMemoBackground"/> <!-- checked -->
-    <item android:state_pressed="true" android:color="@color/writeMemoPress"/> <!-- checked -->
-    <item android:color="@color/writeMemoBackground"/> <!-- anything else -->
+    <item android:state_pressed="false" android:color="@color/_f3f3f3"/> <!-- checked -->
+    <item android:state_pressed="true" android:color="@color/_dfdfdf"/> <!-- checked -->
+    <item android:color="@color/_f3f3f3"/> <!-- anything else -->
 </selector>
