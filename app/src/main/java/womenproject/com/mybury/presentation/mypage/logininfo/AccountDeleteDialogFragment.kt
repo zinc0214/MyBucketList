@@ -25,8 +25,6 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
         get() = R.layout.account_delect_dialog
 
 
-    //val itemView = BaseBucketItemView(viewDataBinding)
-
     val animFadeOut = AnimationUtils.loadAnimation(MyBuryApplication.context, R.anim.fade_out)
 
     override fun initDataBinding() {
@@ -71,6 +69,9 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
                 postDelayed({
                     animFadeOut.duration = 1800
                     viewDataBinding.endContentText.visibility=View.GONE
+                }, 2000)
+                postDelayed({
+                    activity!!.finish()
                 }, 2000)
 
             }
