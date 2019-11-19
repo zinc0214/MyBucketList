@@ -2,7 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/main_fragment">
+    app:startDestination="@+id/create_account_fragment">
+
+    <fragment
+        android:id="@+id/create_account_fragment"
+        android:name="womenproject.com.mybury.presentation.login.CreateAccountFragment"
+        tools:layout="@layout/fragment_create_account"
+        android:label="createAccountFragment">
+        <action
+            android:id="@+id/action_create_to_main"
+            app:destination="@id/main_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/main_fragment"
