@@ -1,18 +1,15 @@
-package womenproject.com.mybury.presentation
+package womenproject.com.mybury.presentation.intro
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import kotlin.random.Random
-import androidx.core.os.HandlerCompat.postDelayed
 import android.os.Handler
 import android.util.Log
-import androidx.databinding.DataBindingUtil
 import womenproject.com.mybury.databinding.SplashWithLoginBinding
+import womenproject.com.mybury.presentation.MainActivity
 
 
 class SplashActivity : AppCompatActivity() {
@@ -23,14 +20,12 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val num = Random.nextInt(2)
         Log.e("ayhan", "nume: $num")
-        /*if (num == 1) {
+        if (num == 1) {
             setContentView(R.layout.splash_white)
         } else {
             setContentView(R.layout.splash_blue)
-        }*/
-       // setContentView(R.layout.splash_with_login)
+        }
 
-        binding = DataBindingUtil.setContentView<SplashWithLoginBinding>(this, R.layout.splash_with_login)
 
         val hd = Handler()
         hd.postDelayed(splashhandler(), 1000)
@@ -38,14 +33,15 @@ class SplashActivity : AppCompatActivity() {
 
     private inner class splashhandler : Runnable {
         override fun run() {
-
-            binding.motionLayout.transitionToEnd()
-           /* val intent = Intent(context, MainActivity::class.java)
+            val intent = Intent(context, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
-            finish()*/
-
+            finish()
         }
+    }
+
+    private fun goGO() {
+
     }
 
 }
