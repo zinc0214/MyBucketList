@@ -35,6 +35,12 @@
                 <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.intro.CreateAccountActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".presentation.MainActivity"
             android:screenOrientation="portrait">

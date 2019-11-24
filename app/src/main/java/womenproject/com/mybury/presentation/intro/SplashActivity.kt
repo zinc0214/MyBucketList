@@ -26,7 +26,6 @@ class SplashActivity : AppCompatActivity() {
             setContentView(R.layout.splash_blue)
         }
 
-
         val hd = Handler()
         hd.postDelayed(splashhandler(), 1000)
     }
@@ -39,9 +38,4 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    private fun goGO() {
-
-    }
-
 }

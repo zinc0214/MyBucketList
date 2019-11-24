@@ -17,6 +17,9 @@ import com.google.android.gms.common.api.ApiException
 import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
+import womenproject.com.mybury.data.Preference.Companion.getNickname
+import womenproject.com.mybury.data.Preference.Companion.setNickname
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -30,25 +33,35 @@ class SplashLoginActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        // [START config_signin]
-        // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-        // [END config_signin]
-
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        // [START initialize_auth]
-        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        binding = DataBindingUtil.setContentView<SplashWithLoginBinding>(this, R.layout.splash_with_login)
-        binding.loginLayout.setOnClickListener { signIn()}
+        binding = DataBindingUtil.setContentView(this, R.layout.splash_with_login)
+        binding.loginLayout.setOnClickListener {
+            if(getNickname(this).isNotEmpty()) {
+                signOut()
+            } else {
+                signIn()
+            }
+
+        }
 
         val hd = Handler()
         hd.postDelayed(splashhandler(), 1000)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(getMyBuryLoginComplete(this)) {
+            val intent = Intent(context, SplashActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+            finish()
+        }
     }
 
     private inner class splashhandler : Runnable {
@@ -57,9 +70,10 @@ class SplashLoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun goGO(account : GoogleSignInAccount) {
+    private fun goToCreateAccount(account : GoogleSignInAccount) {
         Log.e("ayhan", "${account.displayName}, ${account.familyName}, ${account.givenName}")
-        val intent = Intent(context, SplashActivity::class.java)
+        setNickname(this, account.displayName.toString())
+        val intent = Intent(context, CreateAccountActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         finish()
@@ -70,59 +84,44 @@ class SplashLoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun signOut() {
+        auth.signOut()
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
-                if (account != null) {
-                    goGO(account)
-                }
-                firebaseAuthWithGoogle(account!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.e("ayhan", "$e")
-                // ...
-            }
+        googleSignInClient.signOut().addOnCompleteListener(this) {
+            Log.e("ayhan", "login 초기화 완료")
+            signIn()
         }
     }
 
 
-    // [START auth_with_google]
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    goToCreateAccount(account)
+                }
+                firebaseAuthWithGoogle(account!!)
+            } catch (e: ApiException) {
+                Log.e("ayhan", "$e")
+            }
+        }
+    }
+
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.e("ayhan", "firebaseAuthWithGoogle:" + acct.id!!)
-        // [START_EXCLUDE silent]
-        showProgressDialog()
-        // [END_EXCLUDE]
-
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
                         Log.d("ayhan", "signInWithCredential:success")
                         val user = auth.currentUser
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.e("ayhan", "signInWithCredential:failure", task.exception)
                     }
-
-                    // [START_EXCLUDE]
-                    hideProgressDialog()
-                    // [END_EXCLUDE]
                 }
-    }
-    // [END auth_with_google]
-
-    private fun showProgressDialog() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideProgressDialog() {
-        binding.progressBar.visibility = View.GONE
     }
 }
