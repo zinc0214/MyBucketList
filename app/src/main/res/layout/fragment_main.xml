@@ -55,11 +55,13 @@
 
         </FrameLayout>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
+        <ImageView
+            android:id="@+id/loading_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:src="@drawable/loading_anim"
+            android:contentDescription="@null" />
 
         <include
             android:id="@+id/main_toolbar"

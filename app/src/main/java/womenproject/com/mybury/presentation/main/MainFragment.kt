@@ -1,6 +1,8 @@
 package womenproject.com.mybury.presentation.main
 
+import android.graphics.drawable.AnimationDrawable
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +15,7 @@ import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapte
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel
+import kotlinx.android.synthetic.main.fragment_base_dialog.*
 
 
 /**
@@ -22,6 +25,8 @@ import womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel
 class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() {
 
     private val bucketInfoViewModel = BucketInfoViewModel()
+    private lateinit var loadingImg : ImageView
+    private lateinit var animationDrawable: AnimationDrawable
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
@@ -33,6 +38,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
+
+        loadingImg = viewDataBinding.loadingImg
+        loadingImg.setImageResource(R.drawable.loading_anim)
+        animationDrawable = loadingImg.drawable as AnimationDrawable
 
         initBucketListUI()
     }
@@ -46,7 +55,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
 
         bucketInfoViewModel.getMainBucketList(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {
-                viewDataBinding.progressBar.visibility = View.GONE
+                animationDrawable.start()
                 Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
                 val list = viewModel.getDummyMainBucketList()
                 list.last().isLast = true
@@ -54,12 +63,12 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
             }
 
             override fun start() {
-                viewDataBinding.progressBar.visibility = View.VISIBLE
+                viewDataBinding.loadingImg.post(Runnable { animationDrawable.start() })
             }
 
             override fun finish(bucketList: List<BucketItem>) {
                 if(bucketList != null)  {
-                    viewDataBinding.progressBar.visibility = View.GONE
+                    animationDrawable.start()
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
