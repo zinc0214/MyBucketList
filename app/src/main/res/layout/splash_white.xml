@@ -27,7 +27,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
-        android:background="@drawable/gradient_light_background"
+        android:background="@drawable/splash_white_background"
         android:gravity="center"
         android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

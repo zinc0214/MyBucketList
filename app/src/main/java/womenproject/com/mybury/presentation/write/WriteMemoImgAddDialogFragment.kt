@@ -26,6 +26,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.ui.PermissionDialogFragment
 import java.io.File
 import java.io.IOException
@@ -124,7 +125,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.context!!, activity as MainActivity)) {
+        if (checkPermissions(this.context!!, activity as BaseActiviy)) {
             if (checkAddImageListener.invoke()) {
                 goToAlbum()
             }
@@ -132,7 +133,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.context!!, activity as MainActivity)) {
+        if (checkPermissions(this.context!!, activity as BaseActiviy)) {
             if (checkAddImageListener.invoke()) {
                 takePhoto()
             }
@@ -179,7 +180,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
 
-    private fun checkPermissions(context: Context, activity: MainActivity): Boolean {
+    private fun checkPermissions(context: Context, activity: BaseActiviy): Boolean {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if ((ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) ||
                     (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA))) {

@@ -11,12 +11,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.ActivityMainBinding
+import womenproject.com.mybury.presentation.base.BaseActiviy
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActiviy() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration

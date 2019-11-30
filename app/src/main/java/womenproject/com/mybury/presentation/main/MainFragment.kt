@@ -55,7 +55,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
 
         bucketInfoViewModel.getMainBucketList(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {
-                animationDrawable.start()
+                animationDrawable.stop()
+                viewDataBinding.loadingLayout.visibility = View.GONE
                 Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
                 val list = viewModel.getDummyMainBucketList()
                 list.last().isLast = true
@@ -63,12 +64,14 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
             }
 
             override fun start() {
-                viewDataBinding.loadingImg.post(Runnable { animationDrawable.start() })
+                animationDrawable.start()
+                viewDataBinding.loadingLayout.visibility = View.VISIBLE
             }
 
             override fun finish(bucketList: List<BucketItem>) {
                 if(bucketList != null)  {
-                    animationDrawable.start()
+                    animationDrawable.stop()
+                    viewDataBinding.loadingLayout.visibility = View.GONE
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
             }
