@@ -73,13 +73,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
                 if(p0!!.targetPosition.toString().equals("0.0")) {
                     Log.e("ayhan", "111")
-                    viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_open)
                     viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
                 } else {
 
 
                     Log.e("ayhan", "222")
-                    viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
                     viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
                 }
                Log.e("ayhan", "tran  :" + p0!!.id + ","+ p0.targetPosition + "," + p0.transitionName)
@@ -229,10 +227,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT_BOLD;
+                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT_BOLD
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT;
+                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT
                 }
             }
             false

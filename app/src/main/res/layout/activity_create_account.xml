@@ -26,14 +26,13 @@
             <RelativeLayout
                 android:id="@+id/profile_img_view_layout"
                 android:background="@drawable/mypage_profile_img_background_border"
-                android:padding="3dp"
+                android:padding="0.5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="36dp">
 
             <androidx.cardview.widget.CardView
-                android:padding="10dp"
                 android:id="@+id/profile_img_view"
                 android:layout_width="@dimen/image_width"
                 android:layout_height="@dimen/image_width"
@@ -47,7 +46,7 @@
                     android:id="@+id/profile_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/default_profile_bury" />
+                    android:background="@drawable/default_profile_my" />
 
             </androidx.cardview.widget.CardView>
 

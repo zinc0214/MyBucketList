@@ -1,6 +1,6 @@
 package womenproject.com.mybury.presentation.intro
 
-import android.accounts.Account
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
@@ -10,27 +10,27 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
+import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginCompelete
+import womenproject.com.mybury.data.network.bucketListApi
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
-import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditFragment
-import womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
+import womenproject.com.mybury.data.network.APIClient
+import womenproject.com.mybury.data.network.RetrofitInterface
+
 
 class CreateAccountActivity : BaseActiviy() {
 
@@ -135,6 +135,39 @@ class CreateAccountActivity : BaseActiviy() {
 
 
     private val myBuryStartListener = View.OnClickListener {
+        signInAccount()
+    }
+
+
+    override fun onBackPressed() {
+        CancelDialog().show(supportFragmentManager, "tag")
+    }
+
+
+    @SuppressLint("CheckResult")
+    private fun signInAccount() {
+        val email = getAccountEmail(context)
+
+
+        val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
+
+        apiInterface.postSignIn("ayhan@rsupport.com")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    goToNext()
+                }
+                .subscribe({ response ->
+                    Log.e("ayhan_2", response.string())
+                    goToNext()
+                }) {
+                    Log.e("ayhan_3", it.toString())
+                    goToNext()
+
+                }
+    }
+
+    private fun goToNext() {
         setMyBuryLoginCompelete(context, true)
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -142,10 +175,6 @@ class CreateAccountActivity : BaseActiviy() {
         finish()
     }
 
-
-    override fun onBackPressed() {
-        CancelDialog().show(supportFragmentManager, "tag")
-    }
 
 }
 

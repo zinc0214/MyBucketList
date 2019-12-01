@@ -28,6 +28,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     override fun initDataBinding() {
         viewDataBinding.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.title = "카테고리 편집"
         setCategoryList()
     }
 
@@ -58,6 +59,24 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun fail() {
+
+                categoryList.add("없음")
+                categoryList.add("여행")
+                categoryList.add("서울 맛집")
+                categoryList.add("다이어트")
+                categoryList.add("스터디")
+                categoryList.add("도라에몽 주머니")
+
+                editCategoryListAdapter = EditCategoryListAdapter(categoryList, this@CategoryEditFragment)
+
+                viewDataBinding.categoryListRecyclerView.apply {
+                    adapter = editCategoryListAdapter
+                    layoutManager = LinearLayoutManager(context)
+                }
+
+
+                itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+                itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
 
             }
 

@@ -7,7 +7,6 @@ import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import android.os.Handler
 import android.util.Log
-import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,8 +17,8 @@ import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.getNickname
-import womenproject.com.mybury.data.Preference.Companion.setNickname
+import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -42,7 +41,7 @@ class SplashLoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.splash_with_login)
         binding.loginLayout.setOnClickListener {
-            if(getNickname(this).isNotEmpty()) {
+            if(getAccountEmail(this).isNotEmpty()) {
                 signOut()
             } else {
                 signIn()
@@ -71,8 +70,8 @@ class SplashLoginActivity : AppCompatActivity() {
     }
 
     private fun goToCreateAccount(account : GoogleSignInAccount) {
-        Log.e("ayhan", "${account.displayName}, ${account.familyName}, ${account.givenName}")
-        setNickname(this, account.displayName.toString())
+        Log.e("ayhan", "${account.email}, ${account.displayName}, ${account.familyName}, ${account.givenName}")
+        setAccountEmail(this, account.email.toString())
         val intent = Intent(context, CreateAccountActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)

@@ -32,11 +32,14 @@ class BucketInfoViewModel : BaseViewModel() {
 
         callback.start()
 
-        bucketListApi.requestMainBucketListResult()
+        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    bucketList -> callback.finish(bucketList.bucketlists)
+                .subscribe({ bucketList ->
+                    run {
+                        Log.e("ayhan", "getMainBucketList:${bucketList.retcode}")
+                        callback.finish(bucketList.bucketlists)
+                    }
                 }) {
                     Log.e("ayhan", it.toString())
                     callback.fail()
@@ -45,16 +48,16 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, categoryName : String) {
+    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, categoryName: String) {
 
         callback.start()
 
-        bucketListApi.requestMainBucketListResult()
+        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { response -> response.bucketlists}
-                .subscribe({
-                    bucketItemList -> bucketItemList.filter { it.category.name  ==  categoryName }
+                .map { response -> response.bucketlists }
+                .subscribe({ bucketItemList ->
+                    bucketItemList.filter { it.category.name == categoryName }
                     callback.finish(bucketItemList)
                 }) {
                     Log.e("ayhan", it.toString())

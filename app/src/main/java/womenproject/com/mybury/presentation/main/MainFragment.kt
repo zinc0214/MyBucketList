@@ -69,11 +69,21 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainFragmentViewModel>() 
             }
 
             override fun finish(bucketList: List<BucketItem>) {
-                if(bucketList != null)  {
+                animationDrawable.stop()
+                viewDataBinding.loadingLayout.visibility = View.GONE
+                val list = viewModel.getDummyMainBucketList()
+                list.last().isLast = true
+                viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, list)
+                /*if(bucketList != null)  {
+                    if(bucketList.isEmpty()) {
+                        viewDataBinding.blankImg.visibility = View.VISIBLE
+                    } else {
+                        viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
+                    }
                     animationDrawable.stop()
                     viewDataBinding.loadingLayout.visibility = View.GONE
-                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
-                }
+
+                }*/
             }
         })
 

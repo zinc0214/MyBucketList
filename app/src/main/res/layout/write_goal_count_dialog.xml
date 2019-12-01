@@ -27,6 +27,7 @@
             android:layout_marginTop="26dp"
             android:text="목표 달성 횟수(반복)"
             android:textAlignment="center"
+            android:textColor="@color/_222222"
             android:textSize="16sp"
             android:textStyle="bold" />
 

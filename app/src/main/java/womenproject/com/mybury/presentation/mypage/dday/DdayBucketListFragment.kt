@@ -14,7 +14,7 @@ import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewMo
 
 class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketTotalListViewModel>() {
 
-    private val BUCKETLIST_API = "http://10.1.101.161/host/"
+    private val BUCKETLIST_API = "http://154.92.251.44/host/"
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_dday_list

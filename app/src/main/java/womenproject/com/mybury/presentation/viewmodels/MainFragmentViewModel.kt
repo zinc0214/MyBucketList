@@ -31,7 +31,7 @@ class MainFragmentViewModel : BaseViewModel() {
 
         callback.start()
 
-        bucketListApi.requestMainBucketListResult()
+        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { bucketCategory -> callback.finish(bucketCategory)}

@@ -10,6 +10,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import womenproject.com.mybury.data.*
 import java.io.File
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by HanAYeon on 2018. 12. 3..
@@ -21,8 +25,16 @@ interface RetrofitInterface {
     @GET("/v1/search/adult.json")
     fun requestAdultResult(@Query("query") query: String): Observable<AdultCheck>
 
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/host/signup")
+    fun postSignIn(@Body email: String): Observable<ResponseBody>
+
     @GET("/host/home")
     fun requestMainBucketListResult(): Observable<BucketList>
+
+    @GET("/host/home")
+    fun requestMainBucketListResult(@Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
+
 
     @GET("/host/dDay")
     fun requestDdayBucketListResult(): Observable<BucketList>
@@ -30,7 +42,7 @@ interface RetrofitInterface {
     @GET("/host/beforeWrite")
     fun requestCategoryList(): Observable<BucketCategory>
 
-    @Headers( "Accept: application/json", "Content-Type: application/json")
+    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/host/write")
     fun postAddBucketList(@Body params: AddBucketItem): Observable<ResponseBody>
 
@@ -40,9 +52,29 @@ interface RetrofitInterface {
 
 }
 
+internal object APIClient {
+
+    private var retrofit: Retrofit? = null
+
+    val client: Retrofit
+        get() {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+            retrofit = Retrofit.Builder()
+                    .baseUrl("http://54.92.251.44/host/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(client)
+                    .build()
+
+            return retrofit as Retrofit
+        }
+}
 
 val bucketListApi = Retrofit.Builder()
-        .baseUrl("http://10.1.101.161/host/")
+        .baseUrl("http://54.92.251.44/host/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
