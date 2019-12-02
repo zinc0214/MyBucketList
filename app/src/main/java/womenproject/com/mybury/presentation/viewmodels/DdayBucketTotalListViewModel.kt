@@ -1,18 +1,13 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.data.*
-import womenproject.com.mybury.data.network.RetrofitInterface
-import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019. 1. 16..
@@ -32,11 +27,11 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getDdayEachBucketList(api:String, callback: OnDdayBucketListGetEvent) {
+    fun getDdayEachBucketList(callback: OnDdayBucketListGetEvent) {
 
         callback.start()
 
-        bucketListApi.requestDdayBucketListResult()
+        apiInterface.requestDdayBucketListResult()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { bucketList -> callback.finish(bucketList)}

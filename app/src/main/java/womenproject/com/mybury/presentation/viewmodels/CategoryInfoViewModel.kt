@@ -5,7 +5,7 @@ import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.data.network.apiInterface
 
 /**
  * Created by HanAYeon on 2019-08-19.
@@ -23,7 +23,7 @@ class CategoryInfoViewModel {
     @SuppressLint("CheckResult")
     fun getCategoryList(callback: GetBucketListCallBackListener) {
 
-        bucketListApi.requestCategoryList()
+        apiInterface.requestCategoryList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { callback.fail() }

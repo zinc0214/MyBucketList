@@ -1,16 +1,11 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.network.RetrofitInterface
-import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.data.network.apiInterface
 
 class WriteCategoryDialogViewModel : BaseViewModel() {
 
@@ -26,7 +21,7 @@ class WriteCategoryDialogViewModel : BaseViewModel() {
     @SuppressLint("CheckResult")
     fun getCategoryList(callback: OnBucketListGetEvent) {
 
-        bucketListApi.requestMainBucketListResult()
+        apiInterface.requestHomeBucketList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { bucketCategory -> callback.finish(bucketCategory)}
@@ -39,7 +34,7 @@ class WriteCategoryDialogViewModel : BaseViewModel() {
 
         val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
 
-        val bucketListResultData = restClient.requestMainBucketListResult()
+        val bucketListResultData = restClient.requestHomeBucketList()
         bucketListResultData.enqueue(object : Callback<BucketList> {
             override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
 

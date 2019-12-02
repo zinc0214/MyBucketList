@@ -3,18 +3,13 @@ package womenproject.com.mybury.data.network
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import womenproject.com.mybury.data.*
-import java.io.File
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
-import org.json.JSONStringer
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -28,15 +23,26 @@ interface RetrofitInterface {
     fun requestAdultResult(@Query("query") query: String): Observable<AdultCheck>
 
     @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/host/signup_check")
+    fun postSignUpCheck(@Body email: SignUpCheckRequest): Observable<SignUpCheckResponse>
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/host/signup")
-    fun postSignIn(@Body email: Email): Observable<ResponseBody>
+    fun postSignUp(@Body email: SignUpCheckRequest): Observable<SignUpResponse>
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/host/profile")
+    fun postCreateProfile(@Body email: CreateAccountRequest): Observable<SimpleResponse>
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/host/signin")
+    fun getLoginToken(@Body email: GetTokenRequest): Observable<GetTokenResponse>
 
     @GET("/host/home")
-    fun requestMainBucketListResult(): Observable<BucketList>
+    fun requestHomeBucketList(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
 
     @GET("/host/home")
-    fun requestMainBucketListResult(@Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
-
+    fun requestHomeBucketList(): Observable<BucketList>
 
     @GET("/host/dDay")
     fun requestDdayBucketListResult(): Observable<BucketList>
@@ -65,7 +71,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                    .baseUrl("http://54.92.251.44/host/")
+                    .baseUrl("http://3.92.189.69/host/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
@@ -75,9 +81,13 @@ internal object APIClient {
         }
 }
 
+/*
 val bucketListApi = Retrofit.Builder()
-        .baseUrl("http://54.92.251.44/host/")
+        .baseUrl("http://3.92.189.69/host/")
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
         .create(RetrofitInterface::class.java)
+*/
+
+val apiInterface = APIClient.client.create(RetrofitInterface::class.java)

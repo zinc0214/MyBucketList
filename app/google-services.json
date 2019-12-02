@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "158987869075-68gabg3d75114ht80jiuedp64i7dmd3f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "8af595dc0fef4dade847467ef94132758fdfe84b"
+          }
+        },
+        {
           "client_id": "158987869075-1heptk7kr64ujvv0kjoi1p7ooe52oiht.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

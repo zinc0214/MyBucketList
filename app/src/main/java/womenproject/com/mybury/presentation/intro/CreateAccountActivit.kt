@@ -10,17 +10,18 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Email
+import womenproject.com.mybury.data.CreateAccountRequest
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginCompelete
-import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
@@ -29,8 +30,6 @@ import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
-import womenproject.com.mybury.data.network.APIClient
-import womenproject.com.mybury.data.network.RetrofitInterface
 
 
 class CreateAccountActivity : BaseActiviy() {
@@ -147,21 +146,23 @@ class CreateAccountActivity : BaseActiviy() {
 
     @SuppressLint("CheckResult")
     private fun signInAccount() {
-        val email = getAccountEmail(context)
 
-        val dataEMail = Email(email)
+        val userId = getUserId(this)
 
-
-        val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
-
-        apiInterface.postSignIn(dataEMail)
+        val createAccountRequest = CreateAccountRequest(userId, binding.nicknameEditText.text.toString())
+        apiInterface.postCreateProfile(createAccountRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
-                    goToNext()
+                    if(it.retcode=="200") {
+                        goToNext()
+                    } else {
+                        Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
                 .subscribe({ response ->
-                    Log.e("ayhan_2", response.string())
+                    Log.e("ayhan", "createAccountResponse:${response.retcode}")
                     goToNext()
                 }) {
                     Log.e("ayhan_3", it.toString())

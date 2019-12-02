@@ -8,9 +8,39 @@ import java.util.*
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-data class Email(
+data class SignUpCheckRequest(
         var email : String
 )
+
+data class SignUpCheckResponse (
+        val signUp : Boolean
+)
+
+data class SignUpResponse (
+        val retcode : String,
+        val user_id:String
+)
+
+data class CreateAccountRequest(
+        val userId : String,
+        val name : String
+)
+
+data class GetTokenRequest(
+        val userId : String
+)
+
+data class GetTokenResponse(
+        val accessToken : String,
+        val refreshToken : String,
+        val retcode : String
+)
+
+data class SimpleResponse(
+        val retcode: String
+)
+
+
 data class BucketList(
         var bucketlists : List<BucketItem>,
         val popupYn : Boolean,

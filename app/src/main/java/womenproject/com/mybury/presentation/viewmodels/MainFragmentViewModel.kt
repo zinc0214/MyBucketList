@@ -8,38 +8,15 @@ import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.CategoryList
-import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.data.network.apiInterface
 
 /**
  * Created by HanAYeon on 2018. 11. 28..
  */
 class MainFragmentViewModel : BaseViewModel() {
-//ㅇㅇㄴㅇㅇ
-
-
-    interface OnBucketListGetEvent {
-        fun start()
-        fun finish(bucketList: BucketList?)
-    }
-
-
-    private var bucketList: BucketList? = null
-
-
-    @SuppressLint("CheckResult")
-    fun getMainBucketList(api: String, callback: OnBucketListGetEvent) {
-
-        callback.start()
-
-        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
-    }
 
 
     fun getDummyMainBucketList(): List<BucketItem> {
-
 
         val ca = CategoryList("없음")
         val ca2 = CategoryList("여행")

@@ -16,12 +16,13 @@ class Preference {
         private const val GOOGLE_ACCOUNT = "google_account"
         private const val MYBURY_LOGIN_COMPLETE = "mybury_login_complete"
         private const val USER_ID = "user_id"
+        private const val ACCESS_TOKEN = "access_token"
 
-        fun setAccountEmail(context: Context, nickname: String) {
+        fun setAccountEmail(context: Context, email: String) {
 
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
-            editor.putString(GOOGLE_ACCOUNT, nickname)
+            editor.putString(GOOGLE_ACCOUNT, email)
             editor.apply()
         }
 
@@ -51,9 +52,22 @@ class Preference {
             editor.apply()
         }
 
-        fun getUserId(context: Context): Boolean {
+        fun getUserId(context: Context): String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getBoolean(USER_ID, false)
+            val data = sp.getString(USER_ID, "")
+            return data
+        }
+
+        fun setAccessToken(context: Context, token:String) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(ACCESS_TOKEN, token)
+            editor.apply()
+        }
+
+        fun getAccessToken(context: Context): String {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getString(ACCESS_TOKEN, "")
             return data
         }
 

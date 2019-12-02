@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.network.bucketListApi
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
 import java.io.File
@@ -28,7 +28,7 @@ class BucketWriteViewModel : BaseViewModel() {
 
       //  uplaodBucketImage(imgList)
 
-        bucketListApi.postAddBucketList(bucketItem)
+        apiInterface.postAddBucketList(bucketItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
@@ -48,7 +48,7 @@ class BucketWriteViewModel : BaseViewModel() {
     fun uplaodBucketImage(imageList: MutableList<File>) {
 
         for (i in imageList) {
-            bucketListApi.postAddBucketImage(i.fileToMultipartFile())
+            apiInterface.postAddBucketImage(i.fileToMultipartFile())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->

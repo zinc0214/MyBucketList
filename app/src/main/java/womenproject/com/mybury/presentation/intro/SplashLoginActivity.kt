@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.intro
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +17,17 @@ import com.google.android.gms.common.api.ApiException
 import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.setUserId
+import womenproject.com.mybury.data.SignUpCheckRequest
+import womenproject.com.mybury.data.network.APIClient
+import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.presentation.CanNotGoMainDialog
+import womenproject.com.mybury.presentation.MainActivity
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -27,6 +36,8 @@ class SplashLoginActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 100
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -69,14 +80,67 @@ class SplashLoginActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun goToCreateAccount(account : GoogleSignInAccount) {
         Log.e("ayhan", "${account.email}, ${account.displayName}, ${account.familyName}, ${account.givenName}")
-        setAccountEmail(this, account.email.toString())
+
+        val emailDataClass = SignUpCheckRequest(account.email.toString())
+        apiInterface.postSignUpCheck(emailDataClass)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    setAccountEmail(this, emailDataClass.email)
+                    if(it.signUp) {
+                        isAleadyUse(emailDataClass.email) // 이미 로그인 된 적이 있다. user_id 를 받아온다
+                    } else {
+                        goToCreateAccount() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
+                    }
+                }
+                .subscribe({ response ->
+                   Log.e("ayhan","checkSingUpResponse :${response.signUp}")
+
+                }) {
+                    Log.e("ayhan_3", it.toString())
+                }
+
+    }
+
+    private fun goToCreateAccount() {
         val intent = Intent(context, CreateAccountActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         finish()
     }
+
+    private fun goToMainActivity() {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+        finish()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun isAleadyUse(email: String) {
+        val emailDataClass = SignUpCheckRequest(email)
+
+        apiInterface.postSignUp(emailDataClass)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    Log.e("ayhan", "postSignUpResponse : ${response.retcode}, ${response.user_id}")
+                    if(response.retcode == "200") {
+                        setUserId(this, response.user_id)
+                        goToMainActivity()
+                    } else {
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    }
+                }) {
+                    Log.e("ayhan", "fail postSignUpResponse : $it")
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+
+                }
+    }
+
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent

@@ -4,14 +4,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.network.RetrofitInterface
-import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019-06-25.
@@ -28,11 +23,9 @@ class BucketInfoViewModel : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: OnBucketListGetEvent) {
-
+    fun getMainBucketList(callback: OnBucketListGetEvent, userId : String, token:String) {
         callback.start()
-
-        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
+        apiInterface.requestHomeBucketList(token, userId, "started", "updateDt")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bucketList ->
@@ -52,7 +45,7 @@ class BucketInfoViewModel : BaseViewModel() {
 
         callback.start()
 
-        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
+        apiInterface.requestHomeBucketList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response -> response.bucketlists }
@@ -76,7 +69,7 @@ class BucketInfoViewModel : BaseViewModel() {
 
         val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
 
-        val bucketListResultData = restClient.requestMainBucketListResult()
+        val bucketListResultData = restClient.requestHomeBucketList()
         bucketListResultData.enqueue(object : Callback<BucketList> {
             override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
 

@@ -14,8 +14,6 @@ import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewMo
 
 class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketTotalListViewModel>() {
 
-    private val BUCKETLIST_API = "http://154.92.251.44/host/"
-
     override val layoutResourceId: Int
         get() = R.layout.fragment_dday_list
 
@@ -31,7 +29,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
        // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
 
 
-        viewModel.getDdayEachBucketList(BUCKETLIST_API, object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
+        viewModel.getDdayEachBucketList(object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
             override fun start() {
                 viewDataBinding.progressBar.visibility = View.VISIBLE
             }
