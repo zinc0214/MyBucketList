@@ -12,6 +12,8 @@ import womenproject.com.mybury.data.*
 import java.io.File
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
+import org.json.JSONStringer
 import java.util.concurrent.TimeUnit
 
 
@@ -27,7 +29,7 @@ interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/host/signup")
-    fun postSignIn(@Body email: String): Observable<ResponseBody>
+    fun postSignIn(@Body email: Email): Observable<ResponseBody>
 
     @GET("/host/home")
     fun requestMainBucketListResult(): Observable<BucketList>

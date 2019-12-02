@@ -8,6 +8,9 @@ import java.util.*
  * Created by HanAYeon on 2018. 11. 27..
  */
 
+data class Email(
+        var email : String
+)
 data class BucketList(
         var bucketlists : List<BucketItem>,
         val popupYn : Boolean,

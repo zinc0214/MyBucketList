@@ -16,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Email
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginCompelete
@@ -148,10 +149,12 @@ class CreateAccountActivity : BaseActiviy() {
     private fun signInAccount() {
         val email = getAccountEmail(context)
 
+        val dataEMail = Email(email)
+
 
         val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
 
-        apiInterface.postSignIn("ayhan@rsupport.com")
+        apiInterface.postSignIn(dataEMail)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
@@ -162,11 +165,11 @@ class CreateAccountActivity : BaseActiviy() {
                     goToNext()
                 }) {
                     Log.e("ayhan_3", it.toString())
-                    goToNext()
 
                 }
     }
 
+    
     private fun goToNext() {
         setMyBuryLoginCompelete(context, true)
         val intent = Intent(context, MainActivity::class.java)
