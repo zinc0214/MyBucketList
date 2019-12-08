@@ -17,12 +17,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.CreateAccountRequest
+import womenproject.com.mybury.data.GetTokenRequest
+import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginCompelete
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
+import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -30,11 +33,20 @@ import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
+import okhttp3.RequestBody
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import womenproject.com.mybury.data.DefaulProfileImg
+import womenproject.com.mybury.util.Converter.Companion.getUriToDrawable
+import womenproject.com.mybury.util.fileToMultipartFile
+import womenproject.com.mybury.util.stringToMultipartFile
 
 
 class CreateAccountActivity : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
+    private var defaultImg = ""
+    private var file : File ?= null
 
     override fun onResume() {
         super.onResume()
@@ -51,15 +63,20 @@ class CreateAccountActivity : BaseActiviy() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        getLoginToken()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
-        binding.topLayout.title = "프로필생성"
-        binding.startMyburyBtn.setOnClickListener(myBuryStartListener)
-        binding.profileEditBtn.setOnClickListener(profileImageEditClickLister)
-        binding.nicknameEditText.addTextChangedListener(addTextChangedListener())
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
+        binding.apply {
+            topLayout.title = "프로필생성"
+            startMyburyBtn.setOnClickListener(myBuryStartListener)
+            profileEditBtn.setOnClickListener(profileImageEditClickLister)
+            nicknameEditText.addTextChangedListener(addTextChangedListener())
+            root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
+            profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+        }
+        defaultImg = DefaulProfileImg().bury
     }
-
 
     private val checkBaseProfileImgUsable: () -> Boolean = {
         true
@@ -70,8 +87,10 @@ class CreateAccountActivity : BaseActiviy() {
         Log.e("ayhan", "nume: $num")
         if (num == 1) {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+            defaultImg = DefaulProfileImg().bury
         } else {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+            defaultImg = DefaulProfileImg().my
         }
         binding.executePendingBindings()
     }
@@ -81,6 +100,7 @@ class CreateAccountActivity : BaseActiviy() {
     }
 
     private val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
+        this.file = file
         Glide.with(this).load(uri).centerCrop().into(binding.profileImg)
     }
 
@@ -147,14 +167,21 @@ class CreateAccountActivity : BaseActiviy() {
     @SuppressLint("CheckResult")
     private fun signInAccount() {
 
-        val userId = getUserId(this)
+        val token = getAccessToken(this)
+        val userId = getUserId(this).stringToMultipartFile("userId")
+        val nickName = binding.nicknameEditText.text.toString().stringToMultipartFile("nickName")
+        val profileImg = if(file == null) {
+            defaultImg.stringToMultipartFile("profileImg")
+        } else {
+            file!!.fileToMultipartFile("profileImg")
+        }
 
-        val createAccountRequest = CreateAccountRequest(userId, binding.nicknameEditText.text.toString())
-        apiInterface.postCreateProfile(createAccountRequest)
+
+        apiInterface.postCreateProfile(token, userId, nickName, profileImg)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
-                    if(it.retcode=="200") {
+                    if (it.retcode == "200") {
                         goToNext()
                     } else {
                         Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -163,14 +190,13 @@ class CreateAccountActivity : BaseActiviy() {
                 }
                 .subscribe({ response ->
                     Log.e("ayhan", "createAccountResponse:${response.retcode}")
-                    goToNext()
                 }) {
-                    Log.e("ayhan_3", it.toString())
+                    Log.e("ayhan", "createAccountFail: $it")
 
                 }
     }
 
-    
+
     private fun goToNext() {
         setMyBuryLoginCompelete(context, true)
         val intent = Intent(context, MainActivity::class.java)
@@ -179,6 +205,29 @@ class CreateAccountActivity : BaseActiviy() {
         finish()
     }
 
+    @SuppressLint("CheckResult")
+    private fun getLoginToken() {
+        val getTokenRequest = GetTokenRequest(getUserId(this))
+        Log.e("ayhan", "userId : ${getTokenRequest.userId}")
+
+        apiInterface.getLoginToken(getTokenRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    Log.e("ayhan", "getTokenResponse ${response.accessToken}")
+                    if (response.retcode != "200") {
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    } else {
+                        Preference.setAccessToken(this, response.accessToken)
+                    }
+
+                }) {
+                    Log.e("ayhan", "getTokenResponse $it")
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                }
+
+
+    }
 
 }
 

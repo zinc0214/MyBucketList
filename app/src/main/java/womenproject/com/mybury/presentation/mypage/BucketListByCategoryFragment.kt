@@ -48,7 +48,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        Log.e("ayhan", "categoryName : $categoryName")
+        Log.e("ayhan", "categoryId : $categoryName")
 
         bucketInfoViewModel.getMainBucketListByCategory(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {

@@ -21,13 +21,13 @@ data class SignUpResponse (
         val user_id:String
 )
 
-data class CreateAccountRequest(
-        val userId : String,
-        val name : String
-)
-
 data class GetTokenRequest(
         val userId : String
+)
+
+data class DefaulProfileImg(
+        val bury : String = "bury",
+        val my : String = "my"
 )
 
 data class GetTokenResponse(
@@ -75,11 +75,11 @@ data class BucketItem(
 data class AddBucketItem(
         var title : String = "Title",
         val open : Boolean = false,
-        val dDate : Long,
+        val dDate : Date,
         val goalCount : Int = 0,
         var memo : String = "Memo",
-        val categoryName: String,
-        val userId : String
+        val categoryId: String,
+        val givenId : String
 )
 
 data class BucketCategory (

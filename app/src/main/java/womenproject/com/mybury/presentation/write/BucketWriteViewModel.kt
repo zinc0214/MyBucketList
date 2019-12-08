@@ -6,14 +6,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
+import womenproject.com.mybury.util.stringToMultipartFile
 import java.io.File
+import java.text.SimpleDateFormat
 
 class BucketWriteViewModel : BaseViewModel() {
 
-    var bucketItem : BucketItem  ? = null
+    var bucketItem: BucketItem? = null
 
     interface OnBucketAddEvent {
         fun start()
@@ -21,24 +24,77 @@ class BucketWriteViewModel : BaseViewModel() {
         fun fail()
     }
 
+
+
+
     @SuppressLint("CheckResult")
-    fun uploadBucketList(bucketItem: AddBucketItem, imgList: MutableList<File>, onBucketAddEvent: OnBucketAddEvent) {
+    fun beforeBucketWrite(userId: String, onBucketAddEvent: OnBucketAddEvent) {
 
         onBucketAddEvent.start()
 
-      //  uplaodBucketImage(imgList)
+        apiInterface.requestBeforeWrite(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    Log.e("ayhan", "beforeWriteCheck : ${response}")
+                    if(response.string().contains("200")) {
+                        onBucketAddEvent.success()
+                    } else {
+                        onBucketAddEvent.fail()
+                    }
+                }) {
+                    Log.e("ayhan", "beforeWriteFail : $it")
+                    onBucketAddEvent.fail()
+                }
 
-        apiInterface.postAddBucketList(bucketItem)
+
+    }
+
+
+    @SuppressLint("CheckResult")
+    fun uploadBucketList(token: String, userId: String,
+                         bucketItem: AddBucketItem,
+                         imgList: MutableList<File>,
+                         onBucketAddEvent: OnBucketAddEvent) {
+
+        onBucketAddEvent.start()
+
+
+        val title = bucketItem.title.stringToMultipartFile("title")
+        val open = bucketItem.open.stringToMultipartFile("open")
+        val dDate = bucketItem.dDate.stringToMultipartFile("dDate")
+        val goalCount = bucketItem.goalCount.stringToMultipartFile("goalCount")
+        val memo = bucketItem.memo.stringToMultipartFile("memo")
+        val categoryId = bucketItem.categoryId.stringToMultipartFile("categoryId")
+        val userId = userId.stringToMultipartFile("userId")
+/*
+        apiInterface.postAddBucketList(token, title, open, dDate, goalCount, memo, categoryId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
                     uplaodBucketImage(imgList)
                 }
                 .subscribe({ response ->
-                    Log.e("ayhan", response.string())
+                    Log.e("ayhan", "addBucketResponse : ${response.retcode}")
                     onBucketAddEvent.success()
                 }) {
-                    Log.e("ayhan", it.toString())
+                    Log.e("ayhan", "addBucketFail : $it")
+                    onBucketAddEvent.fail()
+                }*/
+
+        val bucketItem = bucketItem.stringToMultipartFile("bucketItem")
+
+        apiInterface.postAddBucketList(token, bucketItem, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    uplaodBucketImage(imgList)
+                }
+                .subscribe({ response ->
+                    Log.e("ayhan", "addBucketResponse : ${response.retcode}")
+                    onBucketAddEvent.success()
+                }) {
+                    Log.e("ayhan", "addBucketFail : $it")
                     onBucketAddEvent.fail()
                 }
     }
@@ -48,7 +104,7 @@ class BucketWriteViewModel : BaseViewModel() {
     fun uplaodBucketImage(imageList: MutableList<File>) {
 
         for (i in imageList) {
-            apiInterface.postAddBucketImage(i.fileToMultipartFile())
+            apiInterface.postAddBucketImage(i.fileToMultipartFile("file"))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
@@ -58,7 +114,6 @@ class BucketWriteViewModel : BaseViewModel() {
                     }
 
         }
-
     }
 
     fun getBucketDetailInfo() {
@@ -66,7 +121,7 @@ class BucketWriteViewModel : BaseViewModel() {
     }
 
 
-    fun isDateNotNull() : Boolean {
+    fun isDateNotNull(): Boolean {
         return bucketItem != null
     }
 /*

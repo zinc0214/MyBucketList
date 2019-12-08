@@ -5,6 +5,7 @@ import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.CategoryList
 import womenproject.com.mybury.data.network.apiInterface
 
 /**
@@ -26,12 +27,21 @@ class CategoryInfoViewModel {
         apiInterface.requestCategoryList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { callback.fail() }
+                .doOnError {
+                    callback.fail()
+                    callback.success(getDummyCategory())
+                }
                 .subscribe({
                     bucketCategory -> callback.success(bucketCategory)
                 }) {
                     Log.e("ayhan", it.toString())
                 }
+    }
+
+    fun getDummyCategory() : BucketCategory{
+        val categoryList = CategoryList("없음")
+        val bucketCategory = BucketCategory(arrayListOf(categoryList), "200")
+        return bucketCategory
     }
 
 /*    fun getCategoryList2(callback: GetBucketListCallBackListener) {

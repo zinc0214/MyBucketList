@@ -15,7 +15,10 @@ import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
+import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
@@ -26,7 +29,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>()  {
+open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
@@ -45,58 +48,77 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     override fun initDataBinding() {
 
-        setCategoryList()
+        viewModel.beforeBucketWrite(getUserId(context!!),
+                object : BucketWriteViewModel.OnBucketAddEvent {
+                    override fun start() {
+                        viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
+                    }
 
-        viewDataBinding.cancelBtnClickListener = setOnBackBtnClickListener()
-        viewDataBinding.registerBtnClickListener = bucketAddOnClickListener()
-        viewDataBinding.memoImgAddListener = memoImgAddOnClickListener()
-        viewDataBinding.memoRemoveListener = memoRemoveListener()
-        viewDataBinding.ddayAddListener = ddayAddListener()
-        viewDataBinding.goalCountSettingListener = goalCountSetListener()
-        viewDataBinding.categorySelectListener = selectCategoryListener()
+                    override fun success() {
+                        viewDataBinding.addBucketProgressBar.visibility = View.GONE
 
-        viewDataBinding.titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
-        viewDataBinding.memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
-        viewDataBinding.memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
-        viewDataBinding.memoImgLayout.setOnTouchListener(memoImgAddOnTouchListener())
+                    }
 
-        viewDataBinding.memoText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                viewDataBinding.memoRemoveImg.visibility = View.INVISIBLE
-            } else {
-                viewDataBinding.memoRemoveImg.visibility = View.VISIBLE
-            }
-        }
+                    override fun fail() {
+                        NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                        viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    }
 
-
-        viewDataBinding.openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
-            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                if(p0!!.targetPosition.toString().equals("0.0")) {
-                    Log.e("ayhan", "111")
-                    viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_enable)
-                } else {
-
-
-                    Log.e("ayhan", "222")
-                    viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
                 }
-               Log.e("ayhan", "tran  :" + p0!!.id + ","+ p0.targetPosition + "," + p0.transitionName)
+
+        )
+      //  setCategoryList()
+
+        viewDataBinding.apply {
+            cancelBtnClickListener = setOnBackBtnClickListener()
+            registerBtnClickListener = bucketAddOnClickListener()
+            memoImgAddListener = memoImgAddOnClickListener()
+            memoRemoveListener = memoRemoveListener()
+            ddayAddListener = ddayAddListener()
+            goalCountSettingListener = goalCountSetListener()
+            categorySelectListener = selectCategoryListener()
+
+            titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
+            memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
+            memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
+            memoImgLayout.setOnTouchListener(memoImgAddOnTouchListener())
+
+            memoText.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    memoRemoveImg.visibility = View.INVISIBLE
+                } else {
+                    memoRemoveImg.visibility = View.VISIBLE
+                }
             }
 
-            override fun allowsTransition(p0: MotionScene.Transition?): Boolean {
-                return true
-            }
+            openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
+                override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+                    if (p0!!.targetPosition.toString().equals("0.0")) {
+                        Log.e("ayhan", "111")
+                        openImg.background = context!!.getDrawable(R.drawable.open_enable)
+                    } else {
+                        Log.e("ayhan", "222")
+                        openImg.background = context!!.getDrawable(R.drawable.open_disable)
+                    }
+                    Log.e("ayhan", "tran  :" + p0!!.id + "," + p0.targetPosition + "," + p0.transitionName)
+                }
 
-            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
-            }
+                override fun allowsTransition(p0: MotionScene.Transition?): Boolean {
+                    return true
+                }
 
-            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-            }
+                override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                }
 
-            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-            }
+                override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+                }
 
-        })
+                override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                }
+
+            })
+
+        }
 
 
         initForUpdate()
@@ -118,6 +140,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             override fun fail() {
                 viewDataBinding.addBucketProgressBar.visibility = View.GONE
                 Toast.makeText(context, "카테고리 값을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+
                 //activity!!.onBackPressed()
 
             }
@@ -161,7 +184,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.uploadBucketList(setBucketItemInfoData(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
+            viewModel.uploadBucketList(
+                    getAccessToken(context!!), getUserId(context!!),
+                    getBucketItemInfo(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
                 override fun start() {
                     viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
 
@@ -387,7 +412,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
 
-    private fun setBucketItemInfoData(): AddBucketItem {
+    private fun getBucketItemInfo(): AddBucketItem {
         if (goal_count_text.text.toString() == "설정") {
             goalCount = 1
         } else {
@@ -395,8 +420,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
-                currentCalendarDay.time, goalCount,
-                viewDataBinding.memoText.text.toString(), viewDataBinding.categoryText.text.toString(), "userId1")
+                currentCalendarDay, goalCount,
+                viewDataBinding.memoText.text.toString(), viewDataBinding.categoryText.text.toString(),
+                getUserId(context!!))
     }
 
 

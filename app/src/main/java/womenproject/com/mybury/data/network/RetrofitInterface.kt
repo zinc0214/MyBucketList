@@ -1,15 +1,14 @@
 package womenproject.com.mybury.data.network
 
 import io.reactivex.Observable
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
+import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import womenproject.com.mybury.data.*
-import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.http.Headers
 
 
 /**
@@ -31,12 +30,15 @@ interface RetrofitInterface {
     fun postSignUp(@Body email: SignUpCheckRequest): Observable<SignUpResponse>
 
     @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/host/profile")
-    fun postCreateProfile(@Body email: CreateAccountRequest): Observable<SimpleResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/host/signin")
     fun getLoginToken(@Body email: GetTokenRequest): Observable<GetTokenResponse>
+
+    @POST("/host/profile")
+    @Multipart
+    fun postCreateProfile(@Header("X-Auth-Token") token: String,
+                          @Part userId: MultipartBody.Part,
+                          @Part name: MultipartBody.Part,
+                          @Part file: MultipartBody.Part): Observable<SimpleResponse>
 
     @GET("/host/home")
     fun requestHomeBucketList(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
@@ -50,13 +52,29 @@ interface RetrofitInterface {
     @GET("/host/beforeWrite")
     fun requestCategoryList(): Observable<BucketCategory>
 
-    @Headers("Accept: application/json", "Content-Type: application/json")
+    @GET("/host/beforeWrite")
+    fun requestBeforeWrite(@Query("userId") userId: String) : Observable<ResponseBody>
+
     @POST("/host/write")
-    fun postAddBucketList(@Body params: AddBucketItem): Observable<ResponseBody>
+    @Multipart
+    fun postAddBucketList(@Header("X-Auth-Token") token: String,
+                          @Part title: MultipartBody.Part,
+                          @Part open: MultipartBody.Part,
+                          @Part dDate: MultipartBody.Part,
+                          @Part goalCount: MultipartBody.Part,
+                          @Part memo: MultipartBody.Part,
+                          @Part categoryId: MultipartBody.Part,
+                          @Part userId: MultipartBody.Part): Observable<SimpleResponse>
+
+    @POST("/host/write")
+    @Multipart
+    fun postAddBucketList(@Header("X-Auth-Token") token: String,
+                          @Part bucketItem: MultipartBody.Part,
+                          @Part userId: MultipartBody.Part): Observable<SimpleResponse>
 
     @Multipart
     @POST("/host/imageUpload")
-    fun postAddBucketImage(@Part file : MultipartBody.Part): Observable<ResponseBody>
+    fun postAddBucketImage(@Part file: MultipartBody.Part): Observable<ResponseBody>
 
 }
 
