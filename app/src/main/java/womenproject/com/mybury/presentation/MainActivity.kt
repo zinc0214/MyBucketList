@@ -1,9 +1,11 @@
 package womenproject.com.mybury.presentation
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -31,9 +33,14 @@ import womenproject.com.mybury.presentation.intro.CancelDialog
 
 class MainActivity : BaseActiviy() {
 
+
+    private lateinit var binding: ActivityMainBinding
+
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private lateinit var loadingImg : ImageView
+    private lateinit var animationDrawable: AnimationDrawable
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +48,7 @@ class MainActivity : BaseActiviy() {
 
         initToken()
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         drawerLayout = binding.drawerLayout
         navController = Navigation.findNavController(this, R.id.nav_fragment)
@@ -52,6 +59,10 @@ class MainActivity : BaseActiviy() {
         if(baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
         }
+
+        loadingImg = binding.loadingLayout.loadingImg
+        loadingImg.setImageResource(R.drawable.loading_anim)
+        animationDrawable = loadingImg.drawable as AnimationDrawable
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -86,6 +97,15 @@ class MainActivity : BaseActiviy() {
 
     }
 
+    public fun startLoading() {
+        animationDrawable.start()
+        binding.loadingLayout.layout.visibility = View.VISIBLE
+    }
+
+    public  fun stopLoading() {
+        animationDrawable.stop()
+        binding.loadingLayout.layout.visibility = View.GONE
+    }
 }
 
 class NetworkFailDialog : BaseNormalDialogFragment() {

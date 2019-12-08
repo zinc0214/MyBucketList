@@ -31,14 +31,15 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
         viewModel.getDdayEachBucketList(object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
             override fun start() {
-                viewDataBinding.progressBar.visibility = View.VISIBLE
+                startLoading()
             }
 
             override fun finish(bucketList: BucketList?) {
                 if(bucketList != null)  {
-                    viewDataBinding.progressBar.visibility = View.GONE
+
                     viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
                 }
+                stopLoading()
             }
         })
     }

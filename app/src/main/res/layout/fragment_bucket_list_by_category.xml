@@ -24,12 +24,6 @@
 
         </ScrollView>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
         <include
             android:id="@+id/header_layout"
             layout="@layout/top_back_btn_layout"/>

@@ -26,8 +26,6 @@ import womenproject.com.mybury.data.Preference.Companion.getUserId
 
 class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
-    private lateinit var loadingImg : ImageView
-    private lateinit var animationDrawable: AnimationDrawable
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
@@ -40,9 +38,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
-        loadingImg = viewDataBinding.loadingImg
-        loadingImg.setImageResource(R.drawable.loading_anim)
-        animationDrawable = loadingImg.drawable as AnimationDrawable
 
         initBucketListUI()
     }
@@ -57,8 +52,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
         viewModel.getMainBucketList(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {
-                animationDrawable.stop()
-                viewDataBinding.loadingLayout.visibility = View.GONE
+                stopLoading()
                 Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
                /* val list = viewModel.getDummyMainBucketList()
                 list.last().isLast = true
@@ -66,8 +60,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
             }
 
             override fun start() {
-                animationDrawable.start()
-                viewDataBinding.loadingLayout.visibility = View.VISIBLE
+                startLoading()
             }
 
             override fun finish(bucketList: List<BucketItem>) {
@@ -76,8 +69,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                 } else {
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
                 }
-                animationDrawable.stop()
-                viewDataBinding.loadingLayout.visibility = View.GONE
+                stopLoading()
             }
         }, getUserId(context!!), getAccessToken(context!!))
 

@@ -13,7 +13,8 @@ data class SignUpCheckRequest(
 )
 
 data class SignUpCheckResponse (
-        val signUp : Boolean
+        val signUp : Boolean,
+        val userId : String
 )
 
 data class SignUpResponse (
@@ -65,7 +66,7 @@ data class BucketItem(
         val open : Boolean = false,
         val pin : Boolean = false,
         val complete : Boolean = false,
-        val category: CategoryList,
+        val category: Category,
         val userCount : Int = 0,
         val goalCount : Int = 1,
         val dDay : Int = 0,
@@ -83,12 +84,13 @@ data class AddBucketItem(
 )
 
 data class BucketCategory (
-        val categoryList : List<CategoryList>,
+        val category : List<Category>,
         val retCode : String
 
 )
 
 @Parcelize
-data class CategoryList(
-        val name: String
+data class Category(
+        val name: String,
+        val id : String
 ) : Parcelable

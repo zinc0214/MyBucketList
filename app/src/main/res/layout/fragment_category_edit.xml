@@ -5,15 +5,14 @@
     <data>
 
         <variable
-            name="backBtnOnClickListener"
-            type="android.view.View.OnClickListener" />
-
+            name="fragment"
+            type="womenproject.com.mybury.presentation.mypage.categoryedit.CategoryEditFragment" />
     </data>
 
     <RelativeLayout
-        android:background="@color/_fafafa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/_fafafa">
 
 
         <ScrollView
@@ -23,10 +22,10 @@
             android:layout_marginTop="64dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="1dp"
                 android:id="@+id/category_list_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="1dp"
                 tools:listitem="@layout/category_list_item" />
 
         </ScrollView>
@@ -36,16 +35,16 @@
             android:layout_height="wrap_content">
 
             <include
-                layout="@layout/top_back_btn_layout"
-                android:id="@+id/back_layout"/>
+                android:id="@+id/back_layout"
+                layout="@layout/top_back_btn_layout" />
 
         </RelativeLayout>
 
 
         <ImageView
-            android:layout_above="@+id/base_layout"
             android:layout_width="match_parent"
             android:layout_height="0.6dp"
+            android:layout_above="@+id/base_layout"
             android:background="@color/_dbdbdb" />
 
         <LinearLayout
@@ -60,25 +59,28 @@
             <TextView
                 android:id="@+id/cancel_text"
                 style="@style/baseDialogButtonTextStyle"
-                android:background="@color/_ffffff"
+                android:background="@drawable/white_button_background"
+                android:enabled="false"
+                android:onClick="@{()->fragment.setCategoryDelectListener()}"
                 android:text="삭제"
-                android:textColor="@color/_b4b4b4" />
+                android:textColor="@color/edit_enable_color" />
 
             <TextView
                 android:id="@+id/confirm_text"
                 style="@style/baseDialogButtonTextStyle"
-                android:background="@color/_ffffff"
+                android:background="@drawable/white_button_background"
                 android:text="추가"
                 android:textColor="@color/_5a95ff" />
 
         </LinearLayout>
 
         <ImageView
-            android:layout_alignParentBottom="true"
             android:layout_width="0.6dp"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:background="@color/_dbdbdb" />
+
 
     </RelativeLayout>
 

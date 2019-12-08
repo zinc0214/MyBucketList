@@ -76,14 +76,14 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
 
 
         /*
-         viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+         viewModel.getCategory(object : BucketWriteViewModel.GetBucketListCallBackListener {
              override fun start() {
 
              }
 
              override fun success(bucketCategory: BucketCategory) {
-                 for(i in 0 until bucketCategory.categoryList.size) {
-                     categoryList.add(bucketCategory.categoryList[i].name)
+                 for(i in 0 until bucketCategory.category.size) {
+                     category.add(bucketCategory.category[i].name)
                  }
 
                 // viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@ScrollingFragment)
@@ -94,7 +94,7 @@ class ScrollingFragment : BaseFragment<ScrollBinding, MyPageViewModel>(), AppBar
 
                  viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
                  viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
+                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, category)
 
                  viewDataBinding.executePendingBindings()
              }

@@ -1,29 +1,35 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.CategoryListItemBinding
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel
+import womenproject.com.mybury.ui.ItemCheckedListener
 
-class EditCategoryListViewHolder(private val binding: CategoryListItemBinding, private val listener: ItemDragListener)
+class EditCategoryListViewHolder(private val binding: CategoryListItemBinding, private val dragListener: ItemDragListener, private val checkedListener: ItemCheckedListener)
     : RecyclerView.ViewHolder(binding.root) {
 
-    init {
-        binding.dragLayout.setOnTouchListener { v, event ->
-            Log.e("ayhan", "isDrag")
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                listener.onStartDrag(this)
-            }
-            false
-        }
-    }
 
-    fun bind(categoryName: String) {
+    @SuppressLint("ClickableViewAccessibility")
+    fun bind(category : Category) {
         binding.apply {
 
-            binding.viewModel = CategoryListItemViewModel(categoryName)
+            viewModel = CategoryListItemViewModel(category.name)
+
+            dragLayout.setOnTouchListener { v, event ->
+                if(event.action == MotionEvent.ACTION_DOWN) {
+                    dragListener.onStartDrag(this@EditCategoryListViewHolder)
+                }
+                false
+            }
+
+            removeBox.setOnCheckedChangeListener { _, isChecked ->
+                checkedListener.checked(isChecked, category)
+            }
+
 
             executePendingBindings()
         }

@@ -3,12 +3,17 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.CategoryListItemBinding
 import womenproject.com.mybury.ui.ItemActionListener
+import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.ui.ItemMovedListener
 
-class EditCategoryListAdapter(private val bucketCategoryList: MutableList<String>,
-                              private val listener: ItemDragListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
+class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Category>,
+                              private val dragListener: ItemDragListener,
+                              private val checkedListener: ItemCheckedListener,
+                              private val itemMovedListener: ItemMovedListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
 
     private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
@@ -16,7 +21,7 @@ class EditCategoryListAdapter(private val bucketCategoryList: MutableList<String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        editCategoryListViewHolder = EditCategoryListViewHolder(CategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+        editCategoryListViewHolder = EditCategoryListViewHolder(CategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), dragListener, checkedListener)
         return editCategoryListViewHolder
     }
 
@@ -37,6 +42,8 @@ class EditCategoryListAdapter(private val bucketCategoryList: MutableList<String
         val fromItem = categoryList.removeAt(from)
         categoryList.add(to, fromItem)
         notifyItemMoved(from, to)
+
+        itemMovedListener.movend(categoryList)
     }
 
 }

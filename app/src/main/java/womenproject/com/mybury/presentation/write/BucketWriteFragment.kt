@@ -67,7 +67,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 }
 
         )
-      //  setCategoryList()
+        //  setCategoryList()
 
         viewDataBinding.apply {
             cancelBtnClickListener = setOnBackBtnClickListener()

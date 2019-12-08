@@ -1,14 +1,10 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.annotation.SuppressLint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.CategoryList
-import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.data.Category
 
 /**
  * Created by HanAYeon on 2018. 11. 28..
@@ -18,9 +14,9 @@ class MainFragmentViewModel : BaseViewModel() {
 
     fun getDummyMainBucketList(): List<BucketItem> {
 
-        val ca = CategoryList("없음")
-        val ca2 = CategoryList("여행")
-        val list = mutableListOf<CategoryList>(ca)
+        val ca = Category("없음", "191919199119")
+        val ca2 = Category("여행", "2020202020")
+        val list = mutableListOf<Category>(ca)
         val category = BucketCategory(list,"20")
 
 

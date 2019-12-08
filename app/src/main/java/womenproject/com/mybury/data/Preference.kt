@@ -32,7 +32,7 @@ class Preference {
             return data
         }
 
-        fun setMyBuryLoginCompelete(context: Context, isComplete: Boolean) {
+        fun setMyBuryLoginComplete(context: Context, isComplete: Boolean) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putBoolean(MYBURY_LOGIN_COMPLETE, isComplete)

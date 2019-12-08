@@ -9,11 +9,14 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.my_page_header.*
 import kotlinx.android.synthetic.main.my_page_more_menu.view.*
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
+import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
@@ -27,32 +30,36 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
+    private val bucketInfoViewModel = BucketInfoViewModel()
     override fun initDataBinding() {
-        viewDataBinding.viewModel = viewModel
-        viewDataBinding.headerLayout.viewModel = viewModel
 
-        viewDataBinding.mypageBottomSheet.homeClickListener = createOnClickHomeListener
-        viewDataBinding.mypageBottomSheet.writeClickListener = createOnClickWriteListener
-        viewDataBinding.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
-        viewDataBinding.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
-        viewDataBinding.headerLayout.moreClickListener = moreButtonOnClickListener
-        viewDataBinding.mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
-        viewDataBinding.mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
-        viewDataBinding.mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
-        viewDataBinding.mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
+        viewDataBinding.apply {
+            viewModel = viewModel
+            headerLayout.viewModel = viewModel
+
+            mypageBottomSheet.homeClickListener = createOnClickHomeListener
+            mypageBottomSheet.writeClickListener = createOnClickWriteListener
+            mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
+            mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
+            headerLayout.moreClickListener = moreButtonOnClickListener
+            mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
+            mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
+            mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
+            mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
 
 
+            appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
+                if (p1 == -384) {
+                    mypageScrollLayout.ddayLayout.visibility = View.GONE
+                    headerLayout.moreBtn.visibility = View.GONE
+                    popupClickListener()
+                } else if (p1 == 0) {
+                    mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                    headerLayout.moreBtn.visibility = View.VISIBLE
+                }
+            })
 
-        viewDataBinding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
-            if (p1 == -384) {
-                viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.GONE
-                viewDataBinding.headerLayout.moreBtn.visibility = View.GONE
-                popupClickListener()
-            } else if (p1 == 0) {
-                viewDataBinding.mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-                viewDataBinding.headerLayout.moreBtn.visibility = View.VISIBLE
-            }
-        })
+        }
 
 
         setCategoryList()
@@ -60,6 +67,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
     }
 
     private fun setCategoryList() {
+
+        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener{
+            override fun start() {
+
+            }
+
+            override fun success(categoryList: List<Category>) {
+
+            }
+
+            override fun fail() {
+
+            }
+
+        }, getUserId(context!!))
+
 
         val categoryList = mutableListOf<String>()
         categoryList.add("없음")
@@ -70,6 +93,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         categoryList.add("도라에몽 주머니")
 
 
+
         val layoutManager = LinearLayoutManager(context)
 
         viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
@@ -77,14 +101,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
         viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
 
 
-        /*viewModel.getCategoryList(object : BucketWriteViewModel.GetBucketListCallBackListener {
+        /*viewModel.getCategory(object : BucketWriteViewModel.GetBucketListCallBackListener {
             override fun start() {
 
             }
 
             override fun success(bucketCategory: BucketCategory) {
-                for(i in 0 until bucketCategory.categoryList.size) {
-                    categoryList.add(bucketCategory.categoryList[i].name)
+                for(i in 0 until bucketCategory.category.size) {
+                    category.add(bucketCategory.category[i].name)
                 }
                 viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@MyPageFragment)
                 startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
@@ -94,7 +118,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>()  {
 
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, category)
 
                 viewDataBinding.executePendingBindings()
             }

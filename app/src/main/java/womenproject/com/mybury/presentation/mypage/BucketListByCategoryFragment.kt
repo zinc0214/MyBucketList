@@ -52,7 +52,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
 
         bucketInfoViewModel.getMainBucketListByCategory(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {
-                viewDataBinding.progressBar.visibility = View.GONE
+                stopLoading()
                 Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
                 val list = viewModel.getDummyMainBucketList()
                 list.last().isLast = true
@@ -70,14 +70,12 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
             }
 
             override fun start() {
-                viewDataBinding.progressBar.visibility = View.VISIBLE
+                startLoading()
             }
 
             override fun finish(bucketList: List<BucketItem>) {
-                if(bucketList != null)  {
-                    viewDataBinding.progressBar.visibility = View.GONE
-                    viewDataBinding.bucketList.adapter = CategoryBucketListeAdapter(context, bucketList)
-                }
+                viewDataBinding.bucketList.adapter = CategoryBucketListeAdapter(context, bucketList)
+                stopLoading()
             }
         }, categoryName)
 

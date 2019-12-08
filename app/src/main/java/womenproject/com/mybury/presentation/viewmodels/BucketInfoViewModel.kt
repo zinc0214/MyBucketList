@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
@@ -59,6 +61,36 @@ class BucketInfoViewModel : BaseViewModel() {
 
 
     }
+
+    interface GetBucketListCallBackListener {
+        fun start()
+        fun success(categoryList : List<Category>)
+        fun fail()
+    }
+
+    @SuppressLint("CheckResult")
+    fun getCategoryList(callback: GetBucketListCallBackListener, userId: String) {
+
+        apiInterface.requestCategoryList(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    callback.fail()
+                }
+                .subscribe({
+                    response ->
+                    if(response.retCode == "200") {
+                        Log.e("ayhan", "categoryLL : ${response.toString()}")
+                        //callback.success(response.category)
+                        callback.fail()
+                    }
+                    Log.e("ayhan", "dds")
+                    callback.fail()
+                    }) {
+                    Log.e("ayhan", it.toString())
+                }
+    }
+
 
 
 /*

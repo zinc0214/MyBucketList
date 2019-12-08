@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import womenproject.com.mybury.presentation.MainActivity
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
@@ -77,6 +78,23 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     open fun setOnBackBtnClickListener() : View.OnClickListener {
         return View.OnClickListener {
             activity!!.onBackPressed()
+        }
+    }
+
+    fun startLoading() {
+        Log.e("ayhan", "startLoading")
+        if(activity is MainActivity) {
+            val a = activity as MainActivity
+            a.startLoading()
+            Log.e("ayhan", "startLoading2")
+        }
+
+    }
+
+    fun stopLoading() {
+        if(activity is MainActivity) {
+            val a = activity as MainActivity
+            a.stopLoading()
         }
     }
 
