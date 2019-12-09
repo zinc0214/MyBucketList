@@ -14,8 +14,8 @@ class MainFragmentViewModel : BaseViewModel() {
 
     fun getDummyMainBucketList(): List<BucketItem> {
 
-        val ca = Category("없음", "191919199119")
-        val ca2 = Category("여행", "2020202020")
+        val ca = Category("없음", "191919199119",0)
+        val ca2 = Category("여행", "2020202020", 1)
         val list = mutableListOf<Category>(ca)
         val category = BucketCategory(list,"20")
 

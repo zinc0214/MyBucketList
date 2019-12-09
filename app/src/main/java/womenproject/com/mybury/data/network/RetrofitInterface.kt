@@ -31,7 +31,7 @@ interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/host/signin")
-    fun getLoginToken(@Body email: GetTokenRequest): Observable<GetTokenResponse>
+    fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
 
     @POST("/host/profile")
     @Multipart
@@ -50,10 +50,7 @@ interface RetrofitInterface {
     fun requestDdayBucketListResult(): Observable<BucketList>
 
     @GET("/host/beforeWrite")
-    fun requestCategoryList(): Observable<BucketCategory>
-
-    @GET("/host/beforeWrite")
-    fun requestBeforeWrite(@Query("userId") userId: String) : Observable<ResponseBody>
+    fun requestBeforeWrite(@Query("userId") userId: String) : Observable<BucketCategory>
 
     @POST("/host/write")
     @Multipart
@@ -75,6 +72,14 @@ interface RetrofitInterface {
     @Multipart
     @POST("/host/imageUpload")
     fun postAddBucketImage(@Part file: MultipartBody.Part): Observable<ResponseBody>
+
+
+    @GET("/host/mypage")
+    fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String) : Observable<MyPageInfo>
+
+
+    @HTTP(method = "DELETE", path="/host/withdrawal", hasBody = true)
+    fun postSignOut(@Body userId: UseUserIdRequest): Observable<SimpleResponse>
 
 }
 

@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.viewmodels.MyPageViewModel" />
-
-        <variable
             name="ddayListClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -21,12 +17,12 @@
 
 
     <androidx.core.widget.NestedScrollView
-        android:background="@color/_fafafa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:background="@color/_fafafa"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.ScrollingFragment"
-        tools:showIn="@layout/activity_scrolling">
+        tools:context=".ui.ScrollingFragment">
 
         <LinearLayout
             android:id="@+id/content_scroll_layout"
@@ -38,11 +34,11 @@
 
             <RelativeLayout
                 android:id="@+id/dday_layout"
-                android:onClick="@{ddayListClickListener}"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/mypage_ddaylist_background">
+                android:layout_marginTop="12dp"
+                android:background="@drawable/mypage_ddaylist_background"
+                android:onClick="@{ddayListClickListener}">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -54,12 +50,12 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/dDayCountText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:text="@{viewModel.ddayCount}"
                     android:textColor="@color/_ffca5a" />
 
 
@@ -67,9 +63,9 @@
 
 
             <RelativeLayout
-                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="18dp">
+                android:layout_height="18dp"
+                android:layout_marginTop="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,24 +75,24 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:onClick="@{categoryEditClickListener}"
-                    android:textColor="@color/_5a95ff"
-                    android:gravity="center"
-                    android:textSize="11sp"
-                    android:text="편집"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/mypage_category_edit_background"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent" />
+                    android:gravity="center"
+                    android:onClick="@{categoryEditClickListener}"
+                    android:text="편집"
+                    android:textColor="@color/_5a95ff"
+                    android:textSize="11sp" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="6dp"
                 android:id="@+id/mypage_category_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/mypage_category_item"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                android:layout_marginTop="6dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/mypage_category_item" />
         </LinearLayout>
 
 

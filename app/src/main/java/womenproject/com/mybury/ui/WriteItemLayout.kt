@@ -8,28 +8,26 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Category
 
 
 @SuppressLint("ViewConstructor")
-class WriteItemLayout internal constructor(context: Context, private var categorySelectListener: (String) -> Unit) : RelativeLayout(context) {
+class WriteItemLayout internal constructor(context: Context, private var categorySelectListener: (Category) -> Unit) : RelativeLayout(context) {
 
-    fun setUI(title: String): View {
+    fun setUI(category: Category): View {
 
         val view = LayoutInflater.from(context).inflate(R.layout.write_dialog_item, this, false)
 
         val textView = view.findViewById<TextView>(R.id.write_item_text)
-        textView.setText(title)
+        textView.text = category.name
 
         val writeLayout = view.findViewById<LinearLayout>(R.id.write_item_layout)
 
-
         writeLayout.setOnClickListener {
-            categorySelectListener.invoke(textView.text.toString())
-
+            categorySelectListener.invoke(category)
         }
 
         return view
     }
-
 
 }

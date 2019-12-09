@@ -9,9 +9,10 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
+import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.CategoryEditViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
@@ -23,7 +24,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     private lateinit var itemTouchHelper: ItemTouchHelper
 
     private val bucketInfoViewModel = BucketInfoViewModel()
-    private val categoryEditViewModel = CategoryEditViewModel()
+    private val categoryEditViewModel = CategoryInfoViewModel()
     private val removedList = hashSetOf<String>()
     private var changeCategoryList = arrayListOf<Category>()
 
@@ -42,8 +43,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     private fun setCategoryList() {
-
-        val categoryList = mutableListOf<Category>()
 
         bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener {
             override fun success(categoryList: List<Category>) {
@@ -65,26 +64,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
 
             override fun fail() {
-
                 stopLoading()
-
-                categoryList.add(Category("없음", "1"))
-                categoryList.add(Category("여행", "2"))
-                categoryList.add(Category("서울 맛집", "3"))
-                categoryList.add(Category("다이어트", "4"))
-                categoryList.add(Category("스터디", "5"))
-                categoryList.add(Category("도라에몽 주머니", "6"))
-
-                editCategoryListAdapter = EditCategoryListAdapter(categoryList, this@CategoryEditFragment, this@CategoryEditFragment, this@CategoryEditFragment)
-
-                viewDataBinding.categoryListRecyclerView.apply {
-                    adapter = editCategoryListAdapter
-                    layoutManager = LinearLayoutManager(context)
-                }
-
-
-                itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
-                itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
 
             }
 
@@ -94,7 +75,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     public fun setCategoryDelectListener() {
 
-        categoryEditViewModel.removeCategoryItem(removedList, object : CategoryEditViewModel.ChangeCategoryState {
+        categoryEditViewModel.removeCategoryItem(removedList, object : CategoryInfoViewModel.ChangeCategoryState {
             override fun start() {
 
             }
@@ -115,19 +96,20 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
 
     override fun setOnBackBtnClickListener(): View.OnClickListener {
-        for(list in changeCategoryList) {
+        for (list in changeCategoryList) {
             Log.e("ayhan", "변경순서 : ${list.name}")
         }
 
         return super.setOnBackBtnClickListener()
 
     }
+
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper.startDrag(viewHolder)
     }
 
     override fun checked(isChecked: Boolean, item: Category) {
-        if(isChecked) {
+        if (isChecked) {
             removedList.add(item.id)
         } else {
             removedList.remove(item.id)
@@ -135,7 +117,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
         viewDataBinding.cancelText.isEnabled = removedList.size > 0
 
-        for(i in removedList) {
+        for (i in removedList) {
             Log.e("ayhan", "itemId : ${i}")
         }
 

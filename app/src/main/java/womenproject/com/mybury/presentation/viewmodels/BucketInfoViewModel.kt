@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.network.apiInterface
@@ -25,7 +24,7 @@ class BucketInfoViewModel : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: OnBucketListGetEvent, userId : String, token:String) {
+    fun getMainBucketList(callback: OnBucketListGetEvent, userId: String, token: String) {
         callback.start()
         apiInterface.requestHomeBucketList(token, userId, "started", "updateDt")
                 .subscribeOn(Schedulers.io())
@@ -43,7 +42,7 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, categoryName: String) {
+    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, category: Category) {
 
         callback.start()
 
@@ -52,7 +51,7 @@ class BucketInfoViewModel : BaseViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response -> response.bucketlists }
                 .subscribe({ bucketItemList ->
-                    bucketItemList.filter { it.category.name == categoryName }
+                    bucketItemList.filter { it.category == category }
                     callback.finish(bucketItemList)
                 }) {
                     Log.e("ayhan", it.toString())
@@ -64,66 +63,26 @@ class BucketInfoViewModel : BaseViewModel() {
 
     interface GetBucketListCallBackListener {
         fun start()
-        fun success(categoryList : List<Category>)
+        fun success(categoryList: List<Category>)
         fun fail()
     }
 
     @SuppressLint("CheckResult")
     fun getCategoryList(callback: GetBucketListCallBackListener, userId: String) {
 
-        apiInterface.requestCategoryList(userId)
+        apiInterface.requestBeforeWrite(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    callback.fail()
-                }
-                .subscribe({
-                    response ->
-                    if(response.retCode == "200") {
-                        Log.e("ayhan", "categoryLL : ${response.toString()}")
-                        //callback.success(response.category)
-                        callback.fail()
+                .subscribe({ response ->
+                    if (response.retcode == "200") {
+                        Log.e("ayhan", "categoryLL : $response")
+                        callback.success(response.categoryList)
                     }
-                    Log.e("ayhan", "dds")
+                }) {
                     callback.fail()
-                    }) {
                     Log.e("ayhan", it.toString())
                 }
     }
-
-
-
-/*
-
-    fun getMainBucketList2(api: String, callback: OnBucketListGetEvent): BucketList? {
-
-        callback.start()
-
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.requestHomeBucketList()
-        bucketListResultData.enqueue(object : Callback<BucketList> {
-            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
-
-                if (response != null && response.isSuccessful) {
-                    Log.e("ayhan:result", "${response.body()}")
-                    bucketList = response.body()
-                    Log.e("ayhan:bucketList", "$bucketList")
-                    callback.finish(bucketList)
-                }
-            }
-
-            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
-                Log.e("ayhan2", t.toString())
-                //progressVisible.set(View.GONE)
-                callback.finish(bucketList)
-            }
-        })
-
-        return bucketList
-
-    }
-*/
 
 
 }

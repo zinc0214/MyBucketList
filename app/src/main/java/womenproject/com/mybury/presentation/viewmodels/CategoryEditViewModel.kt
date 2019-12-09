@@ -1,12 +1,7 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.annotation.SuppressLint
-import android.util.Log
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.CategoryList
-import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.data.Category
 
 /**
  * Created by HanAYeon on 2019-08-19.
@@ -15,35 +10,26 @@ import womenproject.com.mybury.data.network.apiInterface
 class CategoryInfoViewModel {
 
 
-    interface GetBucketListCallBackListener {
-        fun start()
-        fun success(bucketCategory : BucketCategory)
-        fun fail()
-    }
-
-    @SuppressLint("CheckResult")
-    fun getCategoryList(callback: GetBucketListCallBackListener) {
-
-        apiInterface.requestCategoryList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    callback.fail()
-                    callback.success(getDummyCategory())
-                }
-                .subscribe({
-                    bucketCategory -> callback.success(bucketCategory)
-                }) {
-                    Log.e("ayhan", it.toString())
-                }
-    }
-
     fun getDummyCategory() : BucketCategory{
-        val categoryList = CategoryList("없음")
+        val categoryList = Category("없음", "1010101010", 1)
         val bucketCategory = BucketCategory(arrayListOf(categoryList), "200")
         return bucketCategory
     }
 
+
+    interface ChangeCategoryState{
+        fun start()
+        fun success()
+        fun fail()
+    }
+
+    fun removeCategoryItem(category: HashSet<String>, changeCategoryState: ChangeCategoryState) {
+        // 카테고리 제거
+    }
+
+    fun addCategoryItem() {
+
+    }
 /*    fun getCategoryList2(callback: GetBucketListCallBackListener) {
 
         callback.start()

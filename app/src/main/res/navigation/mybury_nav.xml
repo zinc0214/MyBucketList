@@ -168,7 +168,7 @@
         <argument
             android:name="category"
             android:defaultValue="@null"
-            app:argType="string"
+            app:argType="womenproject.com.mybury.data.Category"
             app:nullable="true" />
 
 
@@ -183,14 +183,6 @@
 
     </fragment>
 
-
-    <fragment
-        android:id="@+id/scroll_fragment"
-        android:name="womenproject.com.mybury.ui.ScrollingFragment"
-        android:label="Scroll"
-        tools:layout="@layout/activity_scrolling">
-
-    </fragment>
 
 
     <fragment

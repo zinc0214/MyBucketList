@@ -14,18 +14,20 @@ import androidx.constraintlayout.motion.widget.MotionScene
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -34,10 +36,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
     private var currentCalendarDay = Calendar.getInstance().time
-    private lateinit var categoryList: BucketCategory
+    private var categoryList = arrayListOf<Category>()
     private var imgList = ArrayList<File>()
-
-    private val bucketInfoViewModel = CategoryInfoViewModel()
+    private lateinit var selectCategory : Category
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -45,29 +46,34 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     override val viewModel: BucketWriteViewModel
         get() = BucketWriteViewModel()
 
+    private val bucketInfoViewModel = BucketInfoViewModel()
 
     override fun initDataBinding() {
 
-        viewModel.beforeBucketWrite(getUserId(context!!),
-                object : BucketWriteViewModel.OnBucketAddEvent {
-                    override fun start() {
-                        viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
-                    }
+        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener {
+            override fun success(_categoryList: List<Category>) {
+                stopLoading()
+                Log.e("ayhan", "cate: ${_categoryList.size}")
+                categoryList = _categoryList as ArrayList<Category>
+                selectCategory = categoryList[0]
+                setUpView()
+            }
 
-                    override fun success() {
-                        viewDataBinding.addBucketProgressBar.visibility = View.GONE
+            override fun start() {
+                startLoading()
+            }
 
-                    }
+            override fun fail() {
+                // NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                stopLoading()
+            }
+        }, getUserId(context!!))
 
-                    override fun fail() {
-                        NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
-                        viewDataBinding.addBucketProgressBar.visibility = View.GONE
-                    }
 
-                }
 
-        )
-        //  setCategoryList()
+    }
+
+    private fun setUpView() {
 
         viewDataBinding.apply {
             cancelBtnClickListener = setOnBackBtnClickListener()
@@ -120,13 +126,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         }
 
-
-        initForUpdate()
     }
-
+/*
     private fun setCategoryList() {
 
-        bucketInfoViewModel.getCategoryList(object : CategoryInfoViewModel.GetBucketListCallBackListener {
+        bucketInfoViewModel.getCategoryList(object : CategoryEditViewModel.GetBucketListCallBackListener {
 
             override fun start() {
                 viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
@@ -147,6 +151,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         })
     }
+*/
 
 
     class CancelDialog : BaseNormalDialogFragment() {
@@ -188,18 +193,18 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     getAccessToken(context!!), getUserId(context!!),
                     getBucketItemInfo(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
                 override fun start() {
-                    viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
+                    startLoading()
 
                 }
 
                 override fun success() {
-                    viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    stopLoading()
                     Toast.makeText(context, "버킷이 등록되었습니다", Toast.LENGTH_SHORT).show()
                     activity!!.onBackPressed()
                 }
 
                 override fun fail() {
-                    viewDataBinding.addBucketProgressBar.visibility = View.GONE
+                    stopLoading()
                     Toast.makeText(context, "버킷이 등록되지 못했습니다. 흑흑흑", Toast.LENGTH_SHORT).show()
                 }
 
@@ -393,13 +398,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     private fun selectCategoryListener(): View.OnClickListener {
-        val categorySetListener: (String) -> Unit = { title ->
-            if (title.equals("없음")) {
-                viewDataBinding.categoryText.text = title
+        val categorySetListener: (Category) -> Unit = { category ->
+            selectCategory = category
+            if (category.name.equals("없음")) {
+                viewDataBinding.categoryText.text = category.name
                 viewDataBinding.categoryText.setDisableTextColor()
                 viewDataBinding.categoryImg.setImage(R.drawable.category_disable)
             } else {
-                viewDataBinding.categoryText.text = title
+                viewDataBinding.categoryText.text = category.name
                 viewDataBinding.categoryText.setEnableTextColor()
                 viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
             }
@@ -419,10 +425,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             goalCount = goal_count_text.text.toString().toInt()
         }
 
+
+        val formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay)
+
         return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
-                currentCalendarDay, goalCount,
-                viewDataBinding.memoText.text.toString(), viewDataBinding.categoryText.text.toString(),
-                getUserId(context!!))
+                formDate, goalCount,
+                viewDataBinding.memoText.text.toString(), selectCategory.id)
     }
 
 

@@ -19,7 +19,6 @@ class Preference {
         private const val ACCESS_TOKEN = "access_token"
 
         fun setAccountEmail(context: Context, email: String) {
-
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(GOOGLE_ACCOUNT, email)

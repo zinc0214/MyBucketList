@@ -1,5 +1,11 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.annotation.SuppressLint
+import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.data.MyPageInfo
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
 /**
@@ -8,9 +14,32 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class MyPageViewModel : BaseViewModel() {
 
-    var nickname = "닉네임이 이렇게 길다리다링루룽"
-    var doingBucketCount = "27"
-    var doneBucketCount = "31"
-    var ddayCount = "20"
+    interface GetMyPageInfoListener {
+        fun start()
+        fun success(myPageInfo : MyPageInfo)
+        fun fail()
+    }
+
+
+    @SuppressLint("CheckResult")
+    fun getMyPageData(callback: GetMyPageInfoListener, token : String, userId: String) {
+
+        apiInterface.loadMyPageData(token, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    callback.fail()
+                }
+                .subscribe({ response ->
+                    Log.e("ayhan", "getMyPageInfo : ${response}")
+                    if (response.retcode == "200") {
+                        Log.e("ayhan", "categoryLL : $response")
+                        callback.success(response)
+                    }
+                }) {
+                    callback.fail()
+                    Log.e("ayhan", it.toString())
+                }
+    }
 
 }

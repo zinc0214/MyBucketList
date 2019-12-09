@@ -25,32 +25,6 @@ class BucketWriteViewModel : BaseViewModel() {
     }
 
 
-
-
-    @SuppressLint("CheckResult")
-    fun beforeBucketWrite(userId: String, onBucketAddEvent: OnBucketAddEvent) {
-
-        onBucketAddEvent.start()
-
-        apiInterface.requestBeforeWrite(userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    Log.e("ayhan", "beforeWriteCheck : ${response}")
-                    if(response.string().contains("200")) {
-                        onBucketAddEvent.success()
-                    } else {
-                        onBucketAddEvent.fail()
-                    }
-                }) {
-                    Log.e("ayhan", "beforeWriteFail : $it")
-                    onBucketAddEvent.fail()
-                }
-
-
-    }
-
-
     @SuppressLint("CheckResult")
     fun uploadBucketList(token: String, userId: String,
                          bucketItem: AddBucketItem,
@@ -59,7 +33,6 @@ class BucketWriteViewModel : BaseViewModel() {
 
         onBucketAddEvent.start()
 
-
         val title = bucketItem.title.stringToMultipartFile("title")
         val open = bucketItem.open.stringToMultipartFile("open")
         val dDate = bucketItem.dDate.stringToMultipartFile("dDate")
@@ -67,7 +40,7 @@ class BucketWriteViewModel : BaseViewModel() {
         val memo = bucketItem.memo.stringToMultipartFile("memo")
         val categoryId = bucketItem.categoryId.stringToMultipartFile("categoryId")
         val userId = userId.stringToMultipartFile("userId")
-/*
+
         apiInterface.postAddBucketList(token, title, open, dDate, goalCount, memo, categoryId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,9 +53,10 @@ class BucketWriteViewModel : BaseViewModel() {
                 }) {
                     Log.e("ayhan", "addBucketFail : $it")
                     onBucketAddEvent.fail()
-                }*/
+                }
 
-        val bucketItem = bucketItem.stringToMultipartFile("bucketItem")
+
+/*        val bucketItem = bucketItem.stringToMultipartFile("bucketItem")
 
         apiInterface.postAddBucketList(token, bucketItem, userId)
                 .subscribeOn(Schedulers.io())
@@ -96,7 +70,7 @@ class BucketWriteViewModel : BaseViewModel() {
                 }) {
                     Log.e("ayhan", "addBucketFail : $it")
                     onBucketAddEvent.fail()
-                }
+                }*/
     }
 
 

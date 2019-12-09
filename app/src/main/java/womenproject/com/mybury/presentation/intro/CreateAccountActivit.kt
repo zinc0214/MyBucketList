@@ -17,12 +17,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.GetTokenRequest
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
-import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginCompelete
+import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
@@ -33,11 +33,7 @@ import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
-import okhttp3.RequestBody
-import okhttp3.MediaType
-import okhttp3.MultipartBody
 import womenproject.com.mybury.data.DefaulProfileImg
-import womenproject.com.mybury.util.Converter.Companion.getUriToDrawable
 import womenproject.com.mybury.util.fileToMultipartFile
 import womenproject.com.mybury.util.stringToMultipartFile
 
@@ -198,7 +194,7 @@ class CreateAccountActivity : BaseActiviy() {
 
 
     private fun goToNext() {
-        setMyBuryLoginCompelete(context, true)
+        setMyBuryLoginComplete(context, true)
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
@@ -207,7 +203,7 @@ class CreateAccountActivity : BaseActiviy() {
 
     @SuppressLint("CheckResult")
     private fun getLoginToken() {
-        val getTokenRequest = GetTokenRequest(getUserId(this))
+        val getTokenRequest = UseUserIdRequest(getUserId(this))
         Log.e("ayhan", "userId : ${getTokenRequest.userId}")
 
         apiInterface.getLoginToken(getTokenRequest)

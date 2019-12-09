@@ -22,7 +22,7 @@ data class SignUpResponse (
         val user_id:String
 )
 
-data class GetTokenRequest(
+data class UseUserIdRequest(
         val userId : String
 )
 
@@ -76,21 +76,30 @@ data class BucketItem(
 data class AddBucketItem(
         var title : String = "Title",
         val open : Boolean = false,
-        val dDate : Date,
+        val dDate : String,
         val goalCount : Int = 0,
         var memo : String = "Memo",
-        val categoryId: String,
-        val givenId : String
+        val categoryId: String
 )
-
 data class BucketCategory (
-        val category : List<Category>,
-        val retCode : String
-
+        val categoryList : List<Category>,
+        val retcode : String
 )
 
 @Parcelize
 data class Category(
         val name: String,
-        val id : String
+        val id : String,
+        val priority : Int
 ) : Parcelable
+
+
+data class MyPageInfo(
+        val name : String,
+        val imageUrl : String,
+        val startedCount : Int = 0,
+        val completedCount : Int = 0,
+        val dDayCount : Int = 0,
+        val categoryMap : List<Category>,
+        val retcode : String
+)

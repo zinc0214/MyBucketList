@@ -13,7 +13,7 @@ import womenproject.com.mybury.ui.WriteItemLayout
 
 
 @SuppressLint("ValidFragment")
-class WriteCategoryDialogFragment(private var userCategory : List<Category>, private var categorySetListener : (String) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
+class WriteCategoryDialogFragment(private var userCategory : List<Category>, private var categorySetListener : (Category) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -29,20 +29,10 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>, pri
 
     override fun initDataBinding() {
         viewDataBinding.addCategory.title = "카테고리 추가"
-        viewDataBinding.notUseCategory.title = "없음"
-
-        viewDataBinding.notUseCategory.itemClickListener = notUseCategoryListener()
         viewDataBinding.addCategory.itemClickListener = addCategoryListener()
 
         for (category in userCategory) {
-            addCategoryItem(category.name)
-        }
-    }
-
-    private fun notUseCategoryListener() : View.OnClickListener {
-        return View.OnClickListener {
-            categorySetListener.invoke("없음")
-            dismiss()
+            addCategoryItem(category)
         }
     }
 
@@ -51,14 +41,14 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>, pri
             AddCategoryDialog().show(activity!!.supportFragmentManager, "tag")
         }
     }
-    private fun addCategoryItem(title : String) {
+    private fun addCategoryItem(category: Category) {
 
-        val categorySelectListener: (String) -> Unit = { it ->
+        val categorySelectListener: (Category) -> Unit = { it ->
             categorySetListener.invoke(it)
             dismiss()
         }
 
-        val writeImgLayout = WriteItemLayout(this.context!!, categorySelectListener).setUI(title)
+        val writeImgLayout = WriteItemLayout(this.context!!, categorySelectListener).setUI(category)
         viewDataBinding.categoryListLayout.addView(writeImgLayout)
     }
 

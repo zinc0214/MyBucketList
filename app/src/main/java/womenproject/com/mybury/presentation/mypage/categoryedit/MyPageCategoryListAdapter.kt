@@ -4,12 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.MypageCategoryItemBinding
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
-class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: MutableList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: MutableList<Category>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var myPageCategoryListViewHolder: MyPageCategoryListViewHolder
     private val bucketCategory = bucketCategoryList

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -16,8 +15,7 @@ import androidx.navigation.ui.navigateUp
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.GetTokenRequest
-import womenproject.com.mybury.data.GetTokenResponse
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.network.apiInterface
@@ -25,7 +23,6 @@ import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.intro.CancelDialog
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
@@ -77,7 +74,7 @@ class MainActivity : BaseActiviy() {
     @SuppressLint("CheckResult")
     private fun initToken() {
 
-        val getTokenRequest = GetTokenRequest(getUserId(this))
+        val getTokenRequest = UseUserIdRequest(getUserId(this))
 
         apiInterface.getLoginToken(getTokenRequest)
                 .subscribeOn(Schedulers.io())

@@ -19,11 +19,6 @@
             android:layout_marginBottom="7dp"
             android:orientation="vertical">
 
-
-            <include
-                android:id="@+id/not_use_category"
-                layout="@layout/write_dialog_item" />
-
             <LinearLayout
                 android:id="@+id/category_list_layout"
                 android:layout_width="match_parent"
