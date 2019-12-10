@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.DefaulProfileImg
+import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
@@ -17,6 +19,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import kotlin.random.Random
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
@@ -32,30 +35,30 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private val bucketInfoViewModel = BucketInfoViewModel()
     override fun initDataBinding() {
-
         setCategoryList()
-
     }
 
     private fun setCategoryList() {
 
         viewModel.getMyPageData(object : MyPageViewModel.GetMyPageInfoListener {
+            override fun start() {
+                Log.e("ayhan", "???")
+                startLoading()
+            }
+
             override fun success(myPageInfo: MyPageInfo) {
                 stopLoading()
-                Log.e("ayhan", "cate: ${myPageInfo.categoryMap.size}")
+                Log.e("ayhan", "cate: ${myPageInfo.categoryList.size}")
 
                 val layoutManager = LinearLayoutManager(context)
 
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, myPageInfo.categoryMap as MutableList<Category>)
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, myPageInfo.categoryList as MutableList<MyPageCategory>)
 
                 setUpView(myPageInfo)
             }
 
-            override fun start() {
-                startLoading()
-            }
 
             override fun fail() {
                 stopLoading()
@@ -63,97 +66,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             }
         }, getAccessToken(context!!), getUserId(context!!))
 
-
-/*        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener {
-            override fun success(_categoryList: List<Category>) {
-                stopLoading()
-                Log.e("ayhan", "cate: ${_categoryList.size}")
-
-                val layoutManager = LinearLayoutManager(context)
-
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, _categoryList as MutableList<Category>)
-
-                setUpView()
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
-            }
-        }, getUserId(context!!))*/
-
-
-/*
-        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener{
-            override fun start() {
-
-            }
-
-            override fun success(categoryList: List<Category>) {
-
-            }
-
-            override fun fail() {
-
-            }
-
-        }, getUserId(context!!))
-
-
-        val categoryList = mutableListOf<String>()
-        categoryList.add("없음")
-        categoryList.add("여행")
-        categoryList.add("서울 맛집")
-        categoryList.add("다이어트")
-        categoryList.add("스터디")
-        categoryList.add("도라에몽 주머니")
-
-
-
-        val layoutManager = LinearLayoutManager(context)
-
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-        viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, categoryList)
-*/
-
-
-        /*viewModel.getCategory(object : BucketWriteViewModel.GetBucketListCallBackListener {
-            override fun start() {
-
-            }
-
-            override fun success(bucketCategory: BucketCategory) {
-                for(i in 0 until bucketCategory.category.size) {
-                    category.add(bucketCategory.category[i].name)
-                }
-                viewDataBinding.mainScrollAppbar.addOnOffsetChangedListener(this@MyPageFragment)
-                startAlphaAnimation(viewDataBinding.mainTextviewTitle, 0, View.INVISIBLE)
-
-
-                val layoutManager = LinearLayoutManager(context)
-
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, category)
-
-                viewDataBinding.executePendingBindings()
-            }
-
-            override fun fail() {
-
-            }
-
-        })*/
-
     }
-
 
     private fun setUpView(_myPageInfo: MyPageInfo) {
 
@@ -192,8 +105,31 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 }
             })
 
+            seyMyProfileImg(_myPageInfo.imageUrl.toString())
         }
 
+    }
+
+    private fun seyMyProfileImg(imgUrl: String) {
+        if (imgUrl.isNotBlank()) {
+
+            val num = Random.nextInt(2)
+            Log.e("ayhan", "use RandomImg: $num")
+            if (num == 1) {
+                viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+                DefaulProfileImg().bury
+            } else {
+                viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+                DefaulProfileImg().my
+            }
+
+
+        } else {
+            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileLargeImg)
+            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImg)
+        }
     }
 
     private fun popupClickListener() {

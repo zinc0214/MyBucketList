@@ -43,13 +43,13 @@ class DdayBucketEachListAdapter(context: Context?, bucketList: List<BucketItem>)
         return View.OnClickListener {
             Toast.makeText(context, "count : ${bucket.title}", Toast.LENGTH_SHORT).show()
             val directions = DdayBucketListFragmentDirections.actionDdayBucketToBucketDetail()
-            directions.bucket = bucket
+            directions.bucketId = bucket.id
             it.findNavController().navigate(directions)
         }
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if(bucketItemList[position].complete) {
+        return if(bucketItemList[position].userCount == bucketItemList[position].goalCount) {
             0
         } else {
             bucketItemList[position].goalCount

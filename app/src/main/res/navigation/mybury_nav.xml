@@ -41,9 +41,9 @@
         android:label="Detail"
         tools:layout="@layout/fragment_bucket_detail">
         <argument
-            android:name="bucket"
+            android:name="bucketId"
             android:defaultValue="@null"
-            app:argType="womenproject.com.mybury.data.BucketItem"
+            app:argType="string"
             app:nullable="true" />
 
         <action
@@ -65,7 +65,7 @@
         <argument
             android:name="bucket"
             android:defaultValue="@null"
-            app:argType="womenproject.com.mybury.data.BucketItem"
+            app:argType="womenproject.com.mybury.data.DetailBucketItem"
             app:nullable="true" />
 
     </fragment>
@@ -74,8 +74,7 @@
     <fragment
         android:id="@+id/bucket_write_fragment"
         android:name="womenproject.com.mybury.presentation.write.BucketWriteFragment"
-        android:label="Write"
-        tools:layout="@layout/fragment_bucket_write_test">
+        android:label="Write">
     </fragment>
 
     <fragment
@@ -168,7 +167,7 @@
         <argument
             android:name="category"
             android:defaultValue="@null"
-            app:argType="womenproject.com.mybury.data.Category"
+            app:argType="womenproject.com.mybury.data.MyPageCategory"
             app:nullable="true" />
 
 

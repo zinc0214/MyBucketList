@@ -3,25 +3,24 @@ package womenproject.com.mybury.presentation.update
 import android.util.Log
 import android.view.View
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.presentation.detail.BucketDetailFragmentArgs
+import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
 
 class BucketUpdateFragment : BucketWriteFragment() {
 
-    lateinit var bucketItem: BucketItem
+    lateinit var bucketItem: DetailBucketItem
 
     override fun initForUpdate() {
 
         arguments?.let {
-            val args = BucketDetailFragmentArgs.fromBundle(it)
+            val args = BucketUpdateFragmentArgs.fromBundle(it)
             val bucket = args.bucket
             bucketItem = bucket!!
         }
 
         viewModel.bucketItem = bucketItem
 
-        Log.e("ayhan", "bucket...? , ${bucketItem.dDay}")
+        Log.e("ayhan", "bucket...? , ${bucketItem.title}")
         viewDataBinding.titleText.setText(bucketItem.title)
 
         if(bucketItem.memo.isNotEmpty()) {
@@ -39,8 +38,8 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
 
 
-        if(!bucketItem.category.name.equals("없음")) {
-            viewDataBinding.categoryText.text = bucketItem.category.name
+        if(!bucketItem.category.equals("없음")) {
+            viewDataBinding.categoryText.text = bucketItem.category
             viewDataBinding.categoryText.setEnableTextColor()
             viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
         }

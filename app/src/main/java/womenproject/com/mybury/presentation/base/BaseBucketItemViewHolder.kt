@@ -37,7 +37,6 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     var userCount = 0
     var goalCount = 0
     var bucketType = 0
-    var compelete = false
     var ddayVisible = false
     var isLastItem = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
@@ -116,7 +115,6 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
         ddayVisible = bucketItem.dDay > 0
         userCount = bucketItem.userCount
         goalCount = bucketItem.goalCount
-        compelete = bucketItem.complete
         isLastItem = bucketItem.isLast
     }
 

@@ -69,6 +69,12 @@
             app:layout_constraintTop_toTopOf="@+id/background"
             app:layout_constraintVertical_chainStyle="packed">
 
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/profile_large_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/default_profile_bury" />
+
         </androidx.cardview.widget.CardView>
 
 
@@ -76,8 +82,7 @@
             android:id="@+id/profile_img"
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
-            android:src="@drawable/mypage_profile_img_backgound"
-            app:altSrc="@drawable/mypage_profile_img_background_small"
+            android:src="@drawable/default_profile_bury"
             app:layout_constraintEnd_toEndOf="@+id/icon"
             app:layout_constraintStart_toStartOf="@+id/icon"
             app:layout_constraintTop_toTopOf="@+id/icon" />
@@ -160,18 +165,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-
-        <!--
-                <include
-                    android:layout_marginTop="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:id="@+id/mypage_more_menu_small"
-                    layout="@layout/my_page_more_menu"
-                    android:visibility="visible" />
-        -->
-
 
     </womenproject.com.mybury.ui.CollapsibleToolbar>
 

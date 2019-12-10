@@ -10,6 +10,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.annotation.AnyRes
 import androidx.annotation.NonNull
+import androidx.room.util.FileUtil
 
 
 /**
@@ -41,6 +42,18 @@ class Converter {
                     + '/'.toString() + context.getResources().getResourceEntryName(drawableId))
         }
     }
+}
+
+
+
+fun fileListToMultipartFile(imgList : ArrayList<File>, name : String) : ArrayList<MultipartBody.Part> {
+    val imageList = arrayListOf<MultipartBody.Part>()
+    for(img in imgList) {
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), img)
+        val uploadFile = MultipartBody.Part.createFormData(name, img.name, requestFile)
+        imageList.add(uploadFile)
+    }
+    return imageList
 }
 
 

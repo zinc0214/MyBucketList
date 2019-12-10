@@ -19,6 +19,9 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding, p
 
             viewModel = CategoryListItemViewModel(category.name)
 
+            if(category.name == "없음") {
+                removeBox.isEnabled = false
+            }
             dragLayout.setOnTouchListener { v, event ->
                 if(event.action == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(this@EditCategoryListViewHolder)

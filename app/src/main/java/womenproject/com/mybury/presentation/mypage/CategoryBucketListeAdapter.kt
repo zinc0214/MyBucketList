@@ -16,7 +16,7 @@ class CategoryBucketListeAdapter(context: Context?, bucketList: List<BucketItem>
         return View.OnClickListener {
             Toast.makeText(context, "count : ${bucket.title}", Toast.LENGTH_SHORT).show()
             val directions = BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
-            directions.bucket = bucket
+            directions.bucketId = bucket.id
             it.findNavController().navigate(directions)
 
         }

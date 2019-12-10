@@ -35,7 +35,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
-    private var currentCalendarDay = Calendar.getInstance().time
+    private var currentCalendarDay : Date ?= null
     private var categoryList = arrayListOf<Category>()
     private var imgList = ArrayList<File>()
     private lateinit var selectCategory : Category
@@ -69,7 +69,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }, getUserId(context!!))
 
-
+        initForUpdate()
 
     }
 
@@ -127,32 +127,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
     }
-/*
-    private fun setCategoryList() {
-
-        bucketInfoViewModel.getCategoryList(object : CategoryEditViewModel.GetBucketListCallBackListener {
-
-            override fun start() {
-                viewDataBinding.addBucketProgressBar.visibility = View.VISIBLE
-            }
-
-            override fun success(bucketCategory: BucketCategory) {
-                categoryList = bucketCategory
-                viewDataBinding.addBucketProgressBar.visibility = View.GONE
-            }
-
-            override fun fail() {
-                viewDataBinding.addBucketProgressBar.visibility = View.GONE
-                Toast.makeText(context, "카테고리 값을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
-
-                //activity!!.onBackPressed()
-
-            }
-
-        })
-    }
-*/
-
 
     class CancelDialog : BaseNormalDialogFragment() {
 
@@ -374,7 +348,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnClickListener {
 
             Log.e("ayhan", currentCalendarDay.toString())
-            val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay)
+            if(currentCalendarDay == null) {
+                currentCalendarDay  =  Calendar.getInstance().time
+            }
+            val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay!!)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
         }
     }
@@ -426,7 +403,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
 
-        val formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay)
+        var formDate = ""
+
+        if(currentCalendarDay != null)  {
+            formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
+        }
 
         return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
                 formDate, goalCount,

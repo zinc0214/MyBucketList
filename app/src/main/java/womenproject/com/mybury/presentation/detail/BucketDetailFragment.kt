@@ -2,12 +2,15 @@ package womenproject.com.mybury.presentation.detail
 
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 
@@ -23,7 +26,8 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
     override val viewModel: BucketDetailViewModel
         get() = BucketDetailViewModel()
 
-    lateinit var bucketItem: BucketItem
+    lateinit var bucketItemId: String
+    lateinit var bucketItem: DetailBucketItem
 
     override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
@@ -31,49 +35,86 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
         arguments?.let {
             val args = BucketDetailFragmentArgs.fromBundle(it)
-            val bucket = args.bucket
-            bucketItem = bucket!!
+            val bucketId = args.bucketId
+            bucketItemId = bucketId!!
         }
 
-        viewDataBinding.titleText.text = bucketItem.title
-        viewDataBinding.lockText.text = if (bucketItem.open) "공개" else "비공개"
-        viewDataBinding.categoryText.text = bucketItem.category.name
-        viewDataBinding.dday.text = bucketItem.dDay.toString()
-        viewDataBinding.currentCount.text = "${bucketItem.userCount}/${bucketItem.goalCount}"
-        viewDataBinding.completeText.text = "${bucketItem.userCount}회 완료"
+        loadBucketDetailInfo()
 
-        viewDataBinding.bucketUpdateOnClickListener = createOnClickBucketUpdateListener()
+    }
 
 
-        val uri1 = "https://image.shutterstock.com/image-photo/assortment-fine-chocolates-white-dark-260nw-123360676.jpg"
-        val uri2 = "https://image.shutterstock.com/image-vector/doodle-cake-happy-birthday-vector-600w-1040176828.jpg"
-        val uri3 = "https://image.shutterstock.com/image-photo/road-trip-sign-background-260nw-269296442.jpg"
+    private fun loadBucketDetailInfo() {
+        viewModel.loadBucketDetail(object : BucketDetailViewModel.OnBucketLoadEventListener {
+            override fun start() {
+                startLoading()
+            }
 
-        val list = ArrayList<String>()
-        list.add(uri1)
-        list.add(uri2)
-        list.add(uri3)
+            override fun success(detailBucketItem: DetailBucketItem) {
+                stopLoading()
+                setUpViews(detailBucketItem)
+                bucketItem = detailBucketItem
+            }
+
+            override fun fail() {
+                stopLoading()
+            }
+
+        }, getAccessToken(context!!), bucketItemId)
+    }
+
+    private fun setUpViews(bucketInfo: DetailBucketItem) {
+
+        viewDataBinding.titleText.text = bucketInfo.title
+        viewDataBinding.lockText.text = if (bucketInfo.open) "공개" else "비공개"
+        viewDataBinding.categoryText.text = bucketInfo.category
+        viewDataBinding.dday.text = bucketInfo.dDay.toString()
+        viewDataBinding.currentCount.text = "${bucketInfo.userCount}/${bucketInfo.goalCount}"
+        viewDataBinding.completeText.text = "${bucketInfo.userCount}회 완료"
+
+        viewDataBinding.bucketUpdateOnClickListener = createOnClickBucketUpdateListener(bucketInfo)
+        viewDataBinding.bucketCompleteListener = bucketCompleteListener()
 
         val viewPager = viewDataBinding.moreImage.viewPager
-        val viewPagerAdapter = BucketDatailImageViewPageAdapter(this.context!!, list)
+        val viewPagerAdapter = BucketDatailImageViewPageAdapter(this.context!!, bucketInfo.imgList as ArrayList<String>)
 
         viewPager.adapter = viewPagerAdapter
 
         viewDataBinding.tabLayout.setupWithViewPager(viewPager)
+
     }
 
 
-    public fun createOnClickBucketUpdateListener() : View.OnClickListener {
+    private fun createOnClickBucketUpdateListener(bucketItem: DetailBucketItem): View.OnClickListener {
         return View.OnClickListener {
             Log.e("ayham", "gpgin")
             val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
-
-            Log.e("ayhan", " Bucket??? ${bucketItem.title}" )
             directions.bucket = bucketItem
             this.findNavController().navigate(directions)
         }
 
     }
+
+    private fun bucketCompleteListener() : View.OnClickListener {
+        return View.OnClickListener {
+            viewModel.setBucektComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener {
+                override fun start() {
+                    startLoading()
+                }
+
+                override fun success() {
+                    loadBucketDetailInfo()
+                }
+
+                override fun fail() {
+                    stopLoading()
+                    Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+
+            }, getAccessToken(context!!), bucketItemId)
+        }
+    }
+
 
     override fun setOnBackBtnClickListener(): View.OnClickListener {
         return super.setOnBackBtnClickListener()

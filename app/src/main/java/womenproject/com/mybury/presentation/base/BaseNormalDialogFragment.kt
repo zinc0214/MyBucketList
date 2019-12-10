@@ -27,6 +27,7 @@ open class BaseNormalDialogFragment : DialogFragment() {
     var GRADIENT_BUTTON_VISIBLE = true
     var CANCEL_TEXT = "취소"
     var CONFIRM_TEXT = "확인"
+    var CANCEL_ABLE = true
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,6 +51,7 @@ open class BaseNormalDialogFragment : DialogFragment() {
 
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
+        dialog!!.setCancelable(CANCEL_ABLE)
 
         return binding.root
     }

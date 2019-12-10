@@ -39,7 +39,7 @@ open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if (bucketItemList[position].complete) {
+        return if (bucketItemList[position].userCount == bucketItemList[position].goalCount) {
             0
         } else {
             bucketItemList[position].goalCount
@@ -52,7 +52,7 @@ open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>
         return View.OnClickListener {
             Toast.makeText(context, "count : ${bucket.title}", Toast.LENGTH_SHORT).show()
             val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
-            directions.bucket = bucket
+            directions.bucketId = bucket.id
             it.findNavController().navigate(directions)
 
         }

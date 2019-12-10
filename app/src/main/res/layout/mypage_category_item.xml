@@ -10,7 +10,7 @@
 
 
         <variable
-            name="categroy_count"
+            name="categoryCount"
             type="String" />
 
         <variable
@@ -42,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:text="@{categroy_count}"
+            android:text="@{categoryCount}"
             android:textColor="@color/_5a95ff" />
 
 

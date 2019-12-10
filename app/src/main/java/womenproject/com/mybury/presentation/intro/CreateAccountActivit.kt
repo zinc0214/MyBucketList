@@ -34,6 +34,8 @@ import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
 import womenproject.com.mybury.data.DefaulProfileImg
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
 import womenproject.com.mybury.util.stringToMultipartFile
 
@@ -41,8 +43,7 @@ import womenproject.com.mybury.util.stringToMultipartFile
 class CreateAccountActivity : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
-    private var defaultImg = ""
-    private var file : File ?= null
+    private var file: File? = null
 
     override fun onResume() {
         super.onResume()
@@ -71,7 +72,6 @@ class CreateAccountActivity : BaseActiviy() {
 
             profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
         }
-        defaultImg = DefaulProfileImg().bury
     }
 
     private val checkBaseProfileImgUsable: () -> Boolean = {
@@ -83,10 +83,8 @@ class CreateAccountActivity : BaseActiviy() {
         Log.e("ayhan", "nume: $num")
         if (num == 1) {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
-            defaultImg = DefaulProfileImg().bury
         } else {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
-            defaultImg = DefaulProfileImg().my
         }
         binding.executePendingBindings()
     }
@@ -163,33 +161,22 @@ class CreateAccountActivity : BaseActiviy() {
     @SuppressLint("CheckResult")
     private fun signInAccount() {
 
-        val token = getAccessToken(this)
-        val userId = getUserId(this).stringToMultipartFile("userId")
-        val nickName = binding.nicknameEditText.text.toString().stringToMultipartFile("nickName")
-        val profileImg = if(file == null) {
-            defaultImg.stringToMultipartFile("profileImg")
-        } else {
-            file!!.fileToMultipartFile("profileImg")
-        }
+        val myPageViewModel = MyPageViewModel()
 
+        myPageViewModel.setProfileData(object : MyPageViewModel.SetMyProfileListener {
+            override fun start() {
 
-        apiInterface.postCreateProfile(token, userId, nickName, profileImg)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
-                    if (it.retcode == "200") {
-                        goToNext()
-                    } else {
-                        Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
+            }
 
-                }
-                .subscribe({ response ->
-                    Log.e("ayhan", "createAccountResponse:${response.retcode}")
-                }) {
-                    Log.e("ayhan", "createAccountFail: $it")
+            override fun success() {
+                goToNext()
+            }
 
-                }
+            override fun fail() {
+                NetworkFailDialog().show(supportFragmentManager)
+            }
+
+        }, getAccessToken(this), getUserId(this), binding.nicknameEditText.text.toString(), file)
     }
 
 

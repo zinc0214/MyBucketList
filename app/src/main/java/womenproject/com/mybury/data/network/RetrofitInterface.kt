@@ -40,17 +40,35 @@ interface RetrofitInterface {
                           @Part name: MultipartBody.Part,
                           @Part file: MultipartBody.Part): Observable<SimpleResponse>
 
+    @POST("/host/profile")
+    @Multipart
+    fun postCreateProfile(@Header("X-Auth-Token") token: String,
+                          @Part userId: MultipartBody.Part,
+                          @Part name: MultipartBody.Part): Observable<SimpleResponse>
+
+
     @GET("/host/home")
     fun requestHomeBucketList(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
 
     @GET("/host/home")
     fun requestHomeBucketList(): Observable<BucketList>
 
+    @GET("/host/category")
+    fun requestCategoryBucketList(@Header("X-Auth-Token") token: String, @Query("categoryId") userId: String): Observable<BucketList>
+
+    @GET("/host/bucketlist/{bucketId}")
+    fun requestDetailBucketList(@Header("X-Auth-Token") token: String, @Path("bucketId") bucketId : String): Observable<DetailBucketItem>
+
+    @POST("/host/complete")
+    fun postCompleteBucket(@Header("X-Auth-Token") token: String,
+                           @Body bucketRequest: BucketRequest): Observable<SimpleResponse>
+
+
     @GET("/host/dDay")
     fun requestDdayBucketListResult(): Observable<BucketList>
 
     @GET("/host/beforeWrite")
-    fun requestBeforeWrite(@Query("userId") userId: String) : Observable<BucketCategory>
+    fun requestBeforeWrite(@Query("userId") userId: String): Observable<BucketCategory>
 
     @POST("/host/write")
     @Multipart
@@ -61,7 +79,19 @@ interface RetrofitInterface {
                           @Part goalCount: MultipartBody.Part,
                           @Part memo: MultipartBody.Part,
                           @Part categoryId: MultipartBody.Part,
-                          @Part userId: MultipartBody.Part): Observable<SimpleResponse>
+                          @Part userId: MultipartBody.Part,
+                          @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
+
+    @POST("/host/write")
+    @Multipart
+    fun postAddBucketListNotDDay(@Header("X-Auth-Token") token: String,
+                                 @Part title: MultipartBody.Part,
+                                 @Part open: MultipartBody.Part,
+                                 @Part goalCount: MultipartBody.Part,
+                                 @Part memo: MultipartBody.Part,
+                                 @Part categoryId: MultipartBody.Part,
+                                 @Part userId: MultipartBody.Part,
+                                 @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
 
     @POST("/host/write")
     @Multipart
@@ -75,10 +105,10 @@ interface RetrofitInterface {
 
 
     @GET("/host/mypage")
-    fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String) : Observable<MyPageInfo>
+    fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<MyPageInfo>
 
 
-    @HTTP(method = "DELETE", path="/host/withdrawal", hasBody = true)
+    @HTTP(method = "DELETE", path = "/host/withdrawal", hasBody = true)
     fun postSignOut(@Body userId: UseUserIdRequest): Observable<SimpleResponse>
 
 }
@@ -94,7 +124,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                    .baseUrl("http://3.92.189.69/host/")
+                    .baseUrl("https://www.my-bury.com")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)

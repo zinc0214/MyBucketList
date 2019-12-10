@@ -113,6 +113,7 @@ class NetworkFailDialog : BaseNormalDialogFragment() {
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"
+       // CANCEL_ABLE = false
     }
 
     override fun createOnClickConfirmListener(): View.OnClickListener {
@@ -132,6 +133,7 @@ class CanNotGoMainDialog : BaseNormalDialogFragment() {
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"
+        CANCEL_ABLE = false
     }
 
     override fun createOnClickConfirmListener(): View.OnClickListener {

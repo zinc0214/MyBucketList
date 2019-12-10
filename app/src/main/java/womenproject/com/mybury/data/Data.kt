@@ -37,6 +37,12 @@ data class GetTokenResponse(
         val retcode : String
 )
 
+
+data class BucketRequest(
+        var bucketlistId: String
+)
+
+
 data class SimpleResponse(
         val retcode: String
 )
@@ -65,13 +71,26 @@ data class BucketItem(
         val memo  : String,
         val open : Boolean = false,
         val pin : Boolean = false,
-        val complete : Boolean = false,
         val category: Category,
         val userCount : Int = 0,
         val goalCount : Int = 1,
         val dDay : Int = 0,
         var isLast : Boolean = false
 ) : Parcelable
+
+@Parcelize
+data class DetailBucketItem(
+        var title : String,
+        val memo  : String,
+        val open : Boolean = false,
+        val category: String,
+        val userCount : Int = 0,
+        val goalCount : Int = 0,
+        val dDay : Int = 0,
+        val imgList : List<String>,
+        val retcode : String
+): Parcelable
+
 
 data class AddBucketItem(
         var title : String = "Title",
@@ -90,16 +109,31 @@ data class BucketCategory (
 data class Category(
         val name: String,
         val id : String,
-        val priority : Int
+        val priority : Int = 0
 ) : Parcelable
 
 
 data class MyPageInfo(
         val name : String,
-        val imageUrl : String,
+        val imageUrl : String ?= "",
         val startedCount : Int = 0,
         val completedCount : Int = 0,
         val dDayCount : Int = 0,
-        val categoryMap : List<Category>,
+        val categoryList : List<MyPageCategory>,
         val retcode : String
 )
+
+@Parcelize
+data class MyPageCategory(
+        val name: String,
+        val id : String,
+        val count : Int
+) : Parcelable
+
+enum class ShowFilter {
+    all, completed, started
+}
+
+enum class ListUpFilter {
+    updatedDt, createdDt
+}

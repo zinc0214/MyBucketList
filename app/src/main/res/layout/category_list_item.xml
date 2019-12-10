@@ -33,6 +33,7 @@
                 android:layout_marginStart="17dp"
                 android:button="@drawable/category_check_img"
                 android:background="@drawable/category_check_background"
+                android:enabled="false"
                 android:checked="false" />
 
             <TextView

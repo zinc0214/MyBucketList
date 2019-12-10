@@ -17,6 +17,8 @@ class Preference {
         private const val MYBURY_LOGIN_COMPLETE = "mybury_login_complete"
         private const val USER_ID = "user_id"
         private const val ACCESS_TOKEN = "access_token"
+        private const val SHOW_FILTER = "show_filter"
+        private const val LISTUP_FILTER = "listup_filter"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -67,6 +69,32 @@ class Preference {
         fun getAccessToken(context: Context): String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getString(ACCESS_TOKEN, "")
+            return data
+        }
+
+        fun setFilerForShow(context: Context, showFilter: ShowFilter) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(SHOW_FILTER, showFilter.toString())
+            editor.apply()
+        }
+
+        fun getFilterForShow(context: Context) : String {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getString(SHOW_FILTER, ShowFilter.started.toString())
+            return data
+        }
+
+        fun setFilterListUp(context: Context, listUpFilter: ListUpFilter) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(LISTUP_FILTER, listUpFilter.toString())
+            editor.apply()
+        }
+
+        fun getFilterListUp(context: Context) : String {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
             return data
         }
 

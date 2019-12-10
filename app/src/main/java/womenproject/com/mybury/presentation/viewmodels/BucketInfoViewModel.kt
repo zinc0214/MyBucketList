@@ -24,9 +24,9 @@ class BucketInfoViewModel : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: OnBucketListGetEvent, userId: String, token: String) {
+    fun getMainBucketList(callback: OnBucketListGetEvent, userId: String, token: String, filter: String, sort: String) {
         callback.start()
-        apiInterface.requestHomeBucketList(token, userId, "started", "updateDt")
+        apiInterface.requestHomeBucketList(token, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ bucketList ->
@@ -42,16 +42,15 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, category: Category) {
+    fun getBucketListByCategory(callback: OnBucketListGetEvent, token : String, categoryId: String) {
 
         callback.start()
 
-        apiInterface.requestHomeBucketList()
+        apiInterface.requestCategoryBucketList(token, categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response -> response.bucketlists }
                 .subscribe({ bucketItemList ->
-                    bucketItemList.filter { it.category == category }
                     callback.finish(bucketItemList)
                 }) {
                     Log.e("ayhan", it.toString())
