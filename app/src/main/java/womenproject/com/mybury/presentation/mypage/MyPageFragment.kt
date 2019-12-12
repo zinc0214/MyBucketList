@@ -103,6 +103,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
                     headerLayout.moreBtn.visibility = View.VISIBLE
                 }
+
             })
 
             seyMyProfileImg(_myPageInfo.imageUrl.toString())

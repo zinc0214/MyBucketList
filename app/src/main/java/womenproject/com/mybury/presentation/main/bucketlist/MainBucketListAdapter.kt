@@ -24,6 +24,7 @@ import womenproject.com.mybury.presentation.base.BaseCountBucketItemViewHolder
 open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
+        setLast(position)
         return checkBucketType(position)
     }
 
@@ -44,7 +45,10 @@ open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>
         } else {
             bucketItemList[position].goalCount
         }
+    }
 
+    private fun setLast(position: Int) {
+        bucketItemList[position].isLast = position == bucketItemList.size -1
     }
 
     override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
@@ -57,4 +61,6 @@ open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>
 
         }
     }
+
+
 }

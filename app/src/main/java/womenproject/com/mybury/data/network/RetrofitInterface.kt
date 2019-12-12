@@ -65,7 +65,7 @@ interface RetrofitInterface {
 
 
     @GET("/host/dDay")
-    fun requestDdayBucketListResult(): Observable<BucketList>
+    fun requestDdayBucketListResult(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<DdayBucketListRespone>
 
     @GET("/host/beforeWrite")
     fun requestBeforeWrite(@Query("userId") userId: String): Observable<BucketCategory>

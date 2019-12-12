@@ -54,15 +54,17 @@ data class BucketList(
         val retcode : Int
 )
 
-data class DdayTotalBucketList(
-        var ddayBucketEachListItem : List<DdayEachBucketGroup>
+data class DdayBucketListRespone(
+        val dDayBucketlists : List<DdayBucketList>,
+        val retcode: String
 )
 
-data class DdayEachBucketGroup(
-        var dday: Int = 0,
-        var ddayBucketItemList: List<BucketItem>,
+data class DdayBucketList(
+        val day : Int,
+        val bucketlists : List<BucketItem>,
         var isLast : Boolean = false
 )
+
 
 @Parcelize
 data class BucketItem(

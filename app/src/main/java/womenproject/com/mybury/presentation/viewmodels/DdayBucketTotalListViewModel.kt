@@ -1,11 +1,13 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
@@ -16,26 +18,33 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 class DdayBucketTotalListViewModel  : BaseViewModel() {
 
 
-    private var bucketList : BucketList? = null
-    var progressVisible = ObservableInt(View.GONE)
-
-
     interface OnDdayBucketListGetEvent {
         fun start()
-        fun finish(bucketList: BucketList?)
+        fun finish(bucketList:  List<DdayBucketList>)
+        fun fail()
     }
+
 
 
     @SuppressLint("CheckResult")
-    fun getDdayEachBucketList(callback: OnDdayBucketListGetEvent) {
-
+    fun getDdayEachBucketList(callback: OnDdayBucketListGetEvent,  token: String, userId: String) {
         callback.start()
 
-        apiInterface.requestDdayBucketListResult()
+        apiInterface.requestDdayBucketListResult(token, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketList -> callback.finish(bucketList)}
+                .subscribe({ response ->
+                   if(response.retcode == "200") {
+                       callback.finish(response.dDayBucketlists)
+                   }
+                }) {
+                    Log.e("ayhan", it.toString())
+                    callback.fail()
+                }
+
     }
+
+
 
 /*    fun getDdayEachBucketLis2t(api:String, callback: OnDdayBucketListGetEvent): BucketList? {
 

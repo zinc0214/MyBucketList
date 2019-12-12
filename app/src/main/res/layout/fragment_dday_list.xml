@@ -30,19 +30,12 @@
 
         </ScrollView>
 
-        <RelativeLayout
-            android:id="@+id/toolbar_layout"
+        <include
+            android:id="@+id/dday_toolbar"
+            layout="@layout/top_back_btn_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include
-                android:id="@+id/dday_toolbar"
-                layout="@layout/top_back_btn_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolBarLayout"
-                android:layout_alignParentTop="true" />
-
-        </RelativeLayout>
+            android:layout_height="@dimen/toolBarLayout"
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
 

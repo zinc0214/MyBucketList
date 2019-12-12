@@ -6,21 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import androidx.navigation.findNavController
-import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.presentation.base.BaseBucketListAdapter
-import womenproject.com.mybury.presentation.mypage.dday.DdayCountBucketItemViewHolder
-import womenproject.com.mybury.presentation.mypage.dday.DdayNormalBucketItemViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
 
-class DdayBucketEachListAdapter(context: Context?, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
+class DdayBucketEachListAdapter(context: Context, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
         Log.e(this.toString(), "getItemViewType is Use")

@@ -5,7 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.DdayBucketList
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
+import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 
 /**
@@ -26,21 +30,29 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
         viewDataBinding.ddayEachBucketList.layoutManager = layoutManager
         viewDataBinding.ddayEachBucketList.hasFixedSize()
+        viewDataBinding.ddayToolbar.title = "D-day"
+        viewDataBinding.ddayToolbar.backBtnOnClickListener = setOnBackBtnClickListener()
        // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
 
 
         viewModel.getDdayEachBucketList(object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
+
             override fun start() {
                 startLoading()
             }
 
-            override fun finish(bucketList: BucketList?) {
-                if(bucketList != null)  {
 
-                    viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
-                }
+            override fun finish(bucketList: List<DdayBucketList>) {
                 stopLoading()
+                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
             }
-        })
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
+            }
+
+        }, getAccessToken(context!!), getUserId(context!!))
     }
+
 }
