@@ -1,15 +1,13 @@
-package womenproject.com.mybury.presentation.base
+package womenproject.com.mybury.presentation.main.bucketlist
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
-import womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragmentDirections
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
@@ -23,7 +21,7 @@ open class BaseBucketListAdapter(context: Context?, bucketList: List<BucketItem>
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return currentViewHolder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -35,7 +33,10 @@ open class BaseBucketListAdapter(context: Context?, bucketList: List<BucketItem>
 
     open fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
         return View.OnClickListener {
-
+            Log.e("ayhan", "goTo : ${bucket.title}")
+            val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
+            directions.bucketId = bucket.id
+            it.findNavController().navigate(directions)
         }
     }
 

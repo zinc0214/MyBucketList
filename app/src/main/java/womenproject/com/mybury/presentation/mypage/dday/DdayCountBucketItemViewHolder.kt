@@ -6,7 +6,7 @@ import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
-import womenproject.com.mybury.presentation.base.BaseCountBucketItemViewHolder
+import womenproject.com.mybury.presentation.main.bucketlist.BaseCountBucketItemViewHolder
 
 
 /**

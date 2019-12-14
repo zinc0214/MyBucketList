@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.presentation.base.BaseBucketListAdapter
+import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketListAdapter
 
 /**
  * Created by HanAYeon on 2019. 1. 22..

@@ -39,11 +39,13 @@
             <LinearLayout
                 android:id="@+id/bucket_item_layout"
                 style="@style/BucketItemLayoutStyle"
+                android:background="@drawable/mypage_category_background"
                 android:onClick="@{bucketClickListener}">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@drawable/mypage_category_background">
 
                     <ImageView
                         android:id="@+id/bucket_succeed_image"
@@ -60,17 +62,17 @@
                         android:background="@drawable/bucket_item_base_background" />
 
                     <RelativeLayout
-                        android:visibility="gone"
                         android:id="@+id/count_succeed_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="16dp"
+                        android:visibility="gone">
 
                         <TextView
-                            android:layout_marginTop="21dp"
-                            android:layout_marginBottom="21dp"
                             android:id="@+id/succeed_bucket_title"
                             style="@style/BucketItemTitleTextStyle"
+                            android:layout_marginTop="21dp"
+                            android:layout_marginBottom="21dp"
                             android:text="@{bucketTitleText}" />
 
                     </RelativeLayout>
@@ -82,17 +84,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginBottom="19dp"
                         android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_centerVertical="true"
-                            android:id="@+id/bucket_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="21dp"
-                            android:layout_marginRight="70dp"
-                            android:maxLines="2"
-                            style="@style/BucketItemTitleTextStyle"
-                            android:text="@{bucketTitleText}" />
 
                         <LinearLayout
                             android:id="@+id/prgress_layout"
@@ -125,23 +116,34 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:id="@+id/bucket_title"
+                            style="@style/BucketItemTitleTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="21dp"
+                            android:layout_marginRight="70dp"
+                            android:maxLines="2"
+                            android:text="@{bucketTitleText}" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:onClick="@{bucketSuccessClickListener}"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentRight="true"
                         android:layout_width="64dp"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:onClick="@{bucketSuccessClickListener}">
 
                         <include
-                            android:layout_marginEnd="16dp"
                             android:id="@+id/success_button_layout"
                             layout="@layout/bucket_succeed_button"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="16dp" />
 
 
                     </RelativeLayout>

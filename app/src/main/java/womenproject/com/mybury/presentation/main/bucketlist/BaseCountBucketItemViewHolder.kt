@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.base
+package womenproject.com.mybury.presentation.main.bucketlist
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -10,6 +10,7 @@ import android.widget.RelativeLayout
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 
 
@@ -35,19 +36,14 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-
             setBucketData(bucketItemInfo)
             setUI(bucketItemInfo, bucketListener)
             setDdayColor()
-
             executePendingBindings()
-
         }
     }
 
     override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
-        super.setUI(bucketItemInfo, bucketListener)
-
         binding.bucketTitleText = bucketItemInfo.title
         binding.succeedBucketTitle.text = bucketItemInfo.title
         binding.currentUserCount = bucketItemInfo.userCount.toString()
@@ -55,8 +51,10 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
         binding.horizontalProgressBar.max = bucketItemInfo.goalCount
 
         binding.bucketClickListener = bucketListener
-        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
-        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener()
+
+        val tokenId = getAccessToken(context)
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo.id)
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo.id)
 
         binding.lastEndImg.lastImgVisible = if (isLastItem) {
             View.VISIBLE
@@ -64,13 +62,6 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             View.GONE
         }
     }
-
-    override fun createOnClickBucketSuccessLayoutListener(): View.OnClickListener {
-        return View.OnClickListener {
-            binding.successButtonLayout.circularProgressBar.callOnClick()
-        }
-    }
-
 
     private fun setProgressMax(pb: ProgressBar, max: Int) {
         pb.max = max * 100

@@ -24,6 +24,7 @@
         <LinearLayout
             android:id="@+id/bucket_item_layout"
             style="@style/BucketItemLayoutStyle"
+            android:background="@drawable/mypage_category_background"
             android:onClick="@{bucketClickListener}">
 
             <RelativeLayout
