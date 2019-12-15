@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.ui.loadingbutton.customView.CircularProgressButton
@@ -113,24 +114,32 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     open fun createOnClickBucketSuccessListener(
             tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
-            val viewModel = BucketDetailViewModel()
-            viewModel.setBucketComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener {
-                override fun start() {
-
-                }
-
-                override fun success() {
-                    onBucketSuccessFinalButtonClickListener(bucketItemInfo)
-                    return
-                }
-
-                override fun fail() {
-                    Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
-
-            }, tokenId, bucketItemInfo.id)
-
+            bucketSuccess(bucketItemInfo)
         }
+    }
+
+    private fun bucketSuccess(bucketItemInfo: BucketItem) {
+        val viewModel = BucketDetailViewModel()
+        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                bucketSuccess(bucketItemInfo)
+            }
+
+            override fun start() {
+
+            }
+
+            override fun success() {
+                onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+                return
+            }
+
+            override fun fail() {
+                Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+        }, bucketItemInfo.id)
+
     }
 
     open fun createOnClickBucketSuccessLayoutListener(tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {

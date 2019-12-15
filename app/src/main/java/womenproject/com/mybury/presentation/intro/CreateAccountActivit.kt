@@ -10,34 +10,30 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.Preference
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
-import womenproject.com.mybury.data.DefaulProfileImg
-import womenproject.com.mybury.presentation.NetworkFailDialog
-import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
-import womenproject.com.mybury.util.fileToMultipartFile
-import womenproject.com.mybury.util.stringToMultipartFile
 
 
 class CreateAccountActivity : BaseActiviy() {
@@ -167,7 +163,11 @@ class CreateAccountActivity : BaseActiviy() {
 
         val myPageViewModel = MyPageViewModel()
 
-        myPageViewModel.setProfileData(object : MyPageViewModel.SetMyProfileListener {
+        myPageViewModel.setProfileData(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                signInAccount()
+            }
+
             override fun start() {
 
             }
@@ -180,7 +180,7 @@ class CreateAccountActivity : BaseActiviy() {
                 NetworkFailDialog().show(supportFragmentManager)
             }
 
-        }, getAccessToken(this), getUserId(this), binding.nicknameEditText.text.toString(), file, useDefaulProfileImg)
+        }, binding.nicknameEditText.text.toString(), file, useDefaulProfileImg)
     }
 
 
@@ -206,6 +206,7 @@ class CreateAccountActivity : BaseActiviy() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     } else {
                         Preference.setAccessToken(this, response.accessToken)
+                        Preference.setRefreshToken(this, response.refreshToken)
                     }
 
                 }) {

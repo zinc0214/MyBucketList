@@ -6,6 +6,7 @@ import android.widget.Toast
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
 import womenproject.com.mybury.presentation.write.BucketWriteViewModel
 
@@ -73,28 +74,35 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     override fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.updateBucketList(
-                    Preference.getAccessToken(context!!), Preference.getUserId(context!!), bucketId,
-                    getBucketItemInfo(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
-                override fun start() {
-                    startLoading()
-
-                }
-
-                override fun success() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
-                    activity!!.onBackPressed()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷이 수정되지 못했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
+            addBucket()
         }
     }
 
+    private fun addBucket() {
+        viewModel.updateBucketList(
+                bucketId, getBucketItemInfo(), imgList, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                addBucket()
+            }
+
+            override fun start() {
+                startLoading()
+
+            }
+
+            override fun success() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
+                activity!!.onBackPressed()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 수정되지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
 
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
         val imgList = arrayListOf<String>()

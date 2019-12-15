@@ -37,6 +37,10 @@ data class GetTokenResponse(
         val retcode : String
 )
 
+data class NewTokenRequest(
+        val userId : String,
+        val refreshToken: String
+)
 
 data class BucketRequest(
         var bucketlistId: String
@@ -51,7 +55,7 @@ data class SimpleResponse(
 data class BucketList(
         var bucketlists : List<BucketItem>,
         val popupYn : Boolean,
-        val retcode : Int
+        val retcode : String
 )
 
 data class DdayBucketListRespone(

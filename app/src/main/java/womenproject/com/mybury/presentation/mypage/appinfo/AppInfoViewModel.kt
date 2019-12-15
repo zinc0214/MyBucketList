@@ -18,47 +18,4 @@ class AppInfoViewModel : BaseViewModel() {
     val currentVersion = BuildConfig.VERSION_NAME
     val latelyVersion = "1.0.2"
 
-
-    interface LoadTextView {
-        fun start()
-        fun success(text: String)
-        fun fail()
-    }
-
-
-    @SuppressLint("CheckResult")
-    fun loadTermsOfUse(callback: LoadTextView, token: String) {
-
-        callback.start()
-
-        apiInterface.loadTermsOfUse(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    //Log.e("ayhan", "getMyPageInfo : ${response.string()}")
-                    callback.success(response.string())
-
-                }) {
-                    callback.fail()
-                    Log.e("ayhan", it.toString())
-                }
-    }
-
-    @SuppressLint("CheckResult")
-    fun loadPrivacyPolicy(callback: LoadTextView, token: String) {
-
-        callback.start()
-
-        apiInterface.loadPrivacyPolicy(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    //Log.e("ayhan", "getMyPageInfo : ${response.string()}")
-                    callback.success(response.string())
-
-                }) {
-                    callback.fail()
-                    Log.e("ayhan", it.toString())
-                }
-    }
 }

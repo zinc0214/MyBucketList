@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -77,7 +78,8 @@
                 android:paddingBottom="5dp"
                 android:text="@{version_text}"
                 android:textColor="@color/update_color"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="최신 버전 업데이트" />
 
             <include
                 android:id="@+id/use_eula"
@@ -118,22 +120,17 @@
                 android:layout_height="wrap_content" />
 
 
-            <LinearLayout
+            <TextView
+                android:layout_width="133dp"
+                android:layout_height="26dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/app_info_button_background"
-                android:layout_width="133dp"
-                android:layout_height="26dp">
+                android:gravity="center"
+                android:onClick="@{supportClickListener}"
+                android:text="후원하러 가기:)"
+                android:textColor="@color/_797979"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:textColor="@color/_797979"
-                    android:textSize="12sp"
-                    android:onClick="@{supportClickListener}"
-                    android:gravity="center"
-                    android:text="후원하러 가기:)"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
         </LinearLayout>
 
 

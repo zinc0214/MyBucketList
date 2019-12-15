@@ -1,18 +1,11 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
-import android.graphics.Rect
-import android.text.Html
-import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.navigation.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.main.MainFragmentDirections
-import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.util.Converter.Companion.stringFormat
 
 /**
@@ -28,10 +21,7 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
     override val viewModel: AppInfoViewModel
         get() = AppInfoViewModel()
 
-    private lateinit var tokenId: String
     override fun initDataBinding() {
-        tokenId = getAccessToken(context!!)
-
         viewDataBinding.backLayout.title = "앱 정보"
         viewDataBinding.useEula.content = "이용약관"
         viewDataBinding.privacyEula.content = "개인 정보 처리 방침"
@@ -50,6 +40,7 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
 
         viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
         viewDataBinding.useEula.appInfoDetailClickListener = goToUseEula()
+        viewDataBinding.privacyEula.appInfoDetailClickListener = goToPrivacy()
     }
 
     private fun goToUseEula() = View.OnClickListener {
@@ -58,5 +49,10 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
         it.findNavController().navigate(directions)
     }
 
+    private fun goToPrivacy() = View.OnClickListener {
+        val directions = AppInfoFragmentDirections.actionInfoToDetail()
+        directions.type = DataTextType.privacy.toString()
+        it.findNavController().navigate(directions)
+    }
 
 }

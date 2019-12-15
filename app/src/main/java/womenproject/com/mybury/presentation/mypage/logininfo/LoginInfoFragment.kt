@@ -12,25 +12,27 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.FragmentLoginInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 
 /**
  * Created by HanAYeon on 2019-09-16.
  */
 
-class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, LoginInfoViewModel>() {
+class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>() {
 
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_login_info
 
-    override val viewModel: LoginInfoViewModel
-        get() = LoginInfoViewModel()
+    override val viewModel: BaseViewModel
+        get() = BaseViewModel()
 
 
     private lateinit var auth: FirebaseAuth
@@ -60,11 +62,22 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, LoginInfoViewMo
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    if (response.retcode != "200") {
-                        LogoutOrSignOutFailed("계정삭제 실패").show(activity!!.supportFragmentManager, "tag")
-                    } else {
-                        setMyBuryLoginComplete(context!!, false)
-                        AccountDeleteDialogFragment().show(activity!!.supportFragmentManager, "tag")
+                    when {
+                        response.retcode == "200" -> {
+                            setMyBuryLoginComplete(context!!, false)
+                            AccountDeleteDialogFragment().show(activity!!.supportFragmentManager, "tag")
+                        }
+                        response.retcode == "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {
+                            override fun success() {
+                                signOutMyBury()
+                            }
+
+                            override fun fail() {
+                                LogoutOrSignOutFailed("계정삭제 실패").show(activity!!.supportFragmentManager, "tag")
+                            }
+
+                        })
+                        else -> LogoutOrSignOutFailed("계정삭제 실패").show(activity!!.supportFragmentManager, "tag")
                     }
 
                 }) {

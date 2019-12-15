@@ -13,6 +13,7 @@ import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 
 
@@ -46,22 +47,26 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
 
     private fun loadBucketDetailInfo() {
-        viewModel.loadBucketDetail(object : BucketDetailViewModel.OnBucketLoadEventListener {
+        viewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
+            override fun restart() {
+                loadBucketDetailInfo()
+            }
+
             override fun start() {
                 startLoading()
             }
 
-            override fun success(detailBucketItem: DetailBucketItem) {
+            override fun success(detailBucketItem: Any) {
                 stopLoading()
-                setUpViews(detailBucketItem)
-                bucketItem = detailBucketItem
+                setUpViews(detailBucketItem as DetailBucketItem)
+                bucketItem = detailBucketItem as DetailBucketItem
             }
 
             override fun fail() {
                 stopLoading()
             }
 
-        }, getAccessToken(context!!), bucketItemId)
+        },  bucketItemId)
     }
 
     private fun setUpViews(bucketInfo: DetailBucketItem) {
@@ -134,7 +139,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
     }
 
     private fun showMoreMenuLayout(bucketItem: DetailBucketItem) = View.OnClickListener {
-        if(viewDataBinding.detailMoreLayout.visibility == View.GONE) {
+        if (viewDataBinding.detailMoreLayout.visibility == View.GONE) {
             viewDataBinding.detailMoreLayout.visibility = View.VISIBLE
         } else {
             viewDataBinding.detailMoreLayout.visibility = View.GONE
@@ -168,7 +173,11 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         Log.e("ayham", "gpgin")
 
         val userId = UseUserIdRequest(getUserId(context!!))
-        viewModel.deleteBucketListner(object : BucketDetailViewModel.OnBucketCompleteEventListener {
+        viewModel.deleteBucketListner(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                deleteBucket()
+            }
+
             override fun start() {
                 startLoading()
             }
@@ -183,28 +192,38 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 stopLoading()
                 Toast.makeText(context!!, "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-        }, getAccessToken(context!!), userId, bucketItemId)
+        }, userId, bucketItemId)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
     private fun bucketCompleteListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.setBucketComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener {
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    loadBucketDetailInfo()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                    Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
-
-            }, getAccessToken(context!!), bucketItemId)
+            bucketComplete()
         }
+    }
+
+
+    private fun bucketComplete() {
+        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                bucketComplete()
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                loadBucketDetailInfo()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+        }, bucketItemId)
+
     }
 
     fun showImgWide(url: String) {

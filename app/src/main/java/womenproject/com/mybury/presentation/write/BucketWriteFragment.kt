@@ -16,12 +16,11 @@ import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
@@ -54,9 +53,16 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private val bucketInfoViewModel = BucketInfoViewModel()
 
     override fun initDataBinding() {
+        getCateogry()
+    }
 
-        bucketInfoViewModel.getCategoryList(object : BucketInfoViewModel.GetBucketListCallBackListener {
-            override fun success(_categoryList: List<Category>) {
+    private fun getCateogry() {
+        bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                getCateogry()
+            }
+
+            override fun success(_categoryList: List<Any>) {
                 stopLoading()
                 Log.e("ayhan", "cate: ${_categoryList.size}")
                 categoryList = _categoryList as ArrayList<Category>
@@ -74,9 +80,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
                 stopLoading()
             }
-        }, getAccessToken(context!!), getUserId(context!!))
-
-
+        })
 
     }
 
@@ -194,27 +198,33 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     open fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            viewModel.uploadBucketList(
-                    getAccessToken(context!!), getUserId(context!!),
-                    getBucketItemInfo(), imgList, object : BucketWriteViewModel.OnBucketAddEvent {
-                override fun start() {
-                    startLoading()
-
-                }
-
-                override fun success() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷이 등록되었습니다", Toast.LENGTH_SHORT).show()
-                    activity!!.onBackPressed()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷이 등록되지 못했습니다. 흑흑흑", Toast.LENGTH_SHORT).show()
-                }
-
-            })
+            addBucket()
         }
+    }
+
+    private fun addBucket() {
+        viewModel.uploadBucketList(getBucketItemInfo(), imgList, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                addBucket()
+            }
+
+            override fun start() {
+                startLoading()
+
+            }
+
+            override fun success() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 등록되었습니다", Toast.LENGTH_SHORT).show()
+                activity!!.onBackPressed()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 등록되지 못했습니다. 흑흑흑", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun titleTextChangedListener(editText: EditText): TextWatcher {
@@ -428,7 +438,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            val moveToAddCategory : () -> Unit = {
+            val moveToAddCategory: () -> Unit = {
                 val directions = BucketWriteFragmentDirections.actionWriteToCategoryEdit()
                 it.findNavController().navigate(directions)
             }

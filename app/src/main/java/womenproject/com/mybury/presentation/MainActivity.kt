@@ -15,9 +15,10 @@ import androidx.navigation.ui.navigateUp
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
+import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
@@ -84,6 +85,7 @@ class MainActivity : BaseActiviy() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     } else {
                         setAccessToken(this, response.accessToken)
+                        setRefreshToken(this, response.refreshToken)
                     }
 
                 }) {

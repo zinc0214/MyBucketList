@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.mypage.logininfo.AccountDeleteViewModel" />
-
-        <variable
             name="activity"
             type="womenproject.com.mybury.presentation.mypage.logininfo.AccountDeleteDialogFragment" />
 

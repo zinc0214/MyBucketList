@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
@@ -16,23 +14,29 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 class BucketInfoViewModel : BaseViewModel() {
 
 
-    interface OnBucketListGetEvent {
-        fun start()
-        fun finish(bucketList: List<BucketItem>)
-        fun fail()
-    }
-
-
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: OnBucketListGetEvent, userId: String, token: String, filter: String, sort: String) {
+    fun getMainBucketList(callback: MoreCallBackAnyList, filter: String, sort: String) {
         callback.start()
-        apiInterface.requestHomeBucketList(token, userId, filter, sort)
+        apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bucketList ->
-                    run {
-                        Log.e("ayhan", "getMainBucketList:${bucketList.retcode}")
-                        callback.finish(bucketList.bucketlists)
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> {
+                            Log.e("ayhan", "getMainBucketList:${response.retcode}")
+                            callback.success(response.bucketlists)
+                        }
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
                     }
                 }) {
                     Log.e("ayhan", it.toString())
@@ -42,16 +46,31 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getBucketListByCategory(callback: OnBucketListGetEvent, token : String, categoryId: String) {
+    fun getBucketListByCategory(callback: MoreCallBackAnyList, categoryId: String) {
 
         callback.start()
 
-        apiInterface.requestCategoryBucketList(token, categoryId)
+        apiInterface.requestCategoryBucketList(accessToken, categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { response -> response.bucketlists }
+                .map { response ->
+                    when {
+                        response.retcode == "200" -> response.bucketlists
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+                }
                 .subscribe({ bucketItemList ->
-                    callback.finish(bucketItemList)
+                    callback.success(bucketItemList as List<Any>)
                 }) {
                     Log.e("ayhan", it.toString())
                     callback.fail()
@@ -60,22 +79,29 @@ class BucketInfoViewModel : BaseViewModel() {
 
     }
 
-    interface GetBucketListCallBackListener {
-        fun start()
-        fun success(categoryList: List<Category>)
-        fun fail()
-    }
-
     @SuppressLint("CheckResult")
-    fun getCategoryList(callback: GetBucketListCallBackListener, tokenId: String, userId: String) {
+    fun getCategoryList(callback: MoreCallBackAnyList) {
 
-        apiInterface.requestBeforeWrite(tokenId, userId)
+        apiInterface.requestBeforeWrite(accessToken, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    if (response.retcode == "200") {
-                        Log.e("ayhan", "categoryLL : $response")
-                        callback.success(response.categoryList)
+                    when {
+                        response.retcode == "200" -> {
+                            Log.e("ayhan", "categoryLL : $response")
+                            callback.success(response.categoryList)
+                        }
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
                     }
                 }) {
                     callback.fail()

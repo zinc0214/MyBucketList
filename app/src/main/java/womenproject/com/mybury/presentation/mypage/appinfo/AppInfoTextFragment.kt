@@ -1,5 +1,10 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
+
 import android.util.Log
+import android.webkit.ServiceWorkerWebSettings
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
@@ -10,7 +15,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoTextFragment :  BaseFragment<TextViewLayoutBinding, AppInfoViewModel>() {
+class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel>() {
 
 
     override val layoutResourceId: Int
@@ -19,67 +24,45 @@ class AppInfoTextFragment :  BaseFragment<TextViewLayoutBinding, AppInfoViewMode
     override val viewModel: AppInfoViewModel
         get() = AppInfoViewModel()
 
-    private lateinit var type : String
-    private lateinit var tokenId : String
+    private lateinit var type: String
+    private lateinit var webSettings: WebSettings
+    private lateinit var webView : WebView
 
     override fun initDataBinding() {
-
-        tokenId = getAccessToken(context!!)
-
         arguments?.let {
             val args = AppInfoTextFragmentArgs.fromBundle(it)
             val textType = args.type
             type = textType!!
         }
 
+        initWebView()
         viewDataBinding.titleLayout.backBtnOnClickListener = setOnBackBtnClickListener()
 
-        when(type) {
+        when (type) {
             DataTextType.eula.toString() -> loadEula()
             DataTextType.privacy.toString() -> loadPrivacyPolicy()
         }
     }
 
-private fun loadEula() {
-        viewModel.loadTermsOfUse(object : AppInfoViewModel.LoadTextView {
-            override fun start() {
-                startLoading()
-            }
+    private fun initWebView() {
+        webView = viewDataBinding.webView
+        webView.webViewClient = WebViewClient()
+        webSettings = viewDataBinding.webView.settings
+        webSettings.javaScriptEnabled = true
+        webSettings.setSupportMultipleWindows(true)
+        webSettings.useWideViewPort = true
+        webSettings.setSupportZoom(true)
+        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+    }
 
-            override fun success(text: String) {
-                Log.e("ayhan", "eulaResult : $text")
-                viewDataBinding.textField.text = text
-                viewDataBinding.titleLayout.title = "이용약관"
-                stopLoading()
-                viewDataBinding.notifyChange()
-            }
-
-            override fun fail() {
-                stopLoading()
-            }
-
-        }, tokenId)
+    private fun loadEula() {
+        viewDataBinding.titleLayout.title = "이용약관"
+        viewDataBinding.webView.loadUrl("www.naver.com")
     }
 
     private fun loadPrivacyPolicy() {
-        viewModel.loadPrivacyPolicy(object : AppInfoViewModel.LoadTextView {
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success(text: String) {
-                Log.e("ayhan", "eulaResult : $text")
-                viewDataBinding.textField.text = text
-                viewDataBinding.titleLayout.title = "개인 정보 처리 방침"
-                stopLoading()
-                viewDataBinding.notifyChange()
-            }
-
-            override fun fail() {
-                stopLoading()
-            }
-
-        }, tokenId)
+        viewDataBinding.titleLayout.title = "개인정보 처리방침"
+        viewDataBinding.webView.loadUrl("www.my-bury.com/privacy_policy")
     }
 
 

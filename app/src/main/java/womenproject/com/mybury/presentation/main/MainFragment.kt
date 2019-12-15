@@ -1,19 +1,18 @@
 package womenproject.com.mybury.presentation.main
 
 import android.view.View
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.databinding.FragmentMainBinding
-import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
-import womenproject.com.mybury.data.Preference.Companion.getUserId
+import womenproject.com.mybury.databinding.FragmentMainBinding
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
+import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 
 
 /**
@@ -43,35 +42,38 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        viewModel.getMainBucketList(object : BucketInfoViewModel.OnBucketListGetEvent {
+        getMainBucketList()
+
+    }
+
+    private fun getMainBucketList() {
+        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                getMainBucketList()
+            }
+
             override fun fail() {
                 stopLoading()
-                Toast.makeText(context, "아이쿠, 데이터가 없나봐요! 그래서 더미 데이터를 준비했습니다!", Toast.LENGTH_SHORT).show()
-                /* val list = viewModel.getDummyMainBucketList()
-                 list.last().isLast = true
-                 viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, list)*/
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
             }
 
             override fun start() {
                 startLoading()
             }
 
-            override fun finish(bucketList: List<BucketItem>) {
-                if (bucketList.isEmpty()) {
+            override fun success(value: List<Any>) {
+                if (value.isEmpty()) {
                     viewDataBinding.blankImg.visibility = View.VISIBLE
                     viewDataBinding.bucketList.visibility = View.GONE
                 } else {
                     viewDataBinding.blankImg.visibility = View.GONE
                     viewDataBinding.bucketList.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, bucketList)
+                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, value as List<BucketItem>)
                 }
                 stopLoading()
 
             }
-        }, getUserId(context!!), getAccessToken(context!!), getFilterForShow(context!!), getFilterListUp(context!!))
-
-        //   viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
-        //  viewDataBinding.progressBar.visibility = View.GONE
+        }, getFilterForShow(context!!), getFilterListUp(context!!))
 
     }
 

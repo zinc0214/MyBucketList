@@ -14,11 +14,10 @@ import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageInfo
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentProfileEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
@@ -83,39 +82,44 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     }
 
+
     private fun getMyProfileInfo() {
-        val userId = getUserId(context!!)
-        val tokenId = getAccessToken(context!!)
 
+        viewModel.getMyPageData(object : BaseViewModel.MoreCallBackAny {
+            override fun restart() {
 
-        viewModel.getMyPageData(object : MyPageViewModel.GetMyPageInfoListener {
+            }
+
             override fun start() {
                 startLoading()
             }
 
-            override fun success(myPageInfo: MyPageInfo) {
+            override fun success(myPageInfo: Any) {
+                val info = myPageInfo as MyPageInfo
                 Log.e("ayhan", "gogu221ng???")
                 stopLoading()
 
-                viewDataBinding.nicknameEditText.setText(myPageInfo.name)
-                lastNickname = myPageInfo.name
-                lastImg = myPageInfo.imageUrl.toString()
+                viewDataBinding.nicknameEditText.setText(info.name)
+                lastNickname = info.name
+                lastImg = info.imageUrl.toString()
                 setUpView()
-                seyMyProfileImg(myPageInfo.imageUrl)
+                seyMyProfileImg(info.imageUrl)
             }
 
             override fun fail() {
                 stopLoading()
             }
 
-        }, tokenId, userId)
+        })
+
     }
-
     private fun setMyProfileInfo() {
-        val userId = getUserId(context!!)
-        val tokenId = getAccessToken(context!!)
 
-        viewModel.setProfileData(object : MyPageViewModel.SetMyProfileListener {
+        viewModel.setProfileData(object :BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                setMyProfileInfo()
+            }
+
             override fun start() {
                 startLoading()
             }
@@ -134,7 +138,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 stopLoading()
             }
 
-        }, tokenId, userId, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDefatilImg)
+        }, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDefatilImg)
     }
 
     private fun setSaveBtnEnabled() {

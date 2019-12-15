@@ -11,11 +11,10 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
@@ -40,23 +39,29 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private fun setCategoryList() {
 
-        viewModel.getMyPageData(object : MyPageViewModel.GetMyPageInfoListener {
+        viewModel.getMyPageData(object : BaseViewModel.MoreCallBackAny {
+            override fun restart() {
+                setCategoryList()
+            }
+
             override fun start() {
                 Log.e("ayhan", "???")
                 startLoading()
             }
 
-            override fun success(myPageInfo: MyPageInfo) {
+            override fun success(value: Any) {
+
+                val info = value as MyPageInfo
                 stopLoading()
-                Log.e("ayhan", "cate: ${myPageInfo.categoryList.size}")
+                Log.e("ayhan", "cate: ${info.categoryList.size}")
 
                 val layoutManager = LinearLayoutManager(context)
 
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, myPageInfo.categoryList as MutableList<MyPageCategory>)
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
 
-                setUpView(myPageInfo)
+                setUpView(info)
             }
 
 
@@ -64,7 +69,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 stopLoading()
                 NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
             }
-        }, getAccessToken(context!!), getUserId(context!!))
+        })
 
     }
 
@@ -157,8 +162,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private val createOnClickCategoryEditListener = View.OnClickListener {
         popupClickListener()
-            val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
-            it.findNavController().navigate(directions)
+        val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
+        it.findNavController().navigate(directions)
     }
 
 

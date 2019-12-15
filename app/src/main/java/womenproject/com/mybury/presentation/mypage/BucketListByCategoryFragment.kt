@@ -8,6 +8,7 @@ import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 
 class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryBinding, BucketInfoViewModel>() {
@@ -42,7 +43,11 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
 
         Log.e("ayhan", "categoryId : $selectCategory")
 
-        viewModel.getBucketListByCategory(object : BucketInfoViewModel.OnBucketListGetEvent {
+        viewModel.getBucketListByCategory(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                initBucketListUI()
+            }
+
             override fun fail() {
                 stopLoading()
             }
@@ -51,14 +56,11 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
                 startLoading()
             }
 
-            override fun finish(bucketList: List<BucketItem>) {
-                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(context, bucketList)
+            override fun success(value: List<Any>) {
+                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(context, value as List<BucketItem>)
                 stopLoading()
             }
-        }, getAccessToken(context!!), selectCategory.id)
-
-        //   viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, viewModel.getMainBucketList())
-        //  viewDataBinding.progressBar.visibility = View.GONE
+        }, selectCategory.id)
 
     }
 }

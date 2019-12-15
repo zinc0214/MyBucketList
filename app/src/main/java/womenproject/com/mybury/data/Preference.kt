@@ -17,6 +17,7 @@ class Preference {
         private const val MYBURY_LOGIN_COMPLETE = "mybury_login_complete"
         private const val USER_ID = "user_id"
         private const val ACCESS_TOKEN = "access_token"
+        private const val REFRESH_TOKEN = "refresh_token"
         private const val SHOW_FILTER = "show_filter"
         private const val LISTUP_FILTER = "listup_filter"
 
@@ -71,6 +72,21 @@ class Preference {
             val data = sp.getString(ACCESS_TOKEN, "")
             return data
         }
+
+
+        fun setRefreshToken(context: Context, token:String) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(REFRESH_TOKEN, token)
+            editor.apply()
+        }
+
+        fun getRefreshToken(context: Context): String {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getString(REFRESH_TOKEN, "")
+            return data
+        }
+
 
         fun setFilerForShow(context: Context, showFilter: ShowFilter) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)

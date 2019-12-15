@@ -4,14 +4,15 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentAlarmSettingBinding
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.mypage.appinfo.AppInfoViewModel
 
-class AlarmSettingFragment :  BaseFragment<FragmentAlarmSettingBinding, AlarmSettingViewModel>() {
+class AlarmSettingFragment :  BaseFragment<FragmentAlarmSettingBinding, BaseViewModel>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_alarm_setting
 
-    override val viewModel: AlarmSettingViewModel
-        get() = AlarmSettingViewModel()
+    override val viewModel: BaseViewModel
+        get() = BaseViewModel()
 
 
     override fun initDataBinding() {

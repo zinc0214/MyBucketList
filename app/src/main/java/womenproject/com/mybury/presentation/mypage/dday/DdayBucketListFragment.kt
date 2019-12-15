@@ -1,15 +1,12 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.DdayBucketList
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 
 /**
@@ -32,19 +29,23 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
         viewDataBinding.ddayEachBucketList.hasFixedSize()
         viewDataBinding.ddayToolbar.title = "D-day"
         viewDataBinding.ddayToolbar.backBtnOnClickListener = setOnBackBtnClickListener()
-       // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
+        getDdayList()
 
+    }
 
-        viewModel.getDdayEachBucketList(object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
+    private fun getDdayList() {
+        viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                getDdayList()
+            }
 
             override fun start() {
                 startLoading()
             }
 
-
-            override fun finish(bucketList: List<DdayBucketList>) {
+            override fun success(bucketList: List<Any>) {
                 stopLoading()
-                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
+                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>)
             }
 
             override fun fail() {
@@ -52,7 +53,8 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
                 NetworkFailDialog().show(activity!!.supportFragmentManager)
             }
 
-        }, getAccessToken(context!!), getUserId(context!!))
+        })
+
     }
 
 }

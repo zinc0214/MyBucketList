@@ -9,26 +9,21 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
+import womenproject.com.mybury.presentation.base.BaseViewModel
 
 /**
  * Created by HanAYeon on 2019-08-19.
  */
 
-class CategoryInfoViewModel {
+class CategoryInfoViewModel : BaseViewModel() {
 
 
-    interface ChangeCategoryState{
-        fun start()
-        fun success()
-        fun fail()
-    }
-
-    fun removeCategoryItem(category: HashSet<String>, changeCategoryState: ChangeCategoryState) {
+    fun removeCategoryItem(category: HashSet<String>, changeCategoryState:Simple3CallBack) {
         // 카테고리 제거
     }
 
     @SuppressLint("CheckResult")
-    fun addCategoryItem(tokenId : String, categoryName : String, changeCategoryState: ChangeCategoryState) {
+    fun addCategoryItem(categoryName : String, changeCategoryState: Simple3CallBack) {
         /*changeCategoryState.start()
         apiInterface.addNewCategoryItem(tokenId, categoryName)
                 .subscribeOn(Schedulers.io())
@@ -44,7 +39,7 @@ class CategoryInfoViewModel {
     }
 
     @SuppressLint("CheckResult")
-    fun editCategoryItem(tokenId : String, categoryName : String, changeCategoryState: ChangeCategoryState) {
+    fun editCategoryItem(categoryName : String, changeCategoryState: Simple3CallBack) {
         /*changeCategoryState.start()
         apiInterface.addNewCategoryItem(tokenId, categoryName)
                 .subscribeOn(Schedulers.io())

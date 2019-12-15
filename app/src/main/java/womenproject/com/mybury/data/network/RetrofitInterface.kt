@@ -33,6 +33,10 @@ interface RetrofitInterface {
     @POST("/host/signin")
     fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
 
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/host/refresh_token")
+    fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
+
     @POST("/host/profile")
     @Multipart
     fun postCreateProfile(@Header("X-Auth-Token") token: String,
@@ -130,12 +134,6 @@ interface RetrofitInterface {
     @GET("/host/mypage")
     fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<MyPageInfo>
 
-    @GET("/host/terms_of_use")
-    fun loadTermsOfUse(@Header("X-Auth-Token") token: String): Observable<ResponseBody>
-
-    @GET("/host/privacy_policy")
-    fun loadPrivacyPolicy(@Header("X-Auth-Token") token: String): Observable<ResponseBody>
-
     @HTTP(method = "DELETE", path = "/host/withdrawal", hasBody = true)
     fun postSignOut(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest): Observable<SimpleResponse>
 
@@ -161,14 +159,5 @@ internal object APIClient {
             return retrofit as Retrofit
         }
 }
-
-/*
-val bucketListApi = Retrofit.Builder()
-        .baseUrl("http://3.92.189.69/host/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .build()
-        .create(RetrofitInterface::class.java)
-*/
 
 val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
