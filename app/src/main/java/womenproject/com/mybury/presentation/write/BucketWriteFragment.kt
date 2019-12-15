@@ -33,12 +33,15 @@ import kotlin.collections.HashMap
 
 open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
+    var alreadyImgList = arrayListOf<String>()
+    var imgList = ArrayList<Any>()
+
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
-    private var currentCalendarDay : Date ?= null
+    private var currentCalendarDay: Date? = null
     private var categoryList = arrayListOf<Category>()
-    private var imgList = ArrayList<File>()
-    private lateinit var selectCategory : Category
+
+    private lateinit var selectCategory: Category
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -56,6 +59,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 Log.e("ayhan", "cate: ${_categoryList.size}")
                 categoryList = _categoryList as ArrayList<Category>
                 selectCategory = categoryList[0]
+                initForUpdate()
+                alreadyAdd()
                 setUpView()
             }
 
@@ -64,12 +69,34 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun fail() {
-                // NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
                 stopLoading()
             }
-        }, getUserId(context!!))
+        }, getAccessToken(context!!), getUserId(context!!))
 
-        initForUpdate()
+
+
+    }
+
+
+    private fun alreadyAdd() {
+
+        val removeImgListener: (View) -> Unit = { it ->
+            onDeleteImgField(it)
+        }
+
+
+        val imgFieldClickListener: (Any) -> Unit = {
+            if (it is String) {
+                showImgWide(it)
+            }
+        }
+        for (list in alreadyImgList) {
+            val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setAleadyUI(list)
+            addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
+            imgList.add(list)
+            viewDataBinding.imgLayout.addView(writeImgLayout)
+        }
 
     }
 
@@ -161,7 +188,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
     }
 
-    private fun bucketAddOnClickListener(): View.OnClickListener {
+    open fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
             viewModel.uploadBucketList(
                     getAccessToken(context!!), getUserId(context!!),
@@ -291,10 +318,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
 
-        val imgFieldClickListener: (Uri) -> Unit = {
-            showImgWide(it)
+        val imgFieldClickListener: (Any) -> Unit = {
+            if (it is Uri) {
+                showImgWide(it)
+            }
         }
-
 
         val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setUI(uri)
         addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
@@ -302,7 +330,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
-    private fun onDeleteImgField(layout: View) {
+    fun onDeleteImgField(layout: View) {
         var deleteImgValue = 0
 
         for (i in 0..addImgList.size) {
@@ -315,10 +343,16 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         imgList.removeAt(deleteImgValue)
     }
 
-    private fun showImgWide(uri: Uri) {
+    fun showImgWide(uri: Uri) {
         val showImgWideFragment = ShowImgWideFragment(uri)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
+
+    fun showImgWide(url: String) {
+        val showImgWideFragment = ShowImgWideFragment(url)
+        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+    }
+
 
     private fun memoRemoveListener(): View.OnClickListener {
 
@@ -348,8 +382,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnClickListener {
 
             Log.e("ayhan", currentCalendarDay.toString())
-            if(currentCalendarDay == null) {
-                currentCalendarDay  =  Calendar.getInstance().time
+            if (currentCalendarDay == null) {
+                currentCalendarDay = Calendar.getInstance().time
             }
             val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay!!)
             calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
@@ -395,7 +429,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
 
-    private fun getBucketItemInfo(): AddBucketItem {
+    fun getBucketItemInfo(): AddBucketItem {
         if (goal_count_text.text.toString() == "설정") {
             goalCount = 1
         } else {
@@ -405,7 +439,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         var formDate = ""
 
-        if(currentCalendarDay != null)  {
+        if (currentCalendarDay != null) {
             formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
         }
 
@@ -433,5 +467,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     open fun initForUpdate() {}
+
 
 }

@@ -67,9 +67,9 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getCategoryList(callback: GetBucketListCallBackListener, userId: String) {
+    fun getCategoryList(callback: GetBucketListCallBackListener, tokenId: String, userId: String) {
 
-        apiInterface.requestBeforeWrite(userId)
+        apiInterface.requestBeforeWrite(tokenId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

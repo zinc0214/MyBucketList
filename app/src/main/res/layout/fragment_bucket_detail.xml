@@ -29,13 +29,12 @@
         <include
             android:id="@+id/one_image"
             layout="@layout/detail_image_item"
-            android:visibility="@{viewModel.oneImageVisible}" />
+            />
 
         <include
             android:id="@+id/more_image"
             layout="@layout/detail_image_adapter"
-            android:visibility="@{viewModel.moreImageVisible}" />
-
+            />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -43,7 +42,6 @@
             android:layout_height="12dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="187dp"
-            android:visibility="@{viewModel.moreImageVisible}"
             app:tabBackground="@drawable/image_tab_selector"
             app:tabGravity="center"
             app:tabIndicator="@null"
@@ -166,6 +164,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/ddayLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -210,12 +209,42 @@
                 </RelativeLayout>
             </LinearLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/complete_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/complete_text"
+                android:layout_marginBottom="-7dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/bury"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-5dp"
+                    android:src="@drawable/bury_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="-5dp"
+                    android:src="@drawable/bury_speech_complete"
+                    app:layout_constraintStart_toEndOf="@+id/bury"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <Button
                 android:id="@+id/complete_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/gradient_background"
+                android:background="@drawable/complete_background"
                 android:onClick="@{bucketCompleteListener}"
                 android:textColor="@color/_ffffff" />
         </RelativeLayout>

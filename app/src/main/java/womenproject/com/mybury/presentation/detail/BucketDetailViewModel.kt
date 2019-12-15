@@ -16,8 +16,6 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketDetailViewModel : BaseViewModel() {
 
-    var oneImageVisible = View.VISIBLE
-    var moreImageVisible = View.INVISIBLE
 
     interface OnBucketLoadEventListener {
         fun start()
@@ -55,7 +53,7 @@ class BucketDetailViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun setBucektComplete(callback: OnBucketCompleteEventListener, token: String, bucketId: String) {
+    fun setBucketComplete(callback: OnBucketCompleteEventListener, token: String, bucketId: String) {
 
         val bucketRequest = BucketRequest(bucketId)
         callback.start()

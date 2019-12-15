@@ -126,7 +126,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     open fun createOnClickBucketSuccessListener(tokenId:String, bucketId : String): View.OnClickListener {
         return View.OnClickListener {
             val viewModel = BucketDetailViewModel()
-            viewModel.setBucektComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener{
+            viewModel.setBucketComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener{
                 override fun start() {
 
                 }

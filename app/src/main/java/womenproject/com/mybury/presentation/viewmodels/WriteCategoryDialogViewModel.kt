@@ -17,15 +17,6 @@ class WriteCategoryDialogViewModel : BaseViewModel() {
         fun finish(bucketList: BucketList?)
     }
 
-
-    @SuppressLint("CheckResult")
-    fun getCategoryList(callback: OnBucketListGetEvent) {
-
-        apiInterface.requestHomeBucketList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketCategory -> callback.finish(bucketCategory)}
-    }
 /*
 
     fun getMainBucketList(api : String, callback: OnBucketListGetEvent): BucketList? {

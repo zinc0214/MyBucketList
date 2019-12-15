@@ -117,8 +117,11 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         when (it) {
             viewDataBinding.startedCheckBox -> started = viewDataBinding.startedCheckBox.isChecked
             viewDataBinding.completeCheckBox -> complete = viewDataBinding.completeCheckBox.isChecked
-            viewDataBinding.radioBtnUpdate -> update = viewDataBinding.radioBtnUpdate.isChecked
-            viewDataBinding.radioBtnWritten -> written = viewDataBinding.radioBtnWritten.isChecked
+            viewDataBinding.radioBtnUpdate,
+            viewDataBinding.radioBtnWritten -> {
+                update = viewDataBinding.radioBtnUpdate.isChecked
+                written = viewDataBinding.radioBtnWritten.isChecked
+            }
         }
     }
 
@@ -134,6 +137,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun setListUpFilter() {
+        Log.e("ayhan", "checkFilter : ${update}, $written")
         if (update) {
             setFilterListUp(context!!, ListUpFilter.updatedDt)
         } else {

@@ -83,13 +83,15 @@ data class BucketItem(
 @Parcelize
 data class DetailBucketItem(
         var title : String,
-        val memo  : String,
+        val memo  : String = "",
         val open : Boolean = false,
         val category: String,
         val userCount : Int = 0,
         val goalCount : Int = 0,
-        val dDay : Int = 0,
-        val imgList : List<String>,
+        val dDate : String,
+        val imgUrl1 : String,
+        val imgUrl2 : String,
+        val imgUrl3 : String,
         val retcode : String
 ): Parcelable
 
@@ -138,4 +140,8 @@ enum class ShowFilter {
 
 enum class ListUpFilter {
     updatedDt, createdDt
+}
+
+enum class DataTextType {
+    eula, privacy, open
 }

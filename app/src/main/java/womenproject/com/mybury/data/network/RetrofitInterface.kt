@@ -50,9 +50,6 @@ interface RetrofitInterface {
     @GET("/host/home")
     fun requestHomeBucketList(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
 
-    @GET("/host/home")
-    fun requestHomeBucketList(): Observable<BucketList>
-
     @GET("/host/category")
     fun requestCategoryBucketList(@Header("X-Auth-Token") token: String, @Query("categoryId") userId: String): Observable<BucketList>
 
@@ -68,7 +65,7 @@ interface RetrofitInterface {
     fun requestDdayBucketListResult(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<DdayBucketListRespone>
 
     @GET("/host/beforeWrite")
-    fun requestBeforeWrite(@Query("userId") userId: String): Observable<BucketCategory>
+    fun requestBeforeWrite(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<BucketCategory>
 
     @POST("/host/write")
     @Multipart
@@ -93,19 +90,48 @@ interface RetrofitInterface {
                                  @Part userId: MultipartBody.Part,
                                  @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
 
+
+    @POST("/host/bucketlist/{bucketId}")
+    @Multipart
+    fun postUpdateBucketList(@Header("X-Auth-Token") token: String,
+                             @Path("bucketId") bucketId : String,
+                          @Part title: MultipartBody.Part,
+                          @Part open: MultipartBody.Part,
+                          @Part dDate: MultipartBody.Part,
+                          @Part goalCount: MultipartBody.Part,
+                          @Part memo: MultipartBody.Part,
+                          @Part categoryId: MultipartBody.Part,
+                          @Part userId: MultipartBody.Part,
+                          @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
+
+    @POST("/host/bucketlist/{bucketId}")
+    @Multipart
+    fun postUpdateBucketListNotDDay(@Header("X-Auth-Token") token: String,
+                                    @Path("bucketId") bucketId : String,
+                                 @Part title: MultipartBody.Part,
+                                 @Part open: MultipartBody.Part,
+                                 @Part goalCount: MultipartBody.Part,
+                                 @Part memo: MultipartBody.Part,
+                                 @Part categoryId: MultipartBody.Part,
+                                 @Part userId: MultipartBody.Part,
+                                 @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
+
+
+
     @POST("/host/write")
     @Multipart
     fun postAddBucketList(@Header("X-Auth-Token") token: String,
                           @Part bucketItem: MultipartBody.Part,
                           @Part userId: MultipartBody.Part): Observable<SimpleResponse>
 
-    @Multipart
-    @POST("/host/imageUpload")
-    fun postAddBucketImage(@Part file: MultipartBody.Part): Observable<ResponseBody>
-
-
     @GET("/host/mypage")
     fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<MyPageInfo>
+
+    @GET("/host/terms_of_use")
+    fun loadTermsOfUse(@Header("X-Auth-Token") token: String): Observable<ResponseBody>
+
+    @GET("/host/privacy_policy")
+    fun loadPrivacyPolicy(@Header("X-Auth-Token") token: String): Observable<ResponseBody>
 
 
     @HTTP(method = "DELETE", path = "/host/withdrawal", hasBody = true)

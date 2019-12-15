@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
@@ -69,7 +70,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             }
 
-        }, getUserId(context!!))
+        }, getAccessToken(context!!), getUserId(context!!))
 
     }
 

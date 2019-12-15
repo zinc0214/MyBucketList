@@ -112,24 +112,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     }
 
     private fun seyMyProfileImg(imgUrl: String) {
-        if (imgUrl.isNotBlank()) {
+        if (imgUrl.isNullOrBlank()) {
 
             val num = Random.nextInt(2)
             Log.e("ayhan", "use RandomImg: $num")
             if (num == 1) {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+                viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
                 DefaulProfileImg().bury
             } else {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+                viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
                 DefaulProfileImg().my
             }
-
-
         } else {
             Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileLargeImg)
-            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImg)
+            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImgView)
         }
     }
 
