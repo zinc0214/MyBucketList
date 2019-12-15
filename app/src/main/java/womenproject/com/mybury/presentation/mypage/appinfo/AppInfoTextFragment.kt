@@ -1,7 +1,10 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
 import android.util.Log
-import android.webkit.*
+import android.webkit.ServiceWorkerWebSettings
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
@@ -32,6 +35,7 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
             type = textType!!
         }
 
+        initWebView()
         viewDataBinding.titleLayout.backBtnOnClickListener = setOnBackBtnClickListener()
 
         when (type) {
@@ -40,30 +44,19 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
         }
     }
 
-
     private fun initWebView() {
-
-        startLoading()
-
         webView = viewDataBinding.webView
-        webView.settings.javaScriptEnabled = true
-        webView.settings.useWideViewPort = true
-        webView.webViewClient = (object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, url : String): Boolean {
-                view!!.loadUrl(url)
-                stopLoading()
-                return true
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                stopLoading()
-            }
-        })
+        webView.webViewClient = WebViewClient()
+        webSettings = viewDataBinding.webView.settings
+        webSettings.javaScriptEnabled = true
+        webSettings.setSupportMultipleWindows(true)
+        webSettings.useWideViewPort = true
+        webSettings.setSupportZoom(true)
+        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
     }
 
     private fun loadEula() {
         viewDataBinding.titleLayout.title = "이용약관"
-        initWebView()
         viewDataBinding.webView.loadUrl("www.naver.com")
     }
 
