@@ -1,26 +1,19 @@
 package womenproject.com.mybury.presentation.main
 
-import android.graphics.drawable.AnimationDrawable
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
-import womenproject.com.mybury.presentation.main.MainFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel
-import kotlinx.android.synthetic.main.fragment_base_dialog.*
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.Preference.Companion.getUserId
-import java.util.*
 
 
 /**

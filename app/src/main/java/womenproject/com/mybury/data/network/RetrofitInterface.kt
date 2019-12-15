@@ -38,13 +38,15 @@ interface RetrofitInterface {
     fun postCreateProfile(@Header("X-Auth-Token") token: String,
                           @Part userId: MultipartBody.Part,
                           @Part name: MultipartBody.Part,
-                          @Part file: MultipartBody.Part): Observable<SimpleResponse>
+                          @Part file: MultipartBody.Part,
+                          @Part defaultImg : MultipartBody.Part): Observable<SimpleResponse>
 
     @POST("/host/profile")
     @Multipart
     fun postCreateProfile(@Header("X-Auth-Token") token: String,
                           @Part userId: MultipartBody.Part,
-                          @Part name: MultipartBody.Part): Observable<SimpleResponse>
+                          @Part name: MultipartBody.Part,
+                          @Part defaultImg : MultipartBody.Part): Observable<SimpleResponse>
 
 
     @GET("/host/home")
@@ -117,6 +119,10 @@ interface RetrofitInterface {
                                  @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
 
 
+
+    @HTTP(method = "DELETE", path = "/host/bucketlist/{bucketId}", hasBody = true)
+    fun deleteBucket(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest, @Path("bucketId") bucketId : String): Observable<SimpleResponse>
+
     @POST("/host/category")
     fun addNewCategoryItem(@Header("X-Auth-Token") token: String,
                            @Body categoryId: String): Observable<SimpleResponse>
@@ -130,9 +136,8 @@ interface RetrofitInterface {
     @GET("/host/privacy_policy")
     fun loadPrivacyPolicy(@Header("X-Auth-Token") token: String): Observable<ResponseBody>
 
-
     @HTTP(method = "DELETE", path = "/host/withdrawal", hasBody = true)
-    fun postSignOut(@Body userId: UseUserIdRequest): Observable<SimpleResponse>
+    fun postSignOut(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest): Observable<SimpleResponse>
 
 }
 

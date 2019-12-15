@@ -81,6 +81,14 @@
         android:id="@+id/bucket_write_fragment"
         android:name="womenproject.com.mybury.presentation.write.BucketWriteFragment"
         android:label="Write">
+
+        <action
+            android:id="@+id/action_write_to_category_edit"
+            app:destination="@id/category_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment

@@ -36,15 +36,9 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var circularProgressBar: CircularProgressButton
     lateinit var userCountText: TextView
 
-    var userCount = 0
-    var goalCount = 0
-    var bucketType = 0
-    var ddayVisible = false
-    var isLastItem = false
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
-
-    fun onBucketSuccessFinalButtonClickListener() {
+    fun onBucketSuccessFinalButtonClickListener(info: BucketItem) {
         binding.apply {
             circularProgressBar.run {
                 progressType = ProgressType.INDETERMINATE
@@ -58,7 +52,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                     }, 500)
                     postDelayed({
                         revertAnimation()
-                        if (bucketType == 0 || userCount >= goalCount) {
+                        if (info.userCount >= info.goalCount) {
                             setFinalSuccessUIBackground()
                             setFinalSuccessWithCountBucket()
                         } else {
@@ -66,13 +60,13 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         }
                     }, 750)
                     postDelayed({
-                        if (bucketType == 0 || userCount >= goalCount) {
+                        if (info.userCount >= info.goalCount) {
                             animFadeOut.duration = 750
                             bucketItemImage.startAnimation(animFadeOut)
                         }
                     }, 800)
                     postDelayed({
-                        if (bucketType == 0 || userCount >= goalCount) {
+                        if (info.userCount >= info.goalCount) {
                             bucketItemImage.visibility = View.GONE
                             bucketItemLayout.isClickable = true
                         }
@@ -113,41 +107,35 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
         bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
     }
 
-    open fun setBucketData(bucketItem: BucketItem) {
-        ddayVisible = bucketItem.dDay > 0
-        userCount = bucketItem.userCount
-        goalCount = bucketItem.goalCount
-        isLastItem = bucketItem.isLast
-    }
-
     open fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
     }
 
-    open fun createOnClickBucketSuccessListener(tokenId:String, bucketId : String): View.OnClickListener {
+    open fun createOnClickBucketSuccessListener(
+            tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             val viewModel = BucketDetailViewModel()
-            viewModel.setBucketComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener{
+            viewModel.setBucketComplete(object : BucketDetailViewModel.OnBucketCompleteEventListener {
                 override fun start() {
 
                 }
 
                 override fun success() {
-                    onBucketSuccessFinalButtonClickListener()
+                    onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                     return
                 }
 
                 override fun fail() {
-                   Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 }
 
-            }, tokenId, bucketId)
+            }, tokenId, bucketItemInfo.id)
 
         }
     }
 
-    open fun createOnClickBucketSuccessLayoutListener(tokenId:String, bucketId : String): View.OnClickListener {
+    open fun createOnClickBucketSuccessLayoutListener(tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
-            createOnClickBucketSuccessListener(tokenId, bucketId)
+            createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
         }
     }
 

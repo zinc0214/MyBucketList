@@ -22,12 +22,6 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding) 
             ddayEachBucketItemList.hasFixedSize()
             ddayEachBucketItemList.adapter = DdayBucketEachListAdapter(context, bucketItemList.bucketlists)
 
-            lastEndImg.endImage.background = context.getDrawable(R.drawable.end_character_d_day)
-            lastEndImg.lastImgVisible = if (bucketItemList.isLast) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
             executePendingBindings()
         }
     }

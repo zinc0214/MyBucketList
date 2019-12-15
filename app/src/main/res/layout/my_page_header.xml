@@ -69,7 +69,6 @@
             app:layout_constraintTop_toTopOf="@+id/background"
             app:layout_constraintVertical_chainStyle="packed">
 
-
             <ImageView
                 android:id="@+id/profile_large_img"
                 android:layout_width="match_parent"
@@ -93,7 +92,6 @@
             app:layout_constraintStart_toStartOf="@+id/icon"
             app:layout_constraintTop_toTopOf="@+id/icon"
             app:layout_constraintVertical_chainStyle="packed">
-
 
             <ImageView
                 android:id="@+id/profile_img_view"

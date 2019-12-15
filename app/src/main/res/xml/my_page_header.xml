@@ -123,6 +123,11 @@
                 android:id="@+id/profile_img"
                 android:layout_width="@dimen/image_width"
                 android:layout_height="@dimen/image_width"
+                android:shadowColor="@color/_e8e8e8"
+                app:border_width="1.5dp"
+                app:cardBackgroundColor="@color/_e8e8e8"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0.5dp"
                 motion:layout_constraintEnd_toEndOf="@+id/icon"
                 motion:layout_constraintStart_toStartOf="@+id/icon"
                 motion:layout_constraintTop_toTopOf="@+id/icon">
@@ -212,7 +217,7 @@
                 android:shadowColor="@color/_e8e8e8"
                 app:border_width="1.5dp"
                 app:cardBackgroundColor="@color/_e8e8e8"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="26dp"
                 app:cardElevation="0.5dp"
                 motion:layout_constraintStart_toStartOf="@+id/whiteBackground"
                 motion:layout_constraintTop_toTopOf="@+id/whiteBackground">
@@ -224,6 +229,11 @@
                 android:id="@+id/profile_img"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:shadowColor="@color/_e8e8e8"
+                app:border_width="1.5dp"
+                app:cardBackgroundColor="@color/_e8e8e8"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0.5dp"
                 motion:layout_constraintEnd_toEndOf="@+id/icon"
                 motion:layout_constraintStart_toStartOf="@+id/icon"
                 motion:layout_constraintTop_toTopOf="@+id/icon">

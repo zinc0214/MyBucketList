@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
+import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
@@ -39,6 +40,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
     private var currentCalendarDay: Date? = null
+    private var open = true
     private var categoryList = arrayListOf<Category>()
 
     private lateinit var selectCategory: Category
@@ -129,9 +131,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     if (p0!!.targetPosition.toString().equals("0.0")) {
                         Log.e("ayhan", "111")
                         openImg.background = context!!.getDrawable(R.drawable.open_enable)
+                        open = true
                     } else {
                         Log.e("ayhan", "222")
                         openImg.background = context!!.getDrawable(R.drawable.open_disable)
+                        open = false
                     }
                     Log.e("ayhan", "tran  :" + p0!!.id + "," + p0.targetPosition + "," + p0.transitionName)
                 }
@@ -424,7 +428,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteCategoryDialogFragment(categoryList, categorySetListener).show(activity!!.supportFragmentManager, "tag")
+            val moveToAddCategory : () -> Unit = {
+                val directions = BucketWriteFragmentDirections.actionWriteToCategoryEdit()
+                it.findNavController().navigate(directions)
+            }
+            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
@@ -443,7 +451,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
         }
 
-        return AddBucketItem(viewDataBinding.titleText.text.toString(), true,
+        return AddBucketItem(viewDataBinding.titleText.text.toString(), open,
                 formDate, goalCount,
                 viewDataBinding.memoText.text.toString(), selectCategory.id)
     }

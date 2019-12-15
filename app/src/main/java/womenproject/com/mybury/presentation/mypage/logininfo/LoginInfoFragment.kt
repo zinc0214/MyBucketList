@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
@@ -55,7 +56,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, LoginInfoViewMo
     private fun signOutMyBury() {
         val userIdRequest = UseUserIdRequest(Preference.getUserId(context!!))
 
-        apiInterface.postSignOut(userIdRequest)
+        apiInterface.postSignOut(getAccessToken(context!!), userIdRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

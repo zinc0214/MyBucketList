@@ -18,13 +18,11 @@ import womenproject.com.mybury.presentation.main.MainFragmentDirections
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
+open class MainBucketListAdapter(context: Context?, val bucketList: List<BucketItem>) : BaseBucketListAdapter(context, bucketList) {
 
     override fun getItemViewType(position: Int): Int {
-        setLast(position)
         return checkBucketType(position)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -37,15 +35,11 @@ open class MainBucketListAdapter(context: Context?, bucketList: List<BucketItem>
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if (bucketItemList[position].userCount == bucketItemList[position].goalCount) {
+        return if (bucketList[position].userCount >= bucketList[position].goalCount) {
             0
         } else {
-            bucketItemList[position].goalCount
+            bucketList[position].goalCount
         }
-    }
-
-    private fun setLast(position: Int) {
-        bucketItemList[position].isLast = position == bucketItemList.size -1
     }
 
     override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {

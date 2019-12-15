@@ -74,10 +74,9 @@ data class BucketItem(
         val open : Boolean = false,
         val pin : Boolean = false,
         val category: Category,
-        val userCount : Int = 0,
+        var userCount : Int = 0,
         val goalCount : Int = 1,
-        val dDay : Int = 0,
-        var isLast : Boolean = false
+        val dDay : Int = 0
 ) : Parcelable
 
 @Parcelize

@@ -106,14 +106,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             })
 
-            seyMyProfileImg(_myPageInfo.imageUrl.toString())
+            seyMyProfileImg(_myPageInfo.imageUrl)
         }
 
     }
 
-    private fun seyMyProfileImg(imgUrl: String) {
+    private fun seyMyProfileImg(imgUrl: String?) {
         if (imgUrl.isNullOrBlank()) {
-
             val num = Random.nextInt(2)
             Log.e("ayhan", "use RandomImg: $num")
             if (num == 1) {
@@ -158,8 +157,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private val createOnClickCategoryEditListener = View.OnClickListener {
         popupClickListener()
-        val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
-        it.findNavController().navigate(directions)
+            val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
+            it.findNavController().navigate(directions)
     }
 
 

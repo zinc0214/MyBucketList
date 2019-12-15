@@ -36,28 +36,11 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private var imgUrl: File? = null
     private var lastNickname = ""
     private var lastImg = ""
+    private var useDefatilImg = false
 
     override fun initDataBinding() {
-
-
-        //
-        //  viewDataBinding.viewModel = viewModel
-
         getMyProfileInfo()
         viewDataBinding.title = "프로필 수정"
-
-/*        viewModel.apply {
-            myPageInfo.observe {
-                Log.e("ayhan", "gogung???")
-                viewDataBinding.nicknameEditText.setText(it.name)
-                lastNickname = it.name
-                lastImg = it.imageUrl
-                setUpView()
-                seyMyProfileImg(it.imageUrl)
-            }
-        }*/
-
-
     }
 
     private fun setUpView() {
@@ -66,7 +49,6 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         viewDataBinding.backBtnOnClickListener = cancelClickListener
         viewDataBinding.saveBtnOnClickListener = saveBtnOnClickListener
         viewDataBinding.nicknameEditText.addTextChangedListener(addTextChangedListener())
-
         viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
     }
@@ -152,7 +134,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 stopLoading()
             }
 
-        }, tokenId, userId, viewDataBinding.nicknameEditText.text.toString(), imgUrl)
+        }, tokenId, userId, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDefatilImg)
     }
 
     private fun setSaveBtnEnabled() {
@@ -188,6 +170,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             viewDataBinding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
             DefaulProfileImg().my
         }
+        useDefatilImg = true
         viewDataBinding.executePendingBindings()
     }
 
@@ -200,6 +183,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         Glide.with(context!!).load(uri).centerCrop().into(viewDataBinding.profileImg)
         defaultImg = file.toString()
         imgUrl = file
+        useDefatilImg = false
         setSaveBtnEnabled()
     }
 

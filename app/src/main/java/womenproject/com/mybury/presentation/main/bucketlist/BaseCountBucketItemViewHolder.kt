@@ -20,26 +20,23 @@ import womenproject.com.mybury.databinding.BucketItemCountBinding
 
 open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBinding) : BaseBucketItemViewHolder(binding) {
 
+    private lateinit var info : BucketItem
     init {
-        bucketType = 1
         initBinding = binding
-
         bucketItemLayout = binding.bucketItemLayout
         successImageView = binding.successButtonLayout.successImg
         bucketItemImage = binding.bucketItemImage
         bucketTitle = binding.succeedBucketTitle
         circularProgressBar = binding.successButtonLayout.circularProgressBar
         userCountText = binding.userCount
-
-
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            setBucketData(bucketItemInfo)
             setUI(bucketItemInfo, bucketListener)
             setDdayColor()
             executePendingBindings()
+            info = bucketItemInfo
         }
     }
 
@@ -53,14 +50,8 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
         binding.bucketClickListener = bucketListener
 
         val tokenId = getAccessToken(context)
-        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo.id)
-        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo.id)
-
-        binding.lastEndImg.lastImgVisible = if (isLastItem) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo)
     }
 
     private fun setProgressMax(pb: ProgressBar, max: Int) {
@@ -78,12 +69,10 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
             bucketItemLayout.height += context.resources.getDimensionPixelSize(R.dimen.titleMargin)
         }
 
-
         val bucketTitle = binding.bucketTitle.getLayoutParams() as RelativeLayout.LayoutParams
         bucketTitle.topMargin = 0
         bucketTitle.addRule(RelativeLayout.CENTER_VERTICAL)
         binding.bucketTitle.layoutParams = bucketTitle
-        //binding.contentLayout.layoutParams = contentLayout
 
         val contentLayout = binding.contentLayout.getLayoutParams() as RelativeLayout.LayoutParams
         contentLayout.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE)
@@ -93,12 +82,11 @@ open class BaseCountBucketItemViewHolder(private val binding: BucketItemCountBin
     }
 
     override fun addBucketSuccessCount() {
-        binding.currentUserCount = (userCount + 1).toString()
-        binding.horizontalProgressBar.progress = userCount + 1
-        userCount += 1
-
-        setProgressMax(binding.horizontalProgressBar, goalCount)
-        setProgressAnimate(binding.horizontalProgressBar, userCount)
+        binding.currentUserCount = (info.userCount + 1).toString()
+        binding.horizontalProgressBar.progress = info.userCount + 1
+        info.userCount += 1
+        setProgressMax(binding.horizontalProgressBar, info.goalCount)
+        setProgressAnimate(binding.horizontalProgressBar, info.userCount)
     }
 
     private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {

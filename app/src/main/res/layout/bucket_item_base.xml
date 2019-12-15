@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{bucketClickListener}"
         android:orientation="vertical">
 
         <LinearLayout
@@ -70,10 +69,6 @@
 
         </LinearLayout>
 
-        <include
-            android:id="@+id/last_end_img"
-            layout="@layout/list_end_layout" />
-
     </LinearLayout>
 
     <data>
@@ -84,10 +79,6 @@
 
         <variable
             name="bucketTitleText"
-            type="String" />
-
-        <variable
-            name="currentValue"
             type="String" />
 
         <variable

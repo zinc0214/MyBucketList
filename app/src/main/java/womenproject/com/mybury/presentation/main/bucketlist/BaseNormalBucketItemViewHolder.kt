@@ -13,7 +13,6 @@ import womenproject.com.mybury.databinding.BucketItemBaseBinding
 
 open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding) : BaseBucketItemViewHolder(binding) {
 
-
     init {
         bucketItemLayout = binding.bucketItemLayout
         successImageView = binding.successButtonLayout.successImg
@@ -24,7 +23,6 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
         binding.apply {
-            setBucketData(bucketItemInfo)
             setUI(bucketItemInfo, bucketListener)
             setDdayColor()
             executePendingBindings()
@@ -39,14 +37,8 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         binding.bucketClickListener = bucketListener
 
         val tokenId = getAccessToken(context)
-        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo.id)
-        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo.id)
-
-        binding.lastEndImg.lastImgVisible = if (isLastItem) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo)
     }
 
 

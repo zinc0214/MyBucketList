@@ -37,23 +37,15 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/dday_each_list_layout"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dday_each_bucket_item_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp">
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/bucket_item_base" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dday_each_bucket_item_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/bucket_item_base" />
 
-        </ScrollView>
-
-        <include
-            android:id="@+id/last_end_img"
-            layout="@layout/list_end_layout"/>
     </LinearLayout>
 
 </layout>

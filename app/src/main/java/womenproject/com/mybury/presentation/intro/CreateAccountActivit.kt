@@ -44,6 +44,7 @@ class CreateAccountActivity : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
     private var file: File? = null
+    private var useDefaulProfileImg = false
 
     override fun onResume() {
         super.onResume()
@@ -71,6 +72,7 @@ class CreateAccountActivity : BaseActiviy() {
             root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
             profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+            useDefaulProfileImg = true
         }
     }
 
@@ -86,6 +88,7 @@ class CreateAccountActivity : BaseActiviy() {
         } else {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
         }
+        useDefaulProfileImg = true
         binding.executePendingBindings()
     }
 
@@ -95,6 +98,7 @@ class CreateAccountActivity : BaseActiviy() {
 
     private val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
         this.file = file
+        useDefaulProfileImg = false
         Glide.with(this).load(uri).centerCrop().into(binding.profileImg)
     }
 
@@ -176,7 +180,7 @@ class CreateAccountActivity : BaseActiviy() {
                 NetworkFailDialog().show(supportFragmentManager)
             }
 
-        }, getAccessToken(this), getUserId(this), binding.nicknameEditText.text.toString(), file)
+        }, getAccessToken(this), getUserId(this), binding.nicknameEditText.text.toString(), file, useDefaulProfileImg)
     }
 
 

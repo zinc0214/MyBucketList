@@ -88,9 +88,6 @@
 
         </LinearLayout>
 
-        <include
-            android:id="@+id/last_end_img"
-            layout="@layout/list_end_layout"/>
 
     </LinearLayout>
 

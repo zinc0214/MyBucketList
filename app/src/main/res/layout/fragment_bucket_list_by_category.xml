@@ -13,15 +13,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/toolBarTitle"
-            android:layout_marginBottom="50dp"
             android:background="@color/_fafafa">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/bucket_list"
-                tools:listitem="@layout/bucket_item_base"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bucket_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="30dp"
+                    tools:listitem="@layout/bucket_item_base" />
+
+                <ImageView
+                    android:id="@+id/end_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:alpha="0.3"
+                    android:background="@drawable/list_end" />
+
+
+            </LinearLayout>
         </ScrollView>
 
         <include

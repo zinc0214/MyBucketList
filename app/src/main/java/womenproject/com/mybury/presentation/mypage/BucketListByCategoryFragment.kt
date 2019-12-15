@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.mypage
 
 import android.util.Log
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
@@ -10,18 +9,16 @@ import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel
 
-class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryBinding, MainFragmentViewModel>() {
+class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryBinding, BucketInfoViewModel>() {
 
-    private val bucketInfoViewModel = BucketInfoViewModel()
     private lateinit var selectCategory : MyPageCategory
 
     override val layoutResourceId: Int
     get() = R.layout.fragment_bucket_list_by_category
 
-    override val viewModel: MainFragmentViewModel
-    get() = MainFragmentViewModel()
+    override val viewModel: BucketInfoViewModel
+    get() = BucketInfoViewModel()
 
     override fun initDataBinding() {
 
@@ -45,7 +42,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
 
         Log.e("ayhan", "categoryId : $selectCategory")
 
-        bucketInfoViewModel.getBucketListByCategory(object : BucketInfoViewModel.OnBucketListGetEvent {
+        viewModel.getBucketListByCategory(object : BucketInfoViewModel.OnBucketListGetEvent {
             override fun fail() {
                 stopLoading()
             }
@@ -55,7 +52,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
             }
 
             override fun finish(bucketList: List<BucketItem>) {
-                viewDataBinding.bucketList.adapter = CategoryBucketListeAdapter(context, bucketList)
+                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(context, bucketList)
                 stopLoading()
             }
         }, getAccessToken(context!!), selectCategory.id)

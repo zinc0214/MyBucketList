@@ -9,7 +9,7 @@ import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapte
 import womenproject.com.mybury.presentation.mypage.BucketListByCategoryFragmentDirections
 
 
-class CategoryBucketListeAdapter(context: Context?, bucketList: List<BucketItem>) : MainBucketListAdapter(context, bucketList) {
+class CategoryBucketListAdapter(context: Context?, bucketList: List<BucketItem>) : MainBucketListAdapter(context, bucketList) {
 
     override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
 

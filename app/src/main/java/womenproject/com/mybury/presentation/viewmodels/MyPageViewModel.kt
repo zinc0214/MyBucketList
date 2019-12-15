@@ -2,13 +2,11 @@ package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.MyPageInfo
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
@@ -66,15 +64,16 @@ class MyPageViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun setProfileData(callback : SetMyProfileListener, token: String, _userId: String, _nickName : String, _profileImg : File?) {
+    fun setProfileData(callback : SetMyProfileListener, token: String, _userId: String, _nickName : String, _profileImg : File?, _useDefaultImg : Boolean) {
 
         callback.start()
         val userId = _userId.stringToMultipartFile("userId")
         val nickName = _nickName.stringToMultipartFile("name")
+        val defaultImg = _useDefaultImg.stringToMultipartFile("defaultImg")
         val profileImg = _profileImg?.fileToMultipartFile("multipartFile")
 
         if(_profileImg == null) {
-            apiInterface.postCreateProfile(token, userId, nickName)
+            apiInterface.postCreateProfile(token, userId, nickName, defaultImg)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
@@ -89,7 +88,7 @@ class MyPageViewModel : BaseViewModel() {
                         callback.fail()
                     }
         } else {
-            apiInterface.postCreateProfile(token, userId, nickName, profileImg!!)
+            apiInterface.postCreateProfile(token, userId, nickName, profileImg!!, defaultImg)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->

@@ -17,7 +17,6 @@
             name="currentUserCount"
             type="String" />
 
-
         <variable
             name="bucketSuccessClickListener"
             type="android.view.View.OnClickListener" />
@@ -152,11 +151,6 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
-
-            <include
-                android:id="@+id/last_end_img"
-                layout="@layout/list_end_layout" />
 
         </LinearLayout>
 

@@ -5,12 +5,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.detail_image_adapter.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getUserId
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.ui.ShowImgWideFragment
 
 
@@ -69,7 +71,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.lockText.text = if (bucketInfo.open) "공개" else "비공개"
         viewDataBinding.categoryText.text = bucketInfo.category
 
-        if(bucketInfo.dDate.isNullOrEmpty()) {
+        if (bucketInfo.dDate.isNullOrEmpty()) {
             viewDataBinding.ddayLayout.visibility = View.GONE
         } else {
             viewDataBinding.dday.text = bucketInfo.dDate
@@ -78,7 +80,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.currentCount.text = "${bucketInfo.userCount}/${bucketInfo.goalCount}"
         viewDataBinding.completeText.text = "${bucketInfo.userCount}회 완료"
 
-        viewDataBinding.bucketUpdateOnClickListener = createOnClickBucketUpdateListener(bucketInfo)
+        viewDataBinding.bucketMoreMenu = showMoreMenuLayout(bucketInfo)
         viewDataBinding.bucketCompleteListener = bucketCompleteListener()
 
         val viewPager = viewDataBinding.moreImage.viewPager
@@ -110,6 +112,8 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             viewDataBinding.completeText.text = "바킷리스트 달성 완료를 축하해"
             viewDataBinding.completeText.isEnabled = false
         }
+
+        viewDataBinding.backButton.setOnClickListener(setOnBackBtnClickListener())
     }
 
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
@@ -129,6 +133,17 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         return imgList
     }
 
+    private fun showMoreMenuLayout(bucketItem: DetailBucketItem) = View.OnClickListener {
+        if(viewDataBinding.detailMoreLayout.visibility == View.GONE) {
+            viewDataBinding.detailMoreLayout.visibility = View.VISIBLE
+        } else {
+            viewDataBinding.detailMoreLayout.visibility = View.GONE
+        }
+
+        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener(bucketItem)
+        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener()
+    }
+
     private fun createOnClickBucketUpdateListener(bucketItem: DetailBucketItem): View.OnClickListener {
         return View.OnClickListener {
             Log.e("ayham", "gpgin")
@@ -136,7 +151,40 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             directions.bucket = bucketItem
             directions.bucketId = bucketItemId
             this.findNavController().navigate(directions)
+            viewDataBinding.detailMoreLayout.visibility = View.GONE
         }
+    }
+
+    private fun deleteBucketListener(): View.OnClickListener {
+        return View.OnClickListener {
+            val deleteYes: () -> Unit = {
+                deleteBucket()
+            }
+            DeleteBucketDialog(deleteYes).show(activity!!.supportFragmentManager)
+        }
+    }
+
+    private fun deleteBucket() {
+        Log.e("ayham", "gpgin")
+
+        val userId = UseUserIdRequest(getUserId(context!!))
+        viewModel.deleteBucketListner(object : BucketDetailViewModel.OnBucketCompleteEventListener {
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                stopLoading()
+                Toast.makeText(context!!, "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+                activity!!.onBackPressed()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context!!, "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }, getAccessToken(context!!), userId, bucketItemId)
+        viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
     private fun bucketCompleteListener(): View.OnClickListener {
@@ -164,4 +212,31 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
 
+    class DeleteBucketDialog(val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "버킷리스트 삭제"
+            CONTENT_MSG = "정말 버킷리스트를 삭제하시겠습니까?"
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "삭제"
+            CANCEL_TEXT = "취소"
+            CANCEL_ABLE = false
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                deleteYes.invoke()
+                dismiss()
+            }
+        }
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+            }
+        }
+
+    }
 }
+

@@ -6,14 +6,15 @@ import android.view.View
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.WriteCategoryDialogBinding
 import womenproject.com.mybury.ui.WriteItemLayout
 
 
 @SuppressLint("ValidFragment")
-class WriteCategoryDialogFragment(private var userCategory : List<Category>, private var categorySetListener : (Category) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
+class WriteCategoryDialogFragment(private var userCategory : List<Category>,
+                                  private var categorySetListener : (Category) -> Unit,
+                                  private var moveToAddCategory: () -> Unit): BaseDialogFragment<WriteCategoryDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -38,7 +39,8 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>, pri
 
     private fun addCategoryListener() : View.OnClickListener {
         return View.OnClickListener {
-            AddCategoryDialog().show(activity!!.supportFragmentManager, "tag")
+            AddCategoryDialog(moveToAddCategory).show(activity!!.supportFragmentManager, "tag")
+            dismiss()
         }
     }
     private fun addCategoryItem(category: Category) {
@@ -53,7 +55,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>, pri
     }
 
 
-    class AddCategoryDialog : BaseNormalDialogFragment() {
+    class AddCategoryDialog(val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "알림"
@@ -66,12 +68,13 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>, pri
 
         override fun createOnClickCancelListener(): View.OnClickListener {
             return View.OnClickListener {
-                dismiss()
+              dismiss()
             }
         }
 
         override fun createOnClickConfirmListener(): View.OnClickListener {
             return View.OnClickListener {
+                moveToAddCategory.invoke()
                 dismiss()
             }
         }

@@ -11,7 +11,7 @@
             type="womenproject.com.mybury.presentation.detail.BucketDetailViewModel" />
 
         <variable
-            name="bucketUpdateOnClickListener"
+            name="bucketMoreMenu"
             type="android.view.View.OnClickListener" />
 
         <variable
@@ -53,15 +53,19 @@
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp">
 
             <ImageView
+                android:id="@+id/back_button"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/detail_backbutton" />
+                android:src="@drawable/detail_backbutton" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -104,14 +108,17 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+
             <ImageView
+                android:id="@+id/moreImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="14dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/bucket_edit"
-                android:onClick="@{bucketUpdateOnClickListener}" />
+                android:background="@drawable/my_page_more"
+                android:onClick="@{bucketMoreMenu}" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,6 +137,7 @@
                     android:maxLines="2"
                     android:minHeight="40dp"
                     android:textColor="@color/_797979"
+                    tools:text="메모메모 메모메모메모메 메모메모메모메 메모메모메모메모"
                     android:textSize="12sp" />
 
 
@@ -208,6 +216,21 @@
                         android:textSize="12sp" />
                 </RelativeLayout>
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/detail_more_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moreImg"
+                android:layout_marginTop="-20dp"
+                android:layout_marginEnd="15dp"
+                tools:visibility="visible"
+                android:visibility="gone">
+                <include
+                    android:id="@+id/detail_more_menu"
+                    layout="@layout/detail_more_menu" />
+            </RelativeLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/complete_layout"

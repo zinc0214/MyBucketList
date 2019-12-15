@@ -71,6 +71,7 @@
                 android:background="@drawable/profile_edit_text_background"
                 android:cursorVisible="false"
                 android:gravity="center"
+                android:imeOptions="actionDone"
                 android:hint="닉네임을 입력해주세요"
                 android:inputType="text"
                 android:maxLines="1"

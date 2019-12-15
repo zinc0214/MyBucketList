@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketRequest
 import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
@@ -74,6 +75,28 @@ class BucketDetailViewModel : BaseViewModel() {
                 }
 
     }
+
+    @SuppressLint("CheckResult")
+    fun deleteBucketListner(callback: OnBucketCompleteEventListener, token: String, userId : UseUserIdRequest, bucketId: String) {
+        callback.start()
+        apiInterface.deleteBucket(token, userId, bucketId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ detailBucketItem ->
+                    if (detailBucketItem.retcode == "200") {
+                        Log.e("ayhan", "getMainBucketList:${detailBucketItem.retcode}")
+                        callback.success()
+                    } else {
+                        callback.fail()
+                    }
+
+                }) {
+                    Log.e("ayhan", it.toString())
+                    callback.fail()
+                }
+
+    }
+
 
 
 }
