@@ -1,20 +1,20 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.annotation.SuppressLint
+import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.BucketCategory
 import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.presentation.CanNotGoMainDialog
 
 /**
  * Created by HanAYeon on 2019-08-19.
  */
 
 class CategoryInfoViewModel {
-
-
-    fun getDummyCategory() : BucketCategory{
-        val categoryList = Category("없음", "1010101010", 1)
-        val bucketCategory = BucketCategory(arrayListOf(categoryList), "200")
-        return bucketCategory
-    }
 
 
     interface ChangeCategoryState{
@@ -27,32 +27,37 @@ class CategoryInfoViewModel {
         // 카테고리 제거
     }
 
-    fun addCategoryItem() {
+    @SuppressLint("CheckResult")
+    fun addCategoryItem(tokenId : String, categoryName : String, changeCategoryState: ChangeCategoryState) {
+        /*changeCategoryState.start()
+        apiInterface.addNewCategoryItem(tokenId, categoryName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    changeCategoryState.success()
+                }) {
+                   changeCategoryState.fail()
+                }*/
 
+        changeCategoryState.start()
+        changeCategoryState.success()
     }
-/*    fun getCategoryList2(callback: GetBucketListCallBackListener) {
 
-        callback.start()
+    @SuppressLint("CheckResult")
+    fun editCategoryItem(tokenId : String, categoryName : String, changeCategoryState: ChangeCategoryState) {
+        /*changeCategoryState.start()
+        apiInterface.addNewCategoryItem(tokenId, categoryName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    changeCategoryState.success()
+                }) {
+                   changeCategoryState.fail()
+                }*/
 
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(BUCKETLIST_API).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.requestCategoryList()
-        bucketListResultData.enqueue(object : Callback<BucketCategory> {
-            override fun onResponse(call: Call<BucketCategory>, response: Response<BucketCategory>) {
-
-                if (response.isSuccessful) {
-                    Log.e("ayhan:result_addBucketList", "${response.body()}")
-                    callback.success(response.body()!!)
-                }
-            }
-
-            override fun onFailure(call: Call<BucketCategory>, t: Throwable) {
-                Log.e("ayhan2_addBucketList", t.toString())
-                callback.fail()
-            }
-        })
+        changeCategoryState.start()
+        changeCategoryState.success()
+    }
 
 
-
-    }*/
 }

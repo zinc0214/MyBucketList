@@ -21,14 +21,28 @@
             android:layout_height="match_parent"
             android:layout_marginTop="64dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category_list_recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="1dp"
-                tools:listitem="@layout/category_list_item" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/category_list_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    tools:listitem="@layout/category_list_item" />
+
+                <include
+                    android:id="@+id/add_category_item"
+                    layout="@layout/category_list_item" />
+
+            </LinearLayout>
+
 
         </ScrollView>
+
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,7 +75,7 @@
                 style="@style/baseDialogButtonTextStyle"
                 android:background="@drawable/white_button_background"
                 android:enabled="false"
-                android:onClick="@{()->fragment.setCategoryDelectListener()}"
+                android:onClick="@{()->fragment.setCategoryDeleteListener()}"
                 android:text="삭제"
                 android:textColor="@color/edit_enable_color" />
 
@@ -69,6 +83,7 @@
                 android:id="@+id/confirm_text"
                 style="@style/baseDialogButtonTextStyle"
                 android:background="@drawable/white_button_background"
+                android:onClick="@{()->fragment.addNewCategoryListener()}"
                 android:text="추가"
                 android:textColor="@color/_5a95ff" />
 

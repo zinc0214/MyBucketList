@@ -13,7 +13,8 @@ import womenproject.com.mybury.ui.ItemMovedListener
 class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Category>,
                               private val dragListener: ItemDragListener,
                               private val checkedListener: ItemCheckedListener,
-                              private val itemMovedListener: ItemMovedListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
+                              private val itemMovedListener: ItemMovedListener,
+                              private val editCategoryName: (Category, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
 
     private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
@@ -21,7 +22,8 @@ class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Catego
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        editCategoryListViewHolder = EditCategoryListViewHolder(CategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), dragListener, checkedListener)
+        editCategoryListViewHolder = EditCategoryListViewHolder(CategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                dragListener, checkedListener, editCategoryName)
         return editCategoryListViewHolder
     }
 

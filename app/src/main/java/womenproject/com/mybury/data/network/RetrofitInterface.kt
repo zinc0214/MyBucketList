@@ -117,12 +117,9 @@ interface RetrofitInterface {
                                  @Part multipartFiles: List<MultipartBody.Part>): Observable<SimpleResponse>
 
 
-
-    @POST("/host/write")
-    @Multipart
-    fun postAddBucketList(@Header("X-Auth-Token") token: String,
-                          @Part bucketItem: MultipartBody.Part,
-                          @Part userId: MultipartBody.Part): Observable<SimpleResponse>
+    @POST("/host/category")
+    fun addNewCategoryItem(@Header("X-Auth-Token") token: String,
+                           @Body categoryId: String): Observable<SimpleResponse>
 
     @GET("/host/mypage")
     fun loadMyPageData(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<MyPageInfo>
