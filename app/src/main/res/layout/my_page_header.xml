@@ -15,18 +15,17 @@
 
         android:id="@+id/constraintToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/_fafafa"
         android:fitsSystemWindows="true"
         android:minHeight="128dp"
         app:layoutDescription="@xml/my_page_header"
         app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
-
         <ImageView
             android:id="@+id/background"
             android:layout_width="0dp"
-            android:layout_height="192dp"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +36,7 @@
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/whiteBackground"
             android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:src="@drawable/bucket_item_base_background"
             app:altSrc="@drawable/bucket_item_base_background" />
 
@@ -104,9 +103,14 @@
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="14dp"
             android:gravity="center"
             android:textColor="@color/_434343"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/icon"
             tools:text="닉네임" />
@@ -124,7 +128,7 @@
 
             <LinearLayout
                 android:id="@+id/doingLayout"
-                android:layout_width="42dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -132,7 +136,7 @@
                 <TextView
                     android:id="@+id/startCountText"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
+                    android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/_a6c6ff"
                     android:textSize="14sp"
@@ -140,7 +144,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="16dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="진행중"
                     android:textAlignment="center"
@@ -151,7 +155,7 @@
 
 
             <LinearLayout
-                android:layout_width="42dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="26dp"
                 android:layout_toRightOf="@+id/doingLayout"
@@ -161,7 +165,7 @@
                 <TextView
                     android:id="@+id/completeCountText"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
+                    android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textColor="@color/_a6c6ff"
                     android:textSize="14sp"
@@ -169,7 +173,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="16dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="완료"
                     android:textAlignment="center"

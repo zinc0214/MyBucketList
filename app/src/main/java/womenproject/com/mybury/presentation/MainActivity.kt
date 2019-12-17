@@ -37,14 +37,12 @@ class MainActivity : BaseActiviy() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
-    private lateinit var loadingImg : ImageView
+    private lateinit var loadingImg: ImageView
     private lateinit var animationDrawable: AnimationDrawable
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initToken()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -54,7 +52,7 @@ class MainActivity : BaseActiviy() {
 
         val baseViewModel = BaseViewModel()
 
-        if(baseViewModel.isNetworkDisconnect()) {
+        if (baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
         }
 
@@ -68,40 +66,12 @@ class MainActivity : BaseActiviy() {
     }
 
 
-    fun showDialog() {
-        //  BaseNormalDialogFragment().showDialog()
-    }
-
-    @SuppressLint("CheckResult")
-    private fun initToken() {
-
-        val getTokenRequest = UseUserIdRequest(getUserId(this))
-
-        apiInterface.getLoginToken(getTokenRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    if(response.retcode!="200") {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                    } else {
-                        setAccessToken(this, response.accessToken)
-                        setRefreshToken(this, response.refreshToken)
-                    }
-
-                }) {
-                    Log.e("ayhan", it.toString())
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                }
-
-
-    }
-
     public fun startLoading() {
         animationDrawable.start()
         binding.loadingLayout.layout.visibility = View.VISIBLE
     }
 
-    public  fun stopLoading() {
+    public fun stopLoading() {
         animationDrawable.stop()
         binding.loadingLayout.layout.visibility = View.GONE
     }
@@ -115,7 +85,7 @@ class NetworkFailDialog : BaseNormalDialogFragment() {
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"
-       // CANCEL_ABLE = false
+        // CANCEL_ABLE = false
     }
 
     override fun createOnClickConfirmListener(): View.OnClickListener {

@@ -1,10 +1,7 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
 import android.util.Log
-import android.webkit.ServiceWorkerWebSettings
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
@@ -46,18 +43,23 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
 
     private fun initWebView() {
         webView = viewDataBinding.webView
-        webView.webViewClient = WebViewClient()
+        webView.settings.javaScriptEnabled = true
+/*        webView.webChromeClient = WebChromeClient()
+        webView.webViewClient = WebViewClient()*/
+       /* webView.webViewClient = WebViewClient()
         webSettings = viewDataBinding.webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.setSupportMultipleWindows(true)
         webSettings.useWideViewPort = true
         webSettings.setSupportZoom(true)
-        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN*/
     }
 
     private fun loadEula() {
         viewDataBinding.titleLayout.title = "이용약관"
         viewDataBinding.webView.loadUrl("www.naver.com")
+        webView.webChromeClient = WebChromeClient()
+        webView.webViewClient = WebViewClient()
     }
 
     private fun loadPrivacyPolicy() {
