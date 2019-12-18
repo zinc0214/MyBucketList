@@ -32,7 +32,6 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
             type = textType!!
         }
 
-        initWebView()
         viewDataBinding.titleLayout.backBtnOnClickListener = setOnBackBtnClickListener()
 
         when (type) {
@@ -41,25 +40,31 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
         }
     }
 
+
     private fun initWebView() {
+
+        startLoading()
+
         webView = viewDataBinding.webView
         webView.settings.javaScriptEnabled = true
-/*        webView.webChromeClient = WebChromeClient()
-        webView.webViewClient = WebViewClient()*/
-       /* webView.webViewClient = WebViewClient()
-        webSettings = viewDataBinding.webView.settings
-        webSettings.javaScriptEnabled = true
-        webSettings.setSupportMultipleWindows(true)
-        webSettings.useWideViewPort = true
-        webSettings.setSupportZoom(true)
-        webSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN*/
+        webView.settings.useWideViewPort = true
+        webView.webViewClient = (object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, url : String): Boolean {
+                view!!.loadUrl(url)
+                stopLoading()
+                return true
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                stopLoading()
+            }
+        })
     }
 
     private fun loadEula() {
         viewDataBinding.titleLayout.title = "이용약관"
+        initWebView()
         viewDataBinding.webView.loadUrl("www.naver.com")
-        webView.webChromeClient = WebChromeClient()
-        webView.webViewClient = WebViewClient()
     }
 
     private fun loadPrivacyPolicy() {
