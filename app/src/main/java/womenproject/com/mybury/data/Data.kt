@@ -119,6 +119,18 @@ data class Category(
         val priority : Int = 0
 ) : Parcelable
 
+data class AddCategoryRequest(
+        val userId : String,
+        val name: String
+)
+data class ChangeCategoryStatusRequest(
+        val userId : String,
+        val categoryList : List<Category>
+)
+data class RemoveCategoryRequest(
+        val userId : String,
+        val categoryIdList : List<String>
+)
 
 data class MyPageInfo(
         val name : String,

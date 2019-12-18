@@ -1,14 +1,10 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import womenproject.com.mybury.data.BucketCategory
-import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.*
 import womenproject.com.mybury.data.network.apiInterface
-import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
 /**
@@ -18,12 +14,66 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 class CategoryInfoViewModel : BaseViewModel() {
 
 
-    fun removeCategoryItem(category: HashSet<String>, changeCategoryState:Simple3CallBack) {
+    @SuppressLint("CheckResult")
+    fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
         // 카테고리 제거
+        val list = ArrayList<String>()
+        for(i in categoryId) {
+            list.add(i)
+        }
+        val request = RemoveCategoryRequest(userId, list)
+        apiInterface.removeCategoryItem(accessToken, request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    when {
+                        it.retcode == "200" -> callBack.success()
+                        it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callBack.restart()
+                            }
+
+                            override fun fail() {
+                                callBack.fail()
+                            }
+                        })
+                        else -> callBack.fail()
+                    }
+                }) {
+                    callBack.fail()
+                }
+
     }
 
     @SuppressLint("CheckResult")
-    fun addCategoryItem(categoryName : String, changeCategoryState: Simple3CallBack) {
+    fun addCategoryItem(categoryName: String, callBack: Simple3CallBack) {
+        callBack.start()
+        val request = AddCategoryRequest(userId, categoryName)
+        apiInterface.addNewCategoryItem(accessToken, request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    when {
+                        it.retcode == "200" -> callBack.success()
+                        it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callBack.restart()
+                            }
+
+                            override fun fail() {
+                                callBack.fail()
+                            }
+                        })
+                        else -> callBack.fail()
+                    }
+                }) {
+                    callBack.fail()
+                }
+
+    }
+
+    @SuppressLint("CheckResult")
+    fun editCategoryItem(categoryName: String, changeCategoryState: Simple3CallBack) {
         /*changeCategoryState.start()
         apiInterface.addNewCategoryItem(tokenId, categoryName)
                 .subscribeOn(Schedulers.io())
@@ -39,20 +89,32 @@ class CategoryInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun editCategoryItem(categoryName : String, changeCategoryState: Simple3CallBack) {
-        /*changeCategoryState.start()
-        apiInterface.addNewCategoryItem(tokenId, categoryName)
+    fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
+
+        val request = ChangeCategoryStatusRequest(userId, list)
+        callBack.start()
+        apiInterface.changeCategoryList(accessToken, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    changeCategoryState.success()
+                    when {
+                        it.retcode == "200" -> callBack.success()
+                        it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callBack.restart()
+                            }
+
+                            override fun fail() {
+                                callBack.fail()
+                            }
+                        })
+                        else -> callBack.fail()
+                    }
                 }) {
-                   changeCategoryState.fail()
-                }*/
+                    callBack.fail()
+                }
 
-        changeCategoryState.start()
-        changeCategoryState.success()
+
     }
-
 
 }

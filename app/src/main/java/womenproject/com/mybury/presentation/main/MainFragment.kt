@@ -65,9 +65,11 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                 if (value.isEmpty()) {
                     viewDataBinding.blankImg.visibility = View.VISIBLE
                     viewDataBinding.bucketList.visibility = View.GONE
+                    viewDataBinding.endImage.visibility = View.GONE
                 } else {
                     viewDataBinding.blankImg.visibility = View.GONE
                     viewDataBinding.bucketList.visibility = View.VISIBLE
+                    viewDataBinding.endImage.visibility = View.VISIBLE
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(context, value as List<BucketItem>)
                 }
                 stopLoading()

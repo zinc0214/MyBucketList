@@ -53,7 +53,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                     }, 500)
                     postDelayed({
                         revertAnimation()
-                        if (info.userCount >= info.goalCount) {
+                        if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             setFinalSuccessUIBackground()
                             setFinalSuccessWithCountBucket()
                         } else {
@@ -61,13 +61,13 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         }
                     }, 750)
                     postDelayed({
-                        if (info.userCount >= info.goalCount) {
+                        if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             animFadeOut.duration = 750
                             bucketItemImage.startAnimation(animFadeOut)
                         }
                     }, 800)
                     postDelayed({
-                        if (info.userCount >= info.goalCount) {
+                        if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             bucketItemImage.visibility = View.GONE
                             bucketItemLayout.isClickable = true
                         }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
@@ -24,7 +26,10 @@ import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
 
-class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(), ItemDragListener, ItemCheckedListener, ItemMovedListener {
+class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(),
+        ItemDragListener,
+        ItemCheckedListener,
+        ItemMovedListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
 
@@ -32,6 +37,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     private val categoryEditViewModel = CategoryInfoViewModel()
     private val removedList = hashSetOf<String>()
     private var changeCategoryList = arrayListOf<Category>()
+    private var originCategoryList = arrayListOf<Category>()
 
     private lateinit var imm: InputMethodManager
     private var isKeyBoardShown = false
@@ -56,25 +62,16 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     private fun setCategoryList() {
 
         bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                setCategoryList()
+            }
+
             override fun success(value: List<Any>) {
                 val editCategoryName: (Category, String) -> Unit = { category: Category, newName: String ->
                     Log.e("ayhan", "pre : ${category.name}, chan : ${newName}")
                     imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                    categoryEditViewModel.editCategoryItem(newName, object : BaseViewModel.Simple3CallBack {
-                        override fun start() {
-                            startLoading()
-                        }
-
-                        override fun success() {
-                            stopLoading()
-                            setCategoryList()
-                        }
-
-                        override fun fail() {
-                            stopLoading()
-                        }
-
-                    })
+                    editCategoryItem(newName)
+                    originCategoryList = value as ArrayList<Category>
                 }
 
                 val editCategoryListAdapter = EditCategoryListAdapter(value as MutableList<Category>,
@@ -116,24 +113,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
                         viewDataBinding.addCategoryItem.categoryText.text.clear()
                     } else {
-                        categoryEditViewModel.addCategoryItem(v!!.text.toString(), object : BaseViewModel.Simple3CallBack {
-                            override fun start() {
-                                startLoading()
-                            }
-
-                            override fun success() {
-                                stopLoading()
-                                setCategoryList()
-                                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                                viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
-                                viewDataBinding.addCategoryItem.categoryText.text.clear()
-                            }
-
-                            override fun fail() {
-                                stopLoading()
-                            }
-
-                        })
+                        addNewCategory(v!!.text.toString())
                     }
 
                 }
@@ -142,19 +122,72 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         }
     }
 
-    fun setCategoryDeleteListener() {
+    private fun editCategoryItem(newName: String) {
+        categoryEditViewModel.editCategoryItem(newName, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                editCategoryItem(newName)
+            }
 
-        categoryEditViewModel.removeCategoryItem(removedList, object : BaseViewModel.Simple3CallBack {
             override fun start() {
-
+                startLoading()
             }
 
             override fun success() {
-
+                stopLoading()
+                setCategoryList()
             }
 
             override fun fail() {
+                stopLoading()
+            }
 
+        })
+    }
+
+    private fun addNewCategory(name: String) {
+        categoryEditViewModel.addCategoryItem(name, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                addNewCategory(name)
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                stopLoading()
+                setCategoryList()
+                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
+                viewDataBinding.addCategoryItem.categoryText.text.clear()
+            }
+
+            override fun fail() {
+                stopLoading()
+            }
+
+        })
+    }
+
+    fun setCategoryDeleteListener() {
+
+        categoryEditViewModel.removeCategoryItem(removedList, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                setCategoryDeleteListener()
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                stopLoading()
+            }
+
+            override fun fail() {
+                Toast.makeText(context, "카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                stopLoading()
             }
 
         })
@@ -163,13 +196,39 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     }
 
+    fun setCategoryStatusChange(back: View.OnClickListener) {
+        categoryEditViewModel.changeCategoryStatus(changeCategoryList, object : BaseViewModel.Simple3CallBack {
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                stopLoading()
+                back
+           //    setOnBackBtnClickListener()
+            }
+
+            override fun fail() {
+                Toast.makeText(context, "카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                stopLoading()
+            }
+
+            override fun restart() {
+                setCategoryStatusChange(back)
+                stopLoading()
+            }
+
+        })
+    }
 
     override fun setOnBackBtnClickListener(): View.OnClickListener {
-        for (list in changeCategoryList) {
-            Log.e("ayhan", "변경순서 : ${list.name}")
+        if (changeCategoryList == originCategoryList) {
+            return super.setOnBackBtnClickListener()
+        } else {
+            setCategoryStatusChange(super.setOnBackBtnClickListener())
         }
         return super.setOnBackBtnClickListener()
-
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
@@ -183,7 +242,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             removedList.remove(item.id)
         }
 
-        viewDataBinding.cancelText.isEnabled = removedList.size > 1
+        viewDataBinding.cancelText.isEnabled = removedList.size > 0
 
         for (i in removedList) {
             Log.e("ayhan", "itemId : ${i}")

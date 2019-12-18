@@ -17,8 +17,6 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
-import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
-import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy

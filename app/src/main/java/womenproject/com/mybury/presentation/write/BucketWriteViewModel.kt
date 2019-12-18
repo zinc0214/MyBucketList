@@ -35,69 +35,46 @@ class BucketWriteViewModel : BaseViewModel() {
         val memo = bucketItem.memo.stringToMultipartFile("memo")
         val categoryId = bucketItem.categoryId.stringToMultipartFile("categoryId")
         val p_userId = userId.stringToMultipartFile("userId")
-
-        val imageList = arrayListOf<MultipartBody.Part>()
-
-        for (img in imgList) {
-            if (img is File) {
-                imageList.add(img.fileToMultipartFile("multipartFiles"))
+        var image1: MultipartBody.Part? = null
+        var image2: MultipartBody.Part? = null
+        var image3: MultipartBody.Part? = null
+        for (i in 0 until imgList.size) {
+            if (imgList[i] is File) {
+                val file = imgList[i] as File
+                when (i) {
+                    0 -> image1 = file.fileToMultipartFile("image1")
+                    1 -> image2 = file.fileToMultipartFile("image2")
+                    2 -> image3 = file.fileToMultipartFile("image3")
+                }
             }
-
         }
 
-        if (bucketItem.dDate.isBlank()) {
-            apiInterface.postAddBucketListNotDDay(accessToken, title, open, goalCount, memo, categoryId, p_userId, imageList)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when {
-                            response.retcode == "200" -> {
-                                Log.e("ayhan", "addBucketResponse : ${response.retcode}")
-                                onBucketAddEvent.success()
-                            }
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    onBucketAddEvent.restart()
-                                }
 
-                                override fun fail() {
-                                    onBucketAddEvent.fail()
-                                }
-                            })
-                            else -> onBucketAddEvent.fail()
+        apiInterface.postAddBucketList(accessToken, title, open, dDate, goalCount, memo, categoryId, p_userId, image1, image2, image3)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> {
+                            Log.e("ayhan", "addBucketResponse : ${response.retcode}")
+                            onBucketAddEvent.success()
                         }
-
-                    }) {
-                        Log.e("ayhan", "addBucketFail : $it")
-                        onBucketAddEvent.fail()
-                    }
-        } else {
-            apiInterface.postAddBucketList(accessToken, title, open, dDate, goalCount, memo, categoryId, p_userId, imageList)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when {
-                            response.retcode == "200" -> {
-                                Log.e("ayhan", "addBucketResponse : ${response.retcode}")
-                                onBucketAddEvent.success()
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                onBucketAddEvent.restart()
                             }
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    onBucketAddEvent.restart()
-                                }
 
-                                override fun fail() {
-                                    onBucketAddEvent.fail()
-                                }
-                            })
-                            else -> onBucketAddEvent.fail()
-                        }
-
-                    }) {
-                        Log.e("ayhan", "addBucketFail : $it")
-                        onBucketAddEvent.fail()
+                            override fun fail() {
+                                onBucketAddEvent.fail()
+                            }
+                        })
+                        else -> onBucketAddEvent.fail()
                     }
-        }
+
+                }) {
+                    Log.e("ayhan", "addBucketFail : $it")
+                    onBucketAddEvent.fail()
+                }
     }
 
 
@@ -117,68 +94,47 @@ class BucketWriteViewModel : BaseViewModel() {
         val memo = bucketItem.memo.stringToMultipartFile("memo")
         val categoryId = bucketItem.categoryId.stringToMultipartFile("categoryId")
         val p_userId = userId.stringToMultipartFile("userId")
-
-        val imageList = arrayListOf<MultipartBody.Part>()
-
-        for (img in imgList) {
-            if (img is File) {
-                imageList.add(img.fileToMultipartFile("multipartFiles"))
+        var image1: MultipartBody.Part? = null
+        var image2: MultipartBody.Part? = null
+        var image3: MultipartBody.Part? = null
+        for (i in 0 until imgList.size) {
+            if (imgList[i] is File) {
+                val file = imgList[i] as File
+                when (i) {
+                    0 -> image1 = file.fileToMultipartFile("image1")
+                    1 -> image2 = file.fileToMultipartFile("image2")
+                    2 -> image3 = file.fileToMultipartFile("image3")
+                }
             }
         }
 
-        if (bucketItem.dDate.isBlank()) {
-            apiInterface.postUpdateBucketListNotDDay(accessToken, bucketId, title, open, goalCount, memo, categoryId, p_userId, imageList)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when {
-                            response.retcode == "200" -> {
-                                Log.e("ayhan", "addBucketResponse : ${response.retcode}")
-                                onBucketAddEvent.success()
-                            }
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    onBucketAddEvent.restart()
-                                }
 
-                                override fun fail() {
-                                    onBucketAddEvent.fail()
-                                }
-                            })
-                            else -> onBucketAddEvent.fail()
+        apiInterface.postUpdateBucketList(accessToken, bucketId, title, open, dDate, goalCount, memo, categoryId, p_userId, image1, image2, image3)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> {
+                            Log.e("ayhan", "addBucketResponse : ${response.retcode}")
+                            onBucketAddEvent.success()
                         }
-
-                    }) {
-                        Log.e("ayhan", "addBucketFail : $it")
-                        onBucketAddEvent.fail()
-                    }
-        } else {
-            apiInterface.postUpdateBucketList(accessToken, bucketId, title, open, dDate, goalCount, memo, categoryId, p_userId, imageList)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when {
-                            response.retcode == "200" -> {
-                                Log.e("ayhan", "addBucketResponse : ${response.retcode}")
-                                onBucketAddEvent.success()
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                onBucketAddEvent.restart()
                             }
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    onBucketAddEvent.restart()
-                                }
 
-                                override fun fail() {
-                                    onBucketAddEvent.fail()
-                                }
-                            })
-                            else -> onBucketAddEvent.fail()
-                        }
-
-                    }) {
-                        Log.e("ayhan", "addBucketFail : $it")
-                        onBucketAddEvent.fail()
+                            override fun fail() {
+                                onBucketAddEvent.fail()
+                            }
+                        })
+                        else -> onBucketAddEvent.fail()
                     }
-        }
+
+                }) {
+                    Log.e("ayhan", "addBucketFail : $it")
+                    onBucketAddEvent.fail()
+                }
+
     }
 
 

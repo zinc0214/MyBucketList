@@ -96,11 +96,13 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
         if (imgList.size == 0) {
+            viewDataBinding.tabLayout.visibility = View.INVISIBLE
             viewDataBinding.moreImage.layout.visibility = View.GONE
             viewDataBinding.oneImage.layout.visibility = View.VISIBLE
             viewDataBinding.oneImage.backgroundImage
                     .setImageDrawable(resources.getDrawable(R.drawable.gradient_background))
         } else if (imgList.size == 1) {
+            viewDataBinding.tabLayout.visibility = View.INVISIBLE
             viewDataBinding.moreImage.layout.visibility = View.GONE
             viewDataBinding.oneImage.layout.visibility = View.VISIBLE
             Glide.with(context!!).load(imgList[0]).centerCrop().placeholder(
