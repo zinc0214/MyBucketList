@@ -25,8 +25,9 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
     fun bind(category: Category) {
         binding.apply {
 
-            viewModel = CategoryListItemViewModel(category.name)
-
+            if(category.name != null) {
+                viewModel = CategoryListItemViewModel(category.name)
+            }
             if (category.name == "없음") {
                 removeBox.isEnabled = false
                 removeBox.isChecked = false
@@ -69,13 +70,12 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
             binding.root.getWindowVisibleDisplayFrame(r)
 
             val heightDiff = binding.root.rootView.height - (r.bottom - r.top)
-            Log.e("ayhan222", "${heightDiff}")
             try {
-                if (heightDiff < 500) {
+                isKeyBoardShown = if (heightDiff < 500) {
                     binding.categoryText.setText(name)
-                    isKeyBoardShown = false
+                    false
                 } else {
-                    isKeyBoardShown = true
+                    true
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

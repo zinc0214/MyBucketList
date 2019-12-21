@@ -19,7 +19,6 @@ class DdayBucketTotalListAdapter(context: Context?, val bucketList: List<DdayBuc
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        Log.e("ayhan:ViewType", "$viewType")
         currentViewHolderTotal = DdayBucketTotalListViewHolder(DdayBucketListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return currentViewHolderTotal
 

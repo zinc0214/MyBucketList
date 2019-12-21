@@ -97,19 +97,34 @@ class BucketWriteViewModel : BaseViewModel() {
         var image1: MultipartBody.Part? = null
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
+        var noImg1 = true.stringToMultipartFile("noImg1")
+        var noImg2 = true.stringToMultipartFile("noImg2")
+        var noImg3 = true.stringToMultipartFile("noImg3")
+
         for (i in 0 until imgList.size) {
             if (imgList[i] is File) {
                 val file = imgList[i] as File
                 when (i) {
-                    0 -> image1 = file.fileToMultipartFile("image1")
-                    1 -> image2 = file.fileToMultipartFile("image2")
-                    2 -> image3 = file.fileToMultipartFile("image3")
+                    0 -> {
+                        image1 = file.fileToMultipartFile("image1")
+                        noImg1 = false.stringToMultipartFile("noImg1")
+                    }
+                    1 -> {
+                        image2 = file.fileToMultipartFile("image2")
+                        noImg2 = false.stringToMultipartFile("noImg1")
+                    }
+                    2 -> {
+                        image3 = file.fileToMultipartFile("image3")
+                        noImg3 = false.stringToMultipartFile("noImg1")
+                    }
                 }
             }
         }
 
 
-        apiInterface.postUpdateBucketList(accessToken, bucketId, title, open, dDate, goalCount, memo, categoryId, p_userId, image1, image2, image3)
+        apiInterface.postUpdateBucketList(accessToken, bucketId,
+                title, open, dDate, goalCount, memo, categoryId, p_userId,
+                image1, noImg1, image2, noImg2, image3, noImg3)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

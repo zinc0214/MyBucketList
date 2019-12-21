@@ -26,8 +26,6 @@ class DdayBucketEachListAdapter(context: Context, bucketList: List<BucketItem>) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        Log.e("ayhan:ViewType_dday", "$viewType")
-
         currentViewHolder = when(viewType) {
             1 -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> DdayCountBucketItemViewHolder(BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))

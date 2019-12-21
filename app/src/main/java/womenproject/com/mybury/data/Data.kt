@@ -19,7 +19,7 @@ data class SignUpCheckResponse (
 
 data class SignUpResponse (
         val retcode : String,
-        val user_id:String
+        val userId:String
 )
 
 data class UseUserIdRequest(
@@ -123,6 +123,13 @@ data class AddCategoryRequest(
         val userId : String,
         val name: String
 )
+
+data class EditCategoryNameRequest(
+        val userId : String,
+        val id : String,
+        val name: String
+)
+
 data class ChangeCategoryStatusRequest(
         val userId : String,
         val categoryList : List<Category>

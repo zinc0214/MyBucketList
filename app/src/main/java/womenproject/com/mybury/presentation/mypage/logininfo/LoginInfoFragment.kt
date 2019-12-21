@@ -143,7 +143,6 @@ class LogoutOrSignOutFailed(title: String) : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
         }
     }
 

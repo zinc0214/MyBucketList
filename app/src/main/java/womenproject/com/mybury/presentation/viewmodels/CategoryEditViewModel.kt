@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.*
@@ -73,24 +74,25 @@ class CategoryInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun editCategoryItem(categoryName: String, changeCategoryState: Simple3CallBack) {
-        /*changeCategoryState.start()
-        apiInterface.addNewCategoryItem(tokenId, categoryName)
+    fun editCategoryItem(category : Category, categoryName: String, changeCategoryState: Simple3CallBack) {
+        changeCategoryState.start()
+
+        val request = EditCategoryNameRequest(userId, category.id, categoryName)
+        apiInterface.editCategoryItemName(accessToken, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     changeCategoryState.success()
                 }) {
                    changeCategoryState.fail()
-                }*/
-
-        changeCategoryState.start()
-        changeCategoryState.success()
+                }
     }
 
     @SuppressLint("CheckResult")
     fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
-
+        for(i in list) {
+            Log.e("ayhan", "change : ${i.name}")
+        }
         val request = ChangeCategoryStatusRequest(userId, list)
         callBack.start()
         apiInterface.changeCategoryList(accessToken, request)

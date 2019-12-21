@@ -88,7 +88,6 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     when {
                         response.retcode == "200" -> {
-                            Log.e("ayhan", "categoryLL : $response")
                             callback.success(response.categoryList)
                         }
                         response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {

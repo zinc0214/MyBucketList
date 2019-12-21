@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,6 @@ class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Catego
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         editCategoryListViewHolder.bind(bucketCategoryList[position])
     }
 

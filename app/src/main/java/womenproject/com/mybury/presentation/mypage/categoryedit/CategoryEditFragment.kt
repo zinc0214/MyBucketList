@@ -70,10 +70,12 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 val editCategoryName: (Category, String) -> Unit = { category: Category, newName: String ->
                     Log.e("ayhan", "pre : ${category.name}, chan : ${newName}")
                     imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                    editCategoryItem(newName)
+                    editCategoryItem(category, newName)
                     originCategoryList = value as ArrayList<Category>
+                    changeCategoryList = value as ArrayList<Category>
                 }
 
+                Log.e("ayhan", "bubusccess : ${value.size}")
                 val editCategoryListAdapter = EditCategoryListAdapter(value as MutableList<Category>,
                         this@CategoryEditFragment,
                         this@CategoryEditFragment,
@@ -109,7 +111,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.addCategoryItem.categoryText.setOnEditorActionListener { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    if (v?.text.isNullOrEmpty()) {
+                    if (v?.text.isNullOrBlank()) {
                         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
                         viewDataBinding.addCategoryItem.categoryText.text.clear()
                     } else {
@@ -122,10 +124,10 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         }
     }
 
-    private fun editCategoryItem(newName: String) {
-        categoryEditViewModel.editCategoryItem(newName, object : BaseViewModel.Simple3CallBack {
+    private fun editCategoryItem(category: Category, newName: String) {
+        categoryEditViewModel.editCategoryItem(category, newName, object : BaseViewModel.Simple3CallBack {
             override fun restart() {
-                editCategoryItem(newName)
+                editCategoryItem(category, newName)
             }
 
             override fun start() {
@@ -183,6 +185,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             override fun success() {
                 Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 stopLoading()
+                setCategoryList()
             }
 
             override fun fail() {
@@ -203,7 +206,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun success() {
-                Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+             //   Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("ayhan", "is Change")
                 stopLoading()
                 back
            //    setOnBackBtnClickListener()
@@ -224,8 +228,10 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     override fun setOnBackBtnClickListener(): View.OnClickListener {
         if (changeCategoryList == originCategoryList) {
+            Log.e("ayhan", "SAME")
             return super.setOnBackBtnClickListener()
         } else {
+            Log.e("ayhan", "NOTSAME")
             setCategoryStatusChange(super.setOnBackBtnClickListener())
         }
         return super.setOnBackBtnClickListener()

@@ -129,9 +129,9 @@ class SplashLoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    Log.e("ayhan", "postSignUpResponse : ${response.retcode}, ${response.user_id}")
+                    Log.e("ayhan", "postSignUpResponse : ${response.retcode}, ${response.userId}")
                     if (response.retcode == "200") {
-                        setUserId(this, response.user_id)
+                        setUserId(this, response.userId)
                         goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
                     } else {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
