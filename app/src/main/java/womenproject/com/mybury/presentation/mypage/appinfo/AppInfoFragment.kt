@@ -38,7 +38,7 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
             viewDataBinding.updateBtn.isEnabled = true
         }
 
-        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
         viewDataBinding.useEula.appInfoDetailClickListener = goToUseEula()
         viewDataBinding.privacyEula.appInfoDetailClickListener = goToPrivacy()
     }

@@ -96,6 +96,25 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/badge_layout"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_below="@+id/profile_layout"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bucket_item_base_background"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/invalid_name" />
+
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolBarLayout"

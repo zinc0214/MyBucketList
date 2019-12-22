@@ -2,12 +2,14 @@ package womenproject.com.mybury.presentation.mypage.profileedit
 
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -20,6 +22,7 @@ import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
+import womenproject.com.mybury.presentation.write.BucketWriteFragment
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
@@ -36,16 +39,39 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private var lastNickname = ""
     private var lastImg = ""
     private var useDefatilImg = false
+    val cancelConfirm: (Boolean) -> Unit = {
+        if (it) {
+            isCancelConfirm = it
+            activity!!.onBackPressed()
+        }
+    }
 
     override fun initDataBinding() {
         getMyProfileInfo()
         viewDataBinding.title = "프로필 수정"
     }
 
-    private fun setUpView() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            Log.e("ayhan", "profileEditFragment :: softBackBtnClick")
+            if (isCancelConfirm) {
+                Log.e("ayhan", "1")
+                false
+            } else {
+                Log.e("ayhan", "2")
+                cancelClickAction()
+                true
+            }
+
+        })
+    }
+
+
+    private fun setUpView() {
         viewDataBinding.profileImageEditClickListener = profileImageEditClickLister
-        viewDataBinding.backBtnOnClickListener = cancelClickListener
+        viewDataBinding.backBtnOnClickListener = cancelClickListener()
         viewDataBinding.saveBtnOnClickListener = saveBtnOnClickListener
         viewDataBinding.nicknameEditText.addTextChangedListener(addTextChangedListener())
         viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
@@ -73,7 +99,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     private fun seyMyProfileImg(imgUrl: String?) {
-        if(imgUrl.isNullOrBlank()) {
+        if (imgUrl.isNullOrBlank()) {
             setDefaultImg()
         } else {
             Glide.with(this).load(imgUrl).into(viewDataBinding.profileImg)
@@ -113,9 +139,10 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         })
 
     }
+
     private fun setMyProfileInfo() {
 
-        viewModel.setProfileData(object :BaseViewModel.Simple3CallBack {
+        viewModel.setProfileData(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 setMyProfileInfo()
             }
@@ -148,9 +175,11 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
             viewDataBinding.profileSave.isEnabled = true
+            isCancelConfirm = false
         } else {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
             viewDataBinding.profileSave.isEnabled = false
+            isCancelConfirm = true
         }
 
 
@@ -194,21 +223,24 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private val profileImageEditClickLister = View.OnClickListener {
         WriteMemoImgAddDialogFragment(AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
                 checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
-
     }
 
-    private val cancelClickListener = View.OnClickListener {
+    private fun cancelClickListener() = View.OnClickListener {
+        cancelClickAction()
+    }
+    private fun cancelClickAction() {
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
-            CancelDialog().show(activity!!.supportFragmentManager, "tag")
+            CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+            Log.e("ayhan", "cancelClickListener : 1")
         } else {
-            activity!!.onBackPressed()
+            Log.e("ayhan", "cancelClickListener : 2")
+            cancelConfirm.invoke(true)
         }
     }
 
     private val saveBtnOnClickListener = View.OnClickListener {
         setMyProfileInfo()
     }
-
 
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
         return ViewTreeObserver.OnGlobalLayoutListener {
@@ -223,11 +255,10 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
     }
 
-    class CancelDialog : BaseNormalDialogFragment() {
+    class CancelDialog(val confirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "프로필 수정"
@@ -241,20 +272,19 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         override fun createOnClickCancelListener(): View.OnClickListener {
             return View.OnClickListener {
                 dismiss()
+                confirm.invoke(false)
             }
         }
 
         override fun createOnClickConfirmListener(): View.OnClickListener {
             return View.OnClickListener {
                 dismiss()
-                activity!!.onBackPressed()
+                confirm.invoke(true)
             }
         }
-
     }
 
-
-    private fun <T> LiveData<T>.observe(block: (T) -> Unit) = observe(this@ProfileEditFragment, Observer { block(it) })
-
+    private fun <T> LiveData<T>.observe(block: (T) -> Unit) =
+            observe(this@ProfileEditFragment, Observer { block(it) })
 
 }

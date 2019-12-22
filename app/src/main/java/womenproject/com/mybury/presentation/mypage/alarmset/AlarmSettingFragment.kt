@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.alarmset
 
+import android.view.View
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentAlarmSettingBinding
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
@@ -23,7 +24,7 @@ class AlarmSettingFragment :  BaseFragment<FragmentAlarmSettingBinding, BaseView
         viewDataBinding.eventAlarm.title = "이벤트, 업데이트 알림"
         viewDataBinding.eventAlarm.content = "진행 중인 이벤트 및 신규 업데이트 내역이 있을 경우 알림 수신"
 
-        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
     }
 
 

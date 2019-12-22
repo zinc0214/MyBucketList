@@ -40,7 +40,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
 
     override fun initDataBinding() {
         viewDataBinding.backLayout.title = "로그인 정보"
-        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
         viewDataBinding.activity = this
     }
 
@@ -52,8 +52,6 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         initGoogle()
         signOut()
     }
-
-
     @SuppressLint("CheckResult")
     private fun signOutMyBury() {
         val userIdRequest = UseUserIdRequest(Preference.getUserId(context!!))

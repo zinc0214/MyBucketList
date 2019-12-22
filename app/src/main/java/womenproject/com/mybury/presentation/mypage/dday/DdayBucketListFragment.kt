@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DdayBucketList
@@ -28,7 +29,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
         viewDataBinding.ddayEachBucketList.layoutManager = layoutManager
         viewDataBinding.ddayEachBucketList.hasFixedSize()
         viewDataBinding.ddayToolbar.title = "D-day"
-        viewDataBinding.ddayToolbar.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.ddayToolbar.backBtnOnClickListener = backBtnOnClickListener()
         getDdayList()
 
     }

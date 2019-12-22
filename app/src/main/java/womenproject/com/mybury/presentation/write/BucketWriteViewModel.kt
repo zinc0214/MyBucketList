@@ -118,6 +118,12 @@ class BucketWriteViewModel : BaseViewModel() {
                         noImg3 = false.stringToMultipartFile("noImg1")
                     }
                 }
+            } else if (imgList[i] is String) {
+                when (i) {
+                    0 -> noImg1 = false.stringToMultipartFile("noImg1")
+                    1 -> noImg2 = false.stringToMultipartFile("noImg1")
+                    2 -> noImg3 = false.stringToMultipartFile("noImg1")
+                }
             }
         }
 

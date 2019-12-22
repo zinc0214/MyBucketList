@@ -73,6 +73,10 @@ class MainActivity : BaseActiviy() {
         animationDrawable.stop()
         binding.loadingLayout.layout.visibility = View.GONE
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }
 
 class NetworkFailDialog : BaseNormalDialogFragment() {
@@ -112,5 +116,4 @@ class CanNotGoMainDialog : BaseNormalDialogFragment() {
             activity!!.finish()
         }
     }
-
 }

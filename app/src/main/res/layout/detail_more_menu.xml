@@ -26,7 +26,7 @@
             android:layout_height="130dp"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="-10dp"
-            android:background="@drawable/mypage_more_back" />
+            android:background="@drawable/detail_more_popup" />
 
         <LinearLayout
             android:padding="10dp"

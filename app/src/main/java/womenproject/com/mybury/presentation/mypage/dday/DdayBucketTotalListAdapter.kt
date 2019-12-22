@@ -21,21 +21,16 @@ class DdayBucketTotalListAdapter(context: Context?, val bucketList: List<DdayBuc
 
         currentViewHolderTotal = DdayBucketTotalListViewHolder(DdayBucketListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return currentViewHolderTotal
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         bucketList[position].isLast = position == bucketList.size - 1
         currentViewHolderTotal.apply {
             bind(bucketList[position], context)
         }
-
     }
 
-
     override fun getItemCount(): Int {
-        Log.e("ayhan", "bbbbb${bucketList.size}, ${bucketList.get(0).day}")
         return bucketList.size
     }
 

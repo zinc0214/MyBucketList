@@ -3,12 +3,14 @@ package womenproject.com.mybury.presentation.write
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
@@ -36,13 +38,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     var alreadyImgList = arrayListOf<String>()
     var imgList = ArrayList<Any>()
 
+
     private var addImgList = HashMap<Int, RelativeLayout>()
     private var goalCount = 1
     private var currentCalendarDay: Date? = null
     private var open = true
     private var categoryList = arrayListOf<Category>()
 
-    private lateinit var selectCategory: Category
+    lateinit var selectCategory: Category
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -53,23 +56,50 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private val bucketInfoViewModel = BucketInfoViewModel()
 
     override fun initDataBinding() {
-        getCateogry()
+        getCategory()
     }
 
-    private fun getCateogry() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            Log.e("ayhan", "softBackBtnClick")
+            if(isCancelConfirm) {
+                false
+            } else {
+                backBtn()
+                true
+            }
+
+        })
+    }
+
+    open fun backBtn() {
+        val cancelConfirm: (Boolean) -> Unit = {
+            if (it) {
+                isCancelConfirm = it
+                activity!!.onBackPressed()
+            }
+        }
+        CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+    }
+
+    private fun setBackClickListener() = View.OnClickListener { backBtn() }
+
+    private fun getCategory() {
         bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
             override fun restart() {
-                getCateogry()
+                getCategory()
             }
 
             override fun success(_categoryList: List<Any>) {
                 stopLoading()
                 Log.e("ayhan", "cate: ${_categoryList.size}")
                 categoryList = _categoryList as ArrayList<Category>
-                selectCategory = categoryList[0]
                 initForUpdate()
                 alreadyAdd()
                 setUpView()
+                setUpCategory(categoryList)
             }
 
             override fun start() {
@@ -83,7 +113,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         })
 
     }
-
 
     private fun alreadyAdd() {
 
@@ -109,7 +138,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun setUpView() {
 
         viewDataBinding.apply {
-            cancelBtnClickListener = setOnBackBtnClickListener()
+            cancelBtnClickListener = setBackClickListener()
             registerBtnClickListener = bucketAddOnClickListener()
             memoImgAddListener = memoImgAddOnClickListener()
             memoRemoveListener = memoRemoveListener()
@@ -163,37 +192,36 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     }
 
-    class CancelDialog : BaseNormalDialogFragment() {
+    class CancelDialog(val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
 
         init {
-            TITLE_MSG = "버킷리스트 등록"
-            CONTENT_MSG = "진짜 지울겁니까???"
+            TITLE_MSG = "등록을 취소하시겠습니까?"
+            CONTENT_MSG = "작성중이던 버킷리스트가 삭제됩니다."
             CANCEL_BUTTON_VISIBLE = true
             GRADIENT_BUTTON_VISIBLE = false
-            CONFIRM_TEXT = "등록 안함"
-            CANCEL_TEXT = "취소"
-        }
-
-        override fun createOnClickCancelListener(): View.OnClickListener {
-            return View.OnClickListener {
-                dismiss()
-            }
+            CONFIRM_TEXT = "등록 취소"
+            CANCEL_TEXT = "계속 작성"
         }
 
         override fun createOnClickConfirmListener(): View.OnClickListener {
             return View.OnClickListener {
+                cancelConfirm.invoke(true)
                 dismiss()
-                activity!!.onBackPressed()
             }
         }
 
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                cancelConfirm.invoke(false)
+                dismiss()
+            }
+        }
     }
 
-    override fun setOnBackBtnClickListener(): View.OnClickListener {
+    override fun actionByBackButton() {
         Log.e("ayhan", "writeBack")
-        return View.OnClickListener {
-            CancelDialog().show(activity!!.supportFragmentManager, "tag")
-        }
+
+
     }
 
     open fun bucketAddOnClickListener(): View.OnClickListener {
@@ -215,13 +243,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
             override fun success() {
                 stopLoading()
-                Toast.makeText(context, "버킷이 등록되었습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
+                isCancelConfirm = true
                 activity!!.onBackPressed()
             }
 
             override fun fail() {
                 stopLoading()
-                Toast.makeText(context, "버킷이 등록되지 못했습니다. 흑흑흑", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -344,7 +373,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.addView(writeImgLayout)
     }
 
-    fun onDeleteImgField(layout: View) {
+    private fun onDeleteImgField(layout: View) {
         var deleteImgValue = 0
 
         for (i in 0..addImgList.size) {
@@ -375,7 +404,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
     }
 
-    fun ddayAddListener(): View.OnClickListener {
+    private fun ddayAddListener(): View.OnClickListener {
 
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
 
@@ -485,6 +514,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     open fun initForUpdate() {}
-
+    open fun setUpCategory(categoryList: ArrayList<Category>) {}
 
 }

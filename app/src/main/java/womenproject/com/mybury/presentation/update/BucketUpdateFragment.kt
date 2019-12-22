@@ -1,11 +1,15 @@
 package womenproject.com.mybury.presentation.update
 
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
 import womenproject.com.mybury.presentation.write.BucketWriteViewModel
@@ -15,6 +19,20 @@ class BucketUpdateFragment : BucketWriteFragment() {
     lateinit var bucketItem: DetailBucketItem
     lateinit var bucketId: String
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            Log.e("ayhan", "softBackBtnClick")
+            if(isCancelConfirm) {
+                false
+            } else {
+                backBtn()
+                true
+            }
+
+        })
+    }
 
     override fun initForUpdate() {
 
@@ -28,8 +46,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
         viewModel.bucketItem = bucketItem
         alreadyImgList = setImgList(bucketItem)
-
-
 
         Log.e("ayhan", "bucket...? , ${bucketItem.title}")
         viewDataBinding.titleText.setText(bucketItem.title)
@@ -46,8 +62,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
             viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
             viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
         }
-
-
 
         if (!bucketItem.category.equals("없음")) {
             viewDataBinding.categoryText.text = bucketItem.category
@@ -93,6 +107,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
             override fun success() {
                 stopLoading()
                 Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
+                isCancelConfirm = true
                 activity!!.onBackPressed()
             }
 
@@ -122,5 +137,49 @@ class BucketUpdateFragment : BucketWriteFragment() {
         return imgList
     }
 
+    override fun setUpCategory(categoryList : ArrayList<Category>){
+        for(i in categoryList) {
+            if(i.name == bucketItem.category) {
+                selectCategory = i
+            }
+        }
+    }
+
+    override fun backBtn() {
+        val cancelConfirm: (Boolean) -> Unit = {
+            if (it) {
+                isCancelConfirm = it
+                activity!!.onBackPressed()
+            }
+        }
+        CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+    }
+
+    class CancelDialog(private val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "수정을 취소하시겠습니까?"
+            CONTENT_MSG = "수정된 내용이 삭제됩니다."
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "수정 취소"
+            CANCEL_TEXT = "계속 작성"
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                cancelConfirm.invoke(true)
+            }
+        }
+
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                cancelConfirm.invoke(false)
+            }
+        }
+    }
 
 }

@@ -132,7 +132,7 @@ data class EditCategoryNameRequest(
 
 data class ChangeCategoryStatusRequest(
         val userId : String,
-        val categoryList : List<Category>
+        val categoryIdList : List<String>
 )
 data class RemoveCategoryRequest(
         val userId : String,

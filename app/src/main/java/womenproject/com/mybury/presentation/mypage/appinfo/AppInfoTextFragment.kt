@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
 import android.util.Log
+import android.view.View
 import android.webkit.ServiceWorkerWebSettings
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -36,7 +37,7 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
         }
 
         initWebView()
-        viewDataBinding.titleLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.titleLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         when (type) {
             DataTextType.eula.toString() -> loadEula()

@@ -114,13 +114,12 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         }
 
         if (bucketInfo.userCount >= bucketInfo.goalCount) {
-            Log.e("ayhan", "foggo")
             viewDataBinding.completeLayout.visibility = View.VISIBLE
-            viewDataBinding.completeText.text = "바킷리스트 달성 완료를 축하해"
+            viewDataBinding.completeText.text = "달성 완료! 대단해요"
             viewDataBinding.completeText.isEnabled = false
         }
 
-        viewDataBinding.backButton.setOnClickListener(setOnBackBtnClickListener())
+        viewDataBinding.backButton.setOnClickListener(backBtnOnClickListener())
     }
 
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {

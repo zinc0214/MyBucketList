@@ -2,12 +2,14 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
 import android.graphics.Rect
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,6 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
@@ -52,7 +53,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun initDataBinding() {
         imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         viewDataBinding.backLayout.title = "카테고리 편집"
-        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
         viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
@@ -186,6 +187,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 stopLoading()
                 setCategoryList()
+                removedList.clear()
             }
 
             override fun fail() {
@@ -199,18 +201,17 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     }
 
-    fun setCategoryStatusChange(back: View.OnClickListener) {
+    fun setCategoryStatusChange() {
         categoryEditViewModel.changeCategoryStatus(changeCategoryList, object : BaseViewModel.Simple3CallBack {
             override fun start() {
                 startLoading()
             }
 
             override fun success() {
-             //   Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 Log.e("ayhan", "is Change")
                 stopLoading()
-                back
-           //    setOnBackBtnClickListener()
+                onBackPressedFragment()
             }
 
             override fun fail() {
@@ -219,22 +220,21 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun restart() {
-                setCategoryStatusChange(back)
+                setCategoryStatusChange()
                 stopLoading()
             }
 
         })
     }
 
-    override fun setOnBackBtnClickListener(): View.OnClickListener {
+    override fun actionByBackButton() {
         if (changeCategoryList == originCategoryList) {
             Log.e("ayhan", "SAME")
-            return super.setOnBackBtnClickListener()
+            onBackPressedFragment()
         } else {
             Log.e("ayhan", "NOTSAME")
-            setCategoryStatusChange(super.setOnBackBtnClickListener())
+            setCategoryStatusChange()
         }
-        return super.setOnBackBtnClickListener()
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {

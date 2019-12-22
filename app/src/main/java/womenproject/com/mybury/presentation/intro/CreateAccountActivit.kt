@@ -223,23 +223,23 @@ class CancelDialog : BaseNormalDialogFragment() {
 
     init {
         TITLE_MSG = "계정 생성 취소"
-        CONTENT_MSG = "계정 생성을 취소하면 처음부터 다시 시작해야됩니다...."
+        CONTENT_MSG = "아직 계정이 생성되지 않았습니다. 취소할 경우 작성할 내용이 삭제됩니다."
         CANCEL_BUTTON_VISIBLE = true
         GRADIENT_BUTTON_VISIBLE = false
-        CONFIRM_TEXT = "확인"
-        CANCEL_TEXT = "취소"
+        CONFIRM_TEXT = "계속 작성"
+        CANCEL_TEXT = "생성 취소"
     }
 
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
         }
     }
 
     override fun createOnClickCancelListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
+            activity!!.finish()
         }
     }
 

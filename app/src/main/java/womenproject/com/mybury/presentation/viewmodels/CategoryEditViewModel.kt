@@ -14,7 +14,6 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class CategoryInfoViewModel : BaseViewModel() {
 
-
     @SuppressLint("CheckResult")
     fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
         // 카테고리 제거
@@ -90,15 +89,18 @@ class CategoryInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
+        var idList = arrayListOf<String>()
         for(i in list) {
             Log.e("ayhan", "change : ${i.name}")
+            idList.add(i.id)
         }
-        val request = ChangeCategoryStatusRequest(userId, list)
+        val request = ChangeCategoryStatusRequest(userId, idList)
         callBack.start()
         apiInterface.changeCategoryList(accessToken, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    Log.e("ayhan", "categortStatusResponse : ${it.retcode}")
                     when {
                         it.retcode == "200" -> callBack.success()
                         it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
