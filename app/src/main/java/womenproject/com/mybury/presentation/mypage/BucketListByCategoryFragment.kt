@@ -57,7 +57,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
             }
 
             override fun success(value: List<Any>) {
-                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(context, value as List<BucketItem>)
+                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(value as List<BucketItem>)
                 stopLoading()
             }
         }, selectCategory.id)

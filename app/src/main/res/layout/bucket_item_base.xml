@@ -15,8 +15,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/mypage_category_background">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/bucket_succeed_image"
@@ -28,7 +27,7 @@
                     android:id="@+id/bucket_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bucket_item_base_background" />
+                    android:background="@drawable/bucket_click_background" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

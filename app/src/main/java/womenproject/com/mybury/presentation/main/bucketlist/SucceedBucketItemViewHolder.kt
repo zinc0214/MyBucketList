@@ -7,7 +7,7 @@ import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 
 class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding) : BaseBucketItemViewHolder(binding) {
 
-    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
+    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {
 
             setUI(bucketItemInfo, bucketListener)

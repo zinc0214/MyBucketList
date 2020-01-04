@@ -167,3 +167,10 @@ enum class ListUpFilter {
 enum class DataTextType {
     eula, privacy, open
 }
+
+val SUCCEED_ITEM = 0
+val COUNT_ITEM = 1
+val BASE_ITEM = 2
+
+val DDAY = true
+val NORMAL = false

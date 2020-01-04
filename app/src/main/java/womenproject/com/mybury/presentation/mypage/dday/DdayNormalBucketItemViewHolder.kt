@@ -40,9 +40,9 @@ class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding)
     }
 
     override fun setDdayColor() {
+        binding.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
         binding.successButtonLayout.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
         binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
-        bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
 
     }
 }

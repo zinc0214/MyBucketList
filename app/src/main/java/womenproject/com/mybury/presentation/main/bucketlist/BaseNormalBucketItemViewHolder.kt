@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
-import android.content.Context
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.data.BucketItem
@@ -21,7 +20,7 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         circularProgressBar = binding.successButtonLayout.circularProgressBar
     }
 
-    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context) {
+    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {
             setUI(bucketItemInfo, bucketListener)
             setDdayColor()
