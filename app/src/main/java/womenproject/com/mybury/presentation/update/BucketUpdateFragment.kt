@@ -5,14 +5,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
-import womenproject.com.mybury.presentation.write.BucketWriteViewModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BucketUpdateFragment : BucketWriteFragment() {
 
@@ -71,13 +72,25 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
 
         if (bucketItem.dDate != null && !bucketItem.dDate.equals("0")) {
-            viewDataBinding.ddayText.text = bucketItem.dDate.toString()
+            viewDataBinding.ddayText.text = bucketItem.dDate
+
+            val dday = bucketItem.dDate.split("/")
+
+            Log.e("ayhan", "dday_split : ${dday}")
+            var date = Date()
+            date.year = dday[0].toInt()-1900
+            date.month = dday[1].toInt()-1
+            date.date = dday[2].toInt()
+
+            currentCalendarDay = date
+
             viewDataBinding.ddayText.setEnableTextColor()
             viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
         if (bucketItem.goalCount != null && !bucketItem.goalCount.equals("1")) {
             viewDataBinding.goalCountText.text = bucketItem.goalCount.toString()
+            goalCount = bucketItem.goalCount
             viewDataBinding.goalCountText.setEnableTextColor()
             viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
         }

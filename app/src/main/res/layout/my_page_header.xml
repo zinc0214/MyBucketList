@@ -12,7 +12,6 @@
     </data>
 
     <womenproject.com.mybury.ui.CollapsibleToolbar
-
         android:id="@+id/constraintToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,22 +44,22 @@
             android:id="@+id/more_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/my_page_more"
             android:onClick="@{moreClickListener}"
             app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
             app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/icon"
+            android:id="@+id/large_profile_cardview"
             android:layout_width="@dimen/image_width"
             android:layout_height="@dimen/image_width"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="72dp"
             android:shadowColor="@color/_ffffff"
             app:border_width="2dp"
+            app:cardBackgroundColor="@color/_dddddd"
             app:cardCornerRadius="26dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="@+id/background"
@@ -72,30 +71,7 @@
                 android:id="@+id/profile_large_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/default_profile_bury" />
-
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profile_img"
-            android:layout_width="@dimen/image_width"
-            android:layout_height="@dimen/image_width"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="72dp"
-            android:shadowColor="@color/_ffffff"
-            app:border_width="2dp"
-            app:cardCornerRadius="26dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="@+id/icon"
-            app:layout_constraintStart_toStartOf="@+id/icon"
-            app:layout_constraintTop_toTopOf="@+id/icon"
-            app:layout_constraintVertical_chainStyle="packed">
-
-            <ImageView
-                android:id="@+id/profile_img_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_margin="0.5dp"
                 android:background="@drawable/default_profile_bury" />
 
         </androidx.cardview.widget.CardView>
@@ -104,16 +80,37 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="14dp"
             android:gravity="center"
             android:textColor="@color/_434343"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/icon"
+            app:layout_constraintEnd_toEndOf="@id/whiteBackground"
+            app:layout_constraintStart_toStartOf="@id/whiteBackground"
+            app:layout_constraintTop_toBottomOf="@+id/large_profile_cardview"
             tools:text="닉네임" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/small_profile_cardview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:shadowColor="@color/_ffffff"
+            app:border_width="2dp"
+            app:cardBackgroundColor="@color/_dddddd"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/background"
+            app:layout_constraintStart_toStartOf="@+id/background"
+            app:layout_constraintTop_toTopOf="@+id/background">
+
+            <ImageView
+                android:id="@+id/profile_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/default_profile_bury" />
+
+        </androidx.cardview.widget.CardView>
 
 
         <RelativeLayout

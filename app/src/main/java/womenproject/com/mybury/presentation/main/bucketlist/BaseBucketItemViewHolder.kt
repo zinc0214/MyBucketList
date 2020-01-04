@@ -26,7 +26,7 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem, context: Context)
+    abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem)
 
     lateinit var initBinding: ViewDataBinding
 

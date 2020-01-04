@@ -37,11 +37,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     var alreadyImgList = arrayListOf<String>()
     var imgList = ArrayList<Any>()
-
+    var currentCalendarDay= Calendar.getInstance().time
+    var goalCount = 1
 
     private var addImgList = HashMap<Int, RelativeLayout>()
-    private var goalCount = 1
-    private var currentCalendarDay: Date? = null
     private var open = true
     private var categoryList = arrayListOf<Category>()
 
@@ -112,6 +111,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         })
 
+    }
+
+    open fun setUpCategory(categoryList : ArrayList<Category>){
+        selectCategory = categoryList[0]
     }
 
     private fun alreadyAdd() {
@@ -483,9 +486,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             goalCount = goal_count_text.text.toString().toInt()
         }
 
-
         var formDate = ""
-
         if (currentCalendarDay != null) {
             formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
         }
@@ -514,6 +515,5 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     open fun initForUpdate() {}
-    open fun setUpCategory(categoryList: ArrayList<Category>) {}
 
 }

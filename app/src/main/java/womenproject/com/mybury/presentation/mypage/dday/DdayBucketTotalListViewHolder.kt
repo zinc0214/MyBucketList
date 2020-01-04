@@ -20,7 +20,7 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding) 
 
             ddayEachBucketItemList.layoutManager = LinearLayoutManager(context)
             ddayEachBucketItemList.hasFixedSize()
-            ddayEachBucketItemList.adapter = DdayBucketEachListAdapter(context, bucketItemList.bucketlists)
+            ddayEachBucketItemList.adapter = DdayBucketEachListAdapter(bucketItemList.bucketlists)
 
             executePendingBindings()
         }
