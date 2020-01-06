@@ -58,12 +58,12 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
 
     private fun loadEula() {
         viewDataBinding.titleLayout.title = "이용약관"
-        viewDataBinding.webView.loadUrl("https://www.naver.com")
+        viewDataBinding.webView.loadUrl("https://www.my-bury.com/terms_of_use")
     }
 
     private fun loadPrivacyPolicy() {
         viewDataBinding.titleLayout.title = "개인정보 처리방침"
-        viewDataBinding.webView.loadUrl("www.my-bury.com/privacy_policy")
+        viewDataBinding.webView.loadUrl("https://www.my-bury.com/privacy_policy")
     }
 
 

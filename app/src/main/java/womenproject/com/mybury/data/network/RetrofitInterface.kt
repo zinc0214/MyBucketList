@@ -146,7 +146,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                    .baseUrl("http://18.213.99.39")
+                    .baseUrl("https://www.my-bury.com")
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
