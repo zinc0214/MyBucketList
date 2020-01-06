@@ -50,7 +50,6 @@
                     motion:customFloatValue="0" />
             </Constraint>
 
-
             <Constraint
                 android:id="@+id/more_btn"
                 android:layout_width="wrap_content"
@@ -62,21 +61,6 @@
                 motion:layout_constraintEnd_toEndOf="@+id/whiteBackground"
                 motion:layout_constraintTop_toTopOf="@+id/whiteBackground" />
 
-
-            <!--    <Constraint
-                    android:id="@+id/icon_small"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:alpha="0"
-                    android:shadowColor="@android:color/white"
-                    android:visibility="gone"
-                    motion:layout_constraintStart_toStartOf="@+id/whiteBackground"
-                    motion:layout_constraintTop_toTopOf="@+id/whiteBackground"
-                    motion:layout_constraintVertical_chainStyle="packed" />
-    -->
 
             <Constraint
                 android:id="@id/name"
@@ -90,10 +74,10 @@
                 android:textColor="@color/_434343"
                 android:textSize="14sp"
                 motion:autoSizeTextType="uniform"
-                motion:layout_constraintEnd_toEndOf="parent"
                 motion:layout_constraintHorizontal_bias="0.5"
-                motion:layout_constraintStart_toStartOf="parent"
-                motion:layout_constraintTop_toBottomOf="@+id/icon">
+                motion:layout_constraintStart_toStartOf="@+id/whiteBackground"
+                motion:layout_constraintEnd_toEndOf="@+id/whiteBackground"
+                motion:layout_constraintTop_toBottomOf="@+id/large_profile_cardview">
 
                 <CustomAttribute
                     motion:attributeName="textColor"
@@ -105,7 +89,7 @@
 
 
             <Constraint
-                android:id="@+id/icon"
+                android:id="@+id/large_profile_cardview"
                 android:layout_width="@dimen/image_width"
                 android:layout_height="@dimen/image_width"
                 android:layout_gravity="center_horizontal"
@@ -113,6 +97,7 @@
                 android:shadowColor="@android:color/white"
                 app:border_width="2dp"
                 app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="@color/_dddddd"
                 app:cardElevation="0dp"
                 motion:layout_constraintEnd_toEndOf="@+id/background"
                 motion:layout_constraintStart_toStartOf="@+id/background"
@@ -121,20 +106,19 @@
 
 
             <Constraint
-                android:id="@+id/profile_img"
-                android:layout_width="@dimen/image_width"
-                android:layout_height="@dimen/image_width"
+                android:id="@+id/small_profile_cardview"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:shadowColor="@color/_e8e8e8"
-                app:border_width="1.5dp"
+                android:visibility="gone"
+                app:border_width="2dp"
                 app:cardBackgroundColor="@color/_e8e8e8"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="0.5dp"
-                motion:layout_constraintEnd_toEndOf="@+id/icon"
-                motion:layout_constraintStart_toStartOf="@+id/icon"
-                motion:layout_constraintTop_toTopOf="@+id/icon">
-                <CustomAttribute
-                    motion:attributeName="Crossfade"
-                    motion:customFloatValue="0" />
+                motion:layout_constraintEnd_toEndOf="@+id/large_profile_cardview"
+                motion:layout_constraintStart_toStartOf="@+id/large_profile_cardview"
+                motion:layout_constraintTop_toTopOf="@+id/large_profile_cardview"
+                motion:layout_constraintBottom_toBottomOf="@+id/large_profile_cardview">
             </Constraint>
 
             <Constraint
@@ -192,15 +176,13 @@
             <Constraint
                 android:id="@id/name"
                 android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="24dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
                 android:gravity="left|center"
                 android:textSize="12sp"
-                motion:layout_constraintStart_toStartOf="@+id/icon"
-                motion:layout_constraintTop_toTopOf="@+id/whiteBackground">
-
-
+                motion:layout_constraintStart_toEndOf="@+id/small_profile_cardview"
+                motion:layout_constraintTop_toTopOf="@+id/whiteBackground"
+                motion:layout_constraintBottom_toBottomOf="@+id/whiteBackground">
                 <CustomAttribute
                     app:attributeName="textSize"
                     app:customFloatValue="12" />
@@ -210,37 +192,36 @@
             </Constraint>
 
             <Constraint
-                android:id="@+id/icon"
+                android:id="@+id/large_profile_cardview"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:shadowColor="@color/_e8e8e8"
+                android:visibility="gone"
+                app:border_width="1.5dp"
+                app:cardBackgroundColor="@color/_e8e8e8"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0.5dp"
+                motion:layout_constraintStart_toStartOf="@+id/small_profile_cardview"
+                motion:layout_constraintTop_toTopOf="@+id/small_profile_cardview">
+            </Constraint>
+
+
+            <Constraint
+                android:id="@+id/small_profile_cardview"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:shadowColor="@color/_e8e8e8"
+                android:visibility="visible"
                 app:border_width="1.5dp"
                 app:cardBackgroundColor="@color/_e8e8e8"
-                app:cardCornerRadius="26dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0.5dp"
                 motion:layout_constraintStart_toStartOf="@+id/whiteBackground"
                 motion:layout_constraintTop_toTopOf="@+id/whiteBackground">
-
-            </Constraint>
-
-
-            <Constraint
-                android:id="@+id/profile_img"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:shadowColor="@color/_e8e8e8"
-                app:border_width="1.5dp"
-                app:cardBackgroundColor="@color/_e8e8e8"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="0.5dp"
-                motion:layout_constraintEnd_toEndOf="@+id/icon"
-                motion:layout_constraintStart_toStartOf="@+id/icon"
-                motion:layout_constraintTop_toTopOf="@+id/icon">
-                <CustomAttribute
-                    motion:attributeName="Crossfade"
-                    motion:customFloatValue="1" />
             </Constraint>
 
             <Constraint
