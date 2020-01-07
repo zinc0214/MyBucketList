@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageCategory
@@ -98,6 +99,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
 
+            mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
             appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
                 if (p1 == -384) {

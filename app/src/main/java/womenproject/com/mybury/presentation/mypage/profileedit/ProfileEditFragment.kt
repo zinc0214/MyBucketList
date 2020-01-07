@@ -228,6 +228,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private fun cancelClickListener() = View.OnClickListener {
         cancelClickAction()
     }
+
     private fun cancelClickAction() {
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")

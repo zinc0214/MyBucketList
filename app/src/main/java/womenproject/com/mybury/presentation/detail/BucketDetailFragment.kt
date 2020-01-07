@@ -79,7 +79,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         if (bucketInfo.dDate.isNullOrEmpty()) {
             viewDataBinding.ddayLayout.visibility = View.GONE
         } else {
-            viewDataBinding.dday.text = bucketInfo.dDate
+            viewDataBinding.dday.text = "${bucketInfo.dDate}(D-${bucketInfo.dDay})"
         }
 
         viewDataBinding.currentCount.text = "${bucketInfo.userCount}/${bucketInfo.goalCount}"

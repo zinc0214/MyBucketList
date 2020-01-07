@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="womenproject.com.mybury.presentation.detail.BucketDetailViewModel" />
@@ -28,13 +30,11 @@
 
         <include
             android:id="@+id/one_image"
-            layout="@layout/detail_image_item"
-            />
+            layout="@layout/detail_image_item" />
 
         <include
             android:id="@+id/more_image"
-            layout="@layout/detail_image_adapter"
-            />
+            layout="@layout/detail_image_adapter" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -72,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/lock_text"
-                android:background="@drawable/detail_lock_status_img" />
+                android:background="@drawable/detail_lock_status_img"
+                android:visibility="@{viewModel.isOpenVisible ? View.VISIBLE : View.GONE}" />
 
             <TextView
                 android:id="@+id/lock_text"
@@ -81,7 +82,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/_ffffff"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="@{viewModel.isOpenVisible ? View.VISIBLE : View.GONE}"
+                tools:text="공개" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -137,8 +140,8 @@
                     android:maxLines="2"
                     android:minHeight="40dp"
                     android:textColor="@color/_797979"
-                    tools:text="메모메모 메모메모메모메 메모메모메모메 메모메모메모메모"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="메모메모 메모메모메모메 메모메모메모메 메모메모메모메모" />
 
 
                 <TextView
@@ -224,8 +227,9 @@
                 android:layout_below="@+id/moreImg"
                 android:layout_marginTop="-20dp"
                 android:layout_marginEnd="15dp"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
+
                 <include
                     android:id="@+id/detail_more_menu"
                     layout="@layout/detail_more_menu" />

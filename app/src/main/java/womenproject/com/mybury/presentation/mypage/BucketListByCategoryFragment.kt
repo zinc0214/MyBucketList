@@ -30,6 +30,7 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
         }
 
         viewDataBinding.headerLayout.title = selectCategory.name
+        viewDataBinding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         initBucketListUI()
     }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.BucketRequest
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.UseUserIdRequest
@@ -17,10 +18,12 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketDetailViewModel : BaseViewModel() {
 
+    val isOpenVisible = BuildConfig.DEBUG
+
     @SuppressLint("CheckResult")
     fun loadBucketDetail(callback: MoreCallBackAny, bucketId: String) {
         callback.start()
-        apiInterface.requestDetailBucketList(accessToken, bucketId)
+        apiInterface.requestDetailBucketList(accessToken, bucketId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ detailBucketItem ->

@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.write
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -37,7 +39,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     var alreadyImgList = arrayListOf<String>()
     var imgList = ArrayList<Any>()
-    var currentCalendarDay= Calendar.getInstance().time
+    var currentCalendarDay: Date? = null
     var goalCount = 1
 
     private var addImgList = HashMap<Int, RelativeLayout>()
@@ -53,6 +55,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         get() = BucketWriteViewModel()
 
     private val bucketInfoViewModel = BucketInfoViewModel()
+    lateinit var imm: InputMethodManager
 
     override fun initDataBinding() {
         getCategory()
@@ -63,14 +66,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
             Log.e("ayhan", "softBackBtnClick")
-            if(isCancelConfirm) {
+            if (isCancelConfirm) {
                 false
             } else {
                 backBtn()
                 true
             }
-
         })
+        imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
     open fun backBtn() {
@@ -113,7 +116,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     }
 
-    open fun setUpCategory(categoryList : ArrayList<Category>){
+    open fun setUpCategory(categoryList: ArrayList<Category>) {
         selectCategory = categoryList[0]
     }
 
@@ -141,6 +144,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun setUpView() {
 
         viewDataBinding.apply {
+            writeViewModel = viewModel
             cancelBtnClickListener = setBackClickListener()
             registerBtnClickListener = bucketAddOnClickListener()
             memoImgAddListener = memoImgAddOnClickListener()
@@ -248,6 +252,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
+                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
+                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 activity!!.onBackPressed()
             }
 
@@ -427,7 +433,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         return View.OnClickListener {
 
-            Log.e("ayhan", currentCalendarDay.toString())
+            Log.e("ayhan", "currentCalendarDay : $ " + currentCalendarDay.toString())
             if (currentCalendarDay == null) {
                 currentCalendarDay = Calendar.getInstance().time
             }

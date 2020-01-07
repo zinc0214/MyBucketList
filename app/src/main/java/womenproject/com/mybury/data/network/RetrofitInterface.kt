@@ -60,7 +60,7 @@ interface RetrofitInterface {
     fun requestCategoryBucketList(@Header("X-Auth-Token") token: String, @Query("categoryId") userId: String): Observable<BucketList>
 
     @GET("/bucketlist/{bucketId}")
-    fun requestDetailBucketList(@Header("X-Auth-Token") token: String, @Path("bucketId") bucketId: String): Observable<DetailBucketItem>
+    fun requestDetailBucketList(@Header("X-Auth-Token") token: String, @Path("bucketId") bucketId: String, @Query("userId") userId: String): Observable<DetailBucketItem>
 
     @POST("/complete")
     fun postCompleteBucket(@Header("X-Auth-Token") token: String,
