@@ -37,12 +37,11 @@ import kotlin.collections.HashMap
 
 open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
-    var alreadyImgList = arrayListOf<String>()
+    var alreadyImgList = mutableMapOf<Int, String?>()
     var imgList = ArrayList<Any>()
     var currentCalendarDay: Date? = null
     var goalCount = 1
 
-    private var addImgList = HashMap<Int, RelativeLayout>()
     private var open = true
     private var categoryList = arrayListOf<Category>()
 
@@ -120,26 +119,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         selectCategory = categoryList[0]
     }
 
-    private fun alreadyAdd() {
-
-        val removeImgListener: (View) -> Unit = { it ->
-            onDeleteImgField(it)
-        }
-
-
-        val imgFieldClickListener: (Any) -> Unit = {
-            if (it is String) {
-                showImgWide(it)
-            }
-        }
-        for (list in alreadyImgList) {
-            val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setAleadyUI(list)
-            addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
-            imgList.add(list)
-            viewDataBinding.imgLayout.addView(writeImgLayout)
-        }
-
-    }
 
     private fun setUpView() {
 
@@ -365,7 +344,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun onAddImgField(file: File, uri: Uri) {
 
-        val removeImgListener: (View) -> Unit = { it ->
+        val removeImgListener: (Int) -> Unit = { it ->
             onDeleteImgField(it)
         }
 
@@ -376,23 +355,45 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgFieldClickListener).setUI(uri)
-        addImgList.put(viewDataBinding.imgLayout.childCount, writeImgLayout as RelativeLayout)
+        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgList.size, imgFieldClickListener).setUI(uri)
         imgList.add(file)
+        alreadyImgList[imgList.size] = uri.toString()
         viewDataBinding.imgLayout.addView(writeImgLayout)
+
+        Log.e("ayhan", "imgList : ${imgList.size}")
     }
 
-    private fun onDeleteImgField(layout: View) {
-        var deleteImgValue = 0
+    private fun alreadyAdd() {
 
-        for (i in 0..addImgList.size) {
-            if (layout.equals(addImgList[i])) {
-                deleteImgValue = i
+        val removeImgListener: (Int) -> Unit = { it ->
+            onDeleteImgField(it)
+        }
+
+
+        val imgFieldClickListener: (Any) -> Unit = {
+            if (it is String) {
+                showImgWide(it)
             }
         }
+
+        for (list in alreadyImgList) {
+            Log.e("ayhan", "list1212 : $list")
+            if (list.value != null) {
+                imgList.add(list)
+                val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgList.size, imgFieldClickListener).setAleadyUI(list.value!!)
+                viewDataBinding.imgLayout.addView(writeImgLayout)
+            }
+
+        }
+
+    }
+
+    private fun onDeleteImgField(layout: Int) {
+        val deleteImgValue = layout - 1
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
-        addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
+        alreadyImgList[layout] = null
+        Log.e("ayhan", "addIMGSIZE : $layout")
     }
 
     fun showImgWide(uri: Uri) {

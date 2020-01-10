@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
@@ -13,7 +12,6 @@ import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 class BucketUpdateFragment : BucketWriteFragment() {
 
@@ -25,7 +23,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
             Log.e("ayhan", "softBackBtnClick")
-            if(isCancelConfirm) {
+            if (isCancelConfirm) {
                 false
             } else {
                 backBtn()
@@ -78,8 +76,8 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
             Log.e("ayhan", "dday_split : ${dday}")
             var date = Date()
-            date.year = dday[0].toInt()-1900
-            date.month = dday[1].toInt()-1
+            date.year = dday[0].toInt() - 1900
+            date.month = dday[1].toInt() - 1
             date.date = dday[2].toInt()
 
             currentCalendarDay = date
@@ -107,7 +105,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     private fun addBucket() {
         viewModel.updateBucketList(
-                bucketId, getBucketItemInfo(), imgList, object : BaseViewModel.Simple3CallBack {
+                bucketId, getBucketItemInfo(), alreadyImgList, imgList, object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 addBucket()
             }
@@ -132,27 +130,17 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     }
 
-    private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
-        val imgList = arrayListOf<String>()
-        if (!bucketInfo.imgUrl1.isNullOrBlank()) {
-            Log.e("ayhan", "1 is use")
-            imgList.add(bucketInfo.imgUrl1)
-        }
-        if (!bucketInfo.imgUrl2.isNullOrBlank()) {
-            Log.e("ayhan", "2 is use")
-            imgList.add(bucketInfo.imgUrl2)
-        }
-        if (!bucketInfo.imgUrl3.isNullOrBlank()) {
-            Log.e("ayhan", "3 is use")
-            imgList.add(bucketInfo.imgUrl3)
-        }
-
+    private fun setImgList(bucketInfo: DetailBucketItem): MutableMap<Int, String?> {
+        val imgList = mutableMapOf<Int, String?>()
+        imgList.put(1, bucketInfo.imgUrl1)
+        imgList.put(2, bucketInfo.imgUrl2)
+        imgList.put(3, bucketInfo.imgUrl3)
         return imgList
     }
 
-    override fun setUpCategory(categoryList : ArrayList<Category>){
-        for(i in categoryList) {
-            if(i.name == bucketItem.category) {
+    override fun setUpCategory(categoryList: ArrayList<Category>) {
+        for (i in categoryList) {
+            if (i.name == bucketItem.category) {
                 selectCategory = i
             }
         }

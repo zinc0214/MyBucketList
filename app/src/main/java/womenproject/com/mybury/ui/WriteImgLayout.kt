@@ -18,7 +18,8 @@ import womenproject.com.mybury.R
 
 @SuppressLint("ViewConstructor")
 class WriteImgLayout internal constructor(context: Context,
-                                          private var imgRemoveListener: (View) -> Unit,
+                                          private var imgRemoveListener: (Int) -> Unit,
+                                          private var count : Int,
                                           private var imgClickListener: (Any) -> Unit): RelativeLayout(context) {
 
     private lateinit var cardViewLayout : RelativeLayout
@@ -36,7 +37,7 @@ class WriteImgLayout internal constructor(context: Context,
         val imgRemove = view.findViewById<RelativeLayout>(R.id.img_remove_btn)
         imgRemove.setOnClickListener {
             run {
-                imgRemoveListener.invoke(this)
+                imgRemoveListener.invoke(count)
             }
         }
 
@@ -48,6 +49,7 @@ class WriteImgLayout internal constructor(context: Context,
     fun setAleadyUI(url : String): View {
         val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
 
+        Log.e("ayhan", "UIIIDDIDI : $url")
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
         Glide.with(view).load(url).centerCrop().placeholder(R.drawable.gradient_background).into(imgView)
@@ -60,7 +62,7 @@ class WriteImgLayout internal constructor(context: Context,
         val imgRemove = view.findViewById<RelativeLayout>(R.id.img_remove_btn)
         imgRemove.setOnClickListener {
             run {
-                imgRemoveListener.invoke(this)
+                imgRemoveListener.invoke(count)
             }
         }
 
