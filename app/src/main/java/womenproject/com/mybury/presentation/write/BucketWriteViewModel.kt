@@ -5,6 +5,7 @@ import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DetailBucketItem
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat
 class BucketWriteViewModel : BaseViewModel() {
 
     var bucketItem: DetailBucketItem? = null
+    val isOpenVisible = BuildConfig.DEBUG
 
     @SuppressLint("CheckResult")
     fun uploadBucketList(bucketItem: AddBucketItem,
@@ -82,6 +84,7 @@ class BucketWriteViewModel : BaseViewModel() {
     fun updateBucketList(
             bucketId: String,
             bucketItem: AddBucketItem,
+            alreadyImgList: MutableMap<Int, String?>,
             imgList: MutableList<Any>,
             onBucketAddEvent: Simple3CallBack) {
 
@@ -97,32 +100,28 @@ class BucketWriteViewModel : BaseViewModel() {
         var image1: MultipartBody.Part? = null
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
-        var noImg1 = true.stringToMultipartFile("noImg1")
-        var noImg2 = true.stringToMultipartFile("noImg2")
-        var noImg3 = true.stringToMultipartFile("noImg3")
+
+        Log.e("ayhan", "alreadyImgList[0].isNullOrBlank() : ${alreadyImgList[0].isNullOrBlank()}")
+        var removeImg1 = (alreadyImgList[1]==null).stringToMultipartFile("removeImg1")
+        var removeImg2 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg2")
+        var removeImg3 =(alreadyImgList[3]==null).stringToMultipartFile("removeImg3")
 
         for (i in 0 until imgList.size) {
             if (imgList[i] is File) {
                 val file = imgList[i] as File
                 when (i) {
                     0 -> {
+                        Log.e("ayhan", "isFile1")
                         image1 = file.fileToMultipartFile("image1")
-                        noImg1 = false.stringToMultipartFile("noImg1")
                     }
                     1 -> {
+                        Log.e("ayhan", "isFile2")
                         image2 = file.fileToMultipartFile("image2")
-                        noImg2 = false.stringToMultipartFile("noImg1")
                     }
                     2 -> {
+                        Log.e("ayhan", "isFile3")
                         image3 = file.fileToMultipartFile("image3")
-                        noImg3 = false.stringToMultipartFile("noImg1")
                     }
-                }
-            } else if (imgList[i] is String) {
-                when (i) {
-                    0 -> noImg1 = false.stringToMultipartFile("noImg1")
-                    1 -> noImg2 = false.stringToMultipartFile("noImg1")
-                    2 -> noImg3 = false.stringToMultipartFile("noImg1")
                 }
             }
         }
@@ -130,7 +129,7 @@ class BucketWriteViewModel : BaseViewModel() {
 
         apiInterface.postUpdateBucketList(accessToken, bucketId,
                 title, open, dDate, goalCount, memo, categoryId, p_userId,
-                image1, noImg1, image2, noImg2, image3, noImg3)
+                image1, removeImg1, image2, removeImg2, image3, removeImg3)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

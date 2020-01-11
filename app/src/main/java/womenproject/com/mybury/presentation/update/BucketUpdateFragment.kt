@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
+import womenproject.com.mybury.presentation.write.BucketWriteFragmentDirections
 import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {
@@ -144,6 +146,11 @@ class BucketUpdateFragment : BucketWriteFragment() {
                 selectCategory = i
             }
         }
+    }
+
+    override fun moveToAddCategory(v : View): () -> Unit = {
+        val directions = BucketUpdateFragmentDirections.actionWriteToCategoryEdit()
+        v.findNavController().navigate(directions)
     }
 
     override fun backBtn() {

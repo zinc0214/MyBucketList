@@ -128,6 +128,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 viewDataBinding.nicknameEditText.setText(info.name)
                 lastNickname = info.name
                 lastImg = info.imageUrl.toString()
+                defaultImg = info.imageUrl.toString()
                 setUpView()
                 seyMyProfileImg(info.imageUrl)
             }
@@ -176,13 +177,13 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
             viewDataBinding.profileSave.isEnabled = true
             isCancelConfirm = false
+            Log.e("ayhan", "다르다")
         } else {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
             viewDataBinding.profileSave.isEnabled = false
             isCancelConfirm = true
+            Log.e("ayhan", "안다르다")
         }
-
-
     }
 
     private val baseProfileUseListener: () -> Unit = {

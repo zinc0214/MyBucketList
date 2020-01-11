@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
@@ -461,6 +462,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
     }
 
+
+    open fun moveToAddCategory(v : View): () -> Unit = {
+        val directions = BucketWriteFragmentDirections.actionWriteToCategoryEdit()
+        v.findNavController().navigate(directions)
+    }
+
     private fun selectCategoryListener(): View.OnClickListener {
         val categorySetListener: (Category) -> Unit = { category ->
             selectCategory = category
@@ -477,11 +484,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            val moveToAddCategory: () -> Unit = {
-                val directions = BucketWriteFragmentDirections.actionWriteToCategoryEdit()
-                it.findNavController().navigate(directions)
-            }
-            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory).show(activity!!.supportFragmentManager, "tag")
+            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory(it)).show(activity!!.supportFragmentManager, "tag")
         }
     }
 
