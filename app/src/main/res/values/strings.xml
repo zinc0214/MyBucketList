@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyBury</string>
+    <string name="app_name">마이버리</string>
 
     <!-- API URL-->
     <string name="naver_adult_api">https://openapi.naver.com/</string>
@@ -21,7 +21,7 @@
 
 
     <string name="network_fail_title">네트워크 연결 실패</string>
-    <string name="network_fail_msg">네트워크 연결이 끊어졌습니다. 마이버리를 사용하실 이수수 수 없습니다. 데헷</string>
+    <string name="network_fail_msg">네트워크 연결이 끊어졌습니다. 마이버리를 사용하실 수 없습니다.</string>
 
     <string name="dd"> myString.replace(" ", "\u00A0"); </string>
 
@@ -34,30 +34,5 @@
     <string name="bucket_open">공개 설정</string>
     <string name="bucket_close">비공개 설정</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-    </string>
     <string name="action_settings">Settings</string>
 </resources>

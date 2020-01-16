@@ -75,7 +75,7 @@
                 android:paddingStart="16dp"
                 android:paddingTop="7dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="5dp"
+                android:paddingBottom="7dp"
                 android:text="@{version_text}"
                 android:textColor="@color/update_color"
                 android:textSize="12sp"
@@ -121,6 +121,7 @@
 
 
             <TextView
+                android:id="@+id/volunteer"
                 android:layout_width="133dp"
                 android:layout_height="26dp"
                 android:layout_marginTop="15dp"

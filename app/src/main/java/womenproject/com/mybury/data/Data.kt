@@ -168,7 +168,7 @@ enum class ListUpFilter {
 }
 
 enum class DataTextType {
-    eula, privacy, open
+    eula, privacy, openSource
 }
 
 val SUCCEED_ITEM = 0

@@ -1,6 +1,5 @@
 package womenproject.com.mybury.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 
 
-@SuppressLint("ViewConstructor")
 class WriteItemLayout internal constructor(context: Context, private var categorySelectListener: (Category) -> Unit) : RelativeLayout(context) {
 
     fun setUI(category: Category): View {

@@ -1,23 +1,24 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
-import android.util.Log
 import android.view.View
-import android.webkit.ServiceWorkerWebSettings
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.TextViewLayoutBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+
 
 /**
  * Created by HanAYeon on 2019-08-20.
  */
 
 class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel>() {
-
 
     override val layoutResourceId: Int
         get() = R.layout.text_view_layout
@@ -42,6 +43,7 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
         when (type) {
             DataTextType.eula.toString() -> loadEula()
             DataTextType.privacy.toString() -> loadPrivacyPolicy()
+            DataTextType.openSource.toString() -> loadOpenSourceText()
         }
     }
 
@@ -58,13 +60,36 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
 
     private fun loadEula() {
         viewDataBinding.titleLayout.title = "이용약관"
+        viewDataBinding.textScrollView.visibility = View.GONE
         viewDataBinding.webView.loadUrl("https://www.my-bury.com/terms_of_use")
     }
 
     private fun loadPrivacyPolicy() {
         viewDataBinding.titleLayout.title = "개인정보 처리방침"
+        viewDataBinding.textScrollView.visibility = View.GONE
         viewDataBinding.webView.loadUrl("https://www.my-bury.com/privacy_policy")
     }
 
+    private fun loadOpenSourceText() {
+        viewDataBinding.webView.visibility = View.GONE
+        readTextFile()
+    }
 
+    @Throws(IOException::class)
+    private fun readTextFile() {
+        var string: String? = ""
+        val stringBuilder = StringBuilder()
+        val `is`: InputStream = this.resources.openRawResource(R.raw.opensource)
+        val reader = BufferedReader(InputStreamReader(`is`))
+        while (true) {
+            try {
+                if (reader.readLine().also { string = it } == null) break
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            stringBuilder.append(string).append("\n")
+            viewDataBinding.textView.text = stringBuilder
+        }
+        `is`.close()
+    }
 }

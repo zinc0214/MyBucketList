@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation.mypage.appinfo
 
 import android.view.View
 import androidx.navigation.findNavController
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
@@ -13,7 +14,6 @@ import womenproject.com.mybury.util.Converter.Companion.stringFormat
  */
 
 class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>() {
-
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_app_info
@@ -41,6 +41,11 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
         viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
         viewDataBinding.useEula.appInfoDetailClickListener = goToUseEula()
         viewDataBinding.privacyEula.appInfoDetailClickListener = goToPrivacy()
+        viewDataBinding.openSource.appInfoDetailClickListener = goToOpenSource()
+
+        if(!BuildConfig.DEBUG) {
+            viewDataBinding.volunteer.visibility = View.GONE
+        }
     }
 
     private fun goToUseEula() = View.OnClickListener {
@@ -55,4 +60,10 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
         it.findNavController().navigate(directions)
     }
 
+
+    private fun goToOpenSource() = View.OnClickListener {
+        val directions = AppInfoFragmentDirections.actionInfoToDetail()
+        directions.type = DataTextType.openSource.toString()
+        it.findNavController().navigate(directions)
+    }
 }

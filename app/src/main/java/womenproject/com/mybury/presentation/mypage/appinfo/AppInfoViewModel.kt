@@ -16,6 +16,6 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 class AppInfoViewModel : BaseViewModel() {
 
     val currentVersion = BuildConfig.VERSION_NAME
-    val latelyVersion = "1.0.2"
+    val latelyVersion = "1.0.1"
 
 }
