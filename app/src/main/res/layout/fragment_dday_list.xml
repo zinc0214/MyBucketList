@@ -32,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/dday_bucket_list"
+                    android:paddingBottom="30dp"
                     tools:itemCount="2"/>
 
                 <ImageView

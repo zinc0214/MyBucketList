@@ -3,7 +3,7 @@ package womenproject.com.mybury.presentation.main
 import android.app.ActionBar
 import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
+import android.widget.Toast
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.ListUpFilter
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
@@ -11,9 +11,8 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.Preference.Companion.setFilerForShow
 import womenproject.com.mybury.data.Preference.Companion.setFilterListUp
 import womenproject.com.mybury.data.ShowFilter
-import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MainFilterDialogBinding
-import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
 /**
  * Created by HanAYeon on 2019. 1. 15..
@@ -82,7 +81,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
             }
         }
 
-}
+    }
 
     override fun onResume() {
         super.onResume()
@@ -100,8 +99,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
 
     private fun dialogDismiss() {
         if (!started && !complete) {
-            val showDialog = CanNotDialog()
-            showDialog.show(activity!!.supportFragmentManager)
+            Toast.makeText(context, "표시할 버킷리스트가 최소 하나는 있어야합니다.", Toast.LENGTH_SHORT).show()
         } else {
             setShowFilter()
             setListUpFilter()
@@ -145,23 +143,4 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         }
     }
 
-
-    class CanNotDialog : BaseNormalDialogFragment() {
-
-        init {
-            TITLE_MSG = "안되용"
-            CONTENT_MSG = "표시할 버킷리스트가 최소 하나는 있어야합니다."
-            CANCEL_BUTTON_VISIBLE = false
-            GRADIENT_BUTTON_VISIBLE = true
-            CONFIRM_TEXT = "설정하기"
-            CANCEL_ABLE = false
-        }
-
-        override fun createOnClickConfirmListener(): View.OnClickListener {
-            return View.OnClickListener {
-                dismiss()
-            }
-        }
-
-    }
 }

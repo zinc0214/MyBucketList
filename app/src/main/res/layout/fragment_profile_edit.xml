@@ -70,14 +70,13 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="36dp"
                 android:background="@drawable/profile_edit_text_background"
-                android:cursorVisible="false"
                 android:gravity="center"
                 android:imeOptions="actionDone"
                 android:hint="닉네임을 입력해주세요"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/_434343"
-                android:textColorHint="@color/_b4b4b4"
+                android:textColor="@color/_888888"
+                android:textColorHint="@color/_888888"
                 android:textSize="14sp" />
 
         </LinearLayout>

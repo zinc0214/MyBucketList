@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -57,11 +58,13 @@ class CreateAccountActivity : BaseActiviy() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         getLoginToken()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
         binding.apply {
             topLayout.title = "프로필생성"
+            topLayout.setBackBtnOnClickListener { onBackPressed() }
             startMyburyBtn.setOnClickListener(myBuryStartListener)
             profileEditBtn.setOnClickListener(profileImageEditClickLister)
             nicknameEditText.addTextChangedListener(addTextChangedListener())

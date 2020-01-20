@@ -126,15 +126,17 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
             }
 
             override fun start() {
-
+                bucketItemLayout.isEnabled = false
             }
 
             override fun success() {
                 onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+                bucketItemLayout.isEnabled = true
                 return
             }
 
             override fun fail() {
+                bucketItemLayout.isEnabled = true
                 Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 

@@ -160,15 +160,17 @@ class CountBucketItemViewHolder(
             }
 
             override fun start() {
-
+                binding.bucketItemLayout.isEnabled = false
             }
 
             override fun success() {
                 onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+                binding.bucketItemLayout.isEnabled = true
                 return
             }
 
             override fun fail() {
+                binding.bucketItemLayout.isEnabled = true
                 Toast.makeText(MyBuryApplication.context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 

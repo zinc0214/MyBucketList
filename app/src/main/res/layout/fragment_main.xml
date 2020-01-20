@@ -30,6 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:itemCount="5"
+                    android:paddingBottom="30dp"
                     tools:listitem="@layout/bucket_item_base" />
 
                 <ImageView
@@ -47,9 +48,12 @@
         </ScrollView>
 
         <ImageView
+            android:layout_marginBottom="108dp"
+            tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/blank_img"
-            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:background="@drawable/blank_mybury"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

@@ -88,6 +88,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._434343))
                 setSaveBtnEnabled()
             }
 
@@ -253,6 +254,10 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             try {
                 if (heightDiff < 500) {
                     viewDataBinding.nicknameEditText.clearFocus()
+                    viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._888888))
+                    viewDataBinding.badgeLayout.visibility = View.VISIBLE
+                } else {
+                    viewDataBinding.badgeLayout.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

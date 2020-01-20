@@ -74,6 +74,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     editCategoryItem(category, newName)
                     originCategoryList = value as ArrayList<Category>
                     changeCategoryList = value as ArrayList<Category>
+                    viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 }
 
                 Log.e("ayhan", "bubusccess : ${value.size}")
@@ -115,6 +116,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     if (v?.text.isNullOrBlank()) {
                         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
                         viewDataBinding.addCategoryItem.categoryText.text.clear()
+                        viewDataBinding.bottomLayout.visibility = View.VISIBLE
                     } else {
                         addNewCategory(v!!.text.toString())
                     }
@@ -138,6 +140,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             override fun success() {
                 stopLoading()
                 setCategoryList()
+                viewDataBinding.bottomLayout.visibility = View.VISIBLE
             }
 
             override fun fail() {
@@ -161,6 +164,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 stopLoading()
                 setCategoryList()
                 imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
                 viewDataBinding.addCategoryItem.categoryText.text.clear()
             }
@@ -228,6 +232,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     override fun actionByBackButton() {
+        imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+        viewDataBinding.bottomLayout.visibility = View.VISIBLE
         if (changeCategoryList == originCategoryList) {
             Log.e("ayhan", "SAME")
             onBackPressedFragment()
@@ -274,8 +280,10 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                         viewDataBinding.addCategoryItem.categoryText.text.clear()
                         isKeyBoardShown = false
                     }
+                    viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 } else {
                     isKeyBoardShown = true
+                    viewDataBinding.bottomLayout.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

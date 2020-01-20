@@ -105,7 +105,7 @@
             <TextView
                 android:textSize="10sp"
                 android:textColor="@color/_aaaaaa"
-                android:text="마비어리 개발자"
+                android:text="마이버리 개발자"
                 android:layout_marginTop="45dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -12,6 +12,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
+import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -79,6 +80,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         viewDataBinding.apply {
 
             headerLayout.moreClickListener = moreButtonOnClickListener
+            headerLayout.doingBucketListClickListener = doingBucketListClickListener
+            headerLayout.doneBucketListClickListener = doneBucketListerClickListener
             headerLayout.startCountText.text = _myPageInfo.startedCount.toString()
             headerLayout.completeCountText.text = _myPageInfo.completedCount.toString()
             headerLayout.name.text = _myPageInfo.name
@@ -192,6 +195,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         it.findNavController().navigate(directions)
         popupClickListener()
     }
+
+    private val doingBucketListClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
+        directions.filter = ShowFilter.started.toString()
+        it.findNavController().navigate(directions)
+    }
+
+    private val doneBucketListerClickListener =  View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
+        directions.filter = ShowFilter.completed.toString()
+        it.findNavController().navigate(directions)
+    }
+
     private val moreButtonOnClickListener = View.OnClickListener {
 
         if (viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {

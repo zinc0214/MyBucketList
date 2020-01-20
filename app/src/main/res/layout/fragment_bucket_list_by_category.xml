@@ -25,6 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="30dp"
+                    tools:itemCount="5"
                     tools:listitem="@layout/bucket_item_base" />
 
                 <ImageView

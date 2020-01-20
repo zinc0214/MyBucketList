@@ -8,6 +8,7 @@ import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,6 +23,7 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
+import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.SignUpCheckRequest
@@ -29,6 +31,8 @@ import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.UserAlreadyExist
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -53,6 +57,7 @@ class SplashLoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.splash_with_login)
         binding.loginLayout.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
             if (getAccountEmail(this).isNotEmpty() || !getMyBuryLoginComplete(this)) {
                 signOut()
             } else {
@@ -98,8 +103,9 @@ class SplashLoginActivity : AppCompatActivity() {
                     } else {
                         loadUserId(emailDataClass.email)
                     }
-
                 }) {
+                    val networkFailDialog = NetworkFailDialog()
+                    networkFailDialog.show(this.supportFragmentManager)
                     Log.e("ayhan_3", it.toString())
                 }
 
@@ -133,6 +139,8 @@ class SplashLoginActivity : AppCompatActivity() {
                     if (response.retcode == "200") {
                         setUserId(this, response.userId)
                         goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
+                    } else if (response.retcode == "401") {
+                        UserAlreadyExist().show(supportFragmentManager, "tag")
                     } else {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
@@ -170,6 +178,7 @@ class SplashLoginActivity : AppCompatActivity() {
                 }
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
+                binding.progressBar.visibility = View.GONE
                 Log.e("ayhan", "$e")
             }
         }
@@ -182,9 +191,10 @@ class SplashLoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d("ayhan", "signInWithCredential:success")
-                        val user = auth.currentUser
+                        binding.progressBar.visibility = View.VISIBLE
                     } else {
                         Log.e("ayhan", "signInWithCredential:failure", task.exception)
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
                 }
     }

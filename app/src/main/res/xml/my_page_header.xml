@@ -32,8 +32,7 @@
                 motion:layout_constraintBottom_toBottomOf="parent"
                 motion:layout_constraintEnd_toEndOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintVertical_bias="0.38" />
+                motion:layout_constraintTop_toTopOf="parent" />
 
             <Constraint
                 android:id="@+id/whiteBackground"
@@ -143,8 +142,7 @@
                 motion:layout_constraintBottom_toBottomOf="parent"
                 motion:layout_constraintEnd_toEndOf="parent"
                 motion:layout_constraintStart_toStartOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"
-                motion:layout_constraintVertical_bias="0.38" />
+                motion:layout_constraintTop_toTopOf="parent" />
 
 
             <Constraint
@@ -153,6 +151,8 @@
                 android:layout_height="70dp"
                 android:layout_marginTop="144dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                motion:layout_constraintStart_toStartOf="parent"
                 motion:layout_constraintBottom_toBottomOf="parent"
                 motion:layout_constraintEnd_toEndOf="parent"
                 motion:layout_constraintTop_toTopOf="parent">
