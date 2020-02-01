@@ -11,7 +11,6 @@ import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.AccountDelectDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
-import womenproject.com.mybury.ui.BucketItemView
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
@@ -32,10 +31,10 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
         viewDataBinding.activity = this
-        viewDataBinding.lastBucketItem.bucketClickListener = onClickListenr
-        viewDataBinding.lastBucketItem.bucketSuccessClickListener = onClickListenr
+        viewDataBinding.lastBucketItem.bucketClickListener = onClickListener
+        viewDataBinding.lastBucketItem.bucketSuccessClickListener = onClickListener
         viewDataBinding.lastBucketItem.bucketTitleText = "마이버리와 작별하기"
-        viewDataBinding.endClickListener = onClickListenr
+        viewDataBinding.endClickListener = onClickListener
 
     }
 
@@ -52,7 +51,7 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
         this.dismiss()
     }
 
-    private val onClickListenr = View.OnClickListener {
+    private val onClickListener = View.OnClickListener {
         viewDataBinding.lastBucketItem.successButtonLayout.circularProgressBar.run {
             progressType = ProgressType.INDETERMINATE
             startAnimation()
@@ -93,8 +92,7 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
     }
 
 
-    fun setDoneSuccessUIButton() {
-        // viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._e8e8e8)
+    private fun setDoneSuccessUIButton() {
         viewDataBinding.lastBucketItem.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
     }
 }

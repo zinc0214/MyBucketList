@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.UseUserIdRequest
@@ -43,6 +44,8 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
         viewDataBinding.activity = this
     }
+
+    fun getLoginText() = run { "${getAccountEmail(context!!)} 계정으로\n로그인하였습니다." }
 
     fun accountDeleteClickListener() {
         signOutMyBury()
@@ -132,7 +135,7 @@ class LogoutOrSignOutFailed(title: String) : BaseNormalDialogFragment() {
 
     init {
         TITLE_MSG = title
-        CONTENT_MSG = "실패했습니다..."
+        CONTENT_MSG = "계정 삭제에 실패했습니다.\n다시 시도해주세요."
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"

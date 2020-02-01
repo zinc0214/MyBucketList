@@ -1,11 +1,13 @@
 package womenproject.com.mybury.presentation.update
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.findNavController
+import io.reactivex.functions.Cancellable
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
@@ -148,7 +150,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
         }
     }
 
-    override fun moveToAddCategory(v : View): () -> Unit = {
+    override fun moveToAddCategory(v: View): () -> Unit = {
         val directions = BucketUpdateFragmentDirections.actionWriteToCategoryEdit()
         v.findNavController().navigate(directions)
     }
