@@ -23,37 +23,34 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="42dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:background="@drawable/current_dday_badge">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@{ddayText}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:paddingStart="7dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="7dp"
+                android:paddingBottom="4dp"
+                android:text="@{ddayText}"
                 android:textColor="@color/_ffffff"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="D-10" />
         </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/dday_each_list_layout"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dday_each_bucket_item_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp">
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/bucket_item_base" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dday_each_bucket_item_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/bucket_item_base" />
 
-        </ScrollView>
-
-        <include
-            android:id="@+id/last_end_img"
-            layout="@layout/list_end_layout"/>
     </LinearLayout>
 
 </layout>

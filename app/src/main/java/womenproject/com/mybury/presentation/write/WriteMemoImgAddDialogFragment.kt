@@ -32,6 +32,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 enum class AddContentType {
@@ -163,8 +164,8 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("HHmmss").format(Date())
-        val imageFileName = "nostest_" + timeStamp + "_"
-        val storageDir = File("${Environment.getExternalStorageDirectory()}/NOSTest/")
+        val imageFileName = "mybury_" + timeStamp + "_"
+        val storageDir = File("${Environment.getExternalStorageDirectory()}/mybury/")
         if (!storageDir.exists()) {
             storageDir.mkdirs()
         }
@@ -275,7 +276,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
                 e.printStackTrace()
             }
 
-            val folder = File("${Environment.getExternalStorageDirectory()}/NOSTest/")
+            val folder = File("${Environment.getExternalStorageDirectory()}/mybury/")
             val tempFile = File(folder.toString(), croppedFileName!!.getName())
 
 

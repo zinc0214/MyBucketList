@@ -11,7 +11,7 @@
             name="cancelButtonClickListener"
             type="android.view.View.OnClickListener" />
 
-        <variable
+        w<variable
             name="confirmButtonClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -65,7 +65,7 @@
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{confirmButtonClickListener}"
                 android:text="@string/dialog_confirm"
-                android:textColor="@color/_5a95ff" />
+                android:textColor="@color/dialog_btn_enable_color" />
 
         </LinearLayout>
 

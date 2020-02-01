@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.viewmodels.MyPageViewModel" />
+            name="info"
+            type="womenproject.com.mybury.data.MyPageInfo" />
     </data>
 
     <RelativeLayout
@@ -51,8 +52,6 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="28dp"/>
 
-
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -60,7 +59,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginRight="38dp"
                         android:gravity="center"
-                        android:text="닉네임데쇼오"
+                        android:text="@{info.name}"
                         android:textColor="@color/_434343"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -83,7 +82,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.doingBucketCount}"
+                                android:text="@{info.startedCount}"
                                 android:textAlignment="center"
                                 android:textColor="@color/_a6c6ff"
                                 android:textSize="14sp" />
@@ -111,7 +110,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.doneBucketCount}"
+                                android:text="@{info.completedCount}"
                                 android:textAlignment="center"
                                 android:textColor="@color/_a6c6ff"
                                 android:textSize="14sp" />

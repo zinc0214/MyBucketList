@@ -6,13 +6,10 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.DdayBucketList
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.data.*
-import womenproject.com.mybury.data.network.RetrofitInterface
-import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019. 1. 16..
@@ -21,54 +18,33 @@ import womenproject.com.mybury.data.network.bucketListApi
 class DdayBucketTotalListViewModel  : BaseViewModel() {
 
 
-    private var bucketList : BucketList? = null
-    var progressVisible = ObservableInt(View.GONE)
-
-
-    interface OnDdayBucketListGetEvent {
-        fun start()
-        fun finish(bucketList: BucketList?)
-    }
-
-
     @SuppressLint("CheckResult")
-    fun getDdayEachBucketList(api:String, callback: OnDdayBucketListGetEvent) {
-
+    fun getDdayEachBucketList(callback: MoreCallBackAnyList) {
         callback.start()
 
-        bucketListApi.requestDdayBucketListResult()
+        apiInterface.requestDdayBucketListResult(accessToken, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { bucketList -> callback.finish(bucketList)}
-    }
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> callback.success(response.dDayBucketlists)
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
 
-/*    fun getDdayEachBucketLis2t(api:String, callback: OnDdayBucketListGetEvent): BucketList? {
+                            override fun fail() {
+                                callback.fail()
+                            }
 
-        callback.start()
-
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.requestDdayBucketListResult()
-        bucketListResultData.enqueue(object : Callback<BucketList> {
-            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
-
-                if (response != null && response.isSuccessful) {
-                    Log.e("ayhan:result", "${response.body()}")
-                    bucketList = response.body()
-                    Log.e("ayhan:bucketList", "$bucketList")
-                    callback.finish(bucketList)
+                        })
+                        else -> callback.fail()
+                    }
+                }) {
+                    Log.e("ayhan", it.toString())
+                    callback.fail()
                 }
-            }
 
-            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
-                Log.e("ayhan2", t.toString())
-                //progressVisible.set(View.GONE)
-                callback.finish(bucketList)
-            }
-        })
-
-        return bucketList
-
-    }*/
+    }
 
 }

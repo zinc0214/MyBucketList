@@ -22,33 +22,40 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/toolBarTitle">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dday_each_bucket_list"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/dday_bucket_list" />
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dday_each_bucket_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/dday_bucket_list"
+                    android:paddingBottom="30dp"
+                    tools:itemCount="2"/>
+
+                <ImageView
+                    android:id="@+id/end_image"
+                    android:alpha="0.3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/end_character_d_day" />
+
+            </LinearLayout>
+
 
         </ScrollView>
 
-        <RelativeLayout
-            android:id="@+id/toolbar_layout"
+        <include
+            android:id="@+id/dday_toolbar"
+            layout="@layout/top_back_btn_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include
-                android:id="@+id/dday_toolbar"
-                layout="@layout/top_back_btn_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolBarLayout"
-                android:layout_alignParentTop="true" />
-
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_height="@dimen/toolBarLayout"
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
 

@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.mypage.logininfo.AccountDeleteViewModel" />
-
-        <variable
             name="activity"
             type="womenproject.com.mybury.presentation.mypage.logininfo.AccountDeleteDialogFragment" />
 
@@ -24,58 +20,58 @@
         android:layout_height="match_parent"
         android:background="@color/_ffffff">
 
-        <include
-            layout="@layout/main_bottom_sheet"/>
+        <include layout="@layout/main_bottom_sheet" />
 
-        <include
-            layout="@layout/main_toolbar"/>
+        <include layout="@layout/main_toolbar" />
 
         <RelativeLayout
-            android:background="@color/_4D000000"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="106dp"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/_4D000000">
 
-
-            <LinearLayout
-                android:id="@+id/last_bucket_layout"
-                android:layout_width="344dp"
-                android:layout_height="64dp"
-                android:layout_below="@+id/close_img"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="-64dp"
-                android:onClick="@{endClickListener}">
-
-                <include
-                    android:id="@+id/last_bucket_item"
-                    layout="@layout/bucket_item_base_for_end" />
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/close_img"
-                android:layout_width="344dp"
-                android:layout_height="300dp"
-                android:layout_centerHorizontal="true"
-                android:onClick="@{endClickListener}"
-                android:src="@drawable/close_character" />
-
-            <TextView
-                android:id="@+id/end_content_text"
+            <RelativeLayout
+                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/last_bucket_layout"
-                android:layout_marginTop="14dp"
-                android:gravity="center"
-                android:text="버킷리스트를 완료해주세요."
-                android:textColor="@color/_ffffff"
-                android:textSize="12sp" />
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/last_bucket_layout"
+                    android:layout_width="344dp"
+                    android:layout_height="64dp"
+                    android:layout_below="@+id/close_img"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-64dp"
+                    android:onClick="@{endClickListener}">
+
+                    <include
+                        android:id="@+id/last_bucket_item"
+                        layout="@layout/bucket_item_base_for_end" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/close_img"
+                    android:layout_width="344dp"
+                    android:layout_height="300dp"
+                    android:layout_centerHorizontal="true"
+                    android:onClick="@{endClickListener}"
+                    android:src="@drawable/close_character" />
+
+                <TextView
+                    android:id="@+id/end_content_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/last_bucket_layout"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="버킷리스트를 완료해주세요."
+                    android:textColor="@color/_ffffff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </layout>

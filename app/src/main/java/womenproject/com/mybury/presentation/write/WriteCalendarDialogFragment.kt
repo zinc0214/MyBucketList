@@ -15,6 +15,7 @@ import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
 import womenproject.com.mybury.ui.CurrentDateDecorator
 import android.widget.EditText
 import android.view.ViewGroup
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.write_calendar_dialog.*
 import java.util.*
 
@@ -31,6 +32,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     private var dday = ""
 
+    private val today = CalendarDay.today()
     private var selectDay = Date(0, 0, 0)
     private var senderDay = Date(0, 0, 0)
     private var calendarVisible = true
@@ -51,9 +53,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         selectDay.month = viewDataBinding.calendarView.selectedDate.month
         selectDay.date = viewDataBinding.calendarView.selectedDate.day
 
-
         setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
-
         setCalendarViewListener()
 
         Log.e("ayhan", "select : ${selectDay.year}/ ${selectDay.month} / ${selectDay.date}")
@@ -72,19 +72,19 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
     private fun setCalendarViewListener() {
 
-
         colorizeDatePicker(viewDataBinding.datePicker)
         dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color._5a95ff))
 
-
         viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
             if (date.year < 2219) {
+                setConfirmAble(date)
                 setCurrentDateTitle(date.year, date.month, date.day)
             }
         }
 
         viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
             if (date.year < 2219) {
+                setConfirmAble(date)
                 setCurrentDateTitle(date.year, date.month, date.day)
             }
         }
@@ -112,6 +112,9 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     }
 
 
+    private fun setConfirmAble(date: CalendarDay) {
+        viewDataBinding.bottomSheet.confirmText.isEnabled = date.date >= today.date
+    }
 
     private fun setCurrentDateTitle(dateYear: Int, dateMonth: Int, dateDay: Int) {
         var month = ""

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -74,10 +75,11 @@
                 android:paddingStart="16dp"
                 android:paddingTop="7dp"
                 android:paddingEnd="16dp"
-                android:paddingBottom="5dp"
+                android:paddingBottom="7dp"
                 android:text="@{version_text}"
                 android:textColor="@color/update_color"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="최신 버전 업데이트" />
 
             <include
                 android:id="@+id/use_eula"
@@ -103,7 +105,7 @@
             <TextView
                 android:textSize="10sp"
                 android:textColor="@color/_aaaaaa"
-                android:text="마비어리 개발자"
+                android:text="마이버리 개발자"
                 android:layout_marginTop="45dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -118,22 +120,18 @@
                 android:layout_height="wrap_content" />
 
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/volunteer"
+                android:layout_width="133dp"
+                android:layout_height="26dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/app_info_button_background"
-                android:layout_width="133dp"
-                android:layout_height="26dp">
+                android:gravity="center"
+                android:onClick="@{supportClickListener}"
+                android:text="후원하러 가기:)"
+                android:textColor="@color/_797979"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:textColor="@color/_797979"
-                    android:textSize="12sp"
-                    android:onClick="@{supportClickListener}"
-                    android:gravity="center"
-                    android:text="후원하러 가기:)"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
         </LinearLayout>
 
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">54.92.251.44</domain>
+        <domain includeSubdomains="true">18.213.99.39</domain>
+        <domain includeSubdomains="true">https://www.my-bury.com/privacy_policy</domain>
+        <domain includeSubdomains="true">https://www.my-bury.com/terms_of_use</domain>
     </domain-config>
 </network-security-config>

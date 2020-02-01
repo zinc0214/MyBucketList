@@ -5,10 +5,6 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.viewmodels.MainFragmentViewModel" />
-
     </data>
 
     <RelativeLayout
@@ -24,18 +20,40 @@
             android:layout_marginBottom="50dp"
             android:background="@color/_fafafa">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/bucket_list"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/bucket_item_base" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/bucket_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:itemCount="5"
+                    android:paddingBottom="30dp"
+                    tools:listitem="@layout/bucket_item_base" />
+
+                <ImageView
+                    android:id="@+id/end_image"
+                    android:alpha="0.3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/list_end" />
+            </LinearLayout>
+
 
         </ScrollView>
 
         <ImageView
+            android:layout_marginBottom="108dp"
+            tools:visibility="visible"
             android:visibility="gone"
             android:id="@+id/blank_img"
-            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:background="@drawable/blank_mybury"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -62,22 +80,6 @@
             android:layout_height="@dimen/toolBarLayout"
             android:layout_alignParentTop="true" />
 
-
-        <RelativeLayout
-            android:id="@+id/loading_layout"
-            android:background="@color/_cc000000"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/loading_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/loading_anim"
-                android:contentDescription="@null" />
-
-        </RelativeLayout>
 
     </RelativeLayout>
 

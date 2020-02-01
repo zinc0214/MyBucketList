@@ -1,35 +1,62 @@
 package womenproject.com.mybury.presentation.update
 
+import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.findNavController
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.presentation.detail.BucketDetailFragmentArgs
+import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
+import womenproject.com.mybury.presentation.write.BucketWriteFragmentDirections
+import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {
 
-    lateinit var bucketItem: BucketItem
+    lateinit var bucketItem: DetailBucketItem
+    lateinit var bucketId: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            Log.e("ayhan", "softBackBtnClick")
+            if (isCancelConfirm) {
+                false
+            } else {
+                backBtn()
+                true
+            }
+
+        })
+    }
 
     override fun initForUpdate() {
 
         arguments?.let {
-            val args = BucketDetailFragmentArgs.fromBundle(it)
+            val args = BucketUpdateFragmentArgs.fromBundle(it)
             val bucket = args.bucket
+            val id = args.bucketId
             bucketItem = bucket!!
+            bucketId = id!!
         }
 
         viewModel.bucketItem = bucketItem
+        alreadyImgList = setImgList(bucketItem)
 
-        Log.e("ayhan", "bucket...? , ${bucketItem.dDay}")
+        Log.e("ayhan", "bucket...? , ${bucketItem.title}")
         viewDataBinding.titleText.setText(bucketItem.title)
 
-        if(bucketItem.memo.isNotEmpty()) {
+        if (bucketItem.memo.isNotEmpty()) {
             viewDataBinding.memoLayout.visibility = View.VISIBLE
             viewDataBinding.memoText.setText(bucketItem.memo)
         }
 
-        if(bucketItem.open) {
+        if (bucketItem.open) {
             viewDataBinding.openSwitchBtn.transitionToStart()
         } else {
             viewDataBinding.openSwitchBtn.transitionToEnd()
@@ -37,32 +64,130 @@ class BucketUpdateFragment : BucketWriteFragment() {
             viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
         }
 
-
-
-        if(!bucketItem.category.name.equals("없음")) {
-            viewDataBinding.categoryText.text = bucketItem.category.name
+        if (!bucketItem.category.equals("없음")) {
+            viewDataBinding.categoryText.text = bucketItem.category
             viewDataBinding.categoryText.setEnableTextColor()
             viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
         }
 
 
-        if(bucketItem.dDay != null && !bucketItem.dDay.equals("0")) {
-            viewDataBinding.ddayText.text = bucketItem.dDay.toString()
+        if (bucketItem.dDate != null && !bucketItem.dDate.equals("0")) {
+            viewDataBinding.ddayText.text = bucketItem.dDate
+
+            val dday = bucketItem.dDate.split("/")
+
+            Log.e("ayhan", "dday_split : ${dday}")
+            var date = Date()
+            date.year = dday[0].toInt() - 1900
+            date.month = dday[1].toInt() - 1
+            date.date = dday[2].toInt()
+
+            currentCalendarDay = date
+
             viewDataBinding.ddayText.setEnableTextColor()
             viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
-        if(bucketItem.goalCount != null && !bucketItem.goalCount.equals("1")) {
+        if (bucketItem.goalCount != null && !bucketItem.goalCount.equals("1")) {
             viewDataBinding.goalCountText.text = bucketItem.goalCount.toString()
+            goalCount = bucketItem.goalCount
             viewDataBinding.goalCountText.setEnableTextColor()
             viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
         }
 
+        viewDataBinding.writeRegist.isEnabled = true
+    }
 
 
+    override fun bucketAddOnClickListener(): View.OnClickListener {
+        return View.OnClickListener {
+            addBucket()
+        }
+    }
 
+    private fun addBucket() {
+        viewModel.updateBucketList(
+                bucketId, getBucketItemInfo(), alreadyImgList, imgList, object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                addBucket()
+            }
+
+            override fun start() {
+                startLoading()
+
+            }
+
+            override fun success() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
+                isCancelConfirm = true
+                activity!!.onBackPressed()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context, "버킷이 수정되지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
+    private fun setImgList(bucketInfo: DetailBucketItem): MutableMap<Int, String?> {
+        val imgList = mutableMapOf<Int, String?>()
+        imgList.put(1, bucketInfo.imgUrl1)
+        imgList.put(2, bucketInfo.imgUrl2)
+        imgList.put(3, bucketInfo.imgUrl3)
+        return imgList
+    }
+
+    override fun setUpCategory(categoryList: ArrayList<Category>) {
+        for (i in categoryList) {
+            if (i.name == bucketItem.category) {
+                selectCategory = i
+            }
+        }
+    }
+
+    override fun moveToAddCategory(v : View): () -> Unit = {
+        val directions = BucketUpdateFragmentDirections.actionWriteToCategoryEdit()
+        v.findNavController().navigate(directions)
+    }
+
+    override fun backBtn() {
+        val cancelConfirm: (Boolean) -> Unit = {
+            if (it) {
+                isCancelConfirm = it
+                activity!!.onBackPressed()
+            }
+        }
+        CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+    }
+
+    class CancelDialog(private val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "수정을 취소하시겠습니까?"
+            CONTENT_MSG = "수정된 내용이 삭제됩니다."
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "수정 취소"
+            CANCEL_TEXT = "계속 작성"
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                cancelConfirm.invoke(true)
+            }
+        }
+
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                cancelConfirm.invoke(false)
+            }
+        }
+    }
 
 }

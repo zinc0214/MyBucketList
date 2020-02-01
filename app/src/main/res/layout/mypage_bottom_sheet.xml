@@ -37,12 +37,12 @@
                 android:layout_alignParentBottom="true">
 
                 <ImageView
-                    android:onClick="@{homeClickListener}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="54dp"
-                    android:background="@drawable/mypage_bottom_list" />
+                    android:background="@drawable/mypage_bottom_list"
+                    android:onClick="@{homeClickListener}" />
 
                 <ImageView
                     android:layout_width="36dp"
@@ -65,7 +65,6 @@
 
 
         </RelativeLayout>
-
 
 
     </RelativeLayout>

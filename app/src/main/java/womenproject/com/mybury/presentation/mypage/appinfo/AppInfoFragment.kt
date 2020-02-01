@@ -1,9 +1,10 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
-import android.graphics.Rect
-import android.text.Html
-import android.view.ViewTreeObserver
+import android.view.View
+import androidx.navigation.findNavController
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.util.Converter.Companion.stringFormat
@@ -12,15 +13,13 @@ import womenproject.com.mybury.util.Converter.Companion.stringFormat
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>() {
-
+class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>() {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_app_info
 
     override val viewModel: AppInfoViewModel
         get() = AppInfoViewModel()
-
 
     override fun initDataBinding() {
         viewDataBinding.backLayout.title = "앱 정보"
@@ -30,7 +29,7 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
 
         viewDataBinding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModel.currentVersion)
 
-        if(viewModel.currentVersion.equals(viewModel.latelyVersion)) {
+        if (viewModel.currentVersion.equals(viewModel.latelyVersion)) {
             viewDataBinding.versionText = "최신 버전 사용 중"
             viewDataBinding.updateBtn.isEnabled = false
 
@@ -39,7 +38,32 @@ class AppInfoFragment :  BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>(
             viewDataBinding.updateBtn.isEnabled = true
         }
 
-        viewDataBinding.backLayout.backBtnOnClickListener = setOnBackBtnClickListener()
+        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
+        viewDataBinding.useEula.appInfoDetailClickListener = goToUseEula()
+        viewDataBinding.privacyEula.appInfoDetailClickListener = goToPrivacy()
+        viewDataBinding.openSource.appInfoDetailClickListener = goToOpenSource()
+
+        if(!BuildConfig.DEBUG) {
+            viewDataBinding.volunteer.visibility = View.GONE
+        }
     }
 
+    private fun goToUseEula() = View.OnClickListener {
+        val directions = AppInfoFragmentDirections.actionInfoToDetail()
+        directions.type = DataTextType.eula.toString()
+        it.findNavController().navigate(directions)
+    }
+
+    private fun goToPrivacy() = View.OnClickListener {
+        val directions = AppInfoFragmentDirections.actionInfoToDetail()
+        directions.type = DataTextType.privacy.toString()
+        it.findNavController().navigate(directions)
+    }
+
+
+    private fun goToOpenSource() = View.OnClickListener {
+        val directions = AppInfoFragmentDirections.actionInfoToDetail()
+        directions.type = DataTextType.openSource.toString()
+        it.findNavController().navigate(directions)
+    }
 }

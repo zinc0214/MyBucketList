@@ -1,9 +1,9 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
-import android.content.Context
 import android.view.View
-import womenproject.com.mybury.presentation.base.BaseBucketItemViewHolder
+import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 
 /**
@@ -11,7 +11,6 @@ import womenproject.com.mybury.databinding.BucketItemBaseBinding
  */
 
 open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding) : BaseBucketItemViewHolder(binding) {
-
 
     init {
         bucketItemLayout = binding.bucketItemLayout
@@ -21,9 +20,8 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         circularProgressBar = binding.successButtonLayout.circularProgressBar
     }
 
-    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo : BucketItem, context : Context) {
+    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {
-            setBucketData(bucketItemInfo)
             setUI(bucketItemInfo, bucketListener)
             setDdayColor()
             executePendingBindings()
@@ -36,14 +34,10 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         binding.bucketTitleText = bucketItemInfo.title
 
         binding.bucketClickListener = bucketListener
-        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener()
-        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener()
 
-        binding.lastEndImg.lastImgVisible = if(isLastItem) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+        val tokenId = getAccessToken(context)
+        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
+        binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo)
     }
 
 

@@ -37,6 +37,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.intro.CreateAccountActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />

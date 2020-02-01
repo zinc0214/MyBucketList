@@ -3,9 +3,11 @@ package womenproject.com.mybury.presentation.mypage.dday
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 
 /**
@@ -13,8 +15,6 @@ import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewMo
  */
 
 class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketTotalListViewModel>() {
-
-    private val BUCKETLIST_API = "http://154.92.251.44/host/"
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_dday_list
@@ -28,20 +28,34 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
         viewDataBinding.ddayEachBucketList.layoutManager = layoutManager
         viewDataBinding.ddayEachBucketList.hasFixedSize()
-       // viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, DdayBucketTotalListViewModel().getDdayEachBucketItem())
+        viewDataBinding.ddayToolbar.title = "D-day"
+        viewDataBinding.ddayToolbar.backBtnOnClickListener = backBtnOnClickListener()
+        getDdayList()
 
-
-        viewModel.getDdayEachBucketList(BUCKETLIST_API, object : DdayBucketTotalListViewModel.OnDdayBucketListGetEvent{
-            override fun start() {
-                viewDataBinding.progressBar.visibility = View.VISIBLE
-            }
-
-            override fun finish(bucketList: BucketList?) {
-                if(bucketList != null)  {
-                    viewDataBinding.progressBar.visibility = View.GONE
-                    viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList)
-                }
-            }
-        })
     }
+
+    private fun getDdayList() {
+        viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                getDdayList()
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success(bucketList: List<Any>) {
+                stopLoading()
+                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>)
+            }
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
+            }
+
+        })
+
+    }
+
 }

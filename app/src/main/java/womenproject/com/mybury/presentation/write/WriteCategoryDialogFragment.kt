@@ -6,13 +6,15 @@ import android.view.View
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.data.BucketCategory
+import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.WriteCategoryDialogBinding
 import womenproject.com.mybury.ui.WriteItemLayout
 
 
 @SuppressLint("ValidFragment")
-class WriteCategoryDialogFragment(private var userCategory : BucketCategory, private var categorySetListener : (String) -> Unit) : BaseDialogFragment<WriteCategoryDialogBinding>() {
+class WriteCategoryDialogFragment(private var userCategory : List<Category>,
+                                  private var categorySetListener : (Category) -> Unit,
+                                  private var moveToAddCategory: () -> Unit): BaseDialogFragment<WriteCategoryDialogBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -28,43 +30,32 @@ class WriteCategoryDialogFragment(private var userCategory : BucketCategory, pri
 
     override fun initDataBinding() {
         viewDataBinding.addCategory.title = "카테고리 추가"
-        viewDataBinding.notUseCategory.title = "없음"
-
-        viewDataBinding.notUseCategory.itemClickListener = notUseCategoryListener()
         viewDataBinding.addCategory.itemClickListener = addCategoryListener()
 
-
-        for (i in 0 until userCategory.categoryList.size) {
-            addCategoryItem(userCategory.categoryList[i].name)
-        }
-    }
-
-
-    private fun notUseCategoryListener() : View.OnClickListener {
-        return View.OnClickListener {
-            categorySetListener.invoke("없음")
-            dismiss()
+        for (category in userCategory) {
+            addCategoryItem(category)
         }
     }
 
     private fun addCategoryListener() : View.OnClickListener {
         return View.OnClickListener {
-            AddCategoryDialog().show(activity!!.supportFragmentManager, "tag")
+            AddCategoryDialog(moveToAddCategory).show(activity!!.supportFragmentManager, "tag")
+            dismiss()
         }
     }
-    private fun addCategoryItem(title : String) {
+    private fun addCategoryItem(category: Category) {
 
-        val categorySelectListener: (String) -> Unit = { it ->
+        val categorySelectListener: (Category) -> Unit = { it ->
             categorySetListener.invoke(it)
             dismiss()
         }
 
-        val writeImgLayout = WriteItemLayout(this.context!!, categorySelectListener).setUI(title)
+        val writeImgLayout = WriteItemLayout(this.context!!, categorySelectListener).setUI(category)
         viewDataBinding.categoryListLayout.addView(writeImgLayout)
     }
 
 
-    class AddCategoryDialog : BaseNormalDialogFragment() {
+    class AddCategoryDialog(val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "알림"
@@ -77,12 +68,13 @@ class WriteCategoryDialogFragment(private var userCategory : BucketCategory, pri
 
         override fun createOnClickCancelListener(): View.OnClickListener {
             return View.OnClickListener {
-                dismiss()
+              dismiss()
             }
         }
 
         override fun createOnClickConfirmListener(): View.OnClickListener {
             return View.OnClickListener {
+                moveToAddCategory.invoke()
                 dismiss()
             }
         }

@@ -9,7 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import womenproject.com.mybury.presentation.MainActivity
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
@@ -19,23 +19,25 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     lateinit var viewDataBinding: T
 
-    abstract val layoutResourceId : Int
+    abstract val layoutResourceId: Int
 
-    abstract val viewModel : R
+    abstract val viewModel: R
 
-    /*
-    * 두번째 호출
-    * 데이터 바인딩, rxJava 설정
-    * */
     abstract fun initDataBinding()
+
+    var isCancelConfirm = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            Log.e("ayhan", "backBtn")
-            setOnBackBtnClickListener()
-            false
+            Log.e("ayhan", "softBackBtnClick")
+            if (isCancelConfirm) {
+                false
+            } else {
+                actionByBackButton()
+                true
+            }
         })
         checkNetworkConnect()
     }
@@ -43,8 +45,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
-
-
         return viewDataBinding.root
     }
 
@@ -54,17 +54,13 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         initDataBinding()
     }
 
-    private fun checkNetworkConnect(){
-        if(BaseViewModel().isNetworkDisconnect()) {
-
+    private fun checkNetworkConnect() {
+        if (BaseViewModel().isNetworkDisconnect()) {
             BaseNetworkFragment().show(activity!!.supportFragmentManager, "tag")
-
         }
     }
 
-
     class BaseNetworkFragment : BaseNormalDialogFragment() {
-
         init {
             TITLE_MSG = "네트워크 알림"
             CONTENT_MSG = "네트워크 연결이 끊겼습니다."
@@ -74,10 +70,33 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         }
     }
 
-    open fun setOnBackBtnClickListener() : View.OnClickListener {
-        return View.OnClickListener {
-            activity!!.onBackPressed()
+    fun backBtnOnClickListener() = View.OnClickListener {
+        Log.e("ayhan", "backBtnOnClickListener")
+        activity!!.onBackPressed()
+    }
+
+    fun onBackPressedFragment() {
+        isCancelConfirm = true
+        activity!!.onBackPressed()
+    }
+
+    open fun actionByBackButton() {
+        Log.e("ayhan", "actionByBackButton")
+    }
+
+    fun startLoading() {
+        Log.e("ayhan", "startLoading")
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.startLoading()
+            Log.e("ayhan", "startLoading2")
         }
     }
 
+    fun stopLoading() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.stopLoading()
+        }
+    }
 }

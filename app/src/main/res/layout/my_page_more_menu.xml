@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="profileEditClickListener"
             type="android.view.View.OnClickListener" />
@@ -13,15 +15,17 @@
             name="loginInfoClickListener"
             type="android.view.View.OnClickListener" />
 
-
         <variable
             name="appInfoClickListener"
             type="android.view.View.OnClickListener" />
 
-
         <variable
             name="alarmClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="isAlarmVisible"
+            type="boolean" />
 
     </data>
 
@@ -34,7 +38,7 @@
 
         <ImageView
             android:layout_width="224dp"
-            android:layout_height="186dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="70dp"
             android:layout_marginEnd="10dp"
@@ -43,7 +47,7 @@
         <LinearLayout
             android:padding="10dp"
             android:layout_width="168dp"
-            android:layout_height="166dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="84dp"
             android:layout_marginEnd="40dp"
@@ -88,6 +92,7 @@
                 android:gravity="center_vertical"
                 android:onClick="@{alarmClickListener}"
                 android:text="알림"
+                android:visibility="@{isAlarmVisible ? View.VISIBLE : View.GONE}"
                 android:textColor="@color/_434343"
                 android:textSize="14sp" />
 

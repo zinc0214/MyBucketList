@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="cancelBtnClickListener"
             type="android.view.View.OnClickListener" />
@@ -38,12 +40,13 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="viewModel"
+            name="writeViewModel"
             type="womenproject.com.mybury.presentation.write.BucketWriteViewModel" />
 
         <variable
             name="activity"
             type="womenproject.com.mybury.presentation.write.BucketWriteFragment" />
+
 
     </data>
 
@@ -60,8 +63,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp">
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp">
 
                 <TextView
                     android:id="@+id/write_cancel"
@@ -105,11 +108,10 @@
                     android:orientation="vertical">
 
                     <EditText
-                        android:layout_gravity="center_vertical"
                         android:id="@+id/titleText"
-                        style="@style/EditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:background="@android:color/transparent"
                         android:gravity="top"
                         android:hint="새로운 목표를 작성해보세요."
@@ -127,11 +129,11 @@
                         android:layout_height="44dp"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/write_memo_background"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <EditText
                             android:id="@+id/memoText"
-                            style="@style/EditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -188,22 +190,17 @@
                 android:background="@drawable/memo_img_add_button_background"
                 android:onClick="@{memoImgAddListener}">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/memo_img_add" />
-
                 <TextView
                     android:id="@+id/memo_img_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="4dp"
+                    android:drawableLeft="@drawable/memo_img_add"
+                    android:drawablePadding="4dp"
+                    android:gravity="center"
+                    android:paddingStart="8dp"
                     android:paddingTop="6dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="6dp"
-                    android:gravity="center"
                     android:text="메모/이미지"
                     android:textColor="@color/_5a95ff"
                     android:textSize="11sp" />
@@ -213,14 +210,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.6dp"
-                android:background="@color/_dddddd" />
+                android:background="@color/_dddddd"
+                android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/_ffffff"
                 android:gravity="center_vertical"
-                android:onClick="@{openSettingListener}">
+                android:onClick="@{openSettingListener}"
+                android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}">
 
                 <ImageView
                     android:id="@+id/open_img"
@@ -380,14 +379,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
-
-        <ProgressBar
-            android:id="@+id/add_bucket_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
 
     </RelativeLayout>
 

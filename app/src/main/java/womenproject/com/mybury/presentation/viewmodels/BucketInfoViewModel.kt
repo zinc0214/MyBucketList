@@ -4,14 +4,8 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.network.RetrofitInterface
-import womenproject.com.mybury.data.network.bucketListApi
 
 /**
  * Created by HanAYeon on 2019-06-25.
@@ -20,25 +14,29 @@ import womenproject.com.mybury.data.network.bucketListApi
 class BucketInfoViewModel : BaseViewModel() {
 
 
-    interface OnBucketListGetEvent {
-        fun start()
-        fun finish(bucketList: List<BucketItem>)
-        fun fail()
-    }
-
-
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: OnBucketListGetEvent) {
-
+    fun getMainBucketList(callback: MoreCallBackAnyList, filter: String, sort: String) {
         callback.start()
-
-        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
+        apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bucketList ->
-                    run {
-                        Log.e("ayhan", "getMainBucketList:${bucketList.retcode}")
-                        callback.finish(bucketList.bucketlists)
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> {
+                            Log.e("ayhan", "getMainBucketList:${response.retcode}")
+                            callback.success(response.bucketlists)
+                        }
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
                     }
                 }) {
                     Log.e("ayhan", it.toString())
@@ -48,17 +46,31 @@ class BucketInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun getMainBucketListByCategory(callback: OnBucketListGetEvent, categoryName: String) {
+    fun getBucketListByCategory(callback: MoreCallBackAnyList, categoryId: String) {
 
         callback.start()
 
-        bucketListApi.requestMainBucketListResult("8a81e5216ebbd69f016ebbd6b2fa0015", "started", "updateDt")
+        apiInterface.requestCategoryBucketList(accessToken, categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { response -> response.bucketlists }
+                .map { response ->
+                    when {
+                        response.retcode == "200" -> response.bucketlists
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+                }
                 .subscribe({ bucketItemList ->
-                    bucketItemList.filter { it.category.name == categoryName }
-                    callback.finish(bucketItemList)
+                    callback.success(bucketItemList as List<Any>)
                 }) {
                     Log.e("ayhan", it.toString())
                     callback.fail()
@@ -67,38 +79,34 @@ class BucketInfoViewModel : BaseViewModel() {
 
     }
 
+    @SuppressLint("CheckResult")
+    fun getCategoryList(callback: MoreCallBackAnyList) {
 
-/*
+        apiInterface.requestBeforeWrite(accessToken, userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    when {
+                        response.retcode == "200" -> {
+                            callback.success(response.categoryList)
+                        }
+                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
 
-    fun getMainBucketList2(api: String, callback: OnBucketListGetEvent): BucketList? {
+                            override fun fail() {
+                                callback.fail()
+                            }
 
-        callback.start()
-
-        val restClient: RetrofitInterface = OkHttp3RetrofitManager(api).getRetrofitService(RetrofitInterface::class.java)
-
-        val bucketListResultData = restClient.requestMainBucketListResult()
-        bucketListResultData.enqueue(object : Callback<BucketList> {
-            override fun onResponse(call: Call<BucketList>?, response: Response<BucketList>?) {
-
-                if (response != null && response.isSuccessful) {
-                    Log.e("ayhan:result", "${response.body()}")
-                    bucketList = response.body()
-                    Log.e("ayhan:bucketList", "$bucketList")
-                    callback.finish(bucketList)
+                        })
+                        else -> callback.fail()
+                    }
+                }) {
+                    callback.fail()
+                    Log.e("ayhan", it.toString())
                 }
-            }
-
-            override fun onFailure(call: Call<BucketList>?, t: Throwable?) {
-                Log.e("ayhan2", t.toString())
-                //progressVisible.set(View.GONE)
-                callback.finish(bucketList)
-            }
-        })
-
-        return bucketList
-
     }
-*/
 
 
 }
