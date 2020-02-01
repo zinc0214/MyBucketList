@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
@@ -118,7 +117,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             viewDataBinding.moreImage.layout.visibility = View.VISIBLE
         }
 
-        if (bucketInfo.userCount >= bucketInfo.goalCount) {
+        if (bucketInfo.userCount >= bucketInfo.goalCount ?:0) {
             viewDataBinding.completeLayout.visibility = View.VISIBLE
             viewDataBinding.completeText.text = "달성 완료! 대단해요"
             viewDataBinding.completeText.isEnabled = false
@@ -130,15 +129,12 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
         val imgList = arrayListOf<String>()
         if (!bucketInfo.imgUrl1.isNullOrBlank()) {
-            Log.e("ayhan", "1 is use")
             imgList.add(bucketInfo.imgUrl1)
         }
         if (!bucketInfo.imgUrl2.isNullOrBlank()) {
-            Log.e("ayhan", "2 is use")
             imgList.add(bucketInfo.imgUrl2)
         }
         if (!bucketInfo.imgUrl3.isNullOrBlank()) {
-            Log.e("ayhan", "3 is use")
             imgList.add(bucketInfo.imgUrl3)
         }
         return imgList
@@ -179,7 +175,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         Log.e("ayham", "gpgin")
 
         val userId = UseUserIdRequest(getUserId(context!!))
-        viewModel.deleteBucketListner(object : BaseViewModel.Simple3CallBack {
+        viewModel.deleteBucketListener(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 deleteBucket()
             }

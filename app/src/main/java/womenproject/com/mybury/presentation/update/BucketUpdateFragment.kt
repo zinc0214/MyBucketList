@@ -26,7 +26,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
         super.onCreate(savedInstanceState)
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            Log.e("ayhan", "softBackBtnClick")
             if (isCancelConfirm) {
                 false
             } else {
@@ -50,7 +49,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
         viewModel.bucketItem = bucketItem
         alreadyImgList = setImgList(bucketItem)
 
-        Log.e("ayhan", "bucket...? , ${bucketItem.title}")
         viewDataBinding.titleText.setText(bucketItem.title)
 
         if (bucketItem.memo.isNotEmpty()) {
@@ -76,13 +74,12 @@ class BucketUpdateFragment : BucketWriteFragment() {
         if (bucketItem.dDate != null && !bucketItem.dDate.equals("0")) {
             viewDataBinding.ddayText.text = bucketItem.dDate
 
-            val dday = bucketItem.dDate.split("/")
+            val dday = bucketItem.dDate?.split("/")
 
-            Log.e("ayhan", "dday_split : ${dday}")
-            var date = Date()
-            date.year = dday[0].toInt() - 1900
-            date.month = dday[1].toInt() - 1
-            date.date = dday[2].toInt()
+            val date = Date()
+            date.year = dday?.get(0)?.toInt()?.minus(1900) ?: 0
+            date.month = dday?.get(1)?.toInt()?.minus(1) ?: 0
+            date.date = dday?.get(2)?.toInt() ?: 0
 
             currentCalendarDay = date
 
@@ -90,9 +87,9 @@ class BucketUpdateFragment : BucketWriteFragment() {
             viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
-        if (bucketItem.goalCount != null && !bucketItem.goalCount.equals("1")) {
+        if (bucketItem.goalCount != null && bucketItem.goalCount.toString() != "1") {
             viewDataBinding.goalCountText.text = bucketItem.goalCount.toString()
-            goalCount = bucketItem.goalCount
+            goalCount = bucketItem.goalCount?:0
             viewDataBinding.goalCountText.setEnableTextColor()
             viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
         }

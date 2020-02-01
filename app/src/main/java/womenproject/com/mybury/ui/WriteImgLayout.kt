@@ -49,12 +49,10 @@ class WriteImgLayout internal constructor(context: Context,
     fun setAleadyUI(url : String): View {
         val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
 
-        Log.e("ayhan", "UIIIDDIDI : $url")
-
         val imgView = view.findViewById<ImageView>(R.id.write_img)
         Glide.with(view).load(url).centerCrop().placeholder(R.drawable.gradient_background).into(imgView)
 
-        cardViewLayout = view.findViewById<RelativeLayout>(R.id.img_all_layout)
+        cardViewLayout = view.findViewById(R.id.img_all_layout)
         cardViewLayout.setOnClickListener {
             imgClickListener.invoke(url)
         }

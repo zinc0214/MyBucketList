@@ -21,12 +21,11 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> {
-                            Log.e("ayhan", "getMainBucketList:${response.retcode}")
+                    when (response.retcode) {
+                        "200" -> {
                             callback.success(response.bucketlists)
                         }
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -39,7 +38,7 @@ class BucketInfoViewModel : BaseViewModel() {
                         else -> callback.fail()
                     }
                 }) {
-                    Log.e("ayhan", it.toString())
+                    Log.e("myBury", "getMainBucketListFail : $it")
                     callback.fail()
                 }
 
@@ -72,7 +71,7 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribe({ bucketItemList ->
                     callback.success(bucketItemList as List<Any>)
                 }) {
-                    Log.e("ayhan", it.toString())
+                    Log.e("myBury", "requestCategoryBucketList Fail :$it")
                     callback.fail()
                 }
 
@@ -86,11 +85,11 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> {
+                    when (response.retcode) {
+                        "200" -> {
                             callback.success(response.categoryList)
                         }
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -104,7 +103,7 @@ class BucketInfoViewModel : BaseViewModel() {
                     }
                 }) {
                     callback.fail()
-                    Log.e("ayhan", it.toString())
+                    Log.e("myBury", "getCategoryListFail : $it")
                 }
     }
 

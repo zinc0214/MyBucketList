@@ -33,10 +33,8 @@ class MyPageViewModel : BaseViewModel() {
                     callback.fail()
                 }
                 .subscribe({ response ->
-                    Log.e("ayhan", "getMyPageInfo : ${response}")
                     when {
                         response.retcode == "200" -> {
-                            Log.e("ayhan", "categoryLL : $response")
                             _myPageInfo.value = response
                             callback.success(response)
                         }
@@ -53,7 +51,6 @@ class MyPageViewModel : BaseViewModel() {
                     }
                 }) {
                     callback.fail()
-                    Log.e("ayhan", it.toString())
                 }
     }
 
@@ -72,10 +69,9 @@ class MyPageViewModel : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
-                        Log.e("ayhan", "createAccountResponse:${response.retcode}")
-                        when {
-                            response.retcode == "200" -> callback.success()
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        when (response.retcode) {
+                            "200" -> callback.success()
+                            "301" -> getRefreshToken(object : SimpleCallBack {
                                 override fun success() {
                                     callback.restart()
                                 }
@@ -88,7 +84,7 @@ class MyPageViewModel : BaseViewModel() {
                             else -> callback.fail()
                         }
                     }) {
-                        Log.e("ayhan", "createAccountFail: $it")
+                        Log.e("myBury", "createAccountFail: $it")
                         callback.fail()
                     }
         } else {
@@ -96,10 +92,9 @@ class MyPageViewModel : BaseViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response ->
-                        Log.e("ayhan", "createAccountResponse:${response.retcode}")
-                        when {
-                            response.retcode == "200" -> callback.success()
-                            response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        when (response.retcode) {
+                            "200" -> callback.success()
+                            "301" -> getRefreshToken(object : SimpleCallBack {
                                 override fun success() {
                                     callback.restart()
                                 }
@@ -112,7 +107,7 @@ class MyPageViewModel : BaseViewModel() {
                             else -> callback.fail()
                         }
                     }) {
-                        Log.e("ayhan", "createAccountFail: $it")
+                        Log.e("myBury", "createAccountFail: $it")
                         callback.fail()
                     }
         }

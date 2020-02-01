@@ -69,15 +69,13 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             override fun success(value: List<Any>) {
                 val editCategoryName: (Category, String) -> Unit = { category: Category, newName: String ->
-                    Log.e("ayhan", "pre : ${category.name}, chan : ${newName}")
                     imm.hideSoftInputFromWindow(view!!.windowToken, 0)
                     editCategoryItem(category, newName)
                     originCategoryList = value as ArrayList<Category>
-                    changeCategoryList = value as ArrayList<Category>
+                    changeCategoryList = value
                     viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 }
 
-                Log.e("ayhan", "bubusccess : ${value.size}")
                 val editCategoryListAdapter = EditCategoryListAdapter(value as MutableList<Category>,
                         this@CategoryEditFragment,
                         this@CategoryEditFragment,
@@ -200,9 +198,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
         })
-
-        Log.e("ayhan", "setCategoryDeleteListener")
-
     }
 
     fun setCategoryStatusChange() {
@@ -213,7 +208,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             override fun success() {
                 Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
-                Log.e("ayhan", "is Change")
                 stopLoading()
                 onBackPressedFragment()
             }
@@ -235,10 +229,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
         viewDataBinding.bottomLayout.visibility = View.VISIBLE
         if (changeCategoryList == originCategoryList) {
-            Log.e("ayhan", "SAME")
             onBackPressedFragment()
         } else {
-            Log.e("ayhan", "NOTSAME")
             setCategoryStatusChange()
         }
     }
@@ -255,11 +247,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         }
 
         viewDataBinding.cancelText.isEnabled = removedList.size > 0
-
-        for (i in removedList) {
-            Log.e("ayhan", "itemId : ${i}")
-        }
-
     }
 
     override fun movend(list: List<Category>) {
@@ -272,7 +259,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             viewDataBinding.root.getWindowVisibleDisplayFrame(r)
 
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
-            Log.e("ayhan", "${heightDiff}")
             try {
                 if (heightDiff < 500) {
                     if (viewDataBinding.addCategoryItem.categoryItemLayout.visibility == View.VISIBLE && isKeyBoardShown) {

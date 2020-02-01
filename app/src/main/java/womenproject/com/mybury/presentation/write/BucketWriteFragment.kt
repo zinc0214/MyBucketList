@@ -16,9 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
-import kotlinx.android.synthetic.main.text_view_layout.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -34,7 +32,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
@@ -66,7 +63,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         super.onCreate(savedInstanceState)
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            Log.e("ayhan", "softBackBtnClick")
             if (isCancelConfirm) {
                 false
             } else {
@@ -95,10 +91,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 getCategory()
             }
 
-            override fun success(_categoryList: List<Any>) {
+            override fun success(value: List<Any>) {
                 stopLoading()
-                Log.e("ayhan", "cate: ${_categoryList.size}")
-                categoryList = _categoryList as ArrayList<Category>
+                categoryList = value as ArrayList<Category>
                 initForUpdate()
                 alreadyAdd()
                 setUpView()
@@ -151,16 +146,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
             openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
                 override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                    if (p0!!.targetPosition.toString().equals("0.0")) {
-                        Log.e("ayhan", "111")
+                    if (p0!!.targetPosition.toString() == "0.0") {
                         openImg.background = context!!.getDrawable(R.drawable.open_enable)
                         open = true
                     } else {
-                        Log.e("ayhan", "222")
                         openImg.background = context!!.getDrawable(R.drawable.open_disable)
                         open = false
                     }
-                    Log.e("ayhan", "tran  :" + p0!!.id + "," + p0.targetPosition + "," + p0.transitionName)
                 }
 
                 override fun allowsTransition(p0: MotionScene.Transition?): Boolean {
@@ -206,12 +198,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 dismiss()
             }
         }
-    }
-
-    override fun actionByBackButton() {
-        Log.e("ayhan", "writeBack")
-
-
     }
 
     open fun bucketAddOnClickListener(): View.OnClickListener {
@@ -364,7 +350,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         alreadyImgList[imgList.size] = uri.toString()
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
-        Log.e("ayhan", "imgList : ${imgList.size}")
     }
 
     private fun alreadyAdd() {
@@ -381,7 +366,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         for (list in alreadyImgList) {
-            Log.e("ayhan", "list1212 : $list")
             if (list.value != null) {
                 imgList.add(list)
                 val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgList.size, imgFieldClickListener).setAleadyUI(list.value!!)
@@ -397,7 +381,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
         imgList.removeAt(deleteImgValue)
         alreadyImgList[layout] = null
-        Log.e("ayhan", "addIMGSIZE : $layout")
     }
 
     fun showImgWide(uri: Uri) {
@@ -437,8 +420,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-
-            Log.e("ayhan", "currentCalendarDay : $ " + currentCalendarDay.toString())
             if (currentCalendarDay == null) {
                 currentCalendarDay = Calendar.getInstance().time
             }

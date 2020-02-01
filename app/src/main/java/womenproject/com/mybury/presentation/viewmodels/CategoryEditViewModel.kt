@@ -91,7 +91,6 @@ class CategoryInfoViewModel : BaseViewModel() {
     fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
         var idList = arrayListOf<String>()
         for(i in list) {
-            Log.e("ayhan", "change : ${i.name}")
             idList.add(i.id)
         }
         val request = ChangeCategoryStatusRequest(userId, idList)
@@ -100,10 +99,9 @@ class CategoryInfoViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Log.e("ayhan", "categortStatusResponse : ${it.retcode}")
-                    when {
-                        it.retcode == "200" -> callBack.success()
-                        it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                    when (it.retcode) {
+                        "200" -> callBack.success()
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callBack.restart()
                             }

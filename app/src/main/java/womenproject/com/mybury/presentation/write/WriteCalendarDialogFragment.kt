@@ -56,8 +56,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
         setCalendarViewListener()
 
-        Log.e("ayhan", "select : ${selectDay.year}/ ${selectDay.month} / ${selectDay.date}")
-        Log.e("ayhan", "calendar : ${calendarDay} // ${calendarDay.year}}")
     }
 
     private fun initCalendarDeco() {
@@ -138,11 +136,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
         viewDataBinding.dateTitle.setSelectDate(dateYear, dateMonth + 1)
         dday = "$dateYear/$month/$day"
-
-        Log.e("ayhan:cal_setCurrentDateTitle", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
-        Log.e("ayhan:dd", dday)
-
-
     }
 
     private fun confirmOnClickListener(): View.OnClickListener {
@@ -169,8 +162,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     private fun selectTypeOnChangeListener(): View.OnClickListener {
         return View.OnClickListener {
 
-            Log.e("ayhan", "textClick,SelectDay : ${selectDay.year} / ${selectDay.month} / ${selectDay.date}}")
-
             if (calendarVisible) {
                 viewDataBinding.calendarView.visibility = View.GONE
                 viewDataBinding.datePicker.visibility = View.VISIBLE
@@ -181,8 +172,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
                 monthPicker.value = selectDay.month
                 dayPicker.value = selectDay.date
 
-                Log.e("ayhan:datePickerVisible", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
-
                 calendarVisible = false
             } else {
                 viewDataBinding.calendarView.visibility = View.VISIBLE
@@ -192,8 +181,6 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
                 viewDataBinding.calendarView.setCurrentDate(selectDay)
                 viewDataBinding.calendarView.setDateSelected(selectDay, true)
-
-                Log.e("ayhan:calendarVisible", "${selectDay.year}/${selectDay.month}/${selectDay.date}")
 
                 calendarVisible = true
             }

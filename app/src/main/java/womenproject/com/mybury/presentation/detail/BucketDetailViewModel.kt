@@ -29,74 +29,7 @@ class BucketDetailViewModel : BaseViewModel() {
                 .subscribe({ detailBucketItem ->
                     when {
                         detailBucketItem.retcode == "200" -> {
-                            Log.e("ayhan", "getMainBucketList:${detailBucketItem.retcode}")
                             callback.success(detailBucketItem)
-                        }
-                        detailBucketItem.retcode == "301" ->getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
-                    }
-
-                }) {
-                    Log.e("ayhan", it.toString())
-                    callback.fail()
-                }
-
-    }
-
-    @SuppressLint("CheckResult")
-    fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
-
-        val bucketRequest = BucketRequest(bucketId)
-        callback.start()
-        apiInterface.postCompleteBucket(accessToken, bucketRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when {
-                        detailBucketItem.retcode == "200" -> {
-                            Log.e("ayhan", "getMainBucketList:${detailBucketItem.retcode}")
-                            callback.success()
-                        }
-                        detailBucketItem.retcode == "301" ->getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
-                    }
-
-                }) {
-                    Log.e("ayhan", it.toString())
-                    callback.fail()
-                }
-
-    }
-
-    @SuppressLint("CheckResult")
-    fun deleteBucketListner(callback: Simple3CallBack, userId: UseUserIdRequest, bucketId: String) {
-        callback.start()
-        apiInterface.deleteBucket(accessToken, userId, bucketId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when {
-                        detailBucketItem.retcode == "200" -> {
-                            Log.e("ayhan", "getMainBucketList:${detailBucketItem.retcode}")
-                            callback.success()
                         }
                         detailBucketItem.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
@@ -112,7 +45,71 @@ class BucketDetailViewModel : BaseViewModel() {
                     }
 
                 }) {
-                    Log.e("ayhan", it.toString())
+                    Log.e("myBury", "loadBucketDetail Fail : $it")
+                    callback.fail()
+                }
+
+    }
+
+    @SuppressLint("CheckResult")
+    fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
+
+        val bucketRequest = BucketRequest(bucketId)
+        callback.start()
+        apiInterface.postCompleteBucket(accessToken, bucketRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ detailBucketItem ->
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
+                            callback.success()
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+
+                }) {
+                    Log.e("myBury", "postCompleteBucket Fail : $it")
+                    callback.fail()
+                }
+
+    }
+
+    @SuppressLint("CheckResult")
+    fun deleteBucketListener(callback: Simple3CallBack, userId: UseUserIdRequest, bucketId: String) {
+        callback.start()
+        apiInterface.deleteBucket(accessToken, userId, bucketId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ detailBucketItem ->
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
+                            callback.success()
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+
+                }) {
+                    Log.e("myBury", "deleteBucket Fail: $it")
                     callback.fail()
                 }
 

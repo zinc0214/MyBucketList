@@ -110,8 +110,6 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun setOnCheckBoxChangedListener() = View.OnClickListener {
-        Log.e("ayhan", "${it}")
-
         when (it) {
             viewDataBinding.startedCheckBox -> started = viewDataBinding.startedCheckBox.isChecked
             viewDataBinding.completeCheckBox -> complete = viewDataBinding.completeCheckBox.isChecked
@@ -135,7 +133,6 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun setListUpFilter() {
-        Log.e("ayhan", "checkFilter : ${update}, $written")
         if (update) {
             setFilterListUp(context!!, ListUpFilter.updatedDt)
         } else {

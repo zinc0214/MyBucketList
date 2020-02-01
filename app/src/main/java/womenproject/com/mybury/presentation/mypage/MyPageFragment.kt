@@ -47,7 +47,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             }
 
             override fun start() {
-                Log.e("ayhan", "???")
                 startLoading()
             }
 
@@ -55,7 +54,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                 val info = value as MyPageInfo
                 stopLoading()
-                Log.e("ayhan", "cate: ${info.categoryList.size}")
 
                 val layoutManager = LinearLayoutManager(context)
 
@@ -124,7 +122,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     private fun seyMyProfileImg(imgUrl: String?) {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
-            Log.e("ayhan", "use RandomImg: $num")
             if (num == 1) {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
                 viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))

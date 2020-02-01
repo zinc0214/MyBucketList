@@ -56,12 +56,11 @@ class BucketWriteViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> {
-                            Log.e("ayhan", "addBucketResponse : ${response.retcode}")
+                    when (response.retcode) {
+                        "200" -> {
                             onBucketAddEvent.success()
                         }
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 onBucketAddEvent.restart()
                             }
@@ -74,7 +73,7 @@ class BucketWriteViewModel : BaseViewModel() {
                     }
 
                 }) {
-                    Log.e("ayhan", "addBucketFail : $it")
+                    Log.e("myBury", "addBucketFail : $it")
                     onBucketAddEvent.fail()
                 }
     }
@@ -101,7 +100,6 @@ class BucketWriteViewModel : BaseViewModel() {
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
 
-        Log.e("ayhan", "alreadyImgList[0].isNullOrBlank() : ${alreadyImgList[0].isNullOrBlank()}")
         var removeImg1 = (alreadyImgList[1]==null).stringToMultipartFile("removeImg1")
         var removeImg2 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg2")
         var removeImg3 =(alreadyImgList[3]==null).stringToMultipartFile("removeImg3")
@@ -111,15 +109,12 @@ class BucketWriteViewModel : BaseViewModel() {
                 val file = imgList[i] as File
                 when (i) {
                     0 -> {
-                        Log.e("ayhan", "isFile1")
                         image1 = file.fileToMultipartFile("image1")
                     }
                     1 -> {
-                        Log.e("ayhan", "isFile2")
                         image2 = file.fileToMultipartFile("image2")
                     }
                     2 -> {
-                        Log.e("ayhan", "isFile3")
                         image3 = file.fileToMultipartFile("image3")
                     }
                 }
@@ -133,12 +128,11 @@ class BucketWriteViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> {
-                            Log.e("ayhan", "addBucketResponse : ${response.retcode}")
+                    when (response.retcode) {
+                        "200" -> {
                             onBucketAddEvent.success()
                         }
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 onBucketAddEvent.restart()
                             }
@@ -151,7 +145,7 @@ class BucketWriteViewModel : BaseViewModel() {
                     }
 
                 }) {
-                    Log.e("ayhan", "addBucketFail : $it")
+                    Log.e("myBury", "addBucketFail : $it")
                     onBucketAddEvent.fail()
                 }
 

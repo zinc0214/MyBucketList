@@ -26,7 +26,6 @@ class SplashActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         val num = Random.nextInt(2)
-        Log.e("ayhan", "nume: $num")
         if (num == 1) {
             setContentView(R.layout.splash_white)
         } else {
@@ -60,7 +59,6 @@ class SplashActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     if (response.retcode == "200") {
-                        Log.e("ayhan", "token ::: ${response.accessToken}, ${response.refreshToken}")
                         Preference.setAccessToken(this, response.accessToken)
                         Preference.setRefreshToken(this, response.refreshToken)
                         goToNext()
@@ -68,8 +66,8 @@ class SplashActivity : AppCompatActivity() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
                 }) {
-                    Log.e("ayhan", it.toString())
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    Log.e("myBury", "getLoginToken Fail : $it")
                 }
 
 

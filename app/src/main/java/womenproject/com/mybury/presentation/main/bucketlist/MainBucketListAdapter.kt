@@ -58,7 +58,6 @@ open class MainBucketListAdapter(val bucketList: List<BucketItem>) : RecyclerVie
     open fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
 
         return View.OnClickListener {
-            Log.e("ayhan", "버킷 눌렸어 : $bucket.title")
             val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
             directions.bucketId = bucket.id
             it.findNavController().navigate(directions)

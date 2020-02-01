@@ -60,13 +60,11 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private fun initStartView() {
         if (!checkAddImageListener.invoke()) {
-            Log.e("ayhan:checkAddImageListener", "checkAddImageListener is Can't")
             viewDataBinding.addAlbumImgLayout.writeItemLayout.disableAdd()
             viewDataBinding.addCamImgLayout.writeItemLayout.disableAdd()
         }
 
         if (!checkAddTypeAble.invoke()) {
-            Log.e("ayhan:checkMemoAddListener", "checkMemoAddListener is Can't")
             viewDataBinding.addMemoLayout.writeItemLayout.disableAdd()
         }
 

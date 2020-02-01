@@ -48,7 +48,6 @@ class ShowImgWideFragment() : BaseDialogFragment<ImgWideLayoutBinding>() {
 
         viewDataBinding.swipeLayout.setOnSwipeBackListener(object : SwipeBackLayout.SwipeBackListener {
             override fun onViewPositionChanged(fractionAnchor: Float, fractionScreen: Float) {
-                Log.e("ayhan", "fractionAnchor : ${fractionAnchor} / fractionScreen : ${fractionScreen}")
                 if(fractionAnchor.toInt()==1 && fractionScreen.toInt()==1) {
                     dismiss()
                 }

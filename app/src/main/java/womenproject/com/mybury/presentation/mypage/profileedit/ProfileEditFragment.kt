@@ -61,12 +61,9 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         super.onCreate(savedInstanceState)
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            Log.e("ayhan", "profileEditFragment :: softBackBtnClick")
             if (isCancelConfirm) {
-                Log.e("ayhan", "1")
                 false
             } else {
-                Log.e("ayhan", "2")
                 cancelClickAction()
                 true
             }
@@ -129,7 +126,6 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
             override fun success(myPageInfo: Any) {
                 val info = myPageInfo as MyPageInfo
-                Log.e("ayhan", "gogu221ng???")
                 stopLoading()
 
                 viewDataBinding.nicknameEditText.setText(info.name)
@@ -179,18 +175,14 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     private fun setSaveBtnEnabled() {
 
-        Log.e("ayhan", "de: $defaultImg, last: $lastImg")
-
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
             viewDataBinding.profileSave.isEnabled = true
             isCancelConfirm = false
-            Log.e("ayhan", "다르다")
         } else {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
             viewDataBinding.profileSave.isEnabled = false
             isCancelConfirm = true
-            Log.e("ayhan", "안다르다")
         }
     }
 
@@ -204,7 +196,6 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     private fun setDefaultImg() {
         val num = Random.nextInt(2)
-        Log.e("ayhan", "nume: $num")
         defaultImg = if (num == 1) {
             viewDataBinding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
             DefaulProfileImg().bury
@@ -241,9 +232,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private fun cancelClickAction() {
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
-            Log.e("ayhan", "cancelClickListener : 1")
         } else {
-            Log.e("ayhan", "cancelClickListener : 2")
             if(isKeyboardUp) { imm.hideSoftInputFromWindow(view!!.windowToken, 0) }
             cancelConfirm.invoke(true)
         }

@@ -88,14 +88,12 @@ class SplashLoginActivity : AppCompatActivity() {
 
     @SuppressLint("CheckResult")
     private fun checkForIsFirstLogin(account: GoogleSignInAccount) {
-        Log.e("ayhan", "${account.email}, ${account.displayName}, ${account.familyName}, ${account.givenName}")
 
         val emailDataClass = SignUpCheckRequest(account.email.toString())
         apiInterface.postSignUpCheck(emailDataClass)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    Log.e("ayhan", "checkSingUpResponse :${response.signUp}")
                     setAccountEmail(this, emailDataClass.email)
                     if (response.signUp) {
                         setUserId(this, response.userId)
@@ -106,7 +104,7 @@ class SplashLoginActivity : AppCompatActivity() {
                 }) {
                     val networkFailDialog = NetworkFailDialog()
                     networkFailDialog.show(this.supportFragmentManager)
-                    Log.e("ayhan_3", it.toString())
+                    Log.e("myBury", "getCheckForIsFirstLogin Fail $it")
                 }
 
     }
@@ -135,17 +133,20 @@ class SplashLoginActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    Log.e("ayhan", "postSignUpResponse : ${response.retcode}, ${response.userId}")
-                    if (response.retcode == "200") {
-                        setUserId(this, response.userId)
-                        goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
-                    } else if (response.retcode == "401") {
-                        UserAlreadyExist().show(supportFragmentManager, "tag")
-                    } else {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    when (response.retcode) {
+                        "200" -> {
+                            setUserId(this, response.userId)
+                            goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
+                        }
+                        "401" -> {
+                            UserAlreadyExist().show(supportFragmentManager, "tag")
+                        }
+                        else -> {
+                            CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                        }
                     }
                 }) {
-                    Log.e("ayhan", "fail postSignUpResponse : $it")
+                    Log.e("myBury", "PostSignUpResponse Fail: $it")
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
     }
@@ -160,7 +161,7 @@ class SplashLoginActivity : AppCompatActivity() {
         auth.signOut()
 
         googleSignInClient.signOut().addOnCompleteListener(this) {
-            Log.e("ayhan", "login 초기화 완료")
+            //로그인 초기화 완료
             signIn()
         }
     }
@@ -179,22 +180,21 @@ class SplashLoginActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
                 binding.progressBar.visibility = View.GONE
-                Log.e("ayhan", "$e")
+                CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                Log.e("myBury", "GoogleLoginFail : $e")
             }
         }
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        Log.e("ayhan", "firebaseAuthWithGoogle:" + acct.id!!)
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Log.d("ayhan", "signInWithCredential:success")
                         binding.progressBar.visibility = View.VISIBLE
                     } else {
-                        Log.e("ayhan", "signInWithCredential:failure", task.exception)
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                        Log.e("myBury", "signInWithCredential Fail", task.exception)
                     }
                 }
     }

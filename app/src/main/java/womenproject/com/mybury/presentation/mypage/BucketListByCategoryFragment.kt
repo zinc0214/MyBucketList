@@ -42,8 +42,6 @@ class BucketListByCategoryFragment  : BaseFragment<FragmentBucketListByCategoryB
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        Log.e("ayhan", "categoryId : $selectCategory")
-
         viewModel.getBucketListByCategory(object : BaseViewModel.MoreCallBackAnyList {
             override fun restart() {
                 initBucketListUI()

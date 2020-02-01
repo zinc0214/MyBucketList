@@ -82,7 +82,6 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                     }
 
                 }) {
-                    Log.e("ayhan", it.toString())
                     LogoutOrSignOutFailed("계정삭제 실패").show(activity!!.supportFragmentManager, "tag")
                 }
 
@@ -102,7 +101,6 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         auth.signOut()
 
         googleSignInClient.signOut().addOnCompleteListener(activity!!) {
-            Log.e("ayhan", "로그아웃 완료?")
             setMyBuryLoginComplete(context!!, false)
             LogoutSuccess().show(activity!!.supportFragmentManager)
         }

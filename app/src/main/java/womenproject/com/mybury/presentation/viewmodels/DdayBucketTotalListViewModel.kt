@@ -41,7 +41,7 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
                         else -> callback.fail()
                     }
                 }) {
-                    Log.e("ayhan", it.toString())
+                    Log.e("myBury", it.toString())
                     callback.fail()
                 }
 

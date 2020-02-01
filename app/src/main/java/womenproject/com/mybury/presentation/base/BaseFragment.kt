@@ -31,7 +31,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         super.onCreate(savedInstanceState)
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            Log.e("ayhan", "softBackBtnClick")
             if (isCancelConfirm) {
                 false
             } else {
@@ -71,7 +70,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     fun backBtnOnClickListener() = View.OnClickListener {
-        Log.e("ayhan", "backBtnOnClickListener")
         activity!!.onBackPressed()
     }
 
@@ -81,15 +79,14 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     open fun actionByBackButton() {
-        Log.e("ayhan", "actionByBackButton")
+        // back Button Action
     }
 
     fun startLoading() {
-        Log.e("ayhan", "startLoading")
+
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.startLoading()
-            Log.e("ayhan", "startLoading2")
         }
     }
 

@@ -81,7 +81,6 @@ class CreateAccountActivity : BaseActiviy() {
     private val baseProfileUseListener: () -> Unit = {
 
         val num = Random.nextInt(2)
-        Log.e("ayhan", "nume: $num")
         if (num == 1) {
             binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
         } else {
@@ -201,13 +200,10 @@ class CreateAccountActivity : BaseActiviy() {
     @SuppressLint("CheckResult")
     private fun getLoginToken() {
         val getTokenRequest = UseUserIdRequest(getUserId(this))
-        Log.e("ayhan", "userId : ${getTokenRequest.userId}")
-
         apiInterface.getLoginToken(getTokenRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    Log.e("ayhan", "getTokenResponse ${response.accessToken}")
                     if (response.retcode != "200") {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     } else {
@@ -216,7 +212,7 @@ class CreateAccountActivity : BaseActiviy() {
                     }
 
                 }) {
-                    Log.e("ayhan", "getTokenResponse $it")
+                    Log.e("myBury", "getLoginToken Fail : $it")
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
 
