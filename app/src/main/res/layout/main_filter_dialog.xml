@@ -6,12 +6,17 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.viewmodels.FilterDialogViewModel" />
+            name="fragment"
+            type="womenproject.com.mybury.presentation.main.FilterDialogFragment" />
 
         <variable
             name="filterSetClickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="filterBoxListener"
+            type="android.view.View.OnClickListener" />
+
 
     </data>
 
@@ -42,22 +47,26 @@
 
 
         <CheckBox
+            android:id="@+id/startedCheckBox"
             style="@style/FilterDialogSubTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:button="@drawable/filter_checkbox"
+            android:onClick="@{filterBoxListener}"
             android:text="@string/doing_bucket" />
 
 
         <CheckBox
+            android:id="@+id/completeCheckBox"
             style="@style/FilterDialogSubTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="14dp"
             android:button="@drawable/filter_checkbox"
+            android:onClick="@{filterBoxListener}"
             android:text="@string/done_bucket" />
 
 
@@ -65,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="28dp"
-            android:background="@color/dialogCategoryBackgroundColor"
+            android:background="@color/_f6fcff"
             android:orientation="vertical">
 
             <TextView
@@ -91,6 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:button="@drawable/filter_radio_btn"
+                android:onClick="@{filterBoxListener}"
                 android:text="@string/sort_by_update" />
 
             <RadioButton
@@ -100,6 +110,7 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="14dp"
                 android:button="@drawable/filter_radio_btn"
+                android:onClick="@{filterBoxListener}"
                 android:text="@string/sort_by_written" />
 
         </RadioGroup>
@@ -110,10 +121,10 @@
             android:background="@drawable/filter_dialog_bottom_binder" />
 
         <LinearLayout
-            android:onClick="@{filterSetClickListener}"
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:background="@drawable/filter_dialog_bottom_background">
+            android:background="@drawable/filter_dialog_bottom_background"
+            android:onClick="@{filterSetClickListener}">
 
             <TextView
                 android:layout_width="match_parent"

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/text_field"
+            android:background="@color/_dddddd" />
+
+
+        <LinearLayout
+            android:id="@+id/text_field"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="17dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{title}"
+                android:textColor="@color/_434343"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:lineSpacingExtra="6sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@{content}"
+                android:textColor="@color/_797979"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            app:layoutDescription="@xml/custom_switch_button">
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/switch_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/custom_switch_on"
+                app:altSrc="@drawable/custom_switch_off" />
+
+            <ImageView
+                android:id="@+id/switch_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/custom_switch_circle"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_background"
+                app:layout_constraintStart_toStartOf="@+id/switch_background"
+                app:layout_constraintTop_toTopOf="@+id/switch_background" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    </RelativeLayout>
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+        <variable
+            name="supportClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+</layout>

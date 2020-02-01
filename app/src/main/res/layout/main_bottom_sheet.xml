@@ -45,6 +45,7 @@
                     android:background="@drawable/main_bottom_list" />
 
                 <ImageView
+                    android:onClick="@{myPageClickListener}"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
@@ -64,7 +65,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/main_bucekt_add"
+            android:background="@drawable/add_bucket_list"
             android:onClick="@{writeClickListener}" />
 
     </RelativeLayout>

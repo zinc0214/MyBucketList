@@ -2,45 +2,58 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#D81B60</color>
-
-    <color name="dialogCategoryBackgroundColor">#f6fcff</color>
-    <color name="dialogCategoryTextColor">#434343</color>
-    <color name="dialogUncheckBoxTextColor">#888888</color>
-    <color name="dialogCheckedBoxTextColor">#5a95ff</color>
-    <color name="dialogRadioBtnSelectColor">#5a95ff</color>
-    <color name="dialogRadioBtnUnSelectColor">#eaeaea</color>
-
-    <color name="filterDialogBottomBinder">#eaeaea</color>
+    <color name="colorAccent">#5a95ff</color>
 
     <color name="testColor">#ffa2a2</color>
     <color name="trans">#00ffa2a2</color>
     <color name="textOriColor">#3bff9393</color>
 
-    <color name="white">#ffffff</color>
+    <color name="_000000">#000000</color>
+    <color name="_ffffff">#ffffff</color>
+    <color name="_fd0505">#fd0505</color>
+    <color name="_578afb">#578afb</color>
+    <color name="_e8e8e8">#e8e8e8</color>
+    <color name="_434343">#434343</color>
+    <color name="_888888">#888888</color>
+    <color name="_5a95ff">#5a95ff</color>
+    <color name="_eaeaea">#eaeaea</color>
+    <color name="_fafafa">#fafafa</color>
+    <color name="_222222">#222222</color>
+    <color name="_dbdbdb">#dbdbdb</color>
+    <color name="_b4b4b4">#b4b4b4</color>
+    <color name="_aaaaaa">#aaaaaa</color>
+    <color name="_f9f9f9">#f9f9f9</color>
+    <color name="_ffca5a">#ffca5a</color>
+    <color name="_ffe3a6">#ffe3a6</color>
+    <color name="_a6c6ff">#a6c6ff</color>
+    <color name="_797979">#797979</color>
+    <color name="_d2d5ff">#d2d5ff</color>
+    <color name="_d2e5ff">#d2e5ff</color>
+    <color name="_f3f3f3">#f3f3f3</color>
+    <color name="_f0f0f0">#f0f0f0</color>
+    <color name="_dddddd">#dddddd</color>
+    <color name="_dfdfdf">#dfdfdf</color>
+    <color name="_cccccc">#cccccc</color>
+    <color name="_cca248">#cca248</color>
+    <color name="_859ecc">#859ecc</color>
+    <color name="_f6fcff">#f6fcff</color>
+    <color name="_4656e8">#4656e8</color>
+    <color name="_5076f4">#5076f4</color>
+    <color name="_d8d8d8">#d8d8d8</color>
+    <color name="_666666">#666666</color>
+    <color name="_e7ecf5">#e7ecf5</color>
 
-    <color name="mainBackground">#f6fcff</color>
-    <color name="bucketItemBackground">#e8e8e8</color>
-    <color name="transparent">#00ffffff</color>
 
-    <color name="subColor">#a6c6ff</color>
-    <color name="notiColor">#ffca5a</color>
-
-    <color name="circularProgressBackground">#e8e8e8</color>
-    <color name="bucketSucceedBackground">#33859ecc</color>
-    <color name="bucketBaseBtnBackground">#e8e8e8</color>
-    <color name="bucketSuccessBtnBackground">#a6c6ff</color>
-    <color name="bucketBaseText">#434343</color>
-
-    <color name="ddayListBackground">#f9f9f9</color>
-    <color name="ddayBucketSuccessBtnBackground">#ffca5a</color>
-    <color name="ddayProgressColor">#ffe3a6</color>
-    <color name="ddayBucketSucceedBackground">#33cca248</color>
-
-    <color name="dialogTitleText">#222222</color>
-    <color name="dialogContentText">#888888</color>
-    <color name="dialogBinder">#dbdbdb</color>
-    <color name="dialogBottomBackground">#fafafa</color>
-    <color name="dialogBottomCancelText">#b4b4b4</color>
-    <color name="dialogBottomConfirmText">#5a95ff</color>
+    <color name="_66859ECC">#66859ECC</color>
+    <color name="_33cca248">#33cca248</color>
+    <color name="_99434343">#99434343</color>
+    <color name="_33ffffff">#33ffffff</color>
+    <color name="_66859ecc">#66859ecc</color>
+    <color name="_b33341c0">#b33341c0</color>
+    <color name="_00ffffff">#00ffffff</color>
+    <color name="_4D000000">#4D000000</color>
+    <color name="_b3ffffff">#b3ffffff</color>
+    <color name="_4cc8cdda">#4cc8cdda</color>
+    <color name="_ccffffff">#ccffffff</color>
+    <color name="_cc000000">#cc000000</color>
 </resources>

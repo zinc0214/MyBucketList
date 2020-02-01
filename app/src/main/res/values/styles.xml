@@ -7,13 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="colorControlHighlight">@color/_dfdfdf</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme">
-        <item name="android:textViewStyle">@style/TextViewStyle</item>
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
-        <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
-        <item name="android:checkboxStyle">@style/CheckboxStyle</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
@@ -25,30 +23,6 @@
     </style>
 
 
-    <style name="NanumFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
-    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
-    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
-    <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
-    <style name="RadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
-    <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/nanum_font_family</item>
-    </style>
-
     <style name="CustomProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
 
         <item name="android:spacing">0dp</item>
@@ -58,7 +32,7 @@
 
     <style name="FilterDialogCategoryTextStyle" parent="Base.Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/dialogCategoryTextColor</item>
+        <item name="android:textColor">@color/_434343</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginLeft">20dp</item>
     </style>
@@ -80,13 +54,24 @@
         <item name="android:animateLayoutChanges">true</item>
     </style>
 
+
+    <style name="BucketItemLayoutStyleForENd">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/minimumBucketItemHeight</item>
+        <item name="android:animateLayoutChanges">true</item>
+    </style>
+
+
+
     <style name="BucketItemTitleTextStyle">
+        <item name="android:lineHeight">22dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginEnd">70dp</item>
         <item name="android:maxLines">2</item>
-        <item name="android:textColor">@color/bucketBaseText</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+        <item name="android:textColor">@color/_434343</item>
     </style>
 
 
@@ -99,5 +84,84 @@
         <item name="android:textSize">14sp</item>
 
     </style>
+
+    <style name="writeTopTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/register_text_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="writeSwitchLayoutStyle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">14dp</item>
+    </style>
+
+    <style name="writeSettingListTitleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginStart">36dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+    <style name="writeSettingListContentStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:textColor">@color/write_enable_color</item>
+    </style>
+
+
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/_fd0505</item>
+        <item name="colorPrimary">@color/_a6c6ff</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/_000000</item>
+        <item name="android:weekNumberColor">@color/_fd0505</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/_000000</item>
+    </style>
+
+    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@color/mcv_text_date_dark</item>
+    </style>
+
+    <style name="CalendarWeek" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/_888888</item>
+    </style>
+
+    <style name="CalendarDate" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/calendar_date_color</item>
+    </style>
+
+
+    <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
+    </style>
+
+    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:divider">@color/_a6c6ff</item>
+        <item name="android:dividerHeight">0.6dp</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
 

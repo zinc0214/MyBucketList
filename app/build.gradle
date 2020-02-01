@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 28
@@ -10,11 +11,12 @@ android {
         enabled = true
     }
     defaultConfig {
+        versionName "1.0.1"
         applicationId "womenproject.com.mybury"
-        minSdkVersion 25
+        minSdkVersion 24
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,42 +29,71 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-alpha1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02'
+    implementation 'com.google.android.material:material:1.0.0-alpha1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
     implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
 
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.legacySupportVersion"
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
-
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_logging_version"
-
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_converter_version"
-
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     implementation 'com.android.support:design:28.0.0'
 
+    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
+    implementation 'de.hdodenhof:circleimageview:1.3.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.6.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.5.0"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    //rxJava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    //rxKotlin
+    implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
+
+    //rxJava + Retrofit2
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //navigation
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0'
+
+    //google login
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
+    // firebase Crashlytics.
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+
 }
 repositories {
+    google()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
+
+apply plugin: 'com.google.gms.google-services'

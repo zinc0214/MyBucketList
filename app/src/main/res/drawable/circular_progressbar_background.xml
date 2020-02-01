@@ -7,9 +7,9 @@
             android:thickness="1.6dp">
 
             <gradient
-                android:startColor="@color/circularProgressBackground"
-                android:endColor="@color/circularProgressBackground"
-                android:centerColor="@color/circularProgressBackground"
+                android:startColor="@color/_e8e8e8"
+                android:endColor="@color/_e8e8e8"
+                android:centerColor="@color/_e8e8e8"
                 android:type="sweep" />
         </shape>
     </item>
@@ -29,9 +29,9 @@
                     android:pivotX="50%"
                     android:pivotY="50%" />
                 <gradient
-                    android:startColor="@color/subColor"
-                    android:endColor="@color/subColor"
-                    android:centerColor="@color/subColor"
+                    android:startColor="@color/_a6c6ff"
+                    android:endColor="@color/_a6c6ff"
+                    android:centerColor="@color/_a6c6ff"
                     android:type="sweep" />
             </shape>
         </rotate>

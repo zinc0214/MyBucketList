@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel" />
+
+
+    </data>
+
+
+    <LinearLayout
+        android:id="@+id/category_item_layout"
+        android:background="@color/_ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <CheckBox
+                android:id="@+id/removeBox"
+                style="@style/FilterDialogSubTextStyle"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="17dp"
+                android:button="@drawable/category_checkbox"
+                android:background="@drawable/category_check_background"
+                android:enabled="true"
+                android:checked="false" />
+
+            <EditText
+                android:maxLength="12"
+                android:id="@+id/categoryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="40dp"
+                android:layout_toEndOf="@+id/removeBox"
+                android:background="@color/_00ffffff"
+                android:cursorVisible="true"
+                android:hint="카테고리명을 입력하세요"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@{viewModel.bucketName}"
+                android:textColor="@color/_434343"
+                android:textColorHint="@color/_aaaaaa"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/drag_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/category_list_change_img" />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:background="@color/_dddddd"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"/>
+
+    </LinearLayout>
+
+
+</layout>

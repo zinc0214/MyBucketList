@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="womenproject.com.mybury.view.MainFragment"
+        android:name="womenproject.com.mybury.presentation.main.MainFragment"
         android:label="mainFragment"
         tools:layout="@layout/fragment_main">
 
@@ -27,8 +27,160 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_main_bucket_to_dday_bucket"
+            android:id="@+id/action_main_bucket_to_my_page"
+            app:destination="@id/my_page_fragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_detail_fragment"
+        android:name="womenproject.com.mybury.presentation.detail.BucketDetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_bucket_detail">
+        <argument
+            android:name="bucketId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_detail_to_update"
+            app:destination="@id/bucket_update_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_update_fragment"
+        android:name="womenproject.com.mybury.presentation.update.BucketUpdateFragment"
+        android:label="Update"
+        tools:layout="@layout/fragment_bucket_write">
+
+        <argument
+            android:name="bucket"
+            android:defaultValue="@null"
+            app:argType="womenproject.com.mybury.data.DetailBucketItem"
+            app:nullable="true" />
+
+        <argument
+            android:name="bucketId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_write_to_category_edit"
+            app:destination="@id/category_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/bucket_write_fragment"
+        android:name="womenproject.com.mybury.presentation.write.BucketWriteFragment"
+        android:label="Write">
+
+        <action
+            android:id="@+id/action_write_to_category_edit"
+            app:destination="@id/category_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/my_page_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.MyPageFragment"
+        android:label="MyPage"
+        tools:layout="@layout/fragment_my_page">
+
+        <action
+            android:id="@+id/action_my_page_to_home"
+            app:destination="@id/main_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_write"
+            app:destination="@id/bucket_write_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_dday"
             app:destination="@id/dday_bucket_list_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_category_edit"
+            app:destination="@id/category_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_profile_edit"
+            app:destination="@id/profile_edit_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_app_info"
+            app:destination="@id/appinfo_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_login_info"
+            app:destination="@id/login_info_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
+        <action
+            android:id="@+id/action_my_page_to_alarm_setting"
+            app:destination="@id/alarm_setting_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_bucket_item_by_category"
+            app:destination="@id/bucket_list_by_category_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
+        <action
+            android:id="@+id/action_my_page_to_bucket_item_by_filter"
+            app:destination="@id/bucket_list_by_filter_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -38,26 +190,102 @@
 
 
     <fragment
-        android:id="@+id/bucket_detail_fragment"
-        android:name="womenproject.com.mybury.view.BucketDetailFragment"
-        android:label="Detail"
-        tools:layout="@layout/fragment_bucket_detail">
+        android:id="@+id/bucket_list_by_category_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.BucketListByCategoryFragment"
+        android:label="CategoryBucketist"
+        tools:layout="@layout/fragment_bucket_list_by_category">
+
         <argument
-            android:name="bucketId"
-            app:argType="string" />
+            android:name="category"
+            android:defaultValue="@null"
+            app:argType="womenproject.com.mybury.data.MyPageCategory"
+            app:nullable="true" />
+
+
+        <action
+            android:id="@+id/action_category_bucket_list_to_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
     </fragment>
 
 
     <fragment
-        android:id="@+id/bucket_write_fragment"
-        android:name="womenproject.com.mybury.view.BucketWriteFragment"
-        android:label="Write"
-        tools:layout="@layout/fragment_bucket_write">
+        android:id="@+id/bucket_list_by_filter_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.BucketListByFilterFragment"
+        android:label="CategoryBucketist"
+        tools:layout="@layout/fragment_bucket_list_by_category">
+
+        <argument
+            android:name="filter"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_category_bucket_list_to_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/category_edit_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.categoryedit.CategoryEditFragment"
+        android:label="CategoryEdit"
+        tools:layout="@layout/fragment_category_edit">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_edit_fragment"
+        android:label="ProfileEditFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit"/>
+
+
+    <fragment
+        android:id="@+id/appinfo_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.appinfo.AppInfoFragment"
+        android:label="AppInfoFragment"
+        tools:layout="@layout/fragment_app_info">
+
+        <action
+            android:id="@+id/action_info_to_detail"
+            app:destination="@id/app_info_text_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/login_info_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment"
+        android:label="LoginInfoFragment"
+        tools:layout="@layout/fragment_login_info">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/alarm_setting_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.alarmset.AlarmSettingFragment"
+        android:label="AlarmSettingFragment"
+        tools:layout="@layout/fragment_alarm_setting">
+
     </fragment>
 
     <fragment
         android:id="@+id/dday_bucket_list_fragment"
-        android:name="womenproject.com.mybury.view.DdayBucketListFragment"
+        android:name="womenproject.com.mybury.presentation.mypage.dday.DdayBucketListFragment"
         android:label="DdayBucket"
         tools:layout="@layout/fragment_dday_list">
 
@@ -69,6 +297,19 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/app_info_text_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.appinfo.AppInfoTextFragment"
+        android:label="AppInfoTextFragment"
+        tools:layout="@layout/text_view_layout">
+
+        <argument
+            android:name="type"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
 
     </fragment>
 

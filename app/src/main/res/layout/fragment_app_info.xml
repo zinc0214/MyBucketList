@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="version_text"
+            type="String" />
+
+
+        <variable
+            name="supportClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/back_layout"
+            layout="@layout/top_back_btn_layout" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginEnd="58dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/app_info_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:text="마이버리 "
+                android:textColor="@color/_434343"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/current_version_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_current_version"
+                    android:textColor="@color/_888888"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/update_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/app_update_background"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="7dp"
+                android:text="@{version_text}"
+                android:textColor="@color/update_color"
+                android:textSize="12sp"
+                tools:text="최신 버전 업데이트" />
+
+            <include
+                android:id="@+id/use_eula"
+                layout="@layout/app_info_button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="32dp" />
+
+            <include
+                android:id="@+id/privacy_eula"
+                layout="@layout/app_info_button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp" />
+
+            <include
+                android:id="@+id/open_source"
+                layout="@layout/app_info_button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:textSize="10sp"
+                android:textColor="@color/_aaaaaa"
+                android:text="마이버리 개발자"
+                android:layout_marginTop="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:textSize="10sp"
+                android:textColor="@color/_aaaaaa"
+                android:text="김가은, 안예지, 이명선, 한아연"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/volunteer"
+                android:layout_width="133dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/app_info_button_background"
+                android:gravity="center"
+                android:onClick="@{supportClickListener}"
+                android:text="후원하러 가기:)"
+                android:textColor="@color/_797979"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</layout>

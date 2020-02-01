@@ -16,46 +16,58 @@
     </data>
 
     <LinearLayout
-        android:layout_height="@dimen/baseBucketItemHeight"
-        android:id="@+id/bucket_item_layout"
-        style="@style/BucketItemLayoutStyle"
-        android:onClick="@{bucketClickListener}">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/bucket_item_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bucket_item_succeed_background" />
+        <LinearLayout
+            android:id="@+id/bucket_item_layout"
+            style="@style/BucketItemLayoutStyle"
+            android:background="@drawable/mypage_category_background"
+            android:onClick="@{bucketClickListener}">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/bucket_title"
-                    style="@style/BucketItemTitleTextStyle"
-                    android:text="@{bucketTitleText}"
-                    android:textColor="@color/white" />
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/success_img"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/check_complete" />
+                    android:id="@+id/bucket_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bucket_item_succeed_background" />
 
+                <RelativeLayout
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_marginBottom="21dp"
+                        android:layout_marginTop="21dp"
+                        android:id="@+id/bucket_title"
+                        style="@style/BucketItemTitleTextStyle"
+                        android:text="@{bucketTitleText}"
+                        android:textColor="@color/_ffffff" />
+
+                    <ImageView
+                        android:id="@+id/success_img"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/check_complete" />
+
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 
 </layout>

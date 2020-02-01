@@ -14,7 +14,7 @@
         android:layout_width="32dp"
         android:layout_height="32dp">
 
-        <womenproject.com.mybury.util.loadingbutton.customView.CircularProgressButton
+        <womenproject.com.mybury.ui.loadingbutton.customView.CircularProgressButton
             android:id="@+id/circular_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,7 +22,7 @@
             android:onClick="@{bucketSuccessListener}"
             app:finalCornerAngle="50dp"
             app:initialCornerAngle="0dp"
-            app:spinning_bar_color="@color/subColor"
+            app:spinning_bar_color="@color/_a6c6ff"
             app:spinning_bar_width="1.6dp" />
 
         <ImageView

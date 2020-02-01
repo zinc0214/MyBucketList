@@ -1,25 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="womenproject.com.mybury.viewmodels.BucketDetailViewModel" />
+            type="womenproject.com.mybury.presentation.detail.BucketDetailViewModel" />
+
+        <variable
+            name="bucketMoreMenu"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketCompleteListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/bucket_detail_text"
+
+        <include
+            android:id="@+id/one_image"
+            layout="@layout/detail_image_item" />
+
+        <include
+            android:id="@+id/more_image"
+            layout="@layout/detail_image_adapter" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="187dp"
+            app:tabBackground="@drawable/image_tab_selector"
+            app:tabGravity="center"
+            app:tabIndicator="@null"
+            app:tabIndicatorHeight="0dp"
+            app:tabPaddingStart="4dp" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="20dp">
+
+            <ImageView
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/detail_backbutton" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/lock_text"
+                android:background="@drawable/detail_lock_status_img"
+                android:visibility="@{viewModel.isOpenVisible ? View.VISIBLE : View.GONE}" />
+
+            <TextView
+                android:id="@+id/lock_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/_ffffff"
+                android:textSize="14sp"
+                android:visibility="@{viewModel.isOpenVisible ? View.VISIBLE : View.GONE}"
+                tools:text="공개" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@{viewModel.bucketText}" />
+            android:layout_below="@+id/tabLayout"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bucket_item_base_background">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="58dp"
+                android:gravity="center_vertical"
+                android:lineHeight="22sp"
+                android:lineSpacingExtra="8sp"
+                android:minHeight="36dp"
+                android:textColor="@color/_434343"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/moreImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/my_page_more"
+                android:onClick="@{bucketMoreMenu}" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title_text"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="8sp"
+                    android:maxLines="2"
+                    android:minHeight="40dp"
+                    android:textColor="@color/_797979"
+                    android:textSize="12sp"
+                    tools:text="메모메모 메모메모메모메 메모메모메모메 메모메모메모메모" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="상세정보"
+                    android:textColor="@color/_a6c6ff"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="카테고리"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/category_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ddayLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="목표날짜"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/dday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="진행상황"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/current_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/_797979"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/detail_more_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moreImg"
+                android:layout_marginTop="-20dp"
+                android:layout_marginEnd="15dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <include
+                    android:id="@+id/detail_more_menu"
+                    layout="@layout/detail_more_menu" />
+            </RelativeLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/complete_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/complete_text"
+                android:layout_marginBottom="-7dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/bury"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-5dp"
+                    android:src="@drawable/bury_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="-5dp"
+                    android:src="@drawable/bury_speech_complete"
+                    app:layout_constraintStart_toEndOf="@+id/bury"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/complete_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/complete_background"
+                android:onClick="@{bucketCompleteListener}"
+                android:textColor="@color/_ffffff" />
+        </RelativeLayout>
+    </RelativeLayout>
 
 </layout>
