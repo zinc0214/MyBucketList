@@ -118,8 +118,8 @@
                         android:lineSpacingExtra="5sp"
                         android:maxLength="30"
                         android:minHeight="52dp"
-                        android:textColor="@color/_aaaaaa"
-                        android:textColorHint="@color/_888888"
+                        android:textColor="@color/_888888"
+                        android:textColorHint="@color/_aaaaaa"
                         android:textSize="18sp" />
 
 

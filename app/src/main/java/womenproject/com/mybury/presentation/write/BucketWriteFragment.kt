@@ -18,6 +18,7 @@ import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
+import kotlinx.android.synthetic.main.text_view_layout.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -132,6 +133,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             ddayAddListener = ddayAddListener()
             goalCountSettingListener = goalCountSetListener()
             categorySelectListener = selectCategoryListener()
+
+            writeRegist.isEnabled = titleText.length() >= 1
 
             titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
             memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))

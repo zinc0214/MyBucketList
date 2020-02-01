@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
+import android.text.Html
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -71,6 +72,7 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
     }
 
     private fun loadOpenSourceText() {
+        viewDataBinding.titleLayout.title = "오픈 소스 라이선스"
         viewDataBinding.webView.visibility = View.GONE
         readTextFile()
     }
@@ -88,7 +90,7 @@ class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel
                 e.printStackTrace()
             }
             stringBuilder.append(string).append("\n")
-            viewDataBinding.textView.text = stringBuilder
+            viewDataBinding.textView.text = Html.fromHtml(stringBuilder.toString())
         }
         `is`.close()
     }

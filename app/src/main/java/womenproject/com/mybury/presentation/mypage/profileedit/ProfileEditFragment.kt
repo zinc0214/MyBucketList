@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.profileedit
 
+import android.content.Context
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.LiveData
@@ -22,7 +24,6 @@ import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
-import womenproject.com.mybury.presentation.write.BucketWriteFragment
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
@@ -34,11 +35,15 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
+    private lateinit var imm: InputMethodManager
+    private var isKeyboardUp = false
+
     private var defaultImg = "my"
     private var imgUrl: File? = null
     private var lastNickname = ""
     private var lastImg = ""
-    private var useDefatilImg = false
+    private var useDetailImg = false
+
     val cancelConfirm: (Boolean) -> Unit = {
         if (it) {
             isCancelConfirm = it
@@ -47,6 +52,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     override fun initDataBinding() {
+        imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         getMyProfileInfo()
         viewDataBinding.title = "프로필 수정"
     }
@@ -150,6 +156,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             }
 
             override fun start() {
+                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
                 startLoading()
             }
 
@@ -167,7 +174,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 stopLoading()
             }
 
-        }, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDefatilImg)
+        }, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDetailImg)
     }
 
     private fun setSaveBtnEnabled() {
@@ -205,7 +212,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             viewDataBinding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
             DefaulProfileImg().my
         }
-        useDefatilImg = true
+        useDetailImg = true
         viewDataBinding.executePendingBindings()
     }
 
@@ -218,7 +225,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         Glide.with(context!!).load(uri).centerCrop().into(viewDataBinding.profileImg)
         defaultImg = file.toString()
         imgUrl = file
-        useDefatilImg = false
+        useDetailImg = false
         setSaveBtnEnabled()
     }
 
@@ -237,6 +244,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             Log.e("ayhan", "cancelClickListener : 1")
         } else {
             Log.e("ayhan", "cancelClickListener : 2")
+            if(isKeyboardUp) { imm.hideSoftInputFromWindow(view!!.windowToken, 0) }
             cancelConfirm.invoke(true)
         }
     }
@@ -256,8 +264,10 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                     viewDataBinding.nicknameEditText.clearFocus()
                     viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._888888))
                     viewDataBinding.badgeLayout.visibility = View.VISIBLE
+                    isKeyboardUp = false
                 } else {
                     viewDataBinding.badgeLayout.visibility = View.GONE
+                    isKeyboardUp = true
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

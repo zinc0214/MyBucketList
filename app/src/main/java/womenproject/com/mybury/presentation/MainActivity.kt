@@ -1,9 +1,7 @@
 package womenproject.com.mybury.presentation
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
@@ -12,12 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Preference.Companion.getUserId
-import womenproject.com.mybury.data.Preference.Companion.setAccessToken
-import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -87,7 +80,7 @@ class NetworkFailDialog : BaseNormalDialogFragment() {
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"
-        // CANCEL_ABLE = false
+        CANCEL_ABLE = false
     }
 
     override fun createOnClickConfirmListener(): View.OnClickListener {

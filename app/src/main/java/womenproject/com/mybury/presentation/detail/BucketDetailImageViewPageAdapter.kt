@@ -51,12 +51,6 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
 
-  /*      val vp = container as ViewPager
-        val view = `object` as View
-        vp.removeView(view)
-
-        Glide.with(view).clear(view)
-*/
         container.removeView(`object` as View?)
 
     }

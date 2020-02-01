@@ -58,7 +58,7 @@
                 android:background="@drawable/memo_img_add_button_background"
                 android:gravity="center"
                 android:onClick="@{profileImageEditClickListener}"
-                android:text="프로필 사진 변경"
+                android:text="프로필 사진 수정"
                 android:textColor="@color/_5a95ff"
                 android:textSize="12sp" />
 

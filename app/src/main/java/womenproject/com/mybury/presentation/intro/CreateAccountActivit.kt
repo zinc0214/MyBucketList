@@ -142,6 +142,9 @@ class CreateAccountActivity : BaseActiviy() {
             try {
                 if (heightDiff < 500) {
                     binding.nicknameEditText.clearFocus()
+                    binding.startMyBuryLayout.visibility = View.VISIBLE
+                } else {
+                    binding.startMyBuryLayout.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

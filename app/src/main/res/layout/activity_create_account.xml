@@ -4,26 +4,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/_ffffff">
 
         <include
             android:id="@+id/top_layout"
             layout="@layout/top_back_btn_layout" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bucket_item_base_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3">
 
             <LinearLayout
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="117dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -90,7 +81,9 @@
 
                     <EditText
                         android:id="@+id/nickname_edit_text"
-                        android:layout_width="260dp"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginEnd="50dp"
                         android:layout_height="37dp"
                         android:layout_below="@+id/nickname_text"
                         android:layout_centerHorizontal="true"
@@ -106,43 +99,48 @@
                         android:textSize="14sp" />
 
 
-                    <Button
-                        android:id="@+id/start_mybury_btn"
+                    <RelativeLayout
+                        android:id="@+id/startMyBuryLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/nickname_edit_text"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginTop="66dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginBottom="30dp"
-                        android:background="@drawable/start_mybury_background"
-                        android:enabled="false"
-                        android:text="마이버리 시작하기"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="50dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_marginBottom="30dp">
+
+                        <Button
+                            android:id="@+id/start_mybury_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="66dp"
+                            android:background="@drawable/start_mybury_background"
+                            android:enabled="false"
+                            android:text="마이버리 시작하기"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="14sp" />
 
 
-                    <ImageView
-                        android:id="@+id/start_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/nickname_edit_text"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/bury_profile" />
+                        <ImageView
+                            android:id="@+id/start_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/bury_profile" />
 
-                    <ImageView
-                        android:id="@+id/comment_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/nickname_edit_text"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_toEndOf="@+id/start_img"
-                        android:background="@drawable/bury_speech_01" />
+                        <ImageView
+                            android:id="@+id/comment_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_toEndOf="@+id/start_img"
+                            android:background="@drawable/bury_speech_01" />
+
+                    </RelativeLayout>
+
                 </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

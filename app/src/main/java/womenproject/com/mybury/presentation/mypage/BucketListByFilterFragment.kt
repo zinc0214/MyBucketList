@@ -30,8 +30,8 @@ class BucketListByFilterFragment  : BaseFragment<FragmentBucketListByCategoryBin
 
         viewDataBinding.headerLayout.title =
             when(filterType) {
-                ShowFilter.started.toString() -> "진행중인 버킷리스트"
-                else -> "완료된 버킷리스트"
+                ShowFilter.started.toString() -> "진행중"
+                else -> "완료"
             }
         viewDataBinding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
 
