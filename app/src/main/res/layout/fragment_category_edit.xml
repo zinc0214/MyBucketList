@@ -14,11 +14,11 @@
         android:layout_height="match_parent"
         android:background="@color/_fafafa">
 
-
         <ScrollView
             android:id="@+id/category_list_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="55dp"
             android:layout_marginTop="64dp">
 
             <LinearLayout
@@ -29,9 +29,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/category_list_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingTop="4dp"
                     android:background="@color/_ffffff"
+                    tools:itemCount="15"
                     tools:listitem="@layout/category_list_item" />
 
                 <include
