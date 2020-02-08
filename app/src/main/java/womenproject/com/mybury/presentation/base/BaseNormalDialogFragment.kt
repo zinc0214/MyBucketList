@@ -50,7 +50,7 @@ open class BaseNormalDialogFragment : DialogFragment() {
 
 
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog!!.setCanceledOnTouchOutside(true)
+        dialog!!.setCanceledOnTouchOutside(CANCEL_ABLE)
         dialog!!.setCancelable(CANCEL_ABLE)
 
         return binding.root

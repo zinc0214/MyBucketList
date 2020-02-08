@@ -7,16 +7,12 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DetailBucketItem
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.util.fileListToMultipartFile
 import womenproject.com.mybury.util.fileToMultipartFile
 import womenproject.com.mybury.util.stringToMultipartFile
 import java.io.File
-import java.text.SimpleDateFormat
 
 class BucketWriteViewModel : BaseViewModel() {
 
@@ -25,7 +21,7 @@ class BucketWriteViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun uploadBucketList(bucketItem: AddBucketItem,
-                         imgList: MutableList<Any>,
+                         imgList: MutableList<Any?>,
                          onBucketAddEvent: Simple3CallBack) {
 
         onBucketAddEvent.start()
@@ -41,7 +37,7 @@ class BucketWriteViewModel : BaseViewModel() {
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
         for (i in 0 until imgList.size) {
-            if (imgList[i] is File) {
+            if (imgList[i] != null && imgList[i] is File) {
                 val file = imgList[i] as File
                 when (i) {
                     0 -> image1 = file.fileToMultipartFile("image1")
@@ -84,7 +80,7 @@ class BucketWriteViewModel : BaseViewModel() {
             bucketId: String,
             bucketItem: AddBucketItem,
             alreadyImgList: MutableMap<Int, String?>,
-            imgList: MutableList<Any>,
+            imgList: ArrayList<Any?>,
             onBucketAddEvent: Simple3CallBack) {
 
         onBucketAddEvent.start()
@@ -105,7 +101,7 @@ class BucketWriteViewModel : BaseViewModel() {
         var removeImg3 =(alreadyImgList[3]==null).stringToMultipartFile("removeImg3")
 
         for (i in 0 until imgList.size) {
-            if (imgList[i] is File) {
+            if (imgList[i] != null && imgList[i] is File) {
                 val file = imgList[i] as File
                 when (i) {
                     0 -> {

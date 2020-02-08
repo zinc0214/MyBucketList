@@ -1,20 +1,16 @@
 package womenproject.com.mybury.presentation.update
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.findNavController
-import io.reactivex.functions.Cancellable
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
-import womenproject.com.mybury.presentation.write.BucketWriteFragmentDirections
 import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {

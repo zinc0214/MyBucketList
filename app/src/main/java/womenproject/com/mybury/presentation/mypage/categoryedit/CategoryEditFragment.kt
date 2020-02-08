@@ -68,14 +68,14 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun success(value: List<Any>) {
+                originCategoryList = value as ArrayList<Category>
+                changeCategoryList = value
+
                 val editCategoryName: (Category, String) -> Unit = { category: Category, newName: String ->
                     imm.hideSoftInputFromWindow(view!!.windowToken, 0)
                     editCategoryItem(category, newName)
-                    originCategoryList = value as ArrayList<Category>
-                    changeCategoryList = value
                     viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 }
-
                 val editCategoryListAdapter = EditCategoryListAdapter(value as MutableList<Category>,
                         this@CategoryEditFragment,
                         this@CategoryEditFragment,
@@ -89,6 +89,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
                 itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
                 itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+
+                isKeyBoardShown = false
             }
 
             override fun start() {
@@ -107,7 +109,9 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     fun addNewCategoryListener() {
+        Log.e("ayhan", "addNewCategoryListener is go")
         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.VISIBLE
+        viewDataBinding.categoryListRecyclerView.scrollToPosition(originCategoryList.lastIndex)
         viewDataBinding.addCategoryItem.categoryText.setOnEditorActionListener { v, actionId, event ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
@@ -116,13 +120,24 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                         viewDataBinding.addCategoryItem.categoryText.text.clear()
                         viewDataBinding.bottomLayout.visibility = View.VISIBLE
                     } else {
-                        addNewCategory(v!!.text.toString())
+                        if(alreadyUseName(v.text.toString())) {
+                            Toast.makeText(context, "동일한 카테고리 이름이 존재합니다.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            addNewCategory(v.text.toString())
+                        }
                     }
-
                 }
             }
             true
         }
+    }
+
+    private fun alreadyUseName(newCategory: String) : Boolean {
+
+        originCategoryList.forEach{
+            if(it.name == newCategory) return true
+        }
+        return false
     }
 
     private fun editCategoryItem(category: Category, newName: String) {
@@ -138,6 +153,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             override fun success() {
                 stopLoading()
                 setCategoryList()
+                originCategoryList = changeCategoryList
                 viewDataBinding.bottomLayout.visibility = View.VISIBLE
             }
 
@@ -229,6 +245,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
         viewDataBinding.bottomLayout.visibility = View.VISIBLE
         if (changeCategoryList == originCategoryList) {
+            Log.e("ayhan", "why...........")
             onBackPressedFragment()
         } else {
             setCategoryStatusChange()
@@ -250,6 +267,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     override fun movend(list: List<Category>) {
+        Log.e("ayhan", "move")
         changeCategoryList = list as ArrayList<Category>
     }
 
@@ -260,7 +278,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
             try {
-                if (heightDiff < 500) {
+                if (heightDiff < 300) {
                     if (viewDataBinding.addCategoryItem.categoryItemLayout.visibility == View.VISIBLE && isKeyBoardShown) {
                         viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
                         viewDataBinding.addCategoryItem.categoryText.text.clear()

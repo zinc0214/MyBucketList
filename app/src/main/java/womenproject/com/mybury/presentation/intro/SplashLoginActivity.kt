@@ -97,7 +97,12 @@ class SplashLoginActivity : AppCompatActivity() {
                     setAccountEmail(this, emailDataClass.email)
                     if (response.signUp) {
                         setUserId(this, response.userId)
-                        goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                        if( getMyBuryLoginComplete(this)) {
+                            goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                        } else {
+                            goToCreateAccountActivity()
+                        }
+
                     } else {
                         loadUserId(emailDataClass.email)
                     }
