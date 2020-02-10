@@ -105,7 +105,7 @@ data class AddBucketItem(
         val open: Boolean = false,
         val dDate: String,
         val goalCount: Int = 0,
-        var memo: String = "Memo",
+        var memo: String = "",
         val categoryId: String
 )
 

@@ -64,6 +64,7 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
             true
         }
     }
+
     private fun setOnSoftKeyboardChangedListener(name : String): ViewTreeObserver.OnGlobalLayoutListener {
         return ViewTreeObserver.OnGlobalLayoutListener {
             val r = Rect()

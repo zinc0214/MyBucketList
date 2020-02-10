@@ -130,7 +130,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             goalCountSettingListener = goalCountSetListener()
             categorySelectListener = selectCategoryListener()
 
-            writeRegist.isEnabled = titleText.length() >= 1
+            writeRegist.isEnabled = titleText.text.isNotBlank()
 
             titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
             memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
@@ -250,7 +250,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
-                viewDataBinding.writeRegist.isEnabled = editText.length() >= 1
+                viewDataBinding.writeRegist.isEnabled = editText.text.isNotBlank()
             }
         }
     }
@@ -412,12 +412,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun memoRemoveListener(): View.OnClickListener {
 
         return View.OnClickListener {
-            if(viewDataBinding.memoText.text.isNotBlank()) {
-                viewDataBinding.memoLayout.visibility = View.VISIBLE
-            } else {
-                viewDataBinding.memoLayout.visibility = View.GONE
-            }
-
+            viewDataBinding.memoText.text.clear()
+            viewDataBinding.memoLayout.visibility = View.GONE
         }
     }
 

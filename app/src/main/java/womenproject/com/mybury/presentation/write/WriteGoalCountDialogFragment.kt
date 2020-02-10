@@ -2,8 +2,11 @@ package womenproject.com.mybury.presentation.write
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
+import android.graphics.Rect
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
@@ -32,6 +35,8 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
 
 
     override fun initDataBinding() {
+        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
+
         viewDataBinding.goalCountSeekbar.setOnSeekBarChangeListener(setOnSeekbarChangedListener())
         viewDataBinding.goalCountEditText.setOnKeyListener(setOnEditTextEnterListener())
         viewDataBinding.bottomSheet.cancelButtonClickListener = cancelButtonClickListener()
@@ -82,6 +87,23 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
         return View.OnClickListener {
             goalCountSetListener.invoke(viewDataBinding.goalCountEditText.text.toString())
             this.dismiss()
+        }
+    }
+
+    private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
+        return ViewTreeObserver.OnGlobalLayoutListener {
+            val r = Rect()
+            viewDataBinding.root.getWindowVisibleDisplayFrame(r)
+
+            val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
+            Log.e("ayhan", "countK: $heightDiff")
+            try {
+                if (heightDiff < 300) {
+                    viewDataBinding.goalCountSeekbar.progress = viewDataBinding.goalCountEditText.text.toString().toInt()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

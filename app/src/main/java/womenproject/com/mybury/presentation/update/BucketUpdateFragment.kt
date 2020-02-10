@@ -47,7 +47,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
         viewDataBinding.titleText.setText(bucketItem.title)
 
-        if (bucketItem.memo.isNotEmpty()) {
+        if (bucketItem.memo.isNotBlank()) {
             viewDataBinding.memoLayout.visibility = View.VISIBLE
             viewDataBinding.memoText.setText(bucketItem.memo)
         }
