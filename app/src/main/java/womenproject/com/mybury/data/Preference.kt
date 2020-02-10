@@ -97,7 +97,7 @@ class Preference {
 
         fun getFilterForShow(context: Context) : String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(SHOW_FILTER, ShowFilter.started.toString())
+            val data = sp.getString(SHOW_FILTER, ShowFilter.all.toString())
             return data
         }
 

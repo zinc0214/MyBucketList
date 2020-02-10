@@ -49,6 +49,19 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
+            if (isCancelConfirm) {
+                false
+            } else {
+                actionByBackButton()
+                true
+            }
+
+        })
+    }
 
     override fun initDataBinding() {
         imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -83,8 +96,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                         editCategoryName)
 
                 viewDataBinding.categoryListRecyclerView.apply {
-                    adapter = editCategoryListAdapter
                     layoutManager = LinearLayoutManager(context)
+                    adapter = editCategoryListAdapter
                 }
 
                 itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
@@ -206,6 +219,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 stopLoading()
                 setCategoryList()
                 removedList.clear()
+                viewDataBinding.cancelText.isEnabled = false
             }
 
             override fun fail() {
@@ -277,6 +291,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             viewDataBinding.root.getWindowVisibleDisplayFrame(r)
 
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
+            Log.e("ayhan", "heigth Deiif : ${heightDiff}")
             try {
                 if (heightDiff < 300) {
                     if (viewDataBinding.addCategoryItem.categoryItemLayout.visibility == View.VISIBLE && isKeyBoardShown) {
@@ -285,9 +300,11 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                         isKeyBoardShown = false
                     }
                     viewDataBinding.bottomLayout.visibility = View.VISIBLE
+                    viewDataBinding.space.visibility = View.VISIBLE
                 } else {
                     isKeyBoardShown = true
                     viewDataBinding.bottomLayout.visibility = View.GONE
+                    viewDataBinding.space.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.write_dialog_item.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
+import womenproject.com.mybury.databinding.WriteDialogItemBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.ui.PermissionDialogFragment
@@ -60,12 +61,12 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private fun initStartView() {
         if (!checkAddImageListener.invoke()) {
-            viewDataBinding.addAlbumImgLayout.writeItemLayout.disableAdd()
-            viewDataBinding.addCamImgLayout.writeItemLayout.disableAdd()
+            viewDataBinding.addAlbumImgLayout.disableAdd()
+            viewDataBinding.addCamImgLayout.disableAdd()
         }
 
         if (!checkAddTypeAble.invoke()) {
-            viewDataBinding.addMemoLayout.writeItemLayout.disableAdd()
+            viewDataBinding.addMemoLayout.disableAdd()
         }
 
         when (addType) {
@@ -81,17 +82,25 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     override fun initDataBinding() {
-        initStartView()
 
-        viewDataBinding.addMemoLayout.itemClickListener = memoAddOnClickListener
-        viewDataBinding.addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener
-        viewDataBinding.addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener
-        viewDataBinding.setBaseProfileImg.itemClickListener = baseProfileImgClickListener
+        viewDataBinding.apply {
+            addAlbumImgLayout.isAddable = true
+            addCamImgLayout.isAddable = true
+            addMemoLayout.isAddable = true
 
-        viewDataBinding.addMemoLayout.title = "메모 추가"
-        viewDataBinding.addAlbumImgLayout.title = "앨범에서 사진 선택"
-        viewDataBinding.addCamImgLayout.title = "사진 촬영"
-        viewDataBinding.setBaseProfileImg.title = "기본 이미지로 변경"
+            initStartView()
+
+            addMemoLayout.itemClickListener = memoAddOnClickListener
+            addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener
+            addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener
+            setBaseProfileImg.itemClickListener = baseProfileImgClickListener
+
+            addMemoLayout.title = "메모 추가"
+            addAlbumImgLayout.title = "앨범에서 사진 선택"
+            addCamImgLayout.title = "사진 촬영"
+            setBaseProfileImg.title = "기본 이미지로 변경"
+        }
+
     }
 
 
@@ -114,8 +123,13 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
 
     private val memoAddOnClickListener = View.OnClickListener {
-        addTypeClickListener.invoke()
-        this.dismiss()
+        if(viewDataBinding.addMemoLayout.isAddable!!) {
+            addTypeClickListener.invoke()
+            this.dismiss()
+        } else {
+         Toast.makeText(context, "이미 메모가 있습니다.", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private val baseProfileImgClickListener = View.OnClickListener {
@@ -125,17 +139,27 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.context!!, activity as BaseActiviy)) {
-            if (checkAddImageListener.invoke()) {
-                goToAlbum()
+            if(viewDataBinding.addAlbumImgLayout.isAddable!!) {
+                if (checkAddImageListener.invoke()) {
+                    goToAlbum()
+                }
+            } else {
+                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.context!!, activity as BaseActiviy)) {
-            if (checkAddImageListener.invoke()) {
-                takePhoto()
+            if(viewDataBinding.addCamImgLayout.isAddable!!) {
+                if (checkAddImageListener.invoke()) {
+                    takePhoto()
+                }
+            } else {
+                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
@@ -305,9 +329,11 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
         }
     }
 
-    private fun LinearLayout.disableAdd() {
-        this.isEnabled = false
-        this.write_item_text.setTextColor(context!!.getColor(R.color._b4b4b4))
+
+    private fun WriteDialogItemBinding.disableAdd() {
+        this.writeItemText.setTextColor(context!!.getColor(R.color._b4b4b4))
+        this.isAddable = false
     }
 }
+
 

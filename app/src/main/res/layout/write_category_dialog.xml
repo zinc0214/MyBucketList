@@ -12,12 +12,17 @@
         android:background="@drawable/write_dialog_background"
         android:orientation="vertical">
 
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="17dp"
-            android:layout_marginBottom="7dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="17dp"
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants">
 
             <LinearLayout
                 android:id="@+id/category_list_layout"
@@ -30,6 +35,8 @@
                 layout="@layout/write_dialog_item" />
 
         </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

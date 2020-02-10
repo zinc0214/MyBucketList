@@ -127,7 +127,7 @@ class CountBucketItemViewHolder(
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._ffffff)
         binding.succeedBucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
-        binding.bucketItemLayout.layoutParams.height = MyBuryApplication.context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
+        //binding.bucketItemLayout.layoutParams.height = MyBuryApplication.context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
 
         if(isDdayUI) {
             binding.bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)

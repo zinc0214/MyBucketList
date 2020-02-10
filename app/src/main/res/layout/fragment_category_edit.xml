@@ -24,15 +24,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:id="@+id/category_list_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="64dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -41,7 +42,6 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="4dp"
                         android:background="@color/_ffffff"
-                        tools:itemCount="15"
                         android:overScrollMode="never"
                         tools:listitem="@layout/category_list_item" />
 
@@ -49,16 +49,22 @@
                         android:id="@+id/add_category_item"
                         layout="@layout/category_list_item" />
 
+                    <Space
+                        android:id="@+id/space"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp" />
+
                 </LinearLayout>
 
+            </androidx.core.widget.NestedScrollView>
 
-            </ScrollView>
+
 
             <RelativeLayout
                 android:layout_alignParentBottom="true"
                 android:id="@+id/bottomLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:gravity="bottom"
                 android:layout_gravity="bottom">
 

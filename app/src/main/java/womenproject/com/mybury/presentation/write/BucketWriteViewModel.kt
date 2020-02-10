@@ -96,9 +96,9 @@ class BucketWriteViewModel : BaseViewModel() {
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
 
-        var removeImg1 = (alreadyImgList[1]==null).stringToMultipartFile("removeImg1")
-        var removeImg2 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg2")
-        var removeImg3 =(alreadyImgList[3]==null).stringToMultipartFile("removeImg3")
+        var removeImg1 = (alreadyImgList[0]==null).stringToMultipartFile("removeImg1")
+        var removeImg2 =(alreadyImgList[1]==null).stringToMultipartFile("removeImg2")
+        var removeImg3 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg3")
 
         for (i in 0 until imgList.size) {
             if (imgList[i] != null && imgList[i] is File) {

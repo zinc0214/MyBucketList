@@ -214,16 +214,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun start() {
+                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
+                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 startLoading()
-
             }
 
             override fun success() {
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
-                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 activity!!.onBackPressed()
             }
 
@@ -315,12 +314,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         val checkAddImgAbleListener: () -> Boolean = {
-            if (viewDataBinding.imgLayout.childCount > 2) {
-                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
-                false
-            } else {
-                true
-            }
+            viewDataBinding.imgLayout.childCount <= 2
         }
 
         val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
@@ -350,6 +344,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         val id = file.name
         val writeImgLayout = WriteImgLayout(this.context!!, id, removeImgListener, imgFieldClickListener).setUI(uri)
         viewDataBinding.imgLayout.addView(writeImgLayout)
+
+        Log.e("ayhan", "imgL cOunt Basixe : ${viewDataBinding.imgLayout.childCount}")
         addImgList.put(viewDataBinding.imgLayout.childCount, id)
 
         Log.e("ayhan", "im: ${imgList.size}")
@@ -370,12 +366,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         alreadyImgList.forEach{
             val id = it.value
-            val writeImgLayout = WriteImgLayout(this.context!!, id!!, removeImgListener, imgFieldClickListener).setAleadyUI(it.value!!)
-            addImgList.put(viewDataBinding.imgLayout.childCount, id)
-            imgList.add(it.value)
-            viewDataBinding.imgLayout.addView(writeImgLayout)
-        }
+            id?.run {
+                Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
 
+                val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
+                addImgList.put(viewDataBinding.imgLayout.childCount+1, this)
+                imgList.add(this)
+                viewDataBinding.imgLayout.addView(writeImgLayout)
+            }
+        }
     }
 
 
@@ -395,7 +394,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
         addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
-        Log.e("ayhan", "imgSIze : ${imgList.size}")
+        Log.e("ayhan", "imgSIze : ${imgList.size},,,, ${deleteImgValue}")
         alreadyImgList[deleteImgValue] = null
     }
 
@@ -413,7 +412,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun memoRemoveListener(): View.OnClickListener {
 
         return View.OnClickListener {
-            viewDataBinding.memoLayout.visibility = View.GONE
+            if(viewDataBinding.memoText.text.isNotBlank()) {
+                viewDataBinding.memoLayout.visibility = View.VISIBLE
+            } else {
+                viewDataBinding.memoLayout.visibility = View.GONE
+            }
+
         }
     }
 
