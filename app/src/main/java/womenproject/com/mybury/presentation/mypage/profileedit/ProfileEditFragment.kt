@@ -92,7 +92,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._434343))
-                setSaveBtnEnabled()
+                if(count > 0 && viewDataBinding.nicknameEditText.text.isNotBlank()) setSaveBtnEnabled()
             }
 
         }
@@ -134,6 +134,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 defaultImg = info.imageUrl.toString()
                 setUpView()
                 seyMyProfileImg(info.imageUrl)
+
             }
 
             override fun fail() {
@@ -164,6 +165,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 defaultImg = lastImg
 
                 setSaveBtnEnabled()
+                cancelClickAction()
             }
 
             override fun fail() {

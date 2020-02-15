@@ -189,7 +189,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             override fun success() {
                 stopLoading()
-                setCategoryList()
+                initDataBinding()
                 imm.hideSoftInputFromWindow(view!!.windowToken, 0)
                 viewDataBinding.bottomLayout.visibility = View.VISIBLE
                 viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE

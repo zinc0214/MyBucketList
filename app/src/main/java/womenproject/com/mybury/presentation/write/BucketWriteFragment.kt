@@ -10,8 +10,12 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
@@ -38,14 +42,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     var alreadyImgList = mutableMapOf<Int, String?>()
     var addImgList = mutableMapOf<Int, String?>()
+    var addImgViewList = mutableMapOf<String, View>()
     var imgList = ArrayList<Any?>()
     var currentCalendarDay: Date? = null
+    var currentCalendarText : String = ""
+    var selectCategory: Category? = null
     var goalCount = 1
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
-
-    lateinit var selectCategory: Category
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -72,6 +77,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         })
         imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateView()
     }
 
     open fun backBtn() {
@@ -117,6 +127,30 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         selectCategory = categoryList[0]
     }
 
+    private fun updateView() {
+        viewDataBinding.apply {
+            Log.e("ayhan", "titleText : ${titleText.text}, memo : ${memoText.text}," +
+                    "category : ${categoryText.text}, dday : ${currentCalendarText}, count : ${goalCount}, imgCount : ${addImgList.size}, " +
+                    "imgLayout : ${imgLayout.childCount}")
+
+            if (memoText.text.isNotBlank()) {
+                memoLayout.visibility = View.VISIBLE
+            }
+            if (selectCategory?.name != "없음") {
+                categoryText.text = categoryText.text
+            }
+            if (currentCalendarText.isNotBlank()) {
+                ddayText.text = currentCalendarText
+                ddayText.setEnableTextColor()
+                ddayImg.setImage(R.drawable.calendar_enable)
+            }
+            if (goalCount > 2) {
+                goalCountText.text = goalCount.toString()
+                goalCountText.setEnableTextColor()
+                countImg.setImage(R.drawable.target_count_enable)
+            }
+        }
+    }
 
     private fun setUpView() {
 
@@ -346,7 +380,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
         Log.e("ayhan", "imgL cOunt Basixe : ${viewDataBinding.imgLayout.childCount}")
-        addImgList.put(viewDataBinding.imgLayout.childCount, id)
+        addImgList[viewDataBinding.imgLayout.childCount] = id
+        addImgViewList[id] = writeImgLayout
 
         Log.e("ayhan", "im: ${imgList.size}")
 
@@ -370,7 +405,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
 
                 val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
-                addImgList.put(viewDataBinding.imgLayout.childCount+1, this)
+                addImgList[viewDataBinding.imgLayout.childCount+1] = this
+                addImgViewList[id] = writeImgLayout
                 imgList.add(this)
                 viewDataBinding.imgLayout.addView(writeImgLayout)
             }
@@ -392,6 +428,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
+        val id = addImgList[deleteImgValue]
+        addImgViewList.remove(id)
         addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
         Log.e("ayhan", "imgSIze : ${imgList.size},,,, ${deleteImgValue}")
@@ -424,11 +462,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             if (dday.isEmpty()) {
                 viewDataBinding.ddayText.text = "추가"
                 currentCalendarDay = date
+                currentCalendarText = ""
                 viewDataBinding.ddayText.setDisableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
             } else {
                 viewDataBinding.ddayText.text = dday
                 currentCalendarDay = date
+                currentCalendarText = dday
                 viewDataBinding.ddayText.setEnableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
             }
@@ -503,7 +543,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         return AddBucketItem(viewDataBinding.titleText.text.toString(), open,
                 formDate, goalCount,
-                viewDataBinding.memoText.text.toString(), selectCategory.id)
+                viewDataBinding.memoText.text.toString(), selectCategory?.id!!)
     }
 
 

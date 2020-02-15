@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.allClear
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
@@ -81,7 +82,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                 .subscribe({ response ->
                     when (response.retcode) {
                         "200" -> {
-                            setMyBuryLoginComplete(context!!, false)
+                            allClear(context!!)
                             isSucessDelete = true
                         }
                         "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {

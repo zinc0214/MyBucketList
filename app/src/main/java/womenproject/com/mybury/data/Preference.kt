@@ -114,6 +114,13 @@ class Preference {
             return data
         }
 
+        fun allClear(context: Context) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.clear()
+            editor.commit()
+        }
+
     }
 
 }
