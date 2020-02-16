@@ -16,7 +16,7 @@ import womenproject.com.mybury.ui.ItemCheckedListener
 class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
                                  private val dragListener: ItemDragListener,
                                  private val checkedListener: ItemCheckedListener,
-                                 private val editCategoryName : (Category, String) -> Unit)
+                                 private val editCategoryName : (Category) -> Unit)
     : RecyclerView.ViewHolder(binding.root) {
 
     private var isKeyBoardShown = false
@@ -38,30 +38,15 @@ class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
                 }
                 false
             }
-
+            editLayout.setOnClickListener { v ->
+                editCategoryName.invoke(category)
+            }
             removeBox.setOnCheckedChangeListener { _, isChecked ->
                 checkedListener.checked(isChecked, category)
             }
 
-            editCategoryNameListener(category)
             binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener(category.name))
             executePendingBindings()
-        }
-    }
-
-
-    private fun editCategoryNameListener(category: Category) {
-        binding.categoryText.setOnEditorActionListener { v, actionId, event ->
-            when(actionId) {
-                EditorInfo.IME_ACTION_DONE -> {
-                    if(v?.text.isNullOrEmpty()) {
-                        binding.categoryText.setText(category.priority)
-                    } else{
-                        editCategoryName.invoke(category, v.text.toString())
-                    }
-                }
-            }
-            true
         }
     }
 

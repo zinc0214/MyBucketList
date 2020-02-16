@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.rxkotlin.toObservable
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
@@ -64,11 +65,12 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     override fun initDataBinding() {
+        isCancelConfirm = false
+
         imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
-        viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
         viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
         setCategoryList()
     }
@@ -81,28 +83,10 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun success(value: List<Any>) {
-                originCategoryList = value as ArrayList<Category>
-                changeCategoryList = value
-
-                val editCategoryName: (Category, String) -> Unit = { category: Category, newName: String ->
-                    imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                    editCategoryItem(category, newName)
-                    viewDataBinding.bottomLayout.visibility = View.VISIBLE
-                }
-                val editCategoryListAdapter = EditCategoryListAdapter(value as MutableList<Category>,
-                        this@CategoryEditFragment,
-                        this@CategoryEditFragment,
-                        this@CategoryEditFragment,
-                        editCategoryName)
-
-                viewDataBinding.categoryListRecyclerView.apply {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = editCategoryListAdapter
-                }
-
-                itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
-                itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
-
+                Log.e("ayhan", "setCategoryList")
+                initOriginCategory(value as List<Category>)
+                changeCategoryList = value as ArrayList<Category>
+                setCategoryAdapter()
                 isKeyBoardShown = false
             }
 
@@ -110,47 +94,54 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 startLoading()
             }
 
-
             override fun fail() {
                 stopLoading()
                 NetworkFailDialog().show(activity!!.supportFragmentManager)
-
             }
-
         })
+    }
 
+    private fun initOriginCategory(categoryList : List<Category>) {
+        categoryList.forEach{
+            originCategoryList.add(it)
+        }
+    }
+    private fun setCategoryAdapter() {
+
+        val editCategoryName: (Category) -> Unit = {
+            imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+
+            if(it.name == "없음") {
+                Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                val categoryAdd: (String) -> Unit = { name ->
+                    editCategoryItem(it, name)
+                }
+                AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
+                        .show(activity!!.supportFragmentManager)
+            }
+        }
+
+        val editCategoryListAdapter = EditCategoryListAdapter(changeCategoryList,
+                this@CategoryEditFragment,
+                this@CategoryEditFragment,
+                this@CategoryEditFragment,
+                editCategoryName)
+
+        viewDataBinding.categoryListRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = editCategoryListAdapter
+        }
+
+        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
     }
 
     fun addNewCategoryListener() {
-        Log.e("ayhan", "addNewCategoryListener is go")
-        viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.VISIBLE
-        viewDataBinding.categoryListRecyclerView.scrollToPosition(originCategoryList.lastIndex)
-        viewDataBinding.addCategoryItem.categoryText.setOnEditorActionListener { v, actionId, event ->
-            when (actionId) {
-                EditorInfo.IME_ACTION_DONE -> {
-                    if (v?.text.isNullOrBlank()) {
-                        viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
-                        viewDataBinding.addCategoryItem.categoryText.text.clear()
-                        viewDataBinding.bottomLayout.visibility = View.VISIBLE
-                    } else {
-                        if(alreadyUseName(v.text.toString())) {
-                            Toast.makeText(context, "동일한 카테고리 이름이 존재합니다.", Toast.LENGTH_SHORT).show()
-                        } else {
-                            addNewCategory(v.text.toString())
-                        }
-                    }
-                }
-            }
-            true
+        val categoryAdd: (String) -> Unit = {
+            addNewCategory(it)
         }
-    }
-
-    private fun alreadyUseName(newCategory: String) : Boolean {
-
-        originCategoryList.forEach{
-            if(it.name == newCategory) return true
-        }
-        return false
+        AddCategoryDialogFragment(originCategoryList, null, categoryAdd).show(activity!!.supportFragmentManager)
     }
 
     private fun editCategoryItem(category: Category, newName: String) {
@@ -165,9 +156,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             override fun success() {
                 stopLoading()
-                setCategoryList()
-                originCategoryList = changeCategoryList
-                viewDataBinding.bottomLayout.visibility = View.VISIBLE
+                initDataBinding()
             }
 
             override fun fail() {
@@ -191,9 +180,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                 stopLoading()
                 initDataBinding()
                 imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                viewDataBinding.bottomLayout.visibility = View.VISIBLE
-                viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
-                viewDataBinding.addCategoryItem.categoryText.text.clear()
             }
 
             override fun fail() {
@@ -204,7 +190,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     fun setCategoryDeleteListener() {
-
         categoryEditViewModel.removeCategoryItem(removedList, object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 setCategoryDeleteListener()
@@ -217,7 +202,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             override fun success() {
                 Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 stopLoading()
-                setCategoryList()
+                initDataBinding()
                 removedList.clear()
                 viewDataBinding.cancelText.isEnabled = false
             }
@@ -257,9 +242,8 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     override fun actionByBackButton() {
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-        viewDataBinding.bottomLayout.visibility = View.VISIBLE
-        if (changeCategoryList == originCategoryList) {
-            Log.e("ayhan", "why...........")
+        if (originCategoryList == changeCategoryList) {
+            Log.e("ayhan", "why........... ${changeCategoryList[0].name}, ${originCategoryList[0].name}")
             onBackPressedFragment()
         } else {
             setCategoryStatusChange()
@@ -280,9 +264,11 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.cancelText.isEnabled = removedList.size > 0
     }
 
-    override fun movend(list: List<Category>) {
-        Log.e("ayhan", "move")
+    override fun moved(list: List<Category>) {
+        Log.e("ayhan", "move, ${list[0].name}")
         changeCategoryList = list as ArrayList<Category>
+        Log.e("ayhan", "moveq, ${changeCategoryList[0].name}")
+        Log.e("ayhan", "movew, ${originCategoryList[0].name}")
     }
 
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
@@ -294,16 +280,9 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             Log.e("ayhan", "heigth Deiif : ${heightDiff}")
             try {
                 if (heightDiff < 300) {
-                    if (viewDataBinding.addCategoryItem.categoryItemLayout.visibility == View.VISIBLE && isKeyBoardShown) {
-                        viewDataBinding.addCategoryItem.categoryItemLayout.visibility = View.GONE
-                        viewDataBinding.addCategoryItem.categoryText.text.clear()
-                        isKeyBoardShown = false
-                    }
-                    viewDataBinding.bottomLayout.visibility = View.VISIBLE
                     viewDataBinding.space.visibility = View.VISIBLE
                 } else {
                     isKeyBoardShown = true
-                    viewDataBinding.bottomLayout.visibility = View.GONE
                     viewDataBinding.space.visibility = View.GONE
                 }
             } catch (e: Exception) {

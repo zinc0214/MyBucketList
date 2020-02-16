@@ -39,19 +39,14 @@
                         android:id="@+id/category_list_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="4dp"
                         android:background="@color/_ffffff"
                         android:overScrollMode="never"
                         tools:listitem="@layout/category_list_item" />
 
-                    <include
-                        android:id="@+id/add_category_item"
-                        layout="@layout/category_list_item" />
-
                     <Space
                         android:id="@+id/space"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp" />
+                        android:layout_height="80dp" />
 
                 </LinearLayout>
 

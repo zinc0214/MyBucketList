@@ -12,5 +12,5 @@ interface ItemCheckedListener {
 }
 
 interface ItemMovedListener {
-    fun movend(list : List<Category>)
+    fun moved(list : List<Category>)
 }
