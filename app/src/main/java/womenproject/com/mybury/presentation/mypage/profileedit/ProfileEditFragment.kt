@@ -106,7 +106,9 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         if (imgUrl.isNullOrBlank()) {
             setDefaultImg()
         } else {
-            Glide.with(this).load(imgUrl).into(viewDataBinding.profileImg)
+            Glide.with(this).load(imgUrl)
+                    .override(100,100)
+                    .into(viewDataBinding.profileImg)
         }
 
 

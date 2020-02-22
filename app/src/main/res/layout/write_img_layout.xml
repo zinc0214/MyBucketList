@@ -34,6 +34,7 @@
                     android:id="@+id/write_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
                     android:background="@drawable/dday_bucket_item_success_background" />
 
                 <RelativeLayout

@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.ui.ShowImgWideFragment
+import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 
 
 /**
@@ -20,7 +21,6 @@ import womenproject.com.mybury.ui.ShowImgWideFragment
 class BucketDetailImageViewPageAdapter(private val context: Context, private val images : ArrayList<String>,
                                        private var showWideImg: (String) -> Unit) : PagerAdapter() {
     private var layoutInflater: LayoutInflater? = null
-
     override fun getCount(): Int {
         return images.size
     }
@@ -37,7 +37,9 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
         imageView.setOnClickListener { v -> showWideImg.invoke(images[position]) }
 
         try {
-            Glide.with(view).load(images[position]).centerCrop().placeholder(R.drawable.gradient_background).into(imageView)
+            Glide.with(view).load(images[position])
+                    .override(500,500)
+                    .placeholder(R.drawable.gradient_background).into(imageView)
         } catch (ex: IllegalArgumentException) {
             Log.e("Glide-tag", imageView.tag.toString())
         }

@@ -380,10 +380,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
         Log.e("ayhan", "imgL cOunt Basixe : ${viewDataBinding.imgLayout.childCount}")
-        addImgList[viewDataBinding.imgLayout.childCount] = id
+        addImgList[viewDataBinding.imgLayout.childCount-1] = id
         addImgViewList[id] = writeImgLayout
 
-        Log.e("ayhan", "im: ${imgList.size}")
+        Log.e("ayhan", "im: $id ,,, ${addImgList.size}, ${imgList.size}")
 
     }
 
@@ -405,7 +405,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
 
                 val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
-                addImgList[viewDataBinding.imgLayout.childCount+1] = this
+                addImgList[viewDataBinding.imgLayout.childCount] = this
                 addImgViewList[id] = writeImgLayout
                 imgList.add(this)
                 viewDataBinding.imgLayout.addView(writeImgLayout)
@@ -419,29 +419,39 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         Log.e("ayhan", "size == ${addImgList.size}")
 
-        for (i in 0..addImgList.size) {
+        for (i in 0 until addImgList.size) {
             Log.e("ayhan", "for == ${i}")
             Log.e("ayhan", "latyout : $layout, add : ${addImgList[i]}")
             if (layout == addImgList[i]) {
-                Log.e("ayhan", "${i}")
-                deleteImgValue = i-1
+                Log.e("ayhan", "deleteImgValue = ${i}")
+                deleteImgValue = i
             }
         }
         viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
         val id = addImgList[deleteImgValue]
         addImgViewList.remove(id)
+
+        Log.e("ayhan", "addImgList[deleteImgValue] : $id")
+
         addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
-        Log.e("ayhan", "imgSIze : ${imgList.size},,,, ${deleteImgValue}")
-        alreadyImgList[deleteImgValue] = null
+        Log.e("ayhan", "imgSIze : ${addImgList.size},,, ${imgList.size},,,, ${deleteImgValue}")
+
+        alreadyImgList.forEach { num, str ->
+            if(id == str) {
+                Log.e("ayhan", "id : $num")
+                alreadyImgList[num] = null
+            }
+        }
+
     }
 
-    fun showImgWide(uri: Uri) {
+    private fun showImgWide(uri: Uri) {
         val showImgWideFragment = ShowImgWideFragment(uri)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
 
-    fun showImgWide(url: String) {
+    private fun showImgWide(url: String) {
         val showImgWideFragment = ShowImgWideFragment(url)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }

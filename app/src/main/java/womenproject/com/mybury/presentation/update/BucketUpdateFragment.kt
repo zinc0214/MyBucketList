@@ -129,9 +129,9 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     private fun setImgList(bucketInfo: DetailBucketItem): MutableMap<Int, String?> {
         val imgList = mutableMapOf<Int, String?>()
-        imgList.put(0, bucketInfo.imgUrl1)
-        imgList.put(1, bucketInfo.imgUrl2)
-        imgList.put(2, bucketInfo.imgUrl3)
+        imgList[0] = bucketInfo.imgUrl1
+        imgList[1] = bucketInfo.imgUrl2
+        imgList[2] = bucketInfo.imgUrl3
         return imgList
     }
 

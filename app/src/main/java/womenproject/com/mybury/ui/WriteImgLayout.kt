@@ -28,7 +28,12 @@ class WriteImgLayout internal constructor(context: Context,
         val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
-        imgView.setImageURI(uri)
+      //  imgView.setImageURI(uri)
+
+        Glide.with(context)
+                .load(uri)
+                .override(200, 200)
+                .into(imgView)
 
         cardViewLayout = view.findViewById<RelativeLayout>(R.id.img_all_layout)
         cardViewLayout.setOnClickListener {
@@ -45,6 +50,7 @@ class WriteImgLayout internal constructor(context: Context,
         imgRemove.setOnTouchListener(imgRemoveBtnOnTouchListener())
         return view
     }
+
 
 
     fun setAleadyUI(url : String): View {
