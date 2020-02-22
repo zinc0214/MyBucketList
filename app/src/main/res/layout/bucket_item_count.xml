@@ -19,6 +19,10 @@
             type="String" />
 
         <variable
+            name="goalCount"
+            type="String" />
+
+        <variable
             name="bucketSuccessClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -127,7 +131,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
                                 android:gravity="center"
-                                android:text="@{currentUserCount}"
                                 android:textColor="@color/_a6c6ff"
                                 android:textSize="11sp"
                                 tools:text='10' />
