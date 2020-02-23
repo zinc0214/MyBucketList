@@ -58,8 +58,8 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
     class AddCategoryDialog(val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
-            TITLE_MSG = "카테고리 추가하러 이동하기"
-            CONTENT_MSG = "이동할 경우, 작성한 내용이 저장되지 않습니다. "
+            TITLE_MSG = "카테고리 추가"
+            CONTENT_MSG = "카테고리 추가 화면으로 이동합니다."
             CANCEL_BUTTON_VISIBLE = true
             GRADIENT_BUTTON_VISIBLE = false
             CONFIRM_TEXT = "이동"

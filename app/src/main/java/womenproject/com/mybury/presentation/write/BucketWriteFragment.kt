@@ -21,6 +21,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
+import kotlinx.android.synthetic.main.write_img_layout.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -124,20 +125,23 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     open fun setUpCategory(categoryList: ArrayList<Category>) {
-        selectCategory = categoryList[0]
+        selectCategory = categoryList.firstOrNull { it.name == "없음" }
     }
 
     private fun updateView() {
         viewDataBinding.apply {
             Log.e("ayhan", "titleText : ${titleText.text}, memo : ${memoText.text}," +
-                    "category : ${categoryText.text}, dday : ${currentCalendarText}, count : ${goalCount}, imgCount : ${addImgList.size}, " +
+                    "category : ${selectCategory?.name}, dday : ${currentCalendarText}, count : ${goalCount}, imgCount : ${addImgList.size}, " +
                     "imgLayout : ${imgLayout.childCount}")
 
             if (memoText.text.isNotBlank()) {
                 memoLayout.visibility = View.VISIBLE
             }
-            if (selectCategory?.name != "없음") {
-                categoryText.text = categoryText.text
+
+            categoryText.text = selectCategory?.name ?: "없음"
+            if (categoryText.text != "없음") {
+                categoryText.setEnableTextColor()
+                categoryImg.setImage(R.drawable.category_enable)
             }
             if (currentCalendarText.isNotBlank()) {
                 ddayText.text = currentCalendarText
@@ -148,6 +152,24 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 goalCountText.text = goalCount.toString()
                 goalCountText.setEnableTextColor()
                 countImg.setImage(R.drawable.target_count_enable)
+            }
+            if(addImgViewList.isNotEmpty()) {
+                Log.e("ayhan", "imgisNUll???: ${imgLayout.childCount},, ${addImgViewList.size}")
+                val currentCount = imgLayout.childCount
+                addImgViewList.forEach { (t, u) ->
+                    Log.e("ayhan", "newAddVieww : $t, $u")
+                    if(currentCount == 0) {
+                        if(u.parent != null) {
+                            Log.e("ayhan", "parent is use :: $t")
+                            val view = u.parent as ViewGroup
+                            view.removeView(u)
+                            imgLayout.addView(u)
+                        } else {
+                            Log.e("ayhan", "parent is not use :: $t")
+                            imgLayout.addView(u)
+                        }
+                    }
+                }
             }
         }
     }
@@ -401,14 +423,18 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         alreadyImgList.forEach{
             val id = it.value
-            id?.run {
-                Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
-
-                val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
-                addImgList[viewDataBinding.imgLayout.childCount] = this
-                addImgViewList[id] = writeImgLayout
-                imgList.add(this)
-                viewDataBinding.imgLayout.addView(writeImgLayout)
+            Log.e("ayhan", "alreadyImgList id : ${id}")
+            if(!id.isNullOrEmpty()) {
+                id.run {
+                    Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
+                    val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
+                    if(!addImgList.values.contains(this)) {
+                        addImgList[viewDataBinding.imgLayout.childCount] = this
+                        addImgViewList[this] = writeImgLayout
+                        imgList.add(this)
+                        viewDataBinding.imgLayout.addView(writeImgLayout)
+                    }
+                }
             }
         }
     }

@@ -43,7 +43,9 @@ class BucketUpdateFragment : BucketWriteFragment() {
         }
 
         viewModel.bucketItem = bucketItem
-        alreadyImgList = setImgList(bucketItem)
+        if(alreadyImgList.isNullOrEmpty()) {
+            alreadyImgList = setImgList(bucketItem)
+        }
 
         viewDataBinding.titleText.setText(bucketItem.title)
 
