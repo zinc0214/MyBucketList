@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -83,6 +84,7 @@ class CountBucketItemViewHolder(
                     postDelayed({
                         revertAnimation()
                         if (info.userCount >= info.goalCount) {
+                            Log.e("ayhan", "lalala???")
                             setFinalSuccessUIBackground()
                             setFinalSuccessWithCountBucket()
                         } else {
@@ -92,6 +94,7 @@ class CountBucketItemViewHolder(
                     }, 750)
                     postDelayed({
                         if (info.userCount >= info.goalCount) {
+                            Log.e("ayhan", "lalala2???")
                             animFadeOut.duration = 750
                             bucketItemImage.startAnimation(animFadeOut)
                         }
@@ -138,7 +141,6 @@ class CountBucketItemViewHolder(
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._ffffff)
         binding.succeedBucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
-        //binding.bucketItemLayout.layoutParams.height = MyBuryApplication.context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
 
         if(isDdayUI) {
             binding.bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)

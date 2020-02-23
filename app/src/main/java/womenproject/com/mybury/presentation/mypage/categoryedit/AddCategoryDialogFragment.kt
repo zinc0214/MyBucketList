@@ -51,7 +51,7 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
             } else if (currentName != null && currentName == viewDataBinding.categoryEditText.hint.toString() && this.isNullOrBlank()) {
                 Toast.makeText(context, "이름이 변경되지 않았습니다.", Toast.LENGTH_SHORT).show()
             } else if (alreadyUseName(this.toString())) {
-                Toast.makeText(context, "동일한 카테고리 이름이 존재합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "중복된 이름입니다. 다른 카테고리명을 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else if (this.isNullOrBlank()) {
                 Toast.makeText(context, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {

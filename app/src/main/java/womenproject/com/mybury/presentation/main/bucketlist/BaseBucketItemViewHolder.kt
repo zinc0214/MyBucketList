@@ -98,7 +98,6 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
         successImageView.backgroundTintList = context.getColorStateList(R.color._ffffff)
         bucketTitle.setTextColor(context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
-//        bucketItemLayout.layoutParams.height = context.resources.getDimension(R.dimen.minimumBucketItemHeight).toInt()
 
         bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
     }
