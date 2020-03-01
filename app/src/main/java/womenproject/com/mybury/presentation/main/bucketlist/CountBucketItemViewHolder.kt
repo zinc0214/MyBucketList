@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -84,7 +83,6 @@ class CountBucketItemViewHolder(
                     postDelayed({
                         revertAnimation()
                         if (info.userCount >= info.goalCount) {
-                            Log.e("ayhan", "lalala???")
                             setFinalSuccessUIBackground()
                             setFinalSuccessWithCountBucket()
                         } else {
@@ -94,7 +92,6 @@ class CountBucketItemViewHolder(
                     }, 750)
                     postDelayed({
                         if (info.userCount >= info.goalCount) {
-                            Log.e("ayhan", "lalala2???")
                             animFadeOut.duration = 750
                             bucketItemImage.startAnimation(animFadeOut)
                         }
@@ -124,7 +121,6 @@ class CountBucketItemViewHolder(
         } else {
             binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_item_successing_background)
         }
-
     }
 
     private fun setFinalSuccessUIButton() {
@@ -222,7 +218,6 @@ class CountBucketItemViewHolder(
         binding.countSucceedLayout.visibility = View.VISIBLE
 
         val bucketItemLayout = binding.bucketItemLayout.layoutParams as LinearLayout.LayoutParams
-
         if (binding.bucketTitle.lineCount >= 2) {
             bucketItemLayout.height += MyBuryApplication.context.resources.getDimensionPixelSize(R.dimen.titleMargin)
         }

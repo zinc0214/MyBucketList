@@ -243,7 +243,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun actionByBackButton() {
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
         if (originCategoryList == changeCategoryList) {
-            Log.e("ayhan", "why........... ${changeCategoryList[0].name}, ${originCategoryList[0].name}")
             onBackPressedFragment()
         } else {
             setCategoryStatusChange()
@@ -277,7 +276,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             viewDataBinding.root.getWindowVisibleDisplayFrame(r)
 
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
-            Log.e("ayhan", "heigth Deiif : ${heightDiff}")
             try {
                 if (heightDiff < 300) {
                     viewDataBinding.space.visibility = View.VISIBLE

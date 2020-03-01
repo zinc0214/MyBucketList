@@ -446,8 +446,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         Log.e("ayhan", "size == ${addImgList.size}")
 
         for (i in 0 until addImgList.size) {
-            Log.e("ayhan", "for == ${i}")
-            Log.e("ayhan", "latyout : $layout, add : ${addImgList[i]}")
             if (layout == addImgList[i]) {
                 Log.e("ayhan", "deleteImgValue = ${i}")
                 deleteImgValue = i

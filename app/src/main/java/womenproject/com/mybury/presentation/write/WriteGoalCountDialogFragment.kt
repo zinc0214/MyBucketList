@@ -96,7 +96,6 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
             viewDataBinding.root.getWindowVisibleDisplayFrame(r)
 
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
-            Log.e("ayhan", "countK: $heightDiff")
             try {
                 if (heightDiff < 300) {
                     viewDataBinding.goalCountSeekbar.progress = viewDataBinding.goalCountEditText.text.toString().toInt()
