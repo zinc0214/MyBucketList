@@ -63,17 +63,17 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
     }
 
     private fun setOnEditTextEnterListener() : View.OnKeyListener {
-        return object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if (event != null) {
-                    if((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        viewDataBinding.goalCountSeekbar.progress = viewDataBinding.goalCountEditText.text.toString().toInt()
+        return View.OnKeyListener { v, keyCode, event ->
+            if (event != null) {
+                if((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    viewDataBinding.goalCountSeekbar.progress = if(viewDataBinding.goalCountEditText.text.isNotEmpty()) {
+                        viewDataBinding.goalCountEditText.text.toString().toInt()
+                    } else {
+                        1
                     }
                 }
-                return false
             }
-
-
+            false
         }
     }
 
@@ -85,7 +85,11 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
 
     private fun confirmButtonClickListener() : View.OnClickListener {
         return View.OnClickListener {
-            goalCountSetListener.invoke(viewDataBinding.goalCountEditText.text.toString())
+            goalCountSetListener.invoke(if(viewDataBinding.goalCountEditText.text.isNotEmpty()) {
+                viewDataBinding.goalCountEditText.text.toString()
+            } else {
+                "1"
+            })
             this.dismiss()
         }
     }
@@ -98,7 +102,11 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
             val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
             try {
                 if (heightDiff < 300) {
-                    viewDataBinding.goalCountSeekbar.progress = viewDataBinding.goalCountEditText.text.toString().toInt()
+                    viewDataBinding.goalCountSeekbar.progress = if(viewDataBinding.goalCountEditText.text.isNotEmpty()) {
+                        viewDataBinding.goalCountEditText.text.toString().toInt()
+                    } else {
+                        1
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -27,8 +28,8 @@ class CountBucketItemViewHolder(
         private val isDdayUI: Boolean,
         private val binding: BucketItemCountBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private val successImageView = binding.successButtonLayout.successImg
-    private val circularProgressBar = binding.successButtonLayout.circularProgressBar
+    private val successImageView = binding.successButtonView.successImg
+    private val circularProgressBar = binding.successButtonView.circularProgressBar
 
     private val animFadeOut = AnimationUtils.loadAnimation(MyBuryApplication.context, R.anim.fade_out)
 
@@ -47,28 +48,27 @@ class CountBucketItemViewHolder(
 
         binding.userCount.text = formattingCountText
         binding.bucketTitleText = bucketItemInfo.title
-        binding.succeedBucketTitle.text = bucketItemInfo.title
         binding.horizontalProgressBar.progress = bucketItemInfo.userCount
         binding.horizontalProgressBar.max = bucketItemInfo.goalCount
 
         binding.bucketClickListener = bucketListener
 
-        binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(bucketItemInfo)
+        binding.successButtonView.bucketSuccessListener = createOnClickBucketSuccessListener(bucketItemInfo)
         binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(bucketItemInfo)
 
-        if(isDdayUI) {
+        if (isDdayUI) {
             val countText: String = binding.root.context.resources.getString(R.string.dday_bucket_count)
             val formattingCountText = Html.fromHtml(String.format(countText,
                     "${bucketItemInfo.userCount}", "/${bucketItemInfo.goalCount}"))
             binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
             binding.horizontalProgressBar.progressDrawable = MyBuryApplication.context.getDrawable(R.drawable.dday_horizontal_progressbar)
-            binding.successButtonLayout.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
+            binding.successButtonView.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
             binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
             binding.userCount.text = formattingCountText
         }
     }
 
-    fun onBucketSuccessFinalButtonClickListener(info: BucketItem) {
+    private fun onBucketSuccessFinalButtonClickListener(info: BucketItem) {
         binding.apply {
             circularProgressBar.run {
                 progressType = ProgressType.INDETERMINATE
@@ -83,8 +83,7 @@ class CountBucketItemViewHolder(
                     postDelayed({
                         revertAnimation()
                         if (info.userCount >= info.goalCount) {
-                            setFinalSuccessUIBackground()
-                            setFinalSuccessWithCountBucket()
+                            // Nothing
                         } else {
                             setDoneSuccessUIButton()
                             bucketItemLayout.isClickable = true
@@ -98,11 +97,15 @@ class CountBucketItemViewHolder(
                     }, 800)
                     postDelayed({
                         if (info.userCount >= info.goalCount) {
-                            bucketItemImage.visibility = View.GONE
+                            Log.e("ayhan", "gogo : by dday")
                             bucketItemLayout.isClickable = true
+                            setFinalSuccessUIBackground()
+                            setFinalSuccessWithCountBucket()
                         }
-
-                    }, 900)
+                    }, 1000)
+                    postDelayed({
+                        bucketSuccess(info)
+                    }, 1100)
                 }
             }
             executePendingBindings()
@@ -135,10 +138,9 @@ class CountBucketItemViewHolder(
     private fun setFinalSuccessUIBackground() {
         successImageView.setBackgroundResource(R.drawable.check_complete)
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._ffffff)
-        binding.succeedBucketTitle.setTextColor(MyBuryApplication.context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
 
-        if(isDdayUI) {
+        if (isDdayUI) {
             binding.bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)
         } else {
             binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
@@ -157,7 +159,8 @@ class CountBucketItemViewHolder(
 
     private fun createOnClickBucketSuccessListener(bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
-            bucketSuccess(bucketItemInfo)
+            onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+
         }
     }
 
@@ -173,7 +176,7 @@ class CountBucketItemViewHolder(
             }
 
             override fun success() {
-                onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+               // onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 binding.bucketItemLayout.isEnabled = true
                 return
             }
@@ -195,15 +198,15 @@ class CountBucketItemViewHolder(
 
     private fun addBucketSuccessCount(info: BucketItem) {
 
-        val formattingCountText : Spanned
-        formattingCountText = if(isDdayUI) {
+        val formattingCountText: Spanned
+        formattingCountText = if (isDdayUI) {
             val countText: String = binding.root.context.resources.getString(R.string.dday_bucket_count)
             Html.fromHtml(String.format(countText,
-                    "${info.userCount+1}", "/${info.goalCount}"))
+                    "${info.userCount + 1}", "/${info.goalCount}"))
         } else {
             val countText: String = binding.root.context.resources.getString(R.string.bucket_count)
             Html.fromHtml(String.format(countText,
-                    "${info.userCount+1}", "/${info.goalCount}"))
+                    "${info.userCount + 1}", "/${info.goalCount}"))
         }
         binding.userCount.text = formattingCountText
         binding.horizontalProgressBar.progress = info.userCount + 1
@@ -213,25 +216,10 @@ class CountBucketItemViewHolder(
     }
 
     private fun setFinalSuccessWithCountBucket() {
+        Log.e("ayhan", "setFinalSuccessWithCountBucket")
         binding.prgressLayout.visibility = View.GONE
-        binding.contentLayout.visibility = View.GONE
-        binding.countSucceedLayout.visibility = View.VISIBLE
-
-        val bucketItemLayout = binding.bucketItemLayout.layoutParams as LinearLayout.LayoutParams
-        if (binding.bucketTitle.lineCount >= 2) {
-            bucketItemLayout.height += MyBuryApplication.context.resources.getDimensionPixelSize(R.dimen.titleMargin)
-        }
-
-        val bucketTitle = binding.bucketTitle.layoutParams as RelativeLayout.LayoutParams
-        bucketTitle.topMargin = 0
-        bucketTitle.addRule(RelativeLayout.CENTER_VERTICAL)
-        binding.bucketTitle.layoutParams = bucketTitle
-
-        val contentLayout = binding.contentLayout.layoutParams as RelativeLayout.LayoutParams
-        contentLayout.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE)
-        binding.contentLayout.layoutParams = contentLayout
-        binding.contentLayout.gravity = RelativeLayout.CENTER_VERTICAL
-
+        binding.successButtonLayout.visibility = View.GONE
+        binding.executePendingBindings()
     }
 
     private fun setProgressAnimate(pb: ProgressBar, progressTo: Int) {

@@ -455,11 +455,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         val id = addImgList[deleteImgValue]
         addImgViewList.remove(id)
 
-        Log.e("ayhan", "addImgList[deleteImgValue] : $id")
 
         addImgList.remove(deleteImgValue)
         imgList.removeAt(deleteImgValue)
-        Log.e("ayhan", "imgSIze : ${addImgList.size},,, ${imgList.size},,,, ${deleteImgValue}")
 
         alreadyImgList.forEach { num, str ->
             if(id == str) {

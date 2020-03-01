@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bucketClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketTitleText"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/bucket_item_layout"
+            style="@style/BucketItemLayoutStyle"
+            android:background="@drawable/mypage_category_background"
+            android:onClick="@{bucketClickListener}">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/bucket_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/dday_bucket_item_succeed_background" />
+
+                <RelativeLayout
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_marginBottom="21dp"
+                        android:layout_marginTop="21dp"
+                        android:id="@+id/bucket_title"
+                        style="@style/BucketItemTitleTextStyle"
+                        android:text="@{bucketTitleText}"
+                        android:textColor="@color/_ffffff" />
+
+                    <ImageView
+                        android:id="@+id/success_img"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/check_complete" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</layout>
