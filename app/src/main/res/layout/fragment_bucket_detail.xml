@@ -65,7 +65,7 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/detail_backbutton" />
+                android:src="@drawable/back" />
 
             <ImageView
                 android:layout_width="wrap_content"
