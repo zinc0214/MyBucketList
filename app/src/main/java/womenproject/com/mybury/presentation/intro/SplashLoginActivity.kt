@@ -25,8 +25,10 @@ import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.SignUpCheckRequest
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
@@ -97,9 +99,10 @@ class SplashLoginActivity : AppCompatActivity() {
                     setAccountEmail(this, emailDataClass.email)
                     if (response.signUp) {
                         setUserId(this, response.userId)
-                        if(getMyBuryLoginComplete(this)) {
+                        setMyBuryLoginComplete(this, true)
+                        if (getMyBuryLoginComplete(this)) {
                             Log.e("ayhan", "goToMainActivity")
-                            goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                            initToken()
                         } else {
                             Log.e("ayhan", "goToCreateAccountActivity")
                             goToCreateAccountActivity()
@@ -157,6 +160,29 @@ class SplashLoginActivity : AppCompatActivity() {
                 }
     }
 
+    @SuppressLint("CheckResult")
+    private fun initToken() {
+
+        val getTokenRequest = UseUserIdRequest(getUserId(this))
+
+        apiInterface.getLoginToken(getTokenRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    if (response.retcode == "200") {
+                        Preference.setAccessToken(this, response.accessToken)
+                        Preference.setRefreshToken(this, response.refreshToken)
+                        goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                    } else {
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    }
+                }) {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    Log.e("myBury", "getLoginToken Fail : $it")
+                }
+
+
+    }
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
