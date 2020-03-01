@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -16,23 +17,21 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import kotlinx.android.synthetic.main.write_dialog_item.view.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
-import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.databinding.WriteDialogItemBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.ui.PermissionDialogFragment
-import java.io.File
-import java.io.IOException
+import womenproject.com.mybury.util.ScreenUtils
+import java.io.*
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 enum class AddContentType {
@@ -50,8 +49,6 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private var photoUri: Uri? = null
     private lateinit var currentImgFile: File
-    private val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-
     private var mCurrentPhotoPath: String? = null
 
 
@@ -60,12 +57,12 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private fun initStartView() {
         if (!checkAddImageListener.invoke()) {
-            viewDataBinding.addAlbumImgLayout.writeItemLayout.disableAdd()
-            viewDataBinding.addCamImgLayout.writeItemLayout.disableAdd()
+            viewDataBinding.addAlbumImgLayout.disableAdd()
+            viewDataBinding.addCamImgLayout.disableAdd()
         }
 
         if (!checkAddTypeAble.invoke()) {
-            viewDataBinding.addMemoLayout.writeItemLayout.disableAdd()
+            viewDataBinding.addMemoLayout.disableAdd()
         }
 
         when (addType) {
@@ -81,17 +78,25 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     override fun initDataBinding() {
-        initStartView()
 
-        viewDataBinding.addMemoLayout.itemClickListener = memoAddOnClickListener
-        viewDataBinding.addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener
-        viewDataBinding.addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener
-        viewDataBinding.setBaseProfileImg.itemClickListener = baseProfileImgClickListener
+        viewDataBinding.apply {
+            addAlbumImgLayout.isAddable = true
+            addCamImgLayout.isAddable = true
+            addMemoLayout.isAddable = true
 
-        viewDataBinding.addMemoLayout.title = "메모 추가"
-        viewDataBinding.addAlbumImgLayout.title = "앨범에서 사진 선택"
-        viewDataBinding.addCamImgLayout.title = "사진 촬영"
-        viewDataBinding.setBaseProfileImg.title = "기본 이미지로 변경"
+            initStartView()
+
+            addMemoLayout.itemClickListener = memoAddOnClickListener
+            addAlbumImgLayout.itemClickListener = getAlbumImgAndCropOnClickListener
+            addCamImgLayout.itemClickListener = takePictureAndCropOnClickListener
+            setBaseProfileImg.itemClickListener = baseProfileImgClickListener
+
+            addMemoLayout.title = "메모 추가"
+            addAlbumImgLayout.title = "앨범에서 사진 선택"
+            addCamImgLayout.title = "사진 촬영"
+            setBaseProfileImg.title = "기본 이미지로 변경"
+        }
+
     }
 
 
@@ -114,8 +119,13 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
 
     private val memoAddOnClickListener = View.OnClickListener {
-        addTypeClickListener.invoke()
-        this.dismiss()
+        if (viewDataBinding.addMemoLayout.isAddable!!) {
+            addTypeClickListener.invoke()
+            this.dismiss()
+        } else {
+            Toast.makeText(context, "이미 메모가 있습니다.", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private val baseProfileImgClickListener = View.OnClickListener {
@@ -125,17 +135,27 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.context!!, activity as BaseActiviy)) {
-            if (checkAddImageListener.invoke()) {
-                goToAlbum()
+            if (viewDataBinding.addAlbumImgLayout.isAddable!!) {
+                if (checkAddImageListener.invoke()) {
+                    goToAlbum()
+                }
+            } else {
+                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.context!!, activity as BaseActiviy)) {
-            if (checkAddImageListener.invoke()) {
-                takePhoto()
+            if (viewDataBinding.addCamImgLayout.isAddable!!) {
+                if (checkAddImageListener.invoke()) {
+                    takePhoto()
+                }
+            } else {
+                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
@@ -227,15 +247,35 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
             cropImage()
             // 갤러리에 나타나게
             MediaScannerConnection.scanFile(context,
-                    arrayOf(photoUri!!.getPath()), null,
-                    object : MediaScannerConnection.OnScanCompletedListener {
-                        override fun onScanCompleted(path: String, uri: Uri) {}
-                    })
+                    arrayOf(photoUri!!.path), null
+            ) { _, _ -> }
         } else if (requestCode == CROP_FROM_CAMERA) {
-            Log.e("$this", "여기에 이미지 넣어야 함")
+
+            val options = BitmapFactory.Options()
+         //   options.inSampleSize = 2
+            val src = BitmapFactory.decodeFile(currentImgFile.path)
+            Log.e("ayhan", "src : ${src == null}")
+            val resized = Bitmap.createScaledBitmap(src, 700, 700, true);
+            val file = saveBitmapAsFile(resized, currentImgFile.path)
+            currentImgFile = file
+
             imgAddListener.invoke(this.currentImgFile, this.photoUri!!)
             this.dismiss()
         }
+    }
+
+    private fun saveBitmapAsFile(bitmap: Bitmap?, filePath: String): File {
+        val file = File(filePath)
+        var os: OutputStream
+        try {
+            file.createNewFile()
+            os = FileOutputStream(file)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, os)
+            os.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return file
     }
 
     //Android N crop image
@@ -275,9 +315,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
             }
 
             val folder = File("${Environment.getExternalStorageDirectory()}/mybury/")
-            val tempFile = File(folder.toString(), croppedFileName!!.getName())
-
-
+            val tempFile = File(folder.toString(), croppedFileName!!.name)
             currentImgFile = tempFile
             photoUri = FileProvider.getUriForFile(context!!,
                     "MyBuryApplication.provider", tempFile)
@@ -305,9 +343,11 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
         }
     }
 
-    private fun LinearLayout.disableAdd() {
-        this.isEnabled = false
-        this.write_item_text.setTextColor(context!!.getColor(R.color._b4b4b4))
+
+    private fun WriteDialogItemBinding.disableAdd() {
+        this.writeItemText.setTextColor(context!!.getColor(R.color._b4b4b4))
+        this.isAddable = false
     }
 }
+
 

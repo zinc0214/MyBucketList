@@ -97,7 +97,7 @@ class Preference {
 
         fun getFilterForShow(context: Context) : String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(SHOW_FILTER, ShowFilter.started.toString())
+            val data = sp.getString(SHOW_FILTER, ShowFilter.all.toString())
             return data
         }
 
@@ -112,6 +112,13 @@ class Preference {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
             return data
+        }
+
+        fun allClear(context: Context) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.clear()
+            editor.commit()
         }
 
     }

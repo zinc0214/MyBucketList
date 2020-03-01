@@ -18,16 +18,22 @@ import womenproject.com.mybury.R
 
 @SuppressLint("ViewConstructor")
 class WriteImgLayout internal constructor(context: Context,
-                                          private var imgRemoveListener: (Int) -> Unit,
-                                          private var count : Int,
+                                          private var id : String,
+                                          private var imgRemoveListener: (String) -> Unit,
                                           private var imgClickListener: (Any) -> Unit): RelativeLayout(context) {
 
     private lateinit var cardViewLayout : RelativeLayout
+
     fun setUI(uri: Uri): View {
         val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
-        imgView.setImageURI(uri)
+      //  imgView.setImageURI(uri)
+
+        Glide.with(context)
+                .load(uri)
+                .override(200, 200)
+                .into(imgView)
 
         cardViewLayout = view.findViewById<RelativeLayout>(R.id.img_all_layout)
         cardViewLayout.setOnClickListener {
@@ -37,13 +43,14 @@ class WriteImgLayout internal constructor(context: Context,
         val imgRemove = view.findViewById<RelativeLayout>(R.id.img_remove_btn)
         imgRemove.setOnClickListener {
             run {
-                imgRemoveListener.invoke(count)
+                imgRemoveListener.invoke(id)
             }
         }
 
         imgRemove.setOnTouchListener(imgRemoveBtnOnTouchListener())
         return view
     }
+
 
 
     fun setAleadyUI(url : String): View {
@@ -60,7 +67,7 @@ class WriteImgLayout internal constructor(context: Context,
         val imgRemove = view.findViewById<RelativeLayout>(R.id.img_remove_btn)
         imgRemove.setOnClickListener {
             run {
-                imgRemoveListener.invoke(count)
+                imgRemoveListener.invoke(id)
             }
         }
 

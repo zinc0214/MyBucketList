@@ -18,7 +18,8 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 15..
  */
 
-class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBinding>() {
+class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
+                                  private val isAnimEnd : () -> Unit ) : BaseDialogFragment<AccountDelectDialogBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.account_delect_dialog
@@ -46,11 +47,6 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
-
-    private fun dialogDismiss() {
-        this.dismiss()
-    }
-
     private val onClickListener = View.OnClickListener {
         viewDataBinding.lastBucketItem.successButtonLayout.circularProgressBar.run {
             progressType = ProgressType.INDETERMINATE
@@ -59,6 +55,7 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
             Handler().run {
                 viewDataBinding.lastBucketItem.bucketItemLayout.isClickable = false
                 postDelayed({
+                    startDeleting.invoke()
                     setFinalSuccessUIButton()
                 }, 800)
                 postDelayed({
@@ -68,11 +65,8 @@ class AccountDeleteDialogFragment : BaseDialogFragment<AccountDelectDialogBindin
                 postDelayed({
                     animFadeOut.duration = 1800
                     viewDataBinding.endContentText.visibility=View.GONE
+                    isAnimEnd.invoke()
                 }, 2000)
-                postDelayed({
-                    activity!!.finish()
-                }, 2000)
-
             }
         }
         viewDataBinding.executePendingBindings()

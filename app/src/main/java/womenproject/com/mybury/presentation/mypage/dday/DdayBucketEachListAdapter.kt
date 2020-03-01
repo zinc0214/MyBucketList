@@ -6,10 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.*
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
+import womenproject.com.mybury.databinding.BucketItemSucceedBinding
+import womenproject.com.mybury.databinding.DdayBucketItemSucceedBinding
+import womenproject.com.mybury.presentation.main.bucketlist.BaseNormalBucketItemViewHolder
 import womenproject.com.mybury.presentation.main.bucketlist.CountBucketItemViewHolder
+import womenproject.com.mybury.presentation.main.bucketlist.SucceedBucketItemViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
@@ -24,8 +28,9 @@ class DdayBucketEachListAdapter(val bucketList: List<BucketItem>) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when (viewType) {
-            1 -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            SUCCEED_ITEM -> DdaySucceedBucketItemViewHolder(DdayBucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            COUNT_ITEM -> CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
     }
 
@@ -35,6 +40,9 @@ class DdayBucketEachListAdapter(val bucketList: List<BucketItem>) : RecyclerView
                 holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
             }
             is CountBucketItemViewHolder -> {
+                holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
+            }
+            is DdaySucceedBucketItemViewHolder -> {
                 holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
             }
         }
@@ -49,12 +57,13 @@ class DdayBucketEachListAdapter(val bucketList: List<BucketItem>) : RecyclerView
     }
 
     private fun checkBucketType(position: Int): Int {
-        return if (bucketList[position].userCount == bucketList[position].goalCount) {
-            0
-        } else {
-            bucketList[position].goalCount
+        return when {
+            bucketList[position].userCount >= bucketList[position].goalCount -> SUCCEED_ITEM
+            bucketList[position].goalCount > 1 -> COUNT_ITEM
+            else -> BASE_ITEM
         }
     }
+
 
     override fun getItemCount(): Int {
         return bucketList.size

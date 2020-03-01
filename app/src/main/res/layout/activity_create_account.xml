@@ -80,6 +80,7 @@
                         android:textSize="12sp" />
 
                     <EditText
+                        android:maxLength="15"
                         android:id="@+id/nickname_edit_text"
                         android:layout_width="match_parent"
                         android:layout_marginStart="50dp"

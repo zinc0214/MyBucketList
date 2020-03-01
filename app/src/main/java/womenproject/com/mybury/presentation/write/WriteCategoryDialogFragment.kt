@@ -20,7 +20,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
         super.onResume()
 
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
-        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
+        val dialogHeight =  resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
@@ -58,7 +58,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
     class AddCategoryDialog(val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
-            TITLE_MSG = "알림"
+            TITLE_MSG = "카테고리 추가"
             CONTENT_MSG = "카테고리 추가 화면으로 이동합니다."
             CANCEL_BUTTON_VISIBLE = true
             GRADIENT_BUTTON_VISIBLE = false

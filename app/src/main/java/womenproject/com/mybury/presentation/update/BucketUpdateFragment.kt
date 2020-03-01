@@ -1,20 +1,16 @@
 package womenproject.com.mybury.presentation.update
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.findNavController
-import io.reactivex.functions.Cancellable
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
-import womenproject.com.mybury.presentation.write.BucketWriteFragmentDirections
 import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {
@@ -47,11 +43,13 @@ class BucketUpdateFragment : BucketWriteFragment() {
         }
 
         viewModel.bucketItem = bucketItem
-        alreadyImgList = setImgList(bucketItem)
+        if(alreadyImgList.isNullOrEmpty()) {
+            alreadyImgList = setImgList(bucketItem)
+        }
 
         viewDataBinding.titleText.setText(bucketItem.title)
 
-        if (bucketItem.memo.isNotEmpty()) {
+        if (bucketItem.memo.isNotBlank()) {
             viewDataBinding.memoLayout.visibility = View.VISIBLE
             viewDataBinding.memoText.setText(bucketItem.memo)
         }
@@ -133,9 +131,9 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     private fun setImgList(bucketInfo: DetailBucketItem): MutableMap<Int, String?> {
         val imgList = mutableMapOf<Int, String?>()
-        imgList.put(1, bucketInfo.imgUrl1)
-        imgList.put(2, bucketInfo.imgUrl2)
-        imgList.put(3, bucketInfo.imgUrl3)
+        imgList[0] = bucketInfo.imgUrl1
+        imgList[1] = bucketInfo.imgUrl2
+        imgList[2] = bucketInfo.imgUrl3
         return imgList
     }
 

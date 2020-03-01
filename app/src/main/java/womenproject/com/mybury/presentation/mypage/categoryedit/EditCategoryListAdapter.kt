@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,15 +10,15 @@ import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
-class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Category>,
+class EditCategoryListAdapter(private val bucketCategoryList: List<Category>,
                               private val dragListener: ItemDragListener,
                               private val checkedListener: ItemCheckedListener,
                               private val itemMovedListener: ItemMovedListener,
-                              private val editCategoryName: (Category, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
+                              private val editCategoryName: (Category) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
 
     private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
-    private val categoryList = bucketCategoryList
+  //  private val categoryList = bucketCategoryList as MutableList<Category>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -41,11 +40,12 @@ class EditCategoryListAdapter(private val bucketCategoryList: MutableList<Catego
             return
         }
 
+        val categoryList = bucketCategoryList as MutableList<Category>
         val fromItem = categoryList.removeAt(from)
         categoryList.add(to, fromItem)
         notifyItemMoved(from, to)
 
-        itemMovedListener.movend(categoryList)
+        itemMovedListener.moved(categoryList)
     }
 
 }
