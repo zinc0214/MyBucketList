@@ -1,9 +1,6 @@
 package womenproject.com.mybury.data
 
-import android.R.id.edit
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.Context.MODE_PRIVATE
 import android.content.Context.MODE_PRIVATE
 
 
@@ -59,6 +56,7 @@ class Preference {
             val data = sp.getString(USER_ID, "")
             return data
         }
+
 
         fun setAccessToken(context: Context, token:String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)

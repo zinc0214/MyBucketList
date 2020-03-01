@@ -18,15 +18,18 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
+import womenproject.com.mybury.data.SignUpCheckRequest
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.UserAlreadyExist
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -60,7 +63,6 @@ class CreateAccountActivity : BaseActiviy() {
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        getLoginToken()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
         binding.apply {
             topLayout.title = "프로필생성"
@@ -154,7 +156,7 @@ class CreateAccountActivity : BaseActiviy() {
 
 
     private val myBuryStartListener = View.OnClickListener {
-        signInAccount()
+        loadUserId(getAccountEmail(this))
     }
 
 
@@ -209,16 +211,40 @@ class CreateAccountActivity : BaseActiviy() {
                     } else {
                         Preference.setAccessToken(this, response.accessToken)
                         Preference.setRefreshToken(this, response.refreshToken)
+                        signInAccount()
                     }
 
                 }) {
                     Log.e("myBury", "getLoginToken Fail : $it")
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
-
-
     }
 
+    @SuppressLint("CheckResult")
+    private fun loadUserId(email: String) {
+        val emailDataClass = SignUpCheckRequest(email)
+
+        apiInterface.postSignUp(emailDataClass)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    when (response.retcode) {
+                        "200" -> {
+                            Preference.setUserId(this, response.userId)
+                            getLoginToken()
+                        }
+                        "401" -> {
+                            UserAlreadyExist().show(supportFragmentManager, "tag")
+                        }
+                        else -> {
+                            CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                        }
+                    }
+                }) {
+                    Log.e("myBury", "PostSignUpResponse Fail: $it")
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                }
+    }
 }
 
 class CancelDialog : BaseNormalDialogFragment() {
