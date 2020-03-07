@@ -20,7 +20,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
         super.onResume()
 
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
-        val dialogHeight =  resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
+        val dialogHeight = if(userCategory.size < 5) ActionBar.LayoutParams.WRAP_CONTENT else resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
