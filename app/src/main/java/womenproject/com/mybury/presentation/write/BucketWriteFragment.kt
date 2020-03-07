@@ -10,13 +10,18 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionScene
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
+import kotlinx.android.synthetic.main.write_img_layout.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -37,14 +42,16 @@ import kotlin.collections.ArrayList
 open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
 
     var alreadyImgList = mutableMapOf<Int, String?>()
-    var imgList = ArrayList<Any>()
+    var addImgList = mutableMapOf<Int, String?>()
+    var addImgViewList = mutableMapOf<String, View>()
+    var imgList = ArrayList<Any?>()
     var currentCalendarDay: Date? = null
+    var currentCalendarText : String = ""
+    var selectCategory: Category? = null
     var goalCount = 1
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
-
-    lateinit var selectCategory: Category
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -71,6 +78,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         })
         imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateView()
     }
 
     open fun backBtn() {
@@ -113,9 +125,54 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     open fun setUpCategory(categoryList: ArrayList<Category>) {
-        selectCategory = categoryList[0]
+        selectCategory = categoryList.firstOrNull { it.name == "없음" }
     }
 
+    private fun updateView() {
+        viewDataBinding.apply {
+            Log.e("ayhan", "titleText : ${titleText.text}, memo : ${memoText.text}," +
+                    "category : ${selectCategory?.name}, dday : ${currentCalendarText}, count : ${goalCount}, imgCount : ${addImgList.size}, " +
+                    "imgLayout : ${imgLayout.childCount}")
+
+            if (memoText.text.isNotBlank()) {
+                memoLayout.visibility = View.VISIBLE
+            }
+
+            categoryText.text = selectCategory?.name ?: "없음"
+            if (categoryText.text != "없음") {
+                categoryText.setEnableTextColor()
+                categoryImg.setImage(R.drawable.category_enable)
+            }
+            if (currentCalendarText.isNotBlank()) {
+                ddayText.text = currentCalendarText
+                ddayText.setEnableTextColor()
+                ddayImg.setImage(R.drawable.calendar_enable)
+            }
+            if (goalCount > 2) {
+                goalCountText.text = goalCount.toString()
+                goalCountText.setEnableTextColor()
+                countImg.setImage(R.drawable.target_count_enable)
+            }
+            if(addImgViewList.isNotEmpty()) {
+                Log.e("ayhan", "imgisNUll???: ${imgLayout.childCount},, ${addImgViewList.size}")
+                val currentCount = imgLayout.childCount
+                addImgViewList.forEach { (t, u) ->
+                    Log.e("ayhan", "newAddVieww : $t, $u")
+                    if(currentCount == 0) {
+                        if(u.parent != null) {
+                            Log.e("ayhan", "parent is use :: $t")
+                            val view = u.parent as ViewGroup
+                            view.removeView(u)
+                            imgLayout.addView(u)
+                        } else {
+                            Log.e("ayhan", "parent is not use :: $t")
+                            imgLayout.addView(u)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun setUpView() {
 
@@ -129,7 +186,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             goalCountSettingListener = goalCountSetListener()
             categorySelectListener = selectCategoryListener()
 
-            writeRegist.isEnabled = titleText.length() >= 1
+            writeRegist.isEnabled = titleText.text.isNotBlank()
 
             titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
             memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
@@ -213,16 +270,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun start() {
+                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
+                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 startLoading()
-
             }
 
             override fun success() {
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
-                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 activity!!.onBackPressed()
             }
 
@@ -250,7 +306,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
-                viewDataBinding.writeRegist.isEnabled = editText.length() >= 1
+                viewDataBinding.writeRegist.isEnabled = editText.text.isNotBlank()
             }
         }
     }
@@ -314,12 +370,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         val checkAddImgAbleListener: () -> Boolean = {
-            if (viewDataBinding.imgLayout.childCount > 2) {
-                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
-                false
-            } else {
-                true
-            }
+            viewDataBinding.imgLayout.childCount <= 2
         }
 
         val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
@@ -334,7 +385,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun onAddImgField(file: File, uri: Uri) {
 
-        val removeImgListener: (Int) -> Unit = { it ->
+        val removeImgListener: (String) -> Unit = { it ->
             onDeleteImgField(it)
         }
 
@@ -345,19 +396,24 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgList.size, imgFieldClickListener).setUI(uri)
         imgList.add(file)
-        alreadyImgList[imgList.size] = uri.toString()
+        val id = file.name
+        val writeImgLayout = WriteImgLayout(this.context!!, id, removeImgListener, imgFieldClickListener).setUI(uri)
         viewDataBinding.imgLayout.addView(writeImgLayout)
+
+        Log.e("ayhan", "imgL cOunt Basixe : ${viewDataBinding.imgLayout.childCount}")
+        addImgList[viewDataBinding.imgLayout.childCount-1] = id
+        addImgViewList[id] = writeImgLayout
+
+        Log.e("ayhan", "im: $id ,,, ${addImgList.size}, ${imgList.size}")
 
     }
 
     private fun alreadyAdd() {
 
-        val removeImgListener: (Int) -> Unit = { it ->
+        val removeImgListener: (String) -> Unit = { it ->
             onDeleteImgField(it)
         }
-
 
         val imgFieldClickListener: (Any) -> Unit = {
             if (it is String) {
@@ -365,30 +421,59 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        for (list in alreadyImgList) {
-            if (list.value != null) {
-                imgList.add(list)
-                val writeImgLayout = WriteImgLayout(this.context!!, removeImgListener, imgList.size, imgFieldClickListener).setAleadyUI(list.value!!)
-                viewDataBinding.imgLayout.addView(writeImgLayout)
+        alreadyImgList.forEach{
+            val id = it.value
+            Log.e("ayhan", "alreadyImgList id : ${id}")
+            if(!id.isNullOrEmpty()) {
+                id.run {
+                    Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
+                    val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
+                    if(!addImgList.values.contains(this)) {
+                        addImgList[viewDataBinding.imgLayout.childCount] = this
+                        addImgViewList[this] = writeImgLayout
+                        imgList.add(this)
+                        viewDataBinding.imgLayout.addView(writeImgLayout)
+                    }
+                }
             }
+        }
+    }
 
+
+    private fun onDeleteImgField(layout: String) {
+        var deleteImgValue = 0
+
+        Log.e("ayhan", "size == ${addImgList.size}")
+
+        for (i in 0 until addImgList.size) {
+            if (layout == addImgList[i]) {
+                Log.e("ayhan", "deleteImgValue = ${i}")
+                deleteImgValue = i
+            }
+        }
+        viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
+        val id = addImgList[deleteImgValue]
+        addImgViewList.remove(id)
+
+
+        addImgList.remove(deleteImgValue)
+        imgList.removeAt(deleteImgValue)
+
+        alreadyImgList.forEach { num, str ->
+            if(id == str) {
+                Log.e("ayhan", "id : $num")
+                alreadyImgList[num] = null
+            }
         }
 
     }
 
-    private fun onDeleteImgField(layout: Int) {
-        val deleteImgValue = layout - 1
-        viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
-        imgList.removeAt(deleteImgValue)
-        alreadyImgList[layout] = null
-    }
-
-    fun showImgWide(uri: Uri) {
+    private fun showImgWide(uri: Uri) {
         val showImgWideFragment = ShowImgWideFragment(uri)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
 
-    fun showImgWide(url: String) {
+    private fun showImgWide(url: String) {
         val showImgWideFragment = ShowImgWideFragment(url)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
@@ -397,6 +482,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun memoRemoveListener(): View.OnClickListener {
 
         return View.OnClickListener {
+            viewDataBinding.memoText.text.clear()
             viewDataBinding.memoLayout.visibility = View.GONE
         }
     }
@@ -408,11 +494,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             if (dday.isEmpty()) {
                 viewDataBinding.ddayText.text = "추가"
                 currentCalendarDay = date
+                currentCalendarText = ""
                 viewDataBinding.ddayText.setDisableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
             } else {
                 viewDataBinding.ddayText.text = dday
                 currentCalendarDay = date
+                currentCalendarText = dday
                 viewDataBinding.ddayText.setEnableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
             }
@@ -487,7 +575,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         return AddBucketItem(viewDataBinding.titleText.text.toString(), open,
                 formDate, goalCount,
-                viewDataBinding.memoText.text.toString(), selectCategory.id)
+                viewDataBinding.memoText.text.toString(), selectCategory?.id!!)
     }
 
 

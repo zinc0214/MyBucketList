@@ -3,6 +3,8 @@ package womenproject.com.mybury.presentation.mypage
 
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -102,13 +104,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
+          //  val scrollLayout = mypageScrollLayout.contentScrollLayout.layoutParams as LinearLayout.LayoutParams
+
             appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
                 if (p1 == -384) {
                     mypageScrollLayout.ddayLayout.visibility = View.GONE
+               //     scrollLayout.topMargin = 50
+                //    mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.GONE
                     popupClickListener()
                 } else if (p1 == 0) {
                     mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+            //        scrollLayout.topMargin = 0
+              //      mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.VISIBLE
                 }
 

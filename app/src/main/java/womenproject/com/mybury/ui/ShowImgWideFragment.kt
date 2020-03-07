@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.ImgWideLayoutBinding
+import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 
 /**
  * Created by HanAYeon on 2019-05-14.
@@ -28,8 +29,8 @@ class ShowImgWideFragment() : BaseDialogFragment<ImgWideLayoutBinding>() {
     override fun onResume() {
         super.onResume()
 
-        val dialogWidth =  ActionBar.LayoutParams.MATCH_PARENT
-        val dialogHeight = ActionBar.LayoutParams.MATCH_PARENT
+        val dialogWidth = getScreenWidth(context)
+        val dialogHeight = getScreenWidth(context)
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 

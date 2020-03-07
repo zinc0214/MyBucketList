@@ -1,9 +1,6 @@
 package womenproject.com.mybury.data
 
-import android.R.id.edit
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.Context.MODE_PRIVATE
 import android.content.Context.MODE_PRIVATE
 
 
@@ -60,6 +57,7 @@ class Preference {
             return data
         }
 
+
         fun setAccessToken(context: Context, token:String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
@@ -97,7 +95,7 @@ class Preference {
 
         fun getFilterForShow(context: Context) : String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(SHOW_FILTER, ShowFilter.started.toString())
+            val data = sp.getString(SHOW_FILTER, ShowFilter.all.toString())
             return data
         }
 
@@ -112,6 +110,13 @@ class Preference {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
             return data
+        }
+
+        fun allClear(context: Context) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.clear()
+            editor.commit()
         }
 
     }

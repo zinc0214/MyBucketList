@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="isAddable"
+            type="Boolean" />
+
+        <variable
             name="title"
             type="String" />
 

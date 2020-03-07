@@ -3,36 +3,37 @@ package womenproject.com.mybury.presentation.intro
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import womenproject.com.mybury.MyBuryApplication.Companion.context
-import womenproject.com.mybury.R
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.MyBuryApplication.Companion.context
+import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
+import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.SignUpCheckRequest
+import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
+import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
-import womenproject.com.mybury.presentation.UserAlreadyExist
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -97,9 +98,10 @@ class SplashLoginActivity : AppCompatActivity() {
                     setAccountEmail(this, emailDataClass.email)
                     if (response.signUp) {
                         setUserId(this, response.userId)
-                        goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                        setMyBuryLoginComplete(this, true)
+                        initToken()
                     } else {
-                        loadUserId(emailDataClass.email)
+                        goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
                     }
                 }) {
                     val networkFailDialog = NetworkFailDialog()
@@ -124,7 +126,7 @@ class SplashLoginActivity : AppCompatActivity() {
         finish()
     }
 
-
+/*
     @SuppressLint("CheckResult")
     private fun loadUserId(email: String) {
         val emailDataClass = SignUpCheckRequest(email)
@@ -149,8 +151,31 @@ class SplashLoginActivity : AppCompatActivity() {
                     Log.e("myBury", "PostSignUpResponse Fail: $it")
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
-    }
+    }*/
 
+    @SuppressLint("CheckResult")
+    private fun initToken() {
+
+        val getTokenRequest = UseUserIdRequest(getUserId(this))
+
+        apiInterface.getLoginToken(getTokenRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    if (response.retcode == "200") {
+                        Preference.setAccessToken(this, response.accessToken)
+                        Preference.setRefreshToken(this, response.refreshToken)
+                        goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                    } else {
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    }
+                }) {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    Log.e("myBury", "getLoginToken Fail : $it")
+                }
+
+
+    }
 
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent

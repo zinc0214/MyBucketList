@@ -65,6 +65,7 @@ open class MainBucketListAdapter(val bucketList: List<BucketItem>) : RecyclerVie
     }
 
     override fun getItemCount(): Int {
+        Log.e("ayhan", "size : ${bucketList.size}")
         return bucketList.size
     }
 

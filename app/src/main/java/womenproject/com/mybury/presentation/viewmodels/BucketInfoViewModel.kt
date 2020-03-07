@@ -97,7 +97,6 @@ class BucketInfoViewModel : BaseViewModel() {
                             override fun fail() {
                                 callback.fail()
                             }
-
                         })
                         else -> callback.fail()
                     }
