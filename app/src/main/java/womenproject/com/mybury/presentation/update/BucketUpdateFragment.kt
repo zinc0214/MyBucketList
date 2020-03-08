@@ -104,7 +104,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     private fun addBucket() {
         viewModel.updateBucketList(
-                bucketId, getBucketItemInfo(), alreadyImgList, imgList, object : BaseViewModel.Simple3CallBack {
+                bucketId, getBucketItemInfo(), alreadyImgList, getRealSendImgList(), object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 addBucket()
             }
