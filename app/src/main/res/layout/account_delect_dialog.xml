@@ -42,8 +42,7 @@
                     android:layout_height="64dp"
                     android:layout_below="@+id/close_img"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="-64dp"
-                    android:onClick="@{endClickListener}">
+                    android:layout_marginTop="-64dp">
 
                     <include
                         android:id="@+id/last_bucket_item"
@@ -55,7 +54,6 @@
                     android:layout_width="344dp"
                     android:layout_height="300dp"
                     android:layout_centerHorizontal="true"
-                    android:onClick="@{endClickListener}"
                     android:src="@drawable/close_character" />
 
                 <TextView
