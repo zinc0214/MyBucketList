@@ -32,10 +32,8 @@ class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
         dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
         viewDataBinding.activity = this
-        viewDataBinding.lastBucketItem.bucketClickListener = onClickListener
         viewDataBinding.lastBucketItem.bucketSuccessClickListener = onClickListener
         viewDataBinding.lastBucketItem.bucketTitleText = "마이버리와 작별하기"
-        viewDataBinding.endClickListener = onClickListener
 
     }
 
@@ -48,12 +46,14 @@ class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
     }
 
     private val onClickListener = View.OnClickListener {
+        viewDataBinding.lastBucketItem.progressLayout.isEnabled = false
+        viewDataBinding.lastBucketItem.progressLayout.isClickable = false
+
         viewDataBinding.lastBucketItem.successButtonLayout.circularProgressBar.run {
             progressType = ProgressType.INDETERMINATE
             startAnimation()
             progressAnimator(this).start()
             Handler().run {
-                viewDataBinding.lastBucketItem.bucketItemLayout.isClickable = false
                 postDelayed({
                     startDeleting.invoke()
                     setFinalSuccessUIButton()

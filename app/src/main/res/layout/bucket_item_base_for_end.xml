@@ -63,6 +63,7 @@
                         android:text="@{bucketTitleText}" />
 
                     <RelativeLayout
+                        android:id="@+id/progress_layout"
                         android:onClick="@{bucketSuccessClickListener}"
                         android:layout_centerInParent="true"
                         android:layout_alignParentRight="true"

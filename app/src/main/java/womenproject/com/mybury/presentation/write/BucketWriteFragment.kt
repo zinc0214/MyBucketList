@@ -44,9 +44,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     var alreadyImgList = mutableMapOf<Int, String?>()
     var addImgList = mutableMapOf<Int, String?>()
     var addImgViewList = mutableMapOf<String, View>()
-    var imgList = ArrayList<Any?>()
+    var imgList = mutableMapOf<String, Any?>()
     var currentCalendarDay: Date? = null
-    var currentCalendarText : String = ""
+    var currentCalendarText: String = ""
     var selectCategory: Category? = null
     var goalCount = 1
 
@@ -153,13 +153,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 goalCountText.setEnableTextColor()
                 countImg.setImage(R.drawable.target_count_enable)
             }
-            if(addImgViewList.isNotEmpty()) {
+            if (addImgViewList.isNotEmpty()) {
                 Log.e("ayhan", "imgisNUll???: ${imgLayout.childCount},, ${addImgViewList.size}")
                 val currentCount = imgLayout.childCount
                 addImgViewList.forEach { (t, u) ->
                     Log.e("ayhan", "newAddVieww : $t, $u")
-                    if(currentCount == 0) {
-                        if(u.parent != null) {
+                    if (currentCount == 0) {
+                        if (u.parent != null) {
                             Log.e("ayhan", "parent is use :: $t")
                             val view = u.parent as ViewGroup
                             view.removeView(u)
@@ -264,7 +264,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     private fun addBucket() {
-        viewModel.uploadBucketList(getBucketItemInfo(), imgList, object : BaseViewModel.Simple3CallBack {
+        viewModel.uploadBucketList(getBucketItemInfo(), getRealSendImgList(), object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 addBucket()
             }
@@ -288,6 +288,19 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
         })
+    }
+
+    fun getRealSendImgList(): ArrayList<Any?> {
+        val realImgList =  ArrayList<Any?>()
+
+        addImgList.forEach { (_, addValue) ->
+            imgList.forEach { (fileKey, fileValue) ->
+                if(addValue == fileKey) {
+                    realImgList.add(fileValue)
+                }
+            }
+        }
+        return realImgList
     }
 
     private fun titleTextChangedListener(editText: EditText): TextWatcher {
@@ -396,13 +409,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        imgList.add(file)
+        imgList[file.name] = file
         val id = file.name
         val writeImgLayout = WriteImgLayout(this.context!!, id, removeImgListener, imgFieldClickListener).setUI(uri)
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
         Log.e("ayhan", "imgL cOunt Basixe : ${viewDataBinding.imgLayout.childCount}")
-        addImgList[viewDataBinding.imgLayout.childCount-1] = id
+        addImgList[viewDataBinding.imgLayout.childCount - 1] = id
         addImgViewList[id] = writeImgLayout
 
         Log.e("ayhan", "im: $id ,,, ${addImgList.size}, ${imgList.size}")
@@ -421,17 +434,17 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        alreadyImgList.forEach{
+        alreadyImgList.forEach {
             val id = it.value
             Log.e("ayhan", "alreadyImgList id : ${id}")
-            if(!id.isNullOrEmpty()) {
+            if (!id.isNullOrEmpty()) {
                 id.run {
                     Log.e("ayhan", "imgL cOunt alreadyAdd : ${viewDataBinding.imgLayout.childCount}")
                     val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
-                    if(!addImgList.values.contains(this)) {
+                    if (!addImgList.values.contains(this)) {
                         addImgList[viewDataBinding.imgLayout.childCount] = this
                         addImgViewList[this] = writeImgLayout
-                        imgList.add(this)
+                        imgList[id] = this
                         viewDataBinding.imgLayout.addView(writeImgLayout)
                     }
                 }
@@ -441,30 +454,55 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     private fun onDeleteImgField(layout: String) {
-        var deleteImgValue = 0
+        var deleteImgValue: Int? = null
 
         Log.e("ayhan", "size == ${addImgList.size}")
 
+        addImgList.forEach { t, u ->
+            Log.e("ayhan", "remove 시작 ::${t},${u}")
+        }
+
         for (i in 0 until addImgList.size) {
+            Log.e("ayhan", "currenView =  ${addImgList[i]}")
             if (layout == addImgList[i]) {
                 Log.e("ayhan", "deleteImgValue = ${i}")
                 deleteImgValue = i
+                break
             }
         }
-        viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(deleteImgValue))
-        val id = addImgList[deleteImgValue]
-        addImgViewList.remove(id)
 
+        deleteImgValue?.run {
+            viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(this))
+            val id = addImgList[this]
+            Log.e("ayhan", "addImgList Doing::${this}, ${id}")
+            addImgViewList.remove(id)
+            addImgList.replace(this, null)
 
-        addImgList.remove(deleteImgValue)
-        imgList.removeAt(deleteImgValue)
+            val newList = addImgList.filter { it.value != null }.values
+            var newNum = 0
 
-        alreadyImgList.forEach { num, str ->
-            if(id == str) {
-                Log.e("ayhan", "id : $num")
-                alreadyImgList[num] = null
+            val tmpImgList = mutableMapOf<Int, String?>()
+
+            newList.forEach {
+                tmpImgList[newNum] = it
+                newNum += 1
+                Log.e("ayhan", "newList : ${it} ,${newNum}")
+            }
+
+            addImgList = tmpImgList
+
+            addImgList.forEach { t, u ->
+                Log.e("ayhan", "new AddImgList: ${t},  ${u}")
+            }
+
+            alreadyImgList.forEach { num, str ->
+                if (id == str) {
+                    Log.e("ayhan", "id : $num")
+                    alreadyImgList[num] = null
+                }
             }
         }
+
 
     }
 
@@ -535,7 +573,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
 
-    open fun moveToAddCategory(v : View): () -> Unit = {
+    open fun moveToAddCategory(v: View): () -> Unit = {
         val directions = BucketWriteFragmentDirections.actionWriteToCategoryEdit()
         v.findNavController().navigate(directions)
     }
