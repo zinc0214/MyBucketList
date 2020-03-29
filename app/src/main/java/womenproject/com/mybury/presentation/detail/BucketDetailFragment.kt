@@ -14,6 +14,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
+import womenproject.com.mybury.util.ScreenUtils
 
 
 /**
@@ -29,6 +30,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     lateinit var bucketItemId: String
     lateinit var bucketItem: DetailBucketItem
+    private var screenWidth = 0
 
     override fun initDataBinding() {
         viewDataBinding.viewModel = viewModel
@@ -39,6 +41,8 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             val bucketId = args.bucketId
             bucketItemId = bucketId!!
         }
+
+        screenWidth = ScreenUtils.getScreenWidth(viewDataBinding.root.context)
 
         loadBucketDetailInfo()
 
@@ -104,6 +108,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 viewDataBinding.tabLayout.visibility = View.INVISIBLE
                 viewDataBinding.moreImage.layout.visibility = View.GONE
                 viewDataBinding.oneImage.layout.visibility = View.VISIBLE
+                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
                 viewDataBinding.oneImage.backgroundImage
                         .setImageDrawable(resources.getDrawable(R.drawable.gradient_background))
             }
@@ -111,13 +116,15 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 viewDataBinding.tabLayout.visibility = View.INVISIBLE
                 viewDataBinding.moreImage.layout.visibility = View.GONE
                 viewDataBinding.oneImage.layout.visibility = View.VISIBLE
+                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
                 Glide.with(context!!).load(imgList[0])
-                        .override(500,500)
+                        .override(screenWidth,screenWidth)
                         .centerCrop().placeholder(
                                 R.drawable.gradient_background).into(viewDataBinding.oneImage.backgroundImage)
                 viewDataBinding.oneImage.backgroundImage.setOnClickListener { showImgWide(imgList[0]) }
             }
             else -> {
+                viewDataBinding.moreImage.layout.layoutParams.height = screenWidth
                 viewDataBinding.oneImage.layout.visibility = View.GONE
                 viewDataBinding.moreImage.layout.visibility = View.VISIBLE
             }
@@ -234,12 +241,12 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     }
 
-    fun showImgWide(url: String) {
+    private fun showImgWide(url: String) {
         val showImgWideFragment = ShowImgWideFragment(url)
         showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
     }
 
-    class DeleteBucketDialog(val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
+    class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "버킷리스트 삭제"
