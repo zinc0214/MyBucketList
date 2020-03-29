@@ -234,7 +234,12 @@ class CreateAccountActivity : BaseActiviy() {
                             getLoginToken()
                         }
                         "401" -> {
-                            UserAlreadyExist().show(supportFragmentManager, "tag")
+                            try{
+                                UserAlreadyExist().show(supportFragmentManager, "tag")
+                            }catch (e :Exception){
+                                Log.e("myBury","UserAlreadyExist dialog error: $e")
+                            }
+
                         }
                         else -> {
                             CanNotGoMainDialog().show(supportFragmentManager, "tag")
@@ -242,7 +247,12 @@ class CreateAccountActivity : BaseActiviy() {
                     }
                 }) {
                     Log.e("myBury", "PostSignUpResponse Fail: $it")
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    try {
+                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    } catch (e:Exception){
+                        Log.e("myBury","CanNotGoMainDialog error: $e")
+                    }
+
                 }
     }
 }

@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
@@ -92,7 +91,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._434343))
-                if(count > 0 && viewDataBinding.nicknameEditText.text.isNotBlank()) setSaveBtnEnabled()
+                setSaveBtnEnabled()
             }
 
         }
@@ -107,7 +106,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             setDefaultImg()
         } else {
             Glide.with(this).load(imgUrl)
-                    .override(100,100)
+                    .override(100, 100)
                     .into(viewDataBinding.profileImg)
         }
 
@@ -179,7 +178,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     private fun setSaveBtnEnabled() {
 
-        if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
+        if (viewDataBinding.nicknameEditText.text.isNotBlank() && (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg)) {
             viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
             viewDataBinding.profileSave.isEnabled = true
             isCancelConfirm = false
@@ -237,7 +236,9 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
         } else {
-            if(isKeyboardUp) { imm.hideSoftInputFromWindow(view!!.windowToken, 0) }
+            if (isKeyboardUp) {
+                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+            }
             cancelConfirm.invoke(true)
         }
     }
