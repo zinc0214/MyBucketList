@@ -68,6 +68,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isCancelConfirm = false
 
         activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
             if (isCancelConfirm) {
