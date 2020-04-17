@@ -23,8 +23,9 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name=".presentation.intro.SplashLoginActivity"
-            android:screenOrientation="fullSensor"
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,24 +33,27 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.intro.SplashActivity"
-            android:screenOrientation="fullSensor"
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
             </intent-filter>
         </activity>
         <activity android:name=".presentation.intro.CreateAccountActivity"
             android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="fullSensor"
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
             </intent-filter>
         </activity>
 
         <activity android:name=".presentation.MainActivity"
-            android:screenOrientation="fullSensor"
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.provider.Settings.APPLICATION_DETAILS_SETTINGS" />
             </intent-filter>
