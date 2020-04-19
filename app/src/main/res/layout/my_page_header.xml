@@ -27,12 +27,12 @@
         android:fitsSystemWindows="true"
         android:minHeight="128dp"
         app:layoutDescription="@xml/my_page_header"
-        app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
+        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
 
         <ImageView
             android:id="@+id/background"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,12 +40,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/gradient_background" />
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/whiteBackground"
             android:layout_width="64dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/bucket_item_base_background"
-            app:altSrc="@drawable/bucket_item_base_background" />
+            android:background="@drawable/bucket_item_base_background"/>
 
 
         <ImageButton
@@ -58,6 +57,8 @@
             android:onClick="@{moreClickListener}"
             app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
             app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
+
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/large_profile_cardview"
