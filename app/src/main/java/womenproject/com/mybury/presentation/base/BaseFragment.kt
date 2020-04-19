@@ -27,17 +27,18 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     var isCancelConfirm = true
 
+    lateinit var goToBackCallback: OnBackPressedCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                actionByBackButton()
-                true
+        goToBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                //do when go to back.
             }
-        })
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToBackCallback)
+
         checkNetworkConnect()
     }
 

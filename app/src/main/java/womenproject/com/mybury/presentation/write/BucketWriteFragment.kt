@@ -70,14 +70,17 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         super.onCreate(savedInstanceState)
         isCancelConfirm = false
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                backBtn()
-                true
+        val goToActionCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(isCancelConfirm) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                } else {
+                    actionByBackButton()
+                }
             }
-        })
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
         imm = activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
@@ -86,7 +89,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         updateView()
     }
 
-    open fun backBtn() {
+    override fun actionByBackButton() {
         val cancelConfirm: (Boolean) -> Unit = {
             if (it) {
                 isCancelConfirm = it
@@ -96,7 +99,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
     }
 
-    private fun setBackClickListener() = View.OnClickListener { backBtn() }
+    private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
 
     private fun getCategory() {
         bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
