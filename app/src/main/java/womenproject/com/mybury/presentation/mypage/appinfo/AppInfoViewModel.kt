@@ -31,10 +31,23 @@ class AppInfoViewModel : BaseViewModel() {
                 for (mElement in Version) {
                     latelyVersionS = mElement.text().trim { it <= ' ' }
                     withContext(Dispatchers.Main) {
+                        if(latelyVersionS.contains("1."))
                         _latelyVersion.value = latelyVersionS
                     }
                 }
+                withContext(Dispatchers.Main) {
+                    if(_latelyVersion.value.isNullOrBlank()) {
+                        _latelyVersion.value = currentVersion
+                    }
+                }
+
             } catch (ex: IOException) {
+                withContext(Dispatchers.Main) {
+                    if(_latelyVersion.value.isNullOrBlank()) {
+                        _latelyVersion.value = currentVersion
+                    }
+                }
+
                 ex.printStackTrace()
             }
         }
