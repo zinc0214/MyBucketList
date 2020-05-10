@@ -83,6 +83,7 @@
                 tools:text="카테고리 이름을 입력하세요" />
 
             <Button
+                android:id="@+id/confirmBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

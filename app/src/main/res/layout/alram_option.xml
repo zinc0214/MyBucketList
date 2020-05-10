@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,10 +32,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:lineSpacingExtra="6sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
+                android:lineSpacingExtra="6sp"
                 android:text="@{content}"
                 android:textColor="@color/_797979"
                 android:textSize="12sp" />
@@ -79,6 +79,7 @@
         <variable
             name="content"
             type="String" />
+
         <variable
             name="supportClickListener"
             type="android.view.View.OnClickListener" />
