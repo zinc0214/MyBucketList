@@ -3,7 +3,6 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
@@ -53,7 +52,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
         val goToActionCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(isCancelConfirm) {
+                if (isCancelConfirm) {
                     isEnabled = false
                     requireActivity().onBackPressed()
                 } else {
@@ -84,7 +83,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun success(value: List<Any>) {
-                Log.e("ayhan", "setCategoryList")
                 initOriginCategory(value as List<Category>)
                 changeCategoryList = value as ArrayList<Category>
                 setCategoryAdapter()
@@ -102,17 +100,18 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         })
     }
 
-    private fun initOriginCategory(categoryList : List<Category>) {
-        categoryList.forEach{
+    private fun initOriginCategory(categoryList: List<Category>) {
+        categoryList.forEach {
             originCategoryList.add(it)
         }
     }
+
     private fun setCategoryAdapter() {
 
         val editCategoryName: (Category) -> Unit = {
             imm.hideSoftInputFromWindow(view!!.windowToken, 0)
 
-            if(it.name == "없음") {
+            if (it.name == "없음") {
                 Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 val categoryAdd: (String) -> Unit = { name ->
@@ -265,10 +264,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     override fun moved(list: List<Category>) {
-        Log.e("ayhan", "move, ${list[0].name}")
         changeCategoryList = list as ArrayList<Category>
-        Log.e("ayhan", "moveq, ${changeCategoryList[0].name}")
-        Log.e("ayhan", "movew, ${originCategoryList[0].name}")
     }
 
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {

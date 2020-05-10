@@ -5,13 +5,10 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication
@@ -97,7 +94,6 @@ class CountBucketItemViewHolder(
                     }, 800)
                     postDelayed({
                         if (info.userCount >= info.goalCount) {
-                            Log.e("ayhan", "gogo : by dday")
                             bucketItemLayout.isClickable = true
                             setFinalSuccessUIBackground()
                             setFinalSuccessWithCountBucket()
@@ -176,7 +172,7 @@ class CountBucketItemViewHolder(
             }
 
             override fun success() {
-               // onBucketSuccessFinalButtonClickListener(bucketItemInfo)
+                // onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 binding.bucketItemLayout.isEnabled = true
                 return
             }
@@ -216,7 +212,6 @@ class CountBucketItemViewHolder(
     }
 
     private fun setFinalSuccessWithCountBucket() {
-        Log.e("ayhan", "setFinalSuccessWithCountBucket")
         binding.prgressLayout.visibility = View.GONE
         binding.successButtonLayout.visibility = View.GONE
         binding.executePendingBindings()

@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import womenproject.com.mybury.presentation.MainActivity
+
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
