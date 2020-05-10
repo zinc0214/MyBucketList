@@ -3,17 +3,14 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.rxkotlin.toObservable
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
@@ -53,15 +50,18 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                actionByBackButton()
-                true
+        val goToActionCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isCancelConfirm) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                } else {
+                    actionByBackButton()
+                }
             }
+        }
 
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
     override fun initDataBinding() {
@@ -83,7 +83,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
 
             override fun success(value: List<Any>) {
-                Log.e("ayhan", "setCategoryList")
                 initOriginCategory(value as List<Category>)
                 changeCategoryList = value as ArrayList<Category>
                 setCategoryAdapter()
@@ -101,17 +100,18 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         })
     }
 
-    private fun initOriginCategory(categoryList : List<Category>) {
-        categoryList.forEach{
+    private fun initOriginCategory(categoryList: List<Category>) {
+        categoryList.forEach {
             originCategoryList.add(it)
         }
     }
+
     private fun setCategoryAdapter() {
 
         val editCategoryName: (Category) -> Unit = {
             imm.hideSoftInputFromWindow(view!!.windowToken, 0)
 
-            if(it.name == "없음") {
+            if (it.name == "없음") {
                 Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 val categoryAdd: (String) -> Unit = { name ->
@@ -264,10 +264,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     override fun moved(list: List<Category>) {
-        Log.e("ayhan", "move, ${list[0].name}")
         changeCategoryList = list as ArrayList<Category>
-        Log.e("ayhan", "moveq, ${changeCategoryList[0].name}")
-        Log.e("ayhan", "movew, ${originCategoryList[0].name}")
     }
 
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {

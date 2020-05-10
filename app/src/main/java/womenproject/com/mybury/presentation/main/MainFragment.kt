@@ -21,7 +21,6 @@ import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 
 class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
-
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
 
