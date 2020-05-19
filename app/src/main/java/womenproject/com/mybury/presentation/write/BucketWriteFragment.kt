@@ -490,9 +490,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun ddayAddListener(): View.OnClickListener {
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
-            if (dday.isEmpty()) {
+            if (dday.isBlank()) {
                 viewDataBinding.ddayText.text = "추가"
-                currentCalendarDay = date
+                currentCalendarDay = null
                 currentCalendarText = ""
                 viewDataBinding.ddayText.setDisableTextColor()
                 viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
