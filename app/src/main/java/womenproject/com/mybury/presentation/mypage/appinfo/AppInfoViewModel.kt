@@ -10,6 +10,7 @@ import org.jsoup.Jsoup
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import java.io.IOException
+import java.util.regex.Pattern
 
 /**
  * Created by HanAYeon on 2019-08-20.
@@ -30,11 +31,26 @@ class AppInfoViewModel : BaseViewModel() {
                 val Version = doc.select(".htlgb").eq(7)
                 for (mElement in Version) {
                     latelyVersionS = mElement.text().trim { it <= ' ' }
-                    withContext(Dispatchers.Main) {
-                        _latelyVersion.value = latelyVersionS
+                    if (Pattern.matches("^[0-9].[0-9].[0-9]$", latelyVersionS)) {
+                        withContext(Dispatchers.Main) {
+                            if (latelyVersionS.contains("1."))
+                                _latelyVersion.value = latelyVersionS
+                        }
                     }
                 }
+                withContext(Dispatchers.Main) {
+                    if(_latelyVersion.value.isNullOrBlank()) {
+                        _latelyVersion.value = currentVersion
+                    }
+                }
+
             } catch (ex: IOException) {
+                withContext(Dispatchers.Main) {
+                    if(_latelyVersion.value.isNullOrBlank()) {
+                        _latelyVersion.value = currentVersion
+                    }
+                }
+
                 ex.printStackTrace()
             }
         }

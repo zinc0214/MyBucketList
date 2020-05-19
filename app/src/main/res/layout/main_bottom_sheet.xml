@@ -39,6 +39,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <include
+            android:id="@+id/bottom_sheet"
             app:myPageClickListener="@{myPageClickListener}"
             app:homeClickListener="@{noneClickListener}"
             layout="@layout/home_bottom_menu_sheet"/>
