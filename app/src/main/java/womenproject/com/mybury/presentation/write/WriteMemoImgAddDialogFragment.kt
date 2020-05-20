@@ -254,7 +254,6 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
             val options = BitmapFactory.Options()
          //   options.inSampleSize = 2
             val src = BitmapFactory.decodeFile(currentImgFile.path)
-            Log.e("ayhan", "src : ${src == null}")
             val resized = Bitmap.createScaledBitmap(src, 700, 700, true);
             val file = saveBitmapAsFile(resized, currentImgFile.path)
             currentImgFile = file

@@ -2,7 +2,6 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.annotation.SuppressLint
 import android.app.ActionBar
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import womenproject.com.mybury.R
@@ -44,7 +43,6 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
 
 
     private fun addCategoryListener() {
-        Log.e("ayhan", "name : ${viewDataBinding.categoryEditText.text}")
         viewDataBinding.categoryEditText.text.apply {
             if (currentName != null && currentName == this.toString()) {
                 Toast.makeText(context, "이름이 변경되지 않았습니다.", Toast.LENGTH_SHORT).show()
@@ -59,14 +57,10 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
                 dismiss()
             }
         }
-
     }
 
     private fun alreadyUseName(newCategory: String): Boolean {
-        Log.e("ayhan", "name1 : ${newCategory}")
-
         currentList.forEach {
-            Log.e("ayhan", "name2 : ${it.name}")
             if (it.name == newCategory) return true
         }
         return false

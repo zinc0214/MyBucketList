@@ -21,15 +21,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                backBtn()
-                true
-            }
-
-        })
     }
 
     override fun initForUpdate() {
@@ -150,7 +141,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
         v.findNavController().navigate(directions)
     }
 
-    override fun backBtn() {
+    override fun actionByBackButton() {
         val cancelConfirm: (Boolean) -> Unit = {
             if (it) {
                 isCancelConfirm = it

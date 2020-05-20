@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import womenproject.com.mybury.presentation.MainActivity
+
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
@@ -27,17 +28,18 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     var isCancelConfirm = true
 
+    lateinit var goToBackCallback: OnBackPressedCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                actionByBackButton()
-                true
+        goToBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                //do when go to back.
             }
-        })
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToBackCallback)
+
         checkNetworkConnect()
     }
 

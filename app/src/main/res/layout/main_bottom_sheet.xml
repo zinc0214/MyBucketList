@@ -19,7 +19,7 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -29,34 +29,21 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/main_bottom_background">
+            android:background="@drawable/main_bottom_background"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_alignParentBottom="true">
+        <RelativeLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-                <ImageView
-                    android:onClick="@{noneClickListener}"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="54dp"
-                    android:background="@drawable/main_bottom_list" />
+        <include
+            android:id="@+id/bottom_sheet"
+            app:myPageClickListener="@{myPageClickListener}"
+            app:homeClickListener="@{noneClickListener}"
+            layout="@layout/home_bottom_menu_sheet"/>
 
-                <ImageView
-                    android:onClick="@{myPageClickListener}"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginEnd="54dp"
-                    android:background="@drawable/main_mypage" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
 
         <ImageView
             android:id="@+id/plus"
@@ -66,7 +53,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
             android:background="@drawable/add_bucket_list"
-            android:onClick="@{writeClickListener}" />
+            android:onClick="@{writeClickListener}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

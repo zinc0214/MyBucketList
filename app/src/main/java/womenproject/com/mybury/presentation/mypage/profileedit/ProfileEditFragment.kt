@@ -59,15 +59,17 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.addOnBackPressedCallback(this, OnBackPressedCallback {
-            if (isCancelConfirm) {
-                false
-            } else {
-                cancelClickAction()
-                true
+        val goToActionCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(isCancelConfirm) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                } else {
+                    cancelClickAction()
+                }
             }
-
-        })
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
 

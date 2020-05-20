@@ -20,11 +20,16 @@
         android:layout_height="match_parent"
         android:background="@color/_ffffff">
 
-        <include layout="@layout/main_bottom_sheet" />
+        <include
+            android:id="@+id/bottom_sheet"
+            layout="@layout/main_bottom_sheet" />
 
-        <include layout="@layout/main_toolbar" />
+        <include
+            android:id="@+id/main_toolbar"
+            layout="@layout/main_toolbar" />
 
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

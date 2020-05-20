@@ -29,6 +29,10 @@ class CollapsibleToolbar @JvmOverloads constructor(
         progress = -verticalOffset / appBarLayout?.totalScrollRange?.toFloat()!!
     }
 
+    override fun setElevation(elevation: Float) {
+        super.setElevation(0f)
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         (parent as? AppBarLayout)?.addOnOffsetChangedListener(this)
