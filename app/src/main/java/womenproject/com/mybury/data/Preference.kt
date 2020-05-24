@@ -17,6 +17,7 @@ class Preference {
         private const val REFRESH_TOKEN = "refresh_token"
         private const val SHOW_FILTER = "show_filter"
         private const val LISTUP_FILTER = "listup_filter"
+        private const val SHOW_DDAY_STATE = "show_dday_state"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -109,6 +110,19 @@ class Preference {
         fun getFilterListUp(context: Context) : String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
+            return data
+        }
+
+        fun setShowDdayFilter(context: Context, ddayShow : Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(SHOW_DDAY_STATE, ddayShow)
+            editor.apply()
+        }
+
+        fun getShowDdayFilter(context: Context) : Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(SHOW_DDAY_STATE, false)
             return data
         }
 

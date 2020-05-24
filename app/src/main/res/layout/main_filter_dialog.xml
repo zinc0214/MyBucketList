@@ -51,8 +51,6 @@
             style="@style/FilterDialogSubTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
             android:button="@drawable/filter_checkbox"
             android:onClick="@{filterBoxListener}"
             android:text="@string/doing_bucket" />
@@ -63,7 +61,6 @@
             style="@style/FilterDialogSubTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="14dp"
             android:button="@drawable/filter_checkbox"
             android:onClick="@{filterBoxListener}"
@@ -89,16 +86,12 @@
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="39dp"
             android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/radio_btn_update"
                 style="@style/FilterDialogSubTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
                 android:button="@drawable/filter_radio_btn"
                 android:onClick="@{filterBoxListener}"
                 android:text="@string/sort_by_update" />
@@ -106,8 +99,7 @@
             <RadioButton
                 android:id="@+id/radio_btn_written"
                 style="@style/FilterDialogSubTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
                 android:layout_marginTop="14dp"
                 android:button="@drawable/filter_radio_btn"
                 android:onClick="@{filterBoxListener}"
@@ -115,9 +107,34 @@
 
         </RadioGroup>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="28dp"
+            android:background="@color/_f6fcff"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/FilterDialogCategoryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/filter_standard" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/showDdayState"
+            style="@style/FilterDialogSubTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/filter_checkbox"
+            android:onClick="@{filterBoxListener}"
+            android:text="@string/show_dday_state" />
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0.6dp"
+            android:layout_marginTop="39dp"
             android:background="@drawable/filter_dialog_bottom_binder" />
 
         <LinearLayout

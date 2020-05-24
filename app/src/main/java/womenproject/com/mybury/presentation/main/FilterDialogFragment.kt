@@ -8,8 +8,10 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.ListUpFilter
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
+import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
 import womenproject.com.mybury.data.Preference.Companion.setFilerForShow
 import womenproject.com.mybury.data.Preference.Companion.setFilterListUp
+import womenproject.com.mybury.data.Preference.Companion.setShowDdayFilter
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.MainFilterDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
@@ -27,6 +29,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     private var complete = false
     private var update = false
     private var written = false
+    private var dday = false
 
 
     override fun initDataBinding() {
@@ -35,6 +38,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         viewDataBinding.filterBoxListener = setOnCheckBoxChangedListener()
         initShowFilter()
         initListUpFilter()
+        initShowDdayState()
 
     }
 
@@ -80,7 +84,12 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
                 written = true
             }
         }
+    }
 
+    private fun initShowDdayState() {
+        val filter = getShowDdayFilter(context!!)
+        viewDataBinding.showDdayState.isChecked = filter
+        dday = filter
     }
 
     override fun onResume() {
@@ -103,6 +112,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         } else {
             setShowFilter()
             setListUpFilter()
+            setShowDdayState()
             stateChangeListener()
             this.dismiss()
         }
@@ -110,17 +120,18 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun setOnCheckBoxChangedListener() = View.OnClickListener {
-        when (it) {
-            viewDataBinding.startedCheckBox -> started = viewDataBinding.startedCheckBox.isChecked
-            viewDataBinding.completeCheckBox -> complete = viewDataBinding.completeCheckBox.isChecked
-            viewDataBinding.radioBtnUpdate,
-            viewDataBinding.radioBtnWritten -> {
-                update = viewDataBinding.radioBtnUpdate.isChecked
-                written = viewDataBinding.radioBtnWritten.isChecked
+        viewDataBinding.apply {
+            when (it) {
+                startedCheckBox -> started = startedCheckBox.isChecked
+                completeCheckBox -> complete = completeCheckBox.isChecked
+                radioBtnUpdate, radioBtnWritten -> {
+                    update = radioBtnUpdate.isChecked
+                    written = radioBtnWritten.isChecked
+                }
+                showDdayState -> dday = showDdayState.isChecked
             }
         }
     }
-
 
     private fun setShowFilter() {
         if (started && complete) {
@@ -138,6 +149,10 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         } else {
             setFilterListUp(context!!, ListUpFilter.createdDt)
         }
+    }
+
+    private fun setShowDdayState() {
+        setShowDdayFilter(context!!, dday)
     }
 
 }
