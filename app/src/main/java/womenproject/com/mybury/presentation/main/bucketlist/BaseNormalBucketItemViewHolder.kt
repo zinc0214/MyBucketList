@@ -1,8 +1,10 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
+import android.util.Log
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 
@@ -38,6 +40,19 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         val tokenId = getAccessToken(context)
         binding.successButtonLayout.bucketSuccessListener = createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
         binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(tokenId, bucketItemInfo)
+
+        Log.e("ayhan", "base dday :${bucketItemInfo.dDay} ")
+        if (Preference.getShowDdayFilter(binding.root.context))  {
+            bucketItemInfo.dDay?.run {
+                Log.e("ayhan", "base dday info:${bucketItemInfo.dDay} ")
+                binding.isOverDday = this < 0
+                binding.ddayText = if (this < 0) "D${this.toString().replace("-","+")}" else "D-${this}"
+            }
+            binding.ddayTextView.visibility = if (bucketItemInfo.dDay != null) View.VISIBLE else View.INVISIBLE
+        } else {
+            binding.ddayTextView.visibility = View.GONE
+        }
+
     }
 
 

@@ -80,7 +80,7 @@ data class BucketItem(
         val category: Category,
         var userCount: Int = 0,
         val goalCount: Int = 1,
-        val dDay: Int = 0
+        val dDay: Int?
 ) : Parcelable
 
 @Parcelize

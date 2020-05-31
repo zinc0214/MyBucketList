@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.main.bucketlist
 import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
@@ -36,6 +38,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
     lateinit var userCountText: TextView
+    lateinit var ddayText : TextView
 
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 

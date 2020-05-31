@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
@@ -52,6 +55,19 @@ class CountBucketItemViewHolder(
 
         binding.successButtonView.bucketSuccessListener = createOnClickBucketSuccessListener(bucketItemInfo)
         binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(bucketItemInfo)
+
+
+        Log.e("ayhan", "dday :${bucketItemInfo.dDay} ")
+        if (getShowDdayFilter(binding.root.context))  {
+            bucketItemInfo.dDay?.run {
+                Log.e("ayhan", "dday info:${bucketItemInfo.dDay} ")
+                binding.isOverDday = this < 0
+                binding.ddayText = if (this < 0) "D${this.toString().replace("-","+")}" else "D-${this}"
+            }
+            binding.ddayTextView.visibility = if (bucketItemInfo.dDay != null) View.VISIBLE else View.INVISIBLE
+        } else {
+            binding.ddayTextView.visibility = View.GONE
+        }
 
         if (isDdayUI) {
             val countText: String = binding.root.context.resources.getString(R.string.dday_bucket_count)
