@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.animation.ValueAnimator
+import android.view.View
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
@@ -44,5 +45,6 @@ class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding)
         binding.successButtonLayout.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
         binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
 
+        binding.ddayTextView.visibility = View.GONE
     }
 }

@@ -18,6 +18,7 @@ class Preference {
         private const val SHOW_FILTER = "show_filter"
         private const val LISTUP_FILTER = "listup_filter"
         private const val SHOW_DDAY_STATE = "show_dday_state"
+        private const val SHOW_DDAY_FILTER = "show_dday_filter"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -123,6 +124,19 @@ class Preference {
         fun getShowDdayFilter(context: Context) : Boolean {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getBoolean(SHOW_DDAY_STATE, false)
+            return data
+        }
+
+        fun setDdayFilerForShow(context: Context, showFilter: ShowFilter) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(SHOW_DDAY_FILTER, showFilter.toString())
+            editor.apply()
+        }
+
+        fun getDdayFilterForShow(context: Context) : String {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getString(SHOW_DDAY_FILTER, ShowFilter.all.toString())
             return data
         }
 

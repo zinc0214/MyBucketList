@@ -78,6 +78,7 @@ class CountBucketItemViewHolder(
             binding.successButtonView.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
             binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
             binding.userCount.text = formattingCountText
+            binding.ddayTextView.visibility = View.GONE
         }
     }
 
