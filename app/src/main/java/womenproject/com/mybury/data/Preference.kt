@@ -127,7 +127,7 @@ class Preference {
             return data
         }
 
-        fun setDdayFilerForShow(context: Context, showFilter: ShowFilter) {
+        fun setDdayFilerForShow(context: Context, showFilter: DdayShowFilter) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(SHOW_DDAY_FILTER, showFilter.toString())
@@ -136,7 +136,7 @@ class Preference {
 
         fun getDdayFilterForShow(context: Context) : String {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(SHOW_DDAY_FILTER, ShowFilter.all.toString())
+            val data = sp.getString(SHOW_DDAY_FILTER, DdayShowFilter.minus.toString())
             return data
         }
 

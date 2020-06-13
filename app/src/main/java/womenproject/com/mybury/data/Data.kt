@@ -167,6 +167,11 @@ enum class ShowFilter {
     all, completed, started
 }
 
+enum class DdayShowFilter {
+    all, minus, plus
+}
+
+
 enum class ListUpFilter {
     updatedDt, createdDt
 }

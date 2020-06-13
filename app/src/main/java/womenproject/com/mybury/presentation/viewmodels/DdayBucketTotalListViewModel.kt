@@ -16,10 +16,10 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
-    fun getDdayEachBucketList(callback: MoreCallBackAnyList) {
+    fun getDdayEachBucketList(callback: MoreCallBackAnyList, filter: String) {
         callback.start()
 
-        apiInterface.requestDdayBucketListResult(accessToken, userId)
+        apiInterface.requestDdayBucketListResult(accessToken, userId, filter)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->

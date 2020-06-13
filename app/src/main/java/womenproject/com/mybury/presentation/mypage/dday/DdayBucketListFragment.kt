@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
+import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -52,7 +53,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
                 stopLoading()
                 NetworkFailDialog().show(activity!!.supportFragmentManager)
             }
-        })
+        }, getDdayFilterForShow(context!!))
     }
 
 
