@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,6 +13,7 @@
         <variable
             name="bucketTitleText"
             type="String" />
+
 
     </data>
 
@@ -37,20 +39,43 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bucket_item_succeed_background" />
 
-                <RelativeLayout
-                    android:layout_centerVertical="true"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_marginBottom="21dp"
-                        android:layout_marginTop="21dp"
                         android:id="@+id/bucket_title"
                         style="@style/BucketItemTitleTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="21dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="21dp"
                         android:text="@{bucketTitleText}"
-                        android:textColor="@color/_ffffff" />
+                        android:textColor="@color/_ffffff"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="가나다라마바사아자차카타파하가나다라마사아자차카타파하" />
+
+                    <TextView
+                        android:id="@+id/ddayTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="38dp"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/success_img"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintStart_toEndOf="@+id/bucket_title"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="D+10"
+                        tools:textColor="@color/_ffa690" />
 
                     <ImageView
                         android:id="@+id/success_img"
@@ -59,15 +84,18 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/check_complete" />
+                        android:background="@drawable/check_complete"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ddayTextView"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </RelativeLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 
 </layout>
