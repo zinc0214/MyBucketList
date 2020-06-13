@@ -1,6 +1,8 @@
 package womenproject.com.mybury.presentation.main
 
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
@@ -13,6 +15,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
 
 /**
@@ -69,12 +72,35 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.blankImg.visibility = View.GONE
                     viewDataBinding.bucketList.visibility = View.VISIBLE
                     viewDataBinding.endImage.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(value as List<BucketItem>)
+                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(value as List<BucketItem>, showSnackBar)
                 }
                 stopLoading()
 
             }
         }, getFilterForShow(context!!), getFilterListUp(context!!))
+
+    }
+
+    private fun setBucketCancel(bucketId : String) {
+        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                setBucketCancel(bucketId)
+            }
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                getMainBucketList()
+            }
+
+        }, bucketId)
 
     }
 
@@ -108,6 +134,19 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
             val directions = MainFragmentDirections.actionMainBucketToMyPage()
             it.findNavController().navigate(directions)
         }
+    }
+
+    private fun bucketCancelListener(info : BucketItem) = View.OnClickListener {
+        Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
+        setBucketCancel(info.id)
+    }
+
+    private val showSnackBar: (BucketItem) -> Unit = { info : BucketItem ->
+        showCancelSnackBar(view!!, info)
+    }
+
+    private fun showCancelSnackBar(view:View, info : BucketItem) {
+        MainSnackBarWidget.make(view, info.title, info.userCount.toString(), bucketCancelListener(info))?.show()
     }
 
 

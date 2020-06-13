@@ -1,16 +1,17 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
-import womenproject.com.mybury.generated.callback.OnClickListener
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.main.FilterDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
+import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
 /**
  * Created by HanAYeon on 2019. 1. 16..
@@ -44,7 +45,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
             override fun success(bucketList: List<Any>) {
                 stopLoading()
-                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>)
+                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>, showSnackBar)
             }
 
             override fun fail() {
@@ -62,6 +63,42 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
     private val filterChangedListener: () -> Unit = {
         getDdayList()
+    }
+
+    private fun setBucketCancel(bucketId : String) {
+        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                setBucketCancel(bucketId)
+            }
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                getDdayList()
+            }
+
+        }, bucketId)
+
+    }
+
+    private fun bucketCancelListener(info : BucketItem) = View.OnClickListener {
+        Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
+        setBucketCancel(info.id)
+    }
+
+    private val showSnackBar: (BucketItem) -> Unit = { info : BucketItem ->
+        showCancelSnackBar(view!!, info)
+    }
+
+    private fun showCancelSnackBar(view: View, info : BucketItem) {
+        MainSnackBarWidget.make(view, info.title, info.userCount.toString(), bucketCancelListener(info))?.show()
     }
 
 }

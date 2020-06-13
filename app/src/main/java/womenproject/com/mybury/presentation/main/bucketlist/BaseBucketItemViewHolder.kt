@@ -1,9 +1,7 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
@@ -26,7 +23,8 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 10..
  */
 
-abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
+                                        private val showSnackBar: ((BucketItem) -> Unit)? = null) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem)
 
@@ -134,6 +132,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
             override fun success() {
                 onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 bucketItemLayout.isEnabled = true
+                showSnackBar?.invoke(bucketItemInfo)
                 return
             }
 

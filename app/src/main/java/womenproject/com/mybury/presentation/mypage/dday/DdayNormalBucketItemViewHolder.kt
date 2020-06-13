@@ -4,16 +4,18 @@ import android.animation.ValueAnimator
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
-import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 import womenproject.com.mybury.presentation.main.bucketlist.BaseNormalBucketItemViewHolder
+import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 /**
  * Created by HanAYeon on 2019. 1. 24..
  */
 
 
-class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding) : BaseNormalBucketItemViewHolder(binding) {
+class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding,
+                                     private val showSnackBar: ((BucketItem) -> Unit)) : BaseNormalBucketItemViewHolder(binding, showSnackBar) {
 
     override fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
         duration = 500

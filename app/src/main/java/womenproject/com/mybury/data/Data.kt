@@ -46,6 +46,10 @@ data class BucketRequest(
         var bucketlistId: String
 )
 
+data class CancelBucketRequest(
+        val userId : String,
+        var bucketlistId: String
+)
 
 data class SimpleResponse(
         val retcode: String

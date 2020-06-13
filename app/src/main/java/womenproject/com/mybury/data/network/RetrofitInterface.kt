@@ -66,6 +66,10 @@ interface RetrofitInterface {
     fun postCompleteBucket(@Header("X-Auth-Token") token: String,
                            @Body bucketRequest: BucketRequest): Observable<SimpleResponse>
 
+    @POST("/cancel")
+    fun postCancelBucket(@Header("X-Auth-Token") token: String,
+                           @Body bucketRequest: CancelBucketRequest): Observable<SimpleResponse>
+
 
     @GET("/dDay")
     fun requestDdayBucketListResult(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<DdayBucketListRespone>

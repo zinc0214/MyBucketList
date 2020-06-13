@@ -5,7 +5,6 @@ import android.animation.ValueAnimator
 import android.os.Handler
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -26,7 +24,8 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 class CountBucketItemViewHolder(
         private val isDdayUI: Boolean,
-        private val binding: BucketItemCountBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val binding: BucketItemCountBinding,
+        private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.ViewHolder(binding.root) {
 
     private val successImageView = binding.successButtonView.successImg
     private val circularProgressBar = binding.successButtonView.circularProgressBar
@@ -57,10 +56,8 @@ class CountBucketItemViewHolder(
         binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(bucketItemInfo)
 
 
-        Log.e("ayhan", "dday :${bucketItemInfo.dDay} ")
         if (getShowDdayFilter(binding.root.context))  {
             bucketItemInfo.dDay?.run {
-                Log.e("ayhan", "dday info:${bucketItemInfo.dDay} ")
                 binding.isOverDday = this < 0
                 binding.ddayText = if (this < 0) "D${this.toString().replace("-","+")}" else "D-${this}"
             }
@@ -189,8 +186,8 @@ class CountBucketItemViewHolder(
             }
 
             override fun success() {
-                // onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 binding.bucketItemLayout.isEnabled = true
+                showSnackBar.invoke(bucketItemInfo)
                 return
             }
 
