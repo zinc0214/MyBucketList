@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
@@ -48,7 +49,7 @@ class BucketListByFilterFragment  : BaseFragment<FragmentBucketListByCategoryBin
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAnyList {
+        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 initBucketListUI()
             }
@@ -61,8 +62,9 @@ class BucketListByFilterFragment  : BaseFragment<FragmentBucketListByCategoryBin
                 startLoading()
             }
 
-            override fun success(value: List<Any>) {
-                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(value as List<BucketItem>, showSnackBar)
+            override fun success(value: Any) {
+                val response = value as BucketList
+                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(response.bucketlists, showSnackBar)
                 stopLoading()
             }
         }, filterType.toString(), getFilterListUp(context!!))

@@ -37,8 +37,7 @@
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
 
-
-
     <string name="bucket_count"><![CDATA[<font color=#95bbff>%s</font><font color=#b4b4b4>%s</font>]]></string>
     <string name="dday_bucket_count"><![CDATA[<font color=#fecf6a>%s</font><font color=#b4b4b4>%s</font>]]></string>
+    <string name="alarm_close"><u>3일 동안 그만보기</u></string>
 </resources>

@@ -14,9 +14,8 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketInfoViewModel : BaseViewModel() {
 
-
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: MoreCallBackAnyList, filter: String, sort: String) {
+    fun getMainBucketList(callback: MoreCallBackAny, filter: String, sort: String) {
         callback.start()
         apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
@@ -24,7 +23,7 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     when (response.retcode) {
                         "200" -> {
-                            callback.success(response.bucketlists)
+                            callback.success(response)
                         }
                         "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
@@ -88,9 +87,9 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response ->
-                    when {
-                        response.retcode == "200" -> response.bucketlists
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                    when (response.retcode) {
+                        "200" -> response.bucketlists
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
