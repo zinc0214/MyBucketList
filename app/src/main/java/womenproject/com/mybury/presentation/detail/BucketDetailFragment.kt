@@ -37,13 +37,12 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.lifecycleOwner = this
 
         arguments?.let {
-            val args = BucketDetailFragmentArgs.fromBundle(it)
+            val args = NewBucketDetailFragmentArgs.fromBundle(it)
             val bucketId = args.bucketId
             bucketItemId = bucketId!!
         }
 
         screenWidth = ScreenUtils.getScreenWidth(viewDataBinding.root.context)
-
         loadBucketDetailInfo()
 
     }
@@ -62,7 +61,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             override fun success(detailBucketItem: Any) {
                 stopLoading()
                 setUpViews(detailBucketItem as DetailBucketItem)
-                bucketItem = detailBucketItem as DetailBucketItem
+                bucketItem = detailBucketItem
             }
 
             override fun fail() {
@@ -166,8 +165,7 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     private fun createOnClickBucketUpdateListener(bucketItem: DetailBucketItem): View.OnClickListener {
         return View.OnClickListener {
-            Log.e("ayham", "gpgin")
-            val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
+            val directions = NewBucketDetailFragmentDirections.actionDetailToUpdate()
             directions.bucket = bucketItem
             directions.bucketId = bucketItemId
             this.findNavController().navigate(directions)

@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.BucketRequest
+import womenproject.com.mybury.data.CancelBucketRequest
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
@@ -53,10 +54,40 @@ class BucketDetailViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
-
         val bucketRequest = BucketRequest(bucketId)
         callback.start()
         apiInterface.postCompleteBucket(accessToken, bucketRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ detailBucketItem ->
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
+                            callback.success()
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+
+                }) {
+                    Log.e("myBury", "postCompleteBucket Fail : $it")
+                    callback.fail()
+                }
+    }
+
+    @SuppressLint("CheckResult")
+    fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
+        val bucketRequest = CancelBucketRequest(userId, bucketId)
+        callback.start()
+        apiInterface.postCancelBucket(accessToken, bucketRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ detailBucketItem ->
