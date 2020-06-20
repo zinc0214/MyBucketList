@@ -35,7 +35,7 @@ class CountBucketItemViewHolder(
     fun bind(bucketClickListener: View.OnClickListener, bucketInfo: BucketItem) {
         binding.apply {
             setUI(bucketClickListener, bucketInfo)
-            executePendingBindings()
+            executePendingBindings()7
         }
     }
 
@@ -228,6 +228,7 @@ class CountBucketItemViewHolder(
     private fun setFinalSuccessWithCountBucket() {
         binding.prgressLayout.visibility = View.GONE
         binding.successButtonLayout.visibility = View.GONE
+        binding.ddayTextView.visibility = View.INVISIBLE
         binding.executePendingBindings()
     }
 

@@ -22,6 +22,7 @@ open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBin
         bucketItemImage = binding.bucketItemImage
         bucketTitle = binding.bucketTitle
         circularProgressBar = binding.successButtonLayout.circularProgressBar
+        ddayCountView = binding.ddayTextView
     }
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {

@@ -37,6 +37,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
     lateinit var circularProgressBar: CircularProgressButton
     lateinit var userCountText: TextView
     lateinit var ddayText : TextView
+    lateinit var ddayCountView : TextView
 
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
@@ -71,6 +72,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
                         if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             bucketItemImage.visibility = View.GONE
                             bucketItemLayout.isClickable = true
+                            ddayCountView.visibility = View.INVISIBLE
                         }
 
                     }, 900)
