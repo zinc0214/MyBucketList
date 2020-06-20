@@ -84,7 +84,7 @@ class BucketDetailFragment : Fragment() {
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
             isCategoryShow = bucketItem.category != "없음"
-            val isShowCountLayout = bucketItem.userCount > 1 && bucketItem.goalCount > bucketItem.userCount
+            val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
             val isCompleted = bucketItem.goalCount <= bucketItem.userCount
             isCount = isShowCountLayout
             isDone = isCompleted
@@ -95,6 +95,9 @@ class BucketDetailFragment : Fragment() {
                 0 -> {
                     viewDataBinding.tabLayout.visibility = View.GONE
                     viewDataBinding.imageLayout.visibility = View.GONE
+                }
+                1 -> {
+                    viewDataBinding.tabLayout.visibility = View.GONE
                 }
                 else -> {
                     viewDataBinding.tabLayout.visibility = View.VISIBLE

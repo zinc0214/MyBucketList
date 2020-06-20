@@ -10,8 +10,8 @@
         android:orientation="vertical"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
-        tools:layout_height="100dp"
-        tools:layout_width="100dp">
+        tools:layout_height="300dp"
+        tools:layout_width="300dp">
 
         <ImageView
             android:id="@+id/background_image"

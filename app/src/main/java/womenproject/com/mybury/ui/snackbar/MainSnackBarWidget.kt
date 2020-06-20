@@ -42,7 +42,7 @@ class MainSnackBarWidget(
                     R.layout.main_snack_view_widget, parent, false) as CustomSnackBarView
                 customView.apply {
                     titleView.text = "\"${title}\" "
-                    countView.text = "${count}회완료"
+                    countView.text = count
                     cancelView.setOnClickListener {
                         listener.onClick(view)
                         cancelView.isEnabled = false
@@ -54,7 +54,7 @@ class MainSnackBarWidget(
                     }
                 }
 
-                return MainSnackBarWidget(parent, customView).setDuration(10000)
+                return MainSnackBarWidget(parent, customView).setDuration(1500)
             } catch (e: Exception) {
                 Log.e("exception", e.message)
             }

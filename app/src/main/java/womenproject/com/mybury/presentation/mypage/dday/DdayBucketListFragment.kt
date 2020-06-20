@@ -99,7 +99,8 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun showCancelSnackBar(view: View, info : BucketItem) {
-        MainSnackBarWidget.make(view, info.title, info.userCount.toString(), bucketCancelListener(info))?.show()
+        val countText = if(info.userCount > 1) "${info.userCount}회 완료" else "완료"
+        MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
 }

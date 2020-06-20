@@ -34,7 +34,7 @@ class CustomSnackBarView @JvmOverloads constructor(
     override fun animateContentIn(delay: Int, duration: Int) {
         val animatorSet = AnimatorSet().apply {
             interpolator = OvershootInterpolator()
-            setDuration(5000)
+            setDuration(1500)
 
         }
         animatorSet.start()
