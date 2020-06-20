@@ -1,52 +1,48 @@
 package womenproject.com.mybury.presentation.detail
 
-import android.util.Log
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
-import womenproject.com.mybury.data.Preference.Companion.getUserId
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
-import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
-import womenproject.com.mybury.util.ScreenUtils
 
+class BucketDetailFragment : Fragment() {
 
-/**
- * Created by HanAYeon on 2018. 11. 30..
- */
-
-class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDetailViewModel>() {
-
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_detail
-    override val viewModel: BucketDetailViewModel
-        get() = BucketDetailViewModel()
-
+    lateinit var viewDataBinding: FragmentBucketDetailBinding
+    lateinit var viewModel: BucketDetailViewModel
     lateinit var bucketItemId: String
     lateinit var bucketItem: DetailBucketItem
-    private var screenWidth = 0
 
-    override fun initDataBinding() {
-        viewDataBinding.viewModel = viewModel
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
+        viewModel = BucketDetailViewModel()
+        initDataBinding()
+        return viewDataBinding.root
+    }
+
+    private fun initDataBinding() {
         viewDataBinding.lifecycleOwner = this
 
         arguments?.let {
-            val args = NewBucketDetailFragmentArgs.fromBundle(it)
+            val args = BucketDetailFragmentArgs.fromBundle(it)
             val bucketId = args.bucketId
             bucketItemId = bucketId!!
         }
 
-        screenWidth = ScreenUtils.getScreenWidth(viewDataBinding.root.context)
         loadBucketDetailInfo()
-
     }
-
 
     private fun loadBucketDetailInfo() {
         viewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
@@ -59,83 +55,57 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             }
 
             override fun success(detailBucketItem: Any) {
+                bucketItem = detailBucketItem as DetailBucketItem
+                setUpViews()
                 stopLoading()
-                setUpViews(detailBucketItem as DetailBucketItem)
-                bucketItem = detailBucketItem
             }
 
             override fun fail() {
                 stopLoading()
             }
 
-        },  bucketItemId)
+        }, bucketItemId)
     }
 
-    private fun setUpViews(bucketInfo: DetailBucketItem) {
+    private fun setUpViews() {
+        viewDataBinding.apply {
+            detailInfo = bucketItem
+            backClickListener = setOnBackClickListener
+            moreClickListener = showMoreMenuLayout
+            countMinusClickListener = bucketCancelListener
+            countPlusClickListener = bucketCompleteListener
+            lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
 
-        viewDataBinding.titleText.text = bucketInfo.title
-        viewDataBinding.memo.text = bucketInfo.memo
-        viewDataBinding.lockText.text = if (bucketInfo.open) "공개" else "비공개"
-        viewDataBinding.categoryText.text = bucketInfo.category
+            val viewPager = viewDataBinding.viewPager
+            val imgList = setImgList(bucketItem)
+            val showWideListener: (String) -> Unit = { showImgWide(it) }
+            val viewPagerAdapter = BucketDetailImageViewPageAdapter(context!!, imgList, showWideListener)
+            viewPager.adapter = viewPagerAdapter
+            viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
-        if (bucketInfo.dDate.isNullOrEmpty()) {
-            viewDataBinding.ddayLayout.visibility = View.GONE
-        } else {
-            if(bucketInfo.dDay < 0) {
-                val dday = bucketInfo.dDay.toString().replace("-","")
-                viewDataBinding.dday.text = "${bucketInfo.dDate}(D+${dday})"
-            } else {
-                viewDataBinding.dday.text = "${bucketInfo.dDate}(D-${bucketInfo.dDay})"
+            isCategoryShow = bucketItem.category != "없음"
+            val isShowCountLayout = bucketItem.userCount > 1 && bucketItem.goalCount > bucketItem.userCount
+            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
+            isCount = isShowCountLayout
+            isDone = isCompleted
+            isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted
+
+
+            when (imgList.size) {
+                0 -> {
+                    viewDataBinding.tabLayout.visibility = View.GONE
+                    viewDataBinding.imageLayout.visibility = View.GONE
+                }
+                else -> {
+                    viewDataBinding.tabLayout.visibility = View.VISIBLE
+                    viewDataBinding.imageLayout.visibility = View.VISIBLE
+                }
             }
+
+            executePendingBindings()
+
         }
 
-        viewDataBinding.currentCount.text = "${bucketInfo.userCount}/${bucketInfo.goalCount}"
-        viewDataBinding.completeText.text = "${bucketInfo.userCount}회 완료"
-
-        viewDataBinding.bucketMoreMenu = showMoreMenuLayout(bucketInfo)
-        viewDataBinding.bucketCompleteListener = bucketCompleteListener()
-
-        val viewPager = viewDataBinding.moreImage.viewPager
-        val imgList = setImgList(bucketInfo)
-        val showWideListener: (String) -> Unit = { showImgWide(it) }
-        val viewPagerAdapter = BucketDetailImageViewPageAdapter(this.context!!, imgList, showWideListener)
-        viewPager.adapter = viewPagerAdapter
-        viewDataBinding.tabLayout.setupWithViewPager(viewPager)
-
-        when (imgList.size) {
-            0 -> {
-                viewDataBinding.tabLayout.visibility = View.INVISIBLE
-                viewDataBinding.moreImage.layout.visibility = View.GONE
-                viewDataBinding.oneImage.layout.visibility = View.VISIBLE
-                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
-                viewDataBinding.oneImage.backgroundImage
-                        .setImageDrawable(resources.getDrawable(R.drawable.gradient_background))
-            }
-            1 -> {
-                viewDataBinding.tabLayout.visibility = View.INVISIBLE
-                viewDataBinding.moreImage.layout.visibility = View.GONE
-                viewDataBinding.oneImage.layout.visibility = View.VISIBLE
-                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
-                Glide.with(context!!).load(imgList[0])
-                        .override(screenWidth,screenWidth)
-                        .centerCrop().placeholder(
-                                R.drawable.gradient_background).into(viewDataBinding.oneImage.backgroundImage)
-                viewDataBinding.oneImage.backgroundImage.setOnClickListener { showImgWide(imgList[0]) }
-            }
-            else -> {
-                viewDataBinding.moreImage.layout.layoutParams.height = screenWidth
-                viewDataBinding.oneImage.layout.visibility = View.GONE
-                viewDataBinding.moreImage.layout.visibility = View.VISIBLE
-            }
-        }
-
-        if (bucketInfo.userCount >= bucketInfo.goalCount ?:0) {
-            viewDataBinding.completeLayout.visibility = View.VISIBLE
-            viewDataBinding.completeText.text = "달성 완료! 대단해요"
-            viewDataBinding.completeText.isEnabled = false
-        }
-
-        viewDataBinding.backButton.setOnClickListener(backBtnOnClickListener())
     }
 
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
@@ -152,40 +122,44 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         return imgList
     }
 
-    private fun showMoreMenuLayout(bucketItem: DetailBucketItem) = View.OnClickListener {
+    private fun showImgWide(url: String) {
+        val showImgWideFragment = ShowImgWideFragment(url)
+        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+    }
+
+    private val setOnBackClickListener = View.OnClickListener {
+        activity!!.onBackPressed()
+    }
+
+    private val showMoreMenuLayout = View.OnClickListener {
         if (viewDataBinding.detailMoreLayout.visibility == View.GONE) {
             viewDataBinding.detailMoreLayout.visibility = View.VISIBLE
         } else {
             viewDataBinding.detailMoreLayout.visibility = View.GONE
         }
 
-        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener(bucketItem)
-        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener()
+        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
+        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener
     }
 
-    private fun createOnClickBucketUpdateListener(bucketItem: DetailBucketItem): View.OnClickListener {
-        return View.OnClickListener {
-            val directions = NewBucketDetailFragmentDirections.actionDetailToUpdate()
-            directions.bucket = bucketItem
-            directions.bucketId = bucketItemId
-            this.findNavController().navigate(directions)
-            viewDataBinding.detailMoreLayout.visibility = View.GONE
-        }
+    private val createOnClickBucketUpdateListener = View.OnClickListener {
+        val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
+        directions.bucket = bucketItem
+        directions.bucketId = bucketItemId
+        this.findNavController().navigate(directions)
+        viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
-    private fun deleteBucketListener(): View.OnClickListener {
-        return View.OnClickListener {
-            val deleteYes: () -> Unit = {
-                deleteBucket()
-            }
-            DeleteBucketDialog(deleteYes).show(activity!!.supportFragmentManager)
+    private val deleteBucketListener = View.OnClickListener {
+        val deleteYes: () -> Unit = {
+            deleteBucket()
         }
+        DeleteBucketDialog(deleteYes).show(activity!!.supportFragmentManager)
     }
 
     private fun deleteBucket() {
-        Log.e("ayham", "gpgin")
 
-        val userId = UseUserIdRequest(getUserId(context!!))
+        val userId = UseUserIdRequest(Preference.getUserId(context!!))
         viewModel.deleteBucketListener(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 deleteBucket()
@@ -209,12 +183,9 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
-    private fun bucketCompleteListener(): View.OnClickListener {
-        return View.OnClickListener {
-            bucketComplete()
-        }
+    private val bucketCompleteListener = View.OnClickListener {
+        bucketComplete()
     }
-
 
     private fun bucketComplete() {
         viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
@@ -239,10 +210,34 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     }
 
-    private fun showImgWide(url: String) {
-        val showImgWideFragment = ShowImgWideFragment(url)
-        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+    private val bucketCancelListener = View.OnClickListener {
+        bucketCancel()
     }
+
+
+    private fun bucketCancel() {
+        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                bucketComplete()
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                loadBucketDetailInfo()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+        }, bucketItemId)
+
+    }
+
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
 
@@ -268,7 +263,19 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 dismiss()
             }
         }
+    }
 
+    fun startLoading() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.startLoading()
+        }
+    }
+
+    fun stopLoading() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.stopLoading()
+        }
     }
 }
-

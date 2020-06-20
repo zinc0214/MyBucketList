@@ -12,7 +12,7 @@
 
         <action
             android:id="@+id/action_main_bucket_to_bucket_detail"
-            app:destination="@id/bucket_detail_fragment_new"
+            app:destination="@id/bucket_detail_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -42,10 +42,10 @@
 
 
     <fragment
-        android:id="@+id/bucket_detail_fragment_new"
-        android:name="womenproject.com.mybury.presentation.detail.NewBucketDetailFragment"
+        android:id="@+id/bucket_detail_fragment"
+        android:name="womenproject.com.mybury.presentation.detail.BucketDetailFragment"
         android:label="Detail"
-        tools:layout="@layout/fragment_bucket_detail_new">
+        tools:layout="@layout/fragment_bucket_detail">
         <argument
             android:name="bucketId"
             android:defaultValue="@null"
@@ -210,7 +210,7 @@
 
         <action
             android:id="@+id/action_category_bucket_list_to_detail"
-            app:destination="@id/bucket_detail_fragment_new"
+            app:destination="@id/bucket_detail_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -234,7 +234,7 @@
 
         <action
             android:id="@+id/action_category_bucket_list_to_detail"
-            app:destination="@id/bucket_detail_fragment_new"
+            app:destination="@id/bucket_detail_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -297,7 +297,7 @@
 
         <action
             android:id="@+id/action_dday_bucket_to_bucket_detail"
-            app:destination="@id/bucket_detail_fragment_new"
+            app:destination="@id/bucket_detail_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
