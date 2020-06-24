@@ -38,11 +38,11 @@ class BucketDetailViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ detailBucketItem ->
-                    when {
-                        detailBucketItem.retcode == "200" -> {
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
                             callback.success(detailBucketItem)
                         }
-                        detailBucketItem.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
