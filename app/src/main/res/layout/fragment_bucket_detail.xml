@@ -25,6 +25,10 @@
             type="android.view.View.OnClickListener" />
 
         <variable
+            name="redoClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="lessCount"
             type="String" />
 
@@ -460,6 +464,7 @@
                         android:paddingBottom="10dp"
                         android:text="다시 도전하기"
                         android:textColor="@color/_5a95ff"
+                        android:onClick="@{redoClickListener::onClick}"
                         android:textSize="13sp" />
                 </LinearLayout>
 

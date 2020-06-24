@@ -35,7 +35,7 @@ class CountBucketItemViewHolder(
     fun bind(bucketClickListener: View.OnClickListener, bucketInfo: BucketItem) {
         binding.apply {
             setUI(bucketClickListener, bucketInfo)
-            executePendingBindings()7
+            executePendingBindings()
         }
     }
 

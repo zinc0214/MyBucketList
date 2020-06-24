@@ -46,7 +46,7 @@ data class BucketRequest(
         var bucketlistId: String
 )
 
-data class CancelBucketRequest(
+data class StatusChangeBucketRequest(
         val userId : String,
         var bucketlistId: String
 )

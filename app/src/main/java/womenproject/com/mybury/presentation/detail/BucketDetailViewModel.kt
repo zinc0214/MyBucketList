@@ -2,13 +2,17 @@ package womenproject.com.mybury.presentation.detail
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.BucketRequest
-import womenproject.com.mybury.data.CancelBucketRequest
-import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -19,7 +23,13 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketDetailViewModel : BaseViewModel() {
 
-    val isOpenVisible = BuildConfig.DEBUG
+    private val _showLoading = MutableLiveData<Boolean>()
+    private val _isDeleteSuccess = MutableLiveData<Boolean>()
+    private val _isReDoSuccess = MutableLiveData<Boolean>()
+
+    val showLoading: LiveData<Boolean> = _showLoading
+    val isDeleteSuccess: LiveData<Boolean> = _isDeleteSuccess
+    val isReDoSuccess: LiveData<Boolean> = _isReDoSuccess
 
     @SuppressLint("CheckResult")
     fun loadBucketDetail(callback: MoreCallBackAny, bucketId: String) {
@@ -28,11 +38,11 @@ class BucketDetailViewModel : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ detailBucketItem ->
-                    when {
-                        detailBucketItem.retcode == "200" -> {
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
                             callback.success(detailBucketItem)
                         }
-                        detailBucketItem.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -85,7 +95,7 @@ class BucketDetailViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
-        val bucketRequest = CancelBucketRequest(userId, bucketId)
+        val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
         callback.start()
         apiInterface.postCancelBucket(accessToken, bucketRequest)
                 .subscribeOn(Schedulers.io())
@@ -115,36 +125,51 @@ class BucketDetailViewModel : BaseViewModel() {
 
     }
 
-    @SuppressLint("CheckResult")
-    fun deleteBucketListener(callback: Simple3CallBack, userId: UseUserIdRequest, bucketId: String) {
-        callback.start()
-        apiInterface.deleteBucket(accessToken, userId, bucketId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when (detailBucketItem.retcode) {
-                        "200" -> {
-                            callback.success()
+    fun deleteBucketListener(userId: UseUserIdRequest, bucketId: String) {
+        _showLoading.value = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                apiInterface.deleteBucket(accessToken, userId, bucketId).apply {
+                    withContext(Dispatchers.Main) {
+                        when (this@apply.retcode) {
+                            "200" -> _isDeleteSuccess.value = true
+                            "301" -> getRefreshToken(object : SimpleCallBack {
+                                override fun success() {
+                                    deleteBucketListener(userId, bucketId)
+                                }
+
+                                override fun fail() {
+                                    _isDeleteSuccess.value = false
+                                }
+                            })
+                            else -> _isDeleteSuccess.value = false
                         }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
+                        _showLoading.value = false
                     }
-
-                }) {
-                    Log.e("myBury", "deleteBucket Fail: $it")
-                    callback.fail()
                 }
-
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
     }
 
 
+    fun redoBucketList(bucketId: String) {
+        _showLoading.value = true
+        val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                apiInterface.postRedoBucket(accessToken, bucketRequest).apply {
+                    withContext(Dispatchers.Main) {
+                        _isDeleteSuccess.value = this@apply.retcode == "200"
+                        _showLoading.value = false
+                    }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

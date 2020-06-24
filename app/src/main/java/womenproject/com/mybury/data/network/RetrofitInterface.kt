@@ -68,7 +68,12 @@ interface RetrofitInterface {
 
     @POST("/cancel")
     fun postCancelBucket(@Header("X-Auth-Token") token: String,
-                           @Body bucketRequest: CancelBucketRequest): Observable<SimpleResponse>
+                           @Body bucketRequest: StatusChangeBucketRequest): Observable<SimpleResponse>
+
+
+    @POST("/redo")
+    suspend fun postRedoBucket(@Header("X-Auth-Token") token: String,
+                         @Body bucketRequest: StatusChangeBucketRequest): SimpleResponse
 
 
     @GET("/dDay")
@@ -112,7 +117,7 @@ interface RetrofitInterface {
 
 
     @HTTP(method = "DELETE", path = "/bucketlist/{bucketId}", hasBody = true)
-    fun deleteBucket(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest, @Path("bucketId") bucketId: String): Observable<SimpleResponse>
+    suspend fun deleteBucket(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest, @Path("bucketId") bucketId: String): SimpleResponse
 
     @POST("/category")
     fun addNewCategoryItem(@Header("X-Auth-Token") token: String,
