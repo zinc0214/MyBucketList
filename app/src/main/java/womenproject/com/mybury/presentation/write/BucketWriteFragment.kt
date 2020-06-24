@@ -589,7 +589,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         this.background = resource.getDrawable()
     }
 
-    private fun Int.getDrawable(): Drawable {
+    private fun Int.getDrawable(): Drawable? {
         return context!!.getDrawable(this)
     }
 

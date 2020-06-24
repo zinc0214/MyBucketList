@@ -114,7 +114,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
     }
 
     open fun createOnClickBucketSuccessListener(
-            tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
+            tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             bucketSuccess(bucketItemInfo)
         }
@@ -147,7 +147,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
 
     }
 
-    open fun createOnClickBucketSuccessLayoutListener(tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
+    open fun createOnClickBucketSuccessLayoutListener(tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
         }

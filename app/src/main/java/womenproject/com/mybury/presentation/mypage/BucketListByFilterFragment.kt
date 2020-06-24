@@ -49,25 +49,28 @@ class BucketListByFilterFragment  : BaseFragment<FragmentBucketListByCategoryBin
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
-            override fun restart() {
-                initBucketListUI()
-            }
+        getFilterListUp(context!!)?.let {
+            viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
+                override fun restart() {
+                    initBucketListUI()
+                }
 
-            override fun fail() {
-                stopLoading()
-            }
+                override fun fail() {
+                    stopLoading()
+                }
 
-            override fun start() {
-                startLoading()
-            }
+                override fun start() {
+                    startLoading()
+                }
 
-            override fun success(value: Any) {
-                val response = value as BucketList
-                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(response.bucketlists, showSnackBar)
-                stopLoading()
-            }
-        }, filterType.toString(), getFilterListUp(context!!))
+                override fun success(value: Any) {
+                    val response = value as BucketList
+                    viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(response.bucketlists, showSnackBar)
+                    stopLoading()
+                }
+            }, filterType, it)
+        }
+
 
     }
 

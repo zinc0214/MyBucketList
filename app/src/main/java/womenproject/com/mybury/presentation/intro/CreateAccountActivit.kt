@@ -156,7 +156,10 @@ class CreateAccountActivity : BaseActiviy() {
 
 
     private val myBuryStartListener = View.OnClickListener {
-        loadUserId(getAccountEmail(this))
+        getAccountEmail(this)?.let {
+            loadUserId(it)
+        }
+
     }
 
 

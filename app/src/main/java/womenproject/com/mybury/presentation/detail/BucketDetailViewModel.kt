@@ -10,7 +10,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.BucketRequest
 import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.UseUserIdRequest
@@ -34,6 +33,11 @@ class BucketDetailViewModel : BaseViewModel() {
     @SuppressLint("CheckResult")
     fun loadBucketDetail(callback: MoreCallBackAny, bucketId: String) {
         callback.start()
+        if(accessToken==null || userId==null) {
+            callback.fail()
+            return
+        }
+
         apiInterface.requestDetailBucketList(accessToken, bucketId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -65,6 +69,11 @@ class BucketDetailViewModel : BaseViewModel() {
     @SuppressLint("CheckResult")
     fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
         val bucketRequest = BucketRequest(bucketId)
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
+
         callback.start()
         apiInterface.postCompleteBucket(accessToken, bucketRequest)
                 .subscribeOn(Schedulers.io())
@@ -95,6 +104,11 @@ class BucketDetailViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
+
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
         callback.start()
         apiInterface.postCancelBucket(accessToken, bucketRequest)
@@ -126,8 +140,13 @@ class BucketDetailViewModel : BaseViewModel() {
     }
 
     fun deleteBucketListener(userId: UseUserIdRequest, bucketId: String) {
-        _showLoading.value = true
+        if(accessToken==null) {
+            _showLoading.value = false
+            _isDeleteSuccess.value = false
+            return
+        }
 
+        _showLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 apiInterface.deleteBucket(accessToken, userId, bucketId).apply {
@@ -156,6 +175,12 @@ class BucketDetailViewModel : BaseViewModel() {
 
 
     fun redoBucketList(bucketId: String) {
+        if(accessToken==null) {
+            _showLoading.value = false
+            _isReDoSuccess.value = false
+            return
+        }
+
         _showLoading.value = true
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
 
@@ -163,7 +188,7 @@ class BucketDetailViewModel : BaseViewModel() {
             try {
                 apiInterface.postRedoBucket(accessToken, bucketRequest).apply {
                     withContext(Dispatchers.Main) {
-                        _isDeleteSuccess.value = this@apply.retcode == "200"
+                        _isReDoSuccess.value = this@apply.retcode == "200"
                         _showLoading.value = false
                     }
                 }

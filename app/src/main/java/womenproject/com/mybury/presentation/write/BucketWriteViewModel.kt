@@ -24,6 +24,11 @@ class BucketWriteViewModel : BaseViewModel() {
                          imgList: MutableList<Any?>,
                          onBucketAddEvent: Simple3CallBack) {
 
+        if(accessToken==null || userId == null) {
+            onBucketAddEvent.fail()
+            return
+        }
+
         onBucketAddEvent.start()
 
         val title = bucketItem.title.stringToMultipartFile("title")
@@ -82,6 +87,11 @@ class BucketWriteViewModel : BaseViewModel() {
             alreadyImgList: MutableMap<Int, String?>,
             imgList: ArrayList<Any?>,
             onBucketAddEvent: Simple3CallBack) {
+
+        if(accessToken==null || userId == null) {
+            onBucketAddEvent.fail()
+            return
+        }
 
         onBucketAddEvent.start()
 

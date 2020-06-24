@@ -24,6 +24,10 @@ class MyPageViewModel : BaseViewModel() {
     @SuppressLint("CheckResult")
     fun getMyPageData(callback: MoreCallBackAny) {
 
+        if(accessToken==null || userId==null) {
+            callback.fail()
+            return
+        }
         callback.start()
 
         apiInterface.loadMyPageData(accessToken, userId)
@@ -33,12 +37,12 @@ class MyPageViewModel : BaseViewModel() {
                     callback.fail()
                 }
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> {
+                    when (response.retcode) {
+                        "200" -> {
                             _myPageInfo.value = response
                             callback.success(response)
                         }
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -57,6 +61,11 @@ class MyPageViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setProfileData(callback: Simple3CallBack, _nickName: String, _profileImg: File?, _useDefaultImg: Boolean) {
+
+        if(accessToken==null || userId==null) {
+            callback.fail()
+            return
+        }
 
         callback.start()
         val p_userId = userId.stringToMultipartFile("userId")

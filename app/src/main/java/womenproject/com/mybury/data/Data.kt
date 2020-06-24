@@ -2,7 +2,6 @@ package womenproject.com.mybury.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
@@ -23,7 +22,7 @@ data class SignUpResponse(
 )
 
 data class UseUserIdRequest(
-        val userId: String
+        val userId: String?
 )
 
 data class DefaulProfileImg(
@@ -38,8 +37,8 @@ data class GetTokenResponse(
 )
 
 data class NewTokenRequest(
-        val userId: String,
-        val refreshToken: String
+        val userId: String?,
+        val refreshToken: String?
 )
 
 data class BucketRequest(
@@ -47,7 +46,7 @@ data class BucketRequest(
 )
 
 data class StatusChangeBucketRequest(
-        val userId : String,
+        val userId: String?,
         var bucketlistId: String
 )
 
