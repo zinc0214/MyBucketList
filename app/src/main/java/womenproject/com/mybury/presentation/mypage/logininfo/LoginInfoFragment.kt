@@ -2,7 +2,6 @@ package womenproject.com.mybury.presentation.mypage.logininfo
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -16,7 +15,6 @@ import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.allClear
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
-import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
@@ -24,7 +22,6 @@ import womenproject.com.mybury.databinding.FragmentLoginInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.intro.SplashActivity
 import womenproject.com.mybury.presentation.intro.SplashLoginActivity
 
 /**
@@ -72,11 +69,17 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         initGoogle()
         signOut()
     }
+
     @SuppressLint("CheckResult")
     private fun signOutMyBury() {
         val userIdRequest = UseUserIdRequest(Preference.getUserId(context!!))
+        val accessToken = getAccessToken(context!!)
+        if (accessToken == null) {
+            LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
+            return
+        }
 
-        apiInterface.postSignOut(getAccessToken(context!!), userIdRequest)
+        apiInterface.postSignOut(accessToken, userIdRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
@@ -89,6 +92,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                             override fun success() {
                                 signOutMyBury()
                             }
+
                             override fun fail() {
                                 LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
                             }

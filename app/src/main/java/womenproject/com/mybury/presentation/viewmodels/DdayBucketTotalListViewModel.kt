@@ -17,6 +17,11 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun getDdayEachBucketList(callback: MoreCallBackAnyList, filter: String) {
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
+
         callback.start()
 
         apiInterface.requestDdayBucketListResult(accessToken, userId, filter)
@@ -46,6 +51,11 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
+
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
         callback.start()
         apiInterface.postCancelBucket(accessToken, bucketRequest)

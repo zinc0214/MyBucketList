@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
-import android.util.Log
 import android.view.View
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.data.BucketItem

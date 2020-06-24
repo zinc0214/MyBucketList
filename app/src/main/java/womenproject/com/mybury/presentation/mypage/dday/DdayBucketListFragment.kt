@@ -35,25 +35,28 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun getDdayList() {
-        viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
-            override fun restart() {
-                getDdayList()
-            }
+        getDdayFilterForShow(context!!)?.let {
+            viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
+                override fun restart() {
+                    getDdayList()
+                }
 
-            override fun start() {
-                startLoading()
-            }
+                override fun start() {
+                    startLoading()
+                }
 
-            override fun success(bucketList: List<Any>) {
-                stopLoading()
-                viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>, showSnackBar)
-            }
+                override fun success(bucketList: List<Any>) {
+                    stopLoading()
+                    viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>, showSnackBar)
+                }
 
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
-            }
-        }, getDdayFilterForShow(context!!))
+                override fun fail() {
+                    stopLoading()
+                    NetworkFailDialog().show(activity!!.supportFragmentManager)
+                }
+            }, it)
+        }
+
     }
 
 
@@ -66,7 +69,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
         getDdayList()
     }
 
-    private fun setBucketCancel(bucketId : String) {
+    private fun setBucketCancel(bucketId: String) {
         viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 setBucketCancel(bucketId)
@@ -89,17 +92,17 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
     }
 
-    private fun bucketCancelListener(info : BucketItem) = View.OnClickListener {
+    private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
         Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
         setBucketCancel(info.id)
     }
 
-    private val showSnackBar: (BucketItem) -> Unit = { info : BucketItem ->
+    private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
         showCancelSnackBar(view!!, info)
     }
 
-    private fun showCancelSnackBar(view: View, info : BucketItem) {
-        val countText = if(info.userCount > 1) "${info.userCount}회 완료" else "완료"
+    private fun showCancelSnackBar(view: View, info: BucketItem) {
+        val countText = if (info.userCount > 1) "${info.userCount}회 완료" else "완료"
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 

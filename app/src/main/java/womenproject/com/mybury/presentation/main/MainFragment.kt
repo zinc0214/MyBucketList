@@ -52,6 +52,14 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private fun getMainBucketList() {
+
+        val filterForShow  = getFilterForShow(context!!)
+        val filterListUp = getFilterListUp(context!!)
+
+        if(filterForShow == null || filterListUp == null) {
+            return
+        }
+
         viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 getMainBucketList()
@@ -84,7 +92,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                 }
 
             }
-        }, getFilterForShow(context!!), getFilterListUp(context!!))
+        }, filterForShow, filterListUp)
 
     }
 

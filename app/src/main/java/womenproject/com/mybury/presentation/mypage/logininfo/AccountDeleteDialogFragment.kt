@@ -29,7 +29,7 @@ class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
 
     override fun initDataBinding() {
 
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
         viewDataBinding.activity = this
         viewDataBinding.lastBucketItem.bucketSuccessClickListener = onClickListener

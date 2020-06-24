@@ -16,6 +16,10 @@ class BucketInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun getMainBucketList(callback: MoreCallBackAny, filter: String, sort: String) {
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
         callback.start()
         apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
@@ -47,6 +51,10 @@ class BucketInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
         callback.start()
         apiInterface.postCancelBucket(accessToken, bucketRequest)
@@ -80,7 +88,10 @@ class BucketInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun getBucketListByCategory(callback: MoreCallBackAnyList, categoryId: String) {
-
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
         callback.start()
 
         apiInterface.requestCategoryBucketList(accessToken, categoryId)
@@ -114,7 +125,10 @@ class BucketInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun getCategoryList(callback: MoreCallBackAnyList) {
-
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
         apiInterface.requestBeforeWrite(accessToken, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -34,7 +34,7 @@ abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
 
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
 
-        dialog!!.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
 
         initDataBinding()

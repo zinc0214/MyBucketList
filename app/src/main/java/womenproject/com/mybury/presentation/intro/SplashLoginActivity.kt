@@ -59,7 +59,7 @@ class SplashLoginActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.splash_with_login)
         binding.loginLayout.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
-            if (getAccountEmail(this).isNotEmpty() || !getMyBuryLoginComplete(this)) {
+            if (getAccountEmail(this)?.isNotEmpty()!! || !getMyBuryLoginComplete(this)) {
                 signOut()
             } else {
                 signIn()
