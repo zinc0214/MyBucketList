@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
@@ -42,6 +43,7 @@ class BucketDetailFragment : Fragment() {
         }
 
         loadBucketDetailInfo()
+        initObserve()
     }
 
     private fun loadBucketDetailInfo() {
@@ -74,6 +76,7 @@ class BucketDetailFragment : Fragment() {
             moreClickListener = showMoreMenuLayout
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
+            redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
 
             val viewPager = viewDataBinding.viewPager
@@ -161,33 +164,52 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun deleteBucket() {
-
         val userId = UseUserIdRequest(Preference.getUserId(context!!))
-        viewModel.deleteBucketListener(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                deleteBucket()
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                stopLoading()
-                Toast.makeText(context!!, "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
-                activity!!.onBackPressed()
-            }
-
-            override fun fail() {
-                stopLoading()
-                Toast.makeText(context!!, "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }, userId, bucketItemId)
+        viewModel.deleteBucketListener(userId, bucketItemId)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
     private val bucketCompleteListener = View.OnClickListener {
         bucketComplete()
+    }
+
+    private val bucketRedoListener = View.OnClickListener {
+        viewModel.redoBucketList(bucketItemId)
+    }
+
+    private fun initObserve() {
+        viewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
+        viewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
+        viewModel.isReDoSuccess.observe(viewLifecycleOwner, isRedoSuccessObserver)
+    }
+
+    private val isDeleteSuccessObserver = Observer<Boolean> {
+        if(it==true) {
+            stopLoading()
+            Toast.makeText(context!!, "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+            activity!!.onBackPressed()
+        } else {
+            stopLoading()
+            Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val isRedoSuccessObserver = Observer<Boolean> {
+        if(it==true) {
+            stopLoading()
+            loadBucketDetailInfo()
+        } else {
+            stopLoading()
+            Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val isShowLoading = Observer<Boolean> {
+        if(it==true) {
+            startLoading()
+        } else {
+            stopLoading()
+        }
     }
 
     private fun bucketComplete() {
