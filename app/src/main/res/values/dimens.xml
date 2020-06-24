@@ -26,4 +26,7 @@
 
     <dimen name="scroll_top">128dp</dimen>
 
+    <dimen name="_200">200dp</dimen>
+    <dimen name="_24">24dp</dimen>
+
 </resources>

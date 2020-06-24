@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        tools:layout_height="300dp"
+        tools:layout_width="300dp">
 
         <ImageView
             android:id="@+id/background_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:background="@drawable/gradient_background" />
-    </LinearLayout>
+            android:background="@drawable/gradient_background"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
 
 </layout>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
 import womenproject.com.mybury.databinding.BucketItemCountBinding
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
@@ -23,7 +24,8 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 class CountBucketItemViewHolder(
         private val isDdayUI: Boolean,
-        private val binding: BucketItemCountBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val binding: BucketItemCountBinding,
+        private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.ViewHolder(binding.root) {
 
     private val successImageView = binding.successButtonView.successImg
     private val circularProgressBar = binding.successButtonView.circularProgressBar
@@ -33,7 +35,7 @@ class CountBucketItemViewHolder(
     fun bind(bucketClickListener: View.OnClickListener, bucketInfo: BucketItem) {
         binding.apply {
             setUI(bucketClickListener, bucketInfo)
-            executePendingBindings()
+            executePendingBindings()7
         }
     }
 
@@ -53,6 +55,17 @@ class CountBucketItemViewHolder(
         binding.successButtonView.bucketSuccessListener = createOnClickBucketSuccessListener(bucketItemInfo)
         binding.bucketSuccessClickListener = createOnClickBucketSuccessLayoutListener(bucketItemInfo)
 
+
+        if (getShowDdayFilter(binding.root.context))  {
+            bucketItemInfo.dDay?.run {
+                binding.isOverDday = this < 0
+                binding.ddayText = if (this < 0) "D${this.toString().replace("-","+")}" else "D-${this}"
+            }
+            binding.ddayTextView.visibility = if (bucketItemInfo.dDay != null) View.VISIBLE else View.INVISIBLE
+        } else {
+            binding.ddayTextView.visibility = View.GONE
+        }
+
         if (isDdayUI) {
             val countText: String = binding.root.context.resources.getString(R.string.dday_bucket_count)
             val formattingCountText = Html.fromHtml(String.format(countText,
@@ -62,6 +75,7 @@ class CountBucketItemViewHolder(
             binding.successButtonView.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
             binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
             binding.userCount.text = formattingCountText
+            binding.ddayTextView.visibility = View.GONE
         }
     }
 
@@ -172,8 +186,8 @@ class CountBucketItemViewHolder(
             }
 
             override fun success() {
-                // onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 binding.bucketItemLayout.isEnabled = true
+                showSnackBar.invoke(bucketItemInfo)
                 return
             }
 
@@ -214,6 +228,7 @@ class CountBucketItemViewHolder(
     private fun setFinalSuccessWithCountBucket() {
         binding.prgressLayout.visibility = View.GONE
         binding.successButtonLayout.visibility = View.GONE
+        binding.ddayTextView.visibility = View.INVISIBLE
         binding.executePendingBindings()
     }
 

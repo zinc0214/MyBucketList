@@ -1,7 +1,5 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,8 @@ import womenproject.com.mybury.presentation.main.MainFragmentDirections
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-open class MainBucketListAdapter(val bucketList: List<BucketItem>) : RecyclerView.Adapter<ViewHolder>() {
+open class MainBucketListAdapter(val bucketList: List<BucketItem>,
+                                 private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.Adapter<ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return checkBucketType(position)
@@ -27,9 +26,12 @@ open class MainBucketListAdapter(val bucketList: List<BucketItem>) : RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            SUCCEED_ITEM -> SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            COUNT_ITEM -> CountBucketItemViewHolder(NORMAL, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            SUCCEED_ITEM -> SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false))
+            COUNT_ITEM -> CountBucketItemViewHolder(NORMAL, BucketItemCountBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false), showSnackBar)
+            else -> BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false), showSnackBar)
         }
     }
 
@@ -42,7 +44,7 @@ open class MainBucketListAdapter(val bucketList: List<BucketItem>) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is SucceedBucketItemViewHolder -> {
                 holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
             }

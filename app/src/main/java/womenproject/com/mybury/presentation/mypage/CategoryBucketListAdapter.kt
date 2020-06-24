@@ -6,7 +6,8 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 
 
-class CategoryBucketListAdapter(bucketList: List<BucketItem>) : MainBucketListAdapter(bucketList) {
+class CategoryBucketListAdapter(bucketList: List<BucketItem>,
+                                private val showSnackBar: ((BucketItem) -> Unit)) : MainBucketListAdapter(bucketList, showSnackBar) {
 
     override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
 
@@ -17,6 +18,4 @@ class CategoryBucketListAdapter(bucketList: List<BucketItem>) : MainBucketListAd
 
         }
     }
-
-
 }

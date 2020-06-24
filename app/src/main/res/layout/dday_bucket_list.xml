@@ -13,6 +13,10 @@
             name="ddayText"
             type="String" />
 
+        <variable
+            name="isOverDday"
+            type="Boolean" />
+
     </data>
 
     <LinearLayout
@@ -26,7 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:background="@drawable/current_dday_badge">
+            android:background="@{isOverDday ? @drawable/plus_dday_badge : @drawable/minus_dday_badge}"
+            tools:background="@drawable/minus_dday_badge">
 
             <TextView
                 android:layout_width="wrap_content"

@@ -46,6 +46,10 @@ data class BucketRequest(
         var bucketlistId: String
 )
 
+data class CancelBucketRequest(
+        val userId : String,
+        var bucketlistId: String
+)
 
 data class SimpleResponse(
         val retcode: String
@@ -80,7 +84,7 @@ data class BucketItem(
         val category: Category,
         var userCount: Int = 0,
         val goalCount: Int = 1,
-        val dDay: Int = 0
+        val dDay: Int?
 ) : Parcelable
 
 @Parcelize
@@ -90,7 +94,7 @@ data class DetailBucketItem(
         val open: Boolean = false,
         val category: String,
         val userCount: Int = 0,
-        val goalCount: Int? = 0,
+        val goalCount: Int = 0,
         val dDate: String?,
         val dDay: Int,
         val imgUrl1: String? = null,
@@ -98,7 +102,6 @@ data class DetailBucketItem(
         val imgUrl3: String? = null,
         val retcode: String
 ) : Parcelable
-
 
 data class AddBucketItem(
         var title: String = "Title",
@@ -162,6 +165,11 @@ data class MyPageCategory(
 enum class ShowFilter {
     all, completed, started
 }
+
+enum class DdayShowFilter {
+    all, minus, plus
+}
+
 
 enum class ListUpFilter {
     updatedDt, createdDt
