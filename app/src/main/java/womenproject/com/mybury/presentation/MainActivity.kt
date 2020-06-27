@@ -89,7 +89,7 @@ class NetworkFailDialog : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 
@@ -109,7 +109,7 @@ class CanNotGoMainDialog : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 }
@@ -129,7 +129,7 @@ class UserAlreadyExist : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 }
