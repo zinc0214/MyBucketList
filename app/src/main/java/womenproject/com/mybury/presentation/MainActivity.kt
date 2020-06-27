@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Preference.Companion.setAleadyAlarmShow
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -50,6 +51,8 @@ class MainActivity : BaseActiviy() {
         loadingImg = binding.loadingLayout.loadingImg
         loadingImg.setImageResource(R.drawable.loading_anim)
         animationDrawable = loadingImg.drawable as AnimationDrawable
+
+        setAleadyAlarmShow(this, false)
     }
 
     override fun onSupportNavigateUp(): Boolean {

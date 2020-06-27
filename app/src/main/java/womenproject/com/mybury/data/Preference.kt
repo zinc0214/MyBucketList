@@ -20,6 +20,7 @@ class Preference {
         private const val SHOW_DDAY_STATE = "show_dday_state"
         private const val SHOW_DDAY_FILTER = "show_dday_filter"
         private const val CLOSE_ALARM_3_DAYS = "close_alarm_3_days"
+        private const val IS_SHOWN_ALARM = "is_shown_alarm"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -144,6 +145,19 @@ class Preference {
         fun getCloseAlarm3Days(context: Context) : Long  {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getLong(CLOSE_ALARM_3_DAYS, 0)
+            return data
+        }
+
+        fun setAleadyAlarmShow(context: Context, isShowed : Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(IS_SHOWN_ALARM, isShowed)
+            editor.apply()
+        }
+
+        fun getAleadyAlarmShow(context: Context) : Boolean  {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(IS_SHOWN_ALARM, false)
             return data
         }
 

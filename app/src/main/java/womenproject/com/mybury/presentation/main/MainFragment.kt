@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getAleadyAlarmShow
 import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
+import womenproject.com.mybury.data.Preference.Companion.setAleadyAlarmShow
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -53,10 +56,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
     private fun getMainBucketList() {
 
-        val filterForShow  = getFilterForShow(context!!)
+        val filterForShow = getFilterForShow(context!!)
         val filterListUp = getFilterListUp(context!!)
 
-        if(filterForShow == null || filterListUp == null) {
+        if (filterForShow == null || filterListUp == null) {
             return
         }
 
@@ -87,7 +90,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
-                if (response.popupYn && isOpenablePopup()) {
+                if (response.popupYn && isOpenablePopup() && !getAleadyAlarmShow(activity!!)) {
                     showDdayPopup()
                 }
 
@@ -133,6 +136,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     private fun showDdayPopup() {
         val ddayAlarmDialogFragment = DdayAlarmDialogFragment(goToDday)
         ddayAlarmDialogFragment.show(activity!!.supportFragmentManager, "tag")
+        setAleadyAlarmShow(context!!, true)
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
