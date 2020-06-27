@@ -99,6 +99,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="38dp"
+                        android:paddingStart="7dp"
+                        android:paddingEnd="7dp"
                         android:text="@{ddayText}"
                         android:textColor="@{isOverDday ? @color/_ffa690 : @color/_ffca5a}"
                         android:textSize="12sp"
