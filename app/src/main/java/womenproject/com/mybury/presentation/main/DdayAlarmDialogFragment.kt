@@ -25,8 +25,7 @@ class DdayAlarmDialogFragment(private var goToDday: () -> Unit) : BaseDialogFrag
     override fun initDataBinding() {
         viewDataBinding.apply {
             setDoToDdayClickListener {
-                alarmCloseTextView.text = Html.fromHtml(activity?.resources?.getString(R.string.alarm_close))
-                goToDday.invoke()
+                goToDday()
                 dismiss()
             }
             close3DaysClickListener = closeAlarm3Days
@@ -35,7 +34,6 @@ class DdayAlarmDialogFragment(private var goToDday: () -> Unit) : BaseDialogFrag
 
     private val closeAlarm3Days = View.OnClickListener {
         val time = Date().time
-        Log.e("ayhan", "currentTime : $time")
         setCloseAlarm3Days(context!!, time)
         dismiss()
     }
