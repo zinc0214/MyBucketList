@@ -35,7 +35,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun getDdayList() {
-        getDdayFilterForShow(context!!)?.let {
+        getDdayFilterForShow(requireContext())?.let {
             viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
                 override fun restart() {
                     getDdayList()
@@ -62,7 +62,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
     private fun filterOnClickListener() = View.OnClickListener {
         val filterDialogFragment = DdayFilterDialogFragment(filterChangedListener)
-        filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+        filterDialogFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private val filterChangedListener: () -> Unit = {
@@ -98,7 +98,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
-        showCancelSnackBar(view!!, info)
+        showCancelSnackBar(requireView(), info)
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {

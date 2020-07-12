@@ -170,7 +170,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
         setBucketCancel(info.id)
     }
 
