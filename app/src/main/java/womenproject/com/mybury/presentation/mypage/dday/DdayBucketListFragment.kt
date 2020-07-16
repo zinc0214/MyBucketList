@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
@@ -93,7 +92,6 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
         setBucketCancel(info.id)
     }
 
@@ -102,7 +100,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
-        val countText = if (info.userCount > 1) "${info.userCount}회 완료" else "완료"
+        val countText = if (info.goalCount > 1) "${info.userCount}회 완료" else "완료"
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 

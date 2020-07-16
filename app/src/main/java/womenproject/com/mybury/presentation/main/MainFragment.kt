@@ -2,13 +2,11 @@ package womenproject.com.mybury.presentation.main
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAleadyAlarmShow
 import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
@@ -178,7 +176,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
-        val countText = if (info.goalCount > 1) "${info.userCount.toString()}회 완료" else "완료"
+        val countText = if (info.goalCount > 1) "${info.userCount}회 완료" else "완료"
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
