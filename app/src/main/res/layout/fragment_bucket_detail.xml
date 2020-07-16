@@ -176,7 +176,7 @@
                         android:lineSpacingExtra="7sp"
                         android:text="@{detailInfo.memo}"
                         android:textColor="@color/_797979"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         tools:text="이명선,한아연,안예지는 김가은을 빼고 맛집탐험을 하러간다! 우리빼고 퇴사하다니! 배신자! 엉엉 가지마.." />
                 </LinearLayout>
 
