@@ -304,7 +304,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (editText.lineCount > 2) {
+                if (editText.lineCount > 3) {
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
