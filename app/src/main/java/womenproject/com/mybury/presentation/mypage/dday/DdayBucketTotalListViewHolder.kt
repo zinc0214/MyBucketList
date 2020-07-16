@@ -16,8 +16,10 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding,
 
     fun bind(bucketItemList: DdayBucketList, context: Context) {
         binding.apply {
-            ddayText = "D-${bucketItemList.day}"
-            isOverDday = bucketItemList.day < 0
+            bucketItemList.day.apply {
+                isOverDday = this < 0
+                ddayText = if (this < 0) "D${this.toString().replace("-", "+")}" else "D-${this}"
+            }
 
             ddayEachBucketItemList.layoutManager = LinearLayoutManager(context)
             ddayEachBucketItemList.hasFixedSize()

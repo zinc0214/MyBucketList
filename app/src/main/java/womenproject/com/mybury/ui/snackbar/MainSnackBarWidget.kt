@@ -46,6 +46,7 @@ class MainSnackBarWidget(
                     cancelView.setOnClickListener {
                         listener.onClick(view)
                         cancelView.isEnabled = false
+
                     }
 
                     val layoutParams = customView.layoutParams

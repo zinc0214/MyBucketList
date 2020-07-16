@@ -12,12 +12,12 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
  * Created by HanAYeon on 2019. 1. 16..
  */
 
-class DdayBucketTotalListViewModel  : BaseViewModel() {
+class DdayBucketTotalListViewModel : BaseViewModel() {
 
 
     @SuppressLint("CheckResult")
     fun getDdayEachBucketList(callback: MoreCallBackAnyList, filter: String) {
-        if(accessToken==null || userId == null) {
+        if (accessToken == null || userId == null) {
             callback.fail()
             return
         }
@@ -28,9 +28,9 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
-                    when {
-                        response.retcode == "200" -> callback.success(response.dDayBucketlists)
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                    when (response.retcode) {
+                        "200" -> callback.success(response.dDayBucketlists)
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -51,7 +51,7 @@ class DdayBucketTotalListViewModel  : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
-        if(accessToken==null || userId == null) {
+        if (accessToken == null || userId == null) {
             callback.fail()
             return
         }

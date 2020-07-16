@@ -23,8 +23,9 @@ class BucketDetailFragment : Fragment() {
 
     lateinit var viewDataBinding: FragmentBucketDetailBinding
     lateinit var viewModel: BucketDetailViewModel
-    lateinit var bucketItemId: String
     lateinit var bucketItem: DetailBucketItem
+
+    private lateinit var bucketItemId: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -56,8 +57,8 @@ class BucketDetailFragment : Fragment() {
                 startLoading()
             }
 
-            override fun success(detailBucketItem: Any) {
-                bucketItem = detailBucketItem as DetailBucketItem
+            override fun success(value: Any) {
+                bucketItem = value as DetailBucketItem
                 setUpViews()
                 stopLoading()
             }
@@ -82,7 +83,7 @@ class BucketDetailFragment : Fragment() {
             val viewPager = viewDataBinding.viewPager
             val imgList = setImgList(bucketItem)
             val showWideListener: (String) -> Unit = { showImgWide(it) }
-            val viewPagerAdapter = BucketDetailImageViewPageAdapter(context!!, imgList, showWideListener)
+            val viewPagerAdapter = BucketDetailImageViewPageAdapter(requireContext(), imgList, showWideListener)
             viewPager.adapter = viewPagerAdapter
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
@@ -91,7 +92,7 @@ class BucketDetailFragment : Fragment() {
             val isCompleted = bucketItem.goalCount <= bucketItem.userCount
             isCount = isShowCountLayout
             isDone = isCompleted
-            isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted
+            isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
 
             when (imgList.size) {
@@ -130,11 +131,11 @@ class BucketDetailFragment : Fragment() {
 
     private fun showImgWide(url: String) {
         val showImgWideFragment = ShowImgWideFragment(url)
-        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+        showImgWideFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private val setOnBackClickListener = View.OnClickListener {
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     private val showMoreMenuLayout = View.OnClickListener {
@@ -160,11 +161,11 @@ class BucketDetailFragment : Fragment() {
         val deleteYes: () -> Unit = {
             deleteBucket()
         }
-        DeleteBucketDialog(deleteYes).show(activity!!.supportFragmentManager)
+        DeleteBucketDialog(deleteYes).show(requireActivity().supportFragmentManager)
     }
 
     private fun deleteBucket() {
-        val userId = UseUserIdRequest(Preference.getUserId(context!!))
+        val userId = UseUserIdRequest(Preference.getUserId(requireContext()))
         viewModel.deleteBucketListener(userId, bucketItemId)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
@@ -186,11 +187,11 @@ class BucketDetailFragment : Fragment() {
     private val isDeleteSuccessObserver = Observer<Boolean> {
         if(it==true) {
             stopLoading()
-            Toast.makeText(context!!, "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
-            activity!!.onBackPressed()
+            Toast.makeText(requireContext(), "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+            requireActivity().onBackPressed()
         } else {
             stopLoading()
-            Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -200,7 +201,7 @@ class BucketDetailFragment : Fragment() {
             loadBucketDetailInfo()
         } else {
             stopLoading()
-            Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -101,6 +101,7 @@
                                 android:layout_height="wrap_content"
                                 android:lineSpacingExtra="8sp"
                                 android:maxLines="2"
+                                android:ellipsize="end"
                                 android:text="@{bucketTitleText}"
                                 android:textColor="@color/_434343"
                                 tools:text="가나다라마바사아자차카타파하가나다라마사아자차카타파하" />

@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
@@ -35,7 +34,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun getDdayList() {
-        getDdayFilterForShow(context!!)?.let {
+        getDdayFilterForShow(requireContext())?.let {
             viewModel.getDdayEachBucketList(object : BaseViewModel.MoreCallBackAnyList {
                 override fun restart() {
                     getDdayList()
@@ -62,7 +61,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
     private fun filterOnClickListener() = View.OnClickListener {
         val filterDialogFragment = DdayFilterDialogFragment(filterChangedListener)
-        filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+        filterDialogFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private val filterChangedListener: () -> Unit = {
@@ -93,16 +92,15 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        Toast.makeText(activity, "info : ${info.title}", Toast.LENGTH_SHORT).show()
         setBucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
-        showCancelSnackBar(view!!, info)
+        showCancelSnackBar(requireView(), info)
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
-        val countText = if (info.userCount > 1) "${info.userCount}회 완료" else "완료"
+        val countText = if (info.goalCount > 1) "${info.userCount}회 완료" else "완료"
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
