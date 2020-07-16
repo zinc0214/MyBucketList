@@ -56,6 +56,8 @@
                         android:text="@{bucketTitleText}"
                         android:textColor="@color/_ffffff"
                         android:textSize="14sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
                         app:layout_constraintHorizontal_bias="0"

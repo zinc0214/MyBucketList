@@ -66,6 +66,8 @@
                         android:layout_marginTop="21dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="21dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:text="@{bucketTitleText}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
