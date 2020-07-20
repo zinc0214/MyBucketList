@@ -18,6 +18,8 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
+import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 import java.util.*
 
 class BucketDetailFragment : Fragment() {
@@ -81,6 +83,9 @@ class BucketDetailFragment : Fragment() {
             redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
             comment = getRandomComment()
+
+            imageLayout.layoutParams.height = getImageSize()
+            imageLayout.layoutParams.width = getImageSize()
 
             val viewPager = viewDataBinding.viewPager
             val imgList = setImgList(bucketItem)
@@ -285,6 +290,10 @@ class BucketDetailFragment : Fragment() {
 
         return commentList[randomNum]
 
+    }
+
+    private fun getImageSize(): Int {
+        return getScreenWidth(requireContext()) - dpToPx(30)
     }
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
