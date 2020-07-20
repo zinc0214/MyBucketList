@@ -293,7 +293,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun getImageSize(): Int {
-        return getScreenWidth(requireContext()) - dpToPx(30)
+        return getScreenWidth(requireContext()) - dpToPx(60)
     }
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {

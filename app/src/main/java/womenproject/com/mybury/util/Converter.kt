@@ -1,16 +1,15 @@
 package womenproject.com.mybury.util
 
+import android.content.ContentResolver
+import android.content.Context
 import android.content.res.Resources
+import android.net.Uri
+import androidx.annotation.AnyRes
+import androidx.annotation.NonNull
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import android.content.ContentResolver
-import android.content.Context
-import android.net.Uri
-import androidx.annotation.AnyRes
-import androidx.annotation.NonNull
-import androidx.room.util.FileUtil
 
 
 /**
@@ -23,7 +22,7 @@ class Converter {
     companion object {
 
         fun dpToPx(dp: Int): Int {
-            return (dp * Resources.getSystem().getDisplayMetrics().density).toInt()
+            return (dp * Resources.getSystem().displayMetrics.density).toInt()
         }
 
         fun stringFormat(origin : String, text1 :String): String {
@@ -37,9 +36,9 @@ class Converter {
         fun getUriToDrawable(@NonNull context: Context,
                              @AnyRes drawableId: Int): Uri {
             return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                    "://" + context.getResources().getResourcePackageName(drawableId)
-                    + '/'.toString() + context.getResources().getResourceTypeName(drawableId)
-                    + '/'.toString() + context.getResources().getResourceEntryName(drawableId))
+                    "://" + context.resources.getResourcePackageName(drawableId)
+                    + '/'.toString() + context.resources.getResourceTypeName(drawableId)
+                    + '/'.toString() + context.resources.getResourceEntryName(drawableId))
         }
     }
 }
