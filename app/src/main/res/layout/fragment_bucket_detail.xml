@@ -51,6 +51,11 @@
         <variable
             name="detailInfo"
             type="womenproject.com.mybury.data.DetailBucketItem" />
+
+        <variable
+            name="comment"
+            type="String" />
+
     </data>
 
     <RelativeLayout
@@ -328,7 +333,8 @@
                         android:layout_centerInParent="true"
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
-                        android:text="조만간 멋진 일이 일어날거에요"
+                        android:text="@{comment}"
+                        android:textSize="14dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -460,11 +466,11 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
+                        android:onClick="@{redoClickListener::onClick}"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="다시 도전하기"
                         android:textColor="@color/_5a95ff"
-                        android:onClick="@{redoClickListener::onClick}"
                         android:textSize="13sp" />
                 </LinearLayout>
 

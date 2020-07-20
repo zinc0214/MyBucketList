@@ -18,6 +18,7 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
+import java.util.*
 
 class BucketDetailFragment : Fragment() {
 
@@ -79,6 +80,7 @@ class BucketDetailFragment : Fragment() {
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            comment = getRandomComment()
 
             val viewPager = viewDataBinding.viewPager
             val imgList = setImgList(bucketItem)
@@ -264,6 +266,26 @@ class BucketDetailFragment : Fragment() {
 
     }
 
+    private fun getRandomComment(): String {
+
+        val commentList = listOf("하나씩 목표를 달성해볼까요?",
+                "시작이 반이라는 말이 있죠. 아자아자!",
+                "새로운 일을 시작하는 용기가 깃들기를",
+                "천 리 길도 한걸음부터",
+                "우리만의 페이스로 달성해봐요",
+                "당신은 해낼 수 있을 거에요",
+                "이제 도전을 시작해보는 건 어떨까요?",
+                "인생은 게으름과의 싸움이래요!",
+                "당신의 버킷리스트는 이제 이루어졌나요?",
+                "포기하고 싶을 순간에도 응원하고 있어요",
+                "잘못되는 것을 두려워말고 도전해봐요!")
+
+        val random = Random()
+        val randomNum = random.nextInt(commentList.size)
+
+        return commentList[randomNum]
+
+    }
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
 
