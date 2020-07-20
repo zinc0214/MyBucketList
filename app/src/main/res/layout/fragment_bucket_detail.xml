@@ -159,6 +159,7 @@
                         android:text="@{detailInfo.category}"
                         android:textColor="@color/_5a95ff"
                         android:textSize="13sp"
+                        android:layout_marginBottom="8dp"
                         android:visibility="@{isCategoryShow ? View.VISIBLE : View.GONE }"
                         tools:text="여행" />
 
@@ -166,7 +167,6 @@
                         android:id="@+id/bucketTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:text="@{detailInfo.title}"
                         android:textColor="@color/_434343"
                         android:textSize="20sp"
