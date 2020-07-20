@@ -82,6 +82,17 @@ class BucketDetailFragment : Fragment() {
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            isCategoryShow = bucketItem.category != "없음"
+            
+            if (bucketItem.dDate != null) {
+                bucketItem.dDay.apply {
+                    isMinusDday = this >= 0
+                    ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
+                }
+            } else {
+                ddayLayout.visibility = View.GONE
+            }
+
             comment = getRandomComment()
 
             imageLayout.layoutParams.height = getImageSize()
@@ -94,7 +105,6 @@ class BucketDetailFragment : Fragment() {
             viewPager.adapter = viewPagerAdapter
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
-            isCategoryShow = bucketItem.category != "없음"
             val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
             val isCompleted = bucketItem.goalCount <= bucketItem.userCount
             isCount = isShowCountLayout
@@ -192,7 +202,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isDeleteSuccessObserver = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             stopLoading()
             Toast.makeText(requireContext(), "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressed()
@@ -203,7 +213,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isRedoSuccessObserver = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             stopLoading()
             loadBucketDetailInfo()
         } else {
@@ -213,7 +223,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isShowLoading = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             startLoading()
         } else {
             stopLoading()

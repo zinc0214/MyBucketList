@@ -29,6 +29,14 @@
             type="android.view.View.OnClickListener" />
 
         <variable
+            name="isMinusDday"
+            type="Boolean" />
+
+        <variable
+            name="ddayText"
+            type="String" />
+
+        <variable
             name="lessCount"
             type="String" />
 
@@ -91,10 +99,17 @@
                 android:src="@drawable/my_page_more" />
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@id/topLayout"
+            android:background="@color/_dddddd" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/topLayout"
+            android:layout_below="@+id/divider"
             android:background="@color/_ffffff"
             android:fillViewport="true">
 
@@ -104,39 +119,63 @@
 
                 <RelativeLayout
                     android:id="@+id/ddayLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/_febc30"
-                    android:paddingStart="30dp"
-                    android:paddingEnd="30dp"
-                    android:visibility="@{detailInfo.dDay > 0 ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/_febc30"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{ddayText+`일 남았어요!`}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="10일 남았어요" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{`~`+detailInfo.dDate}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="~2020.10.02" />
+
+                    </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/ddayPlusLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@{detailInfo.dDay+`일 남았어요!`}"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="13sp"
+                        android:layout_marginStart="30dp"
+                        android:background="@color/_ffa690"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="4dp"
                         android:textStyle="bold"
-                        tools:text="10일 남았어요" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@{`~`+detailInfo.dDate}"
+                        android:text="@{`D+` + ddayText}"
                         android:textColor="@color/_ffffff"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        tools:text="~2020.10.02" />
-
+                        android:textSize="12sp"
+                        android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="D+10" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -156,10 +195,10 @@
                         android:id="@+id/categoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="@{detailInfo.category}"
                         android:textColor="@color/_5a95ff"
                         android:textSize="13sp"
-                        android:layout_marginBottom="8dp"
                         android:visibility="@{isCategoryShow ? View.VISIBLE : View.GONE }"
                         tools:text="여행" />
 
