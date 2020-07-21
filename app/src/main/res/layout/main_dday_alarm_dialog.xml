@@ -81,15 +81,15 @@
 
         <TextView
             android:id="@+id/alarmCloseTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="7dp"
-            android:text="@string/alarm_close"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:onClick="@{close3DaysClickListener::onClick}"
-            android:textColor="@color/_e6000000"
-            android:textSize="14sp" />
+            android:text="@string/alarm_close"
+            android:textColor="@color/_c4c4c4"
+            android:textSize="13sp" />
 
     </LinearLayout>
 
