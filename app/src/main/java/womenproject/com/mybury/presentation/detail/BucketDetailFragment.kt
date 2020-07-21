@@ -193,7 +193,10 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val bucketRedoListener = View.OnClickListener {
-        viewModel.redoBucketList(bucketItemId)
+        val confirmAction: () -> Unit = {
+            viewModel.redoBucketList(bucketItemId)
+        }
+        RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
     }
 
     private fun initObserve() {
@@ -344,6 +347,32 @@ class BucketDetailFragment : Fragment() {
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.stopLoading()
+        }
+    }
+
+    class RedoBucketDialog(private val confirmAction: () -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "다시 도전하기"
+            CONTENT_MSG = "이 버킷리스트를 처음부터 새롭게 도전해볼까요? (이미 달성한 버킷리스트를 사라집니다.)"
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "확인"
+            CANCEL_TEXT = "취소"
+            CANCEL_ABLE = false
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                confirmAction()
+                dismiss()
+            }
+        }
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+            }
         }
     }
 }
