@@ -115,23 +115,26 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:id="@+id/ddayLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/_febc30"
                         android:paddingStart="30dp"
+                        tools:visibility="gone"
                         android:paddingEnd="30dp"
-                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -164,17 +167,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:background="@color/_ffa690"
-                        android:paddingStart="10dp"
+                        android:paddingStart="12dp"
                         android:paddingTop="4dp"
-                        android:paddingEnd="10dp"
+                        android:paddingEnd="12dp"
                         android:paddingBottom="4dp"
-                        android:textStyle="bold"
                         android:text="@{`D+` + ddayText}"
                         android:textColor="@color/_ffffff"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="D+10" />
                 </RelativeLayout>
 

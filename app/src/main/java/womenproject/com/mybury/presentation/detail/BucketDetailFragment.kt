@@ -83,12 +83,13 @@ class BucketDetailFragment : Fragment() {
             redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
             isCategoryShow = bucketItem.category != "없음"
-            
+
             if (bucketItem.dDate != null) {
                 bucketItem.dDay.apply {
                     isMinusDday = this >= 0
                     ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
                 }
+                ddayLayout.visibility = View.VISIBLE
             } else {
                 ddayLayout.visibility = View.GONE
             }

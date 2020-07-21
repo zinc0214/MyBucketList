@@ -1,17 +1,16 @@
 package womenproject.com.mybury.presentation.main
 
-import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.Preference.Companion.getAleadyAlarmShow
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
+import womenproject.com.mybury.data.Preference.Companion.getEnableShowAlarm
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
-import womenproject.com.mybury.data.Preference.Companion.setAleadyAlarmShow
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -54,8 +53,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
     private fun getMainBucketList() {
 
-        val filterForShow = getFilterForShow(context!!)
-        val filterListUp = getFilterListUp(context!!)
+        val filterForShow = getFilterForShow(requireContext())
+        val filterListUp = getFilterListUp(requireContext())
 
         if (filterForShow == null || filterListUp == null) {
             return
@@ -88,7 +87,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
-                if (response.popupYn && isOpenablePopup() && !getAleadyAlarmShow(activity!!)) {
+                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(activity!!)) {
                     showDdayPopup()
                 }
 
@@ -126,15 +125,13 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
     private fun isOpenablePopup(): Boolean {
         val currentTime = Date().time
-        val daysOverTime = 1000 * 60 * 60 * 24 // 일단 하루로 둠!!!
-        Log.e("ayhan", "time check : ${currentTime - getCloseAlarm3Days(context!!)}")
-        return currentTime - getCloseAlarm3Days(context!!) >= daysOverTime
+        val daysOverTime = 1000 * 60 * 60 * 24 * 3 // 3일로  설정
+        return currentTime - getCloseAlarm3Days(requireContext()) >= daysOverTime
     }
 
     private fun showDdayPopup() {
         val ddayAlarmDialogFragment = DdayAlarmDialogFragment(goToDday)
-        ddayAlarmDialogFragment.show(activity!!.supportFragmentManager, "tag")
-        setAleadyAlarmShow(context!!, true)
+        ddayAlarmDialogFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
@@ -145,13 +142,13 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private val goToDday: () -> Unit = {
-        createOnClickDdayListener.onClick(view!!)
+        createOnClickDdayListener.onClick(requireView())
     }
 
     private fun createOnClickFilterListener(): View.OnClickListener {
         return View.OnClickListener {
             val filterDialogFragment = FilterDialogFragment(filterChangedListener)
-            filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+            filterDialogFragment.show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -172,7 +169,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
-        showCancelSnackBar(view!!, info)
+        showCancelSnackBar(requireView(), info)
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
@@ -180,5 +177,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Preference.setEnableShowAlarm(requireContext(), false)
+    }
 
 }
