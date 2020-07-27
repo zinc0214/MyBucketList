@@ -132,9 +132,9 @@
                         android:layout_height="wrap_content"
                         android:background="@color/_febc30"
                         android:paddingStart="30dp"
-                        tools:visibility="gone"
                         android:paddingEnd="30dp"
-                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}">
+                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
+                        tools:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -167,9 +167,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
                         android:background="@color/_ffa690"
-                        android:paddingStart="12dp"
+                        android:paddingStart="9dp"
                         android:paddingTop="4dp"
-                        android:paddingEnd="12dp"
+                        android:paddingEnd="9dp"
                         android:paddingBottom="4dp"
                         android:text="@{`D+` + ddayText}"
                         android:textColor="@color/_ffffff"
