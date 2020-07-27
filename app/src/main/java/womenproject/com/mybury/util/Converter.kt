@@ -6,7 +6,7 @@ import android.content.res.Resources
 import android.net.Uri
 import androidx.annotation.AnyRes
 import androidx.annotation.NonNull
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -48,7 +48,7 @@ class Converter {
 fun fileListToMultipartFile(imgList : ArrayList<File>, name : String) : ArrayList<MultipartBody.Part> {
     val imageList = arrayListOf<MultipartBody.Part>()
     for(img in imgList) {
-        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), img)
+        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), img)
         val uploadFile = MultipartBody.Part.createFormData(name, img.name, requestFile)
         imageList.add(uploadFile)
     }
@@ -57,7 +57,7 @@ fun fileListToMultipartFile(imgList : ArrayList<File>, name : String) : ArrayLis
 
 
 fun File.fileToMultipartFile(name : String) : MultipartBody.Part {
-    val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),this)
+    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), this)
     val body = MultipartBody.Part.createFormData(name, this.name, requestFile)
     return body
 }
