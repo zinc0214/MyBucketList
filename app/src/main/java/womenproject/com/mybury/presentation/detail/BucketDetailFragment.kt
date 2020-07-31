@@ -294,7 +294,7 @@ class BucketDetailFragment : Fragment() {
                 "우리만의 페이스로 달성해봐요",
                 "당신은 해낼 수 있을 거에요",
                 "이제 도전을 시작해보는 건 어떨까요?",
-                "인생은 게으름과의 싸움이래요!",
+                "인생은 게으름과 자기자신의 싸움이래요",
                 "당신의 버킷리스트는 이제 이루어졌나요?",
                 "포기하고 싶을 순간에도 응원하고 있어요",
                 "잘못되는 것을 두려워말고 도전해봐요!")
@@ -354,7 +354,7 @@ class BucketDetailFragment : Fragment() {
 
         init {
             TITLE_MSG = "다시 도전하기"
-            CONTENT_MSG = "이 버킷리스트를 처음부터 새롭게 도전해볼까요? (이미 달성한 버킷리스트를 사라집니다.)"
+            CONTENT_MSG = "달성 횟수가 초기화 됩니다"
             CANCEL_BUTTON_VISIBLE = true
             GRADIENT_BUTTON_VISIBLE = false
             CONFIRM_TEXT = "확인"
