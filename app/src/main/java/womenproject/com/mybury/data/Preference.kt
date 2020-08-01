@@ -132,7 +132,7 @@ class Preference {
 
         fun getDdayFilterForShow(context: Context) : String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(SHOW_DDAY_FILTER, DdayShowFilter.minus.toString())
+            return sp.getString(SHOW_DDAY_FILTER, DdayShowFilter.all.toString())
         }
 
         fun setCloseAlarm3Days(context : Context, closeTime : Long) {
@@ -148,16 +148,16 @@ class Preference {
             return data
         }
 
-        fun setAleadyAlarmShow(context: Context, isShowed : Boolean) {
+        fun setEnableShowAlarm(context: Context, isShowed: Boolean) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putBoolean(IS_SHOWN_ALARM, isShowed)
             editor.apply()
         }
 
-        fun getAleadyAlarmShow(context: Context) : Boolean  {
+        fun getEnableShowAlarm(context: Context): Boolean {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getBoolean(IS_SHOWN_ALARM, false)
+            val data = sp.getBoolean(IS_SHOWN_ALARM, true)
             return data
         }
 

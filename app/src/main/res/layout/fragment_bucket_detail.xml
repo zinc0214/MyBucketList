@@ -29,6 +29,14 @@
             type="android.view.View.OnClickListener" />
 
         <variable
+            name="isMinusDday"
+            type="Boolean" />
+
+        <variable
+            name="ddayText"
+            type="String" />
+
+        <variable
             name="lessCount"
             type="String" />
 
@@ -51,6 +59,11 @@
         <variable
             name="detailInfo"
             type="womenproject.com.mybury.data.DetailBucketItem" />
+
+        <variable
+            name="comment"
+            type="String" />
+
     </data>
 
     <RelativeLayout
@@ -86,52 +99,84 @@
                 android:src="@drawable/my_page_more" />
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@id/topLayout"
+            android:background="@color/_dddddd" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/topLayout"
+            android:layout_below="@+id/divider"
             android:background="@color/_ffffff"
             android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:id="@+id/ddayLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/_febc30"
-                    android:paddingStart="30dp"
-                    android:paddingEnd="30dp"
-                    android:visibility="@{detailInfo.dDay > 0 ? View.VISIBLE : View.GONE}"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/_febc30"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{ddayText+`일 남았어요!`}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="10일 남았어요" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{`~`+detailInfo.dDate}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="~2020.10.02" />
+
+                    </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/ddayPlusLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@{detailInfo.dDay+`일 남았어요!`}"
+                        android:layout_marginStart="30dp"
+                        android:background="@color/_ffa690"
+                        android:paddingStart="9dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="9dp"
+                        android:paddingBottom="4dp"
+                        android:text="@{`D+` + ddayText}"
                         android:textColor="@color/_ffffff"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:textStyle="bold"
-                        tools:text="10일 남았어요" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:text="@{`~`+detailInfo.dDate}"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        tools:text="~2020.10.02" />
-
+                        android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
+                        tools:text="D+10" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -151,6 +196,7 @@
                         android:id="@+id/categoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:text="@{detailInfo.category}"
                         android:textColor="@color/_5a95ff"
                         android:textSize="13sp"
@@ -161,7 +207,6 @@
                         android:id="@+id/bucketTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:text="@{detailInfo.title}"
                         android:textColor="@color/_434343"
                         android:textSize="20sp"
@@ -199,8 +244,8 @@
 
                 <RelativeLayout
                     android:id="@+id/imageLayout"
-                    android:layout_width="300dp"
-                    android:layout_height="300dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="4dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -328,7 +373,8 @@
                         android:layout_centerInParent="true"
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
-                        android:text="조만간 멋진 일이 일어날거에요"
+                        android:text="@{comment}"
+                        android:textSize="14dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -460,11 +506,11 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="20dp"
                         android:gravity="center"
+                        android:onClick="@{redoClickListener::onClick}"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="다시 도전하기"
                         android:textColor="@color/_5a95ff"
-                        android:onClick="@{redoClickListener::onClick}"
                         android:textSize="13sp" />
                 </LinearLayout>
 

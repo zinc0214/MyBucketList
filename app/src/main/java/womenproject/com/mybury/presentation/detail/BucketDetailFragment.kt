@@ -18,6 +18,9 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
+import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
+import java.util.*
 
 class BucketDetailFragment : Fragment() {
 
@@ -79,6 +82,22 @@ class BucketDetailFragment : Fragment() {
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
             lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            isCategoryShow = bucketItem.category != "없음"
+
+            if (bucketItem.dDate != null) {
+                bucketItem.dDay.apply {
+                    isMinusDday = this >= 0
+                    ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
+                }
+                ddayLayout.visibility = View.VISIBLE
+            } else {
+                ddayLayout.visibility = View.GONE
+            }
+
+            comment = getRandomComment()
+
+            imageLayout.layoutParams.height = getImageSize()
+            imageLayout.layoutParams.width = getImageSize()
 
             val viewPager = viewDataBinding.viewPager
             val imgList = setImgList(bucketItem)
@@ -87,7 +106,6 @@ class BucketDetailFragment : Fragment() {
             viewPager.adapter = viewPagerAdapter
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
-            isCategoryShow = bucketItem.category != "없음"
             val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
             val isCompleted = bucketItem.goalCount <= bucketItem.userCount
             isCount = isShowCountLayout
@@ -175,7 +193,10 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val bucketRedoListener = View.OnClickListener {
-        viewModel.redoBucketList(bucketItemId)
+        val confirmAction: () -> Unit = {
+            viewModel.redoBucketList(bucketItemId)
+        }
+        RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
     }
 
     private fun initObserve() {
@@ -185,7 +206,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isDeleteSuccessObserver = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             stopLoading()
             Toast.makeText(requireContext(), "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
             requireActivity().onBackPressed()
@@ -196,7 +217,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isRedoSuccessObserver = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             stopLoading()
             loadBucketDetailInfo()
         } else {
@@ -206,7 +227,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val isShowLoading = Observer<Boolean> {
-        if(it==true) {
+        if (it == true) {
             startLoading()
         } else {
             stopLoading()
@@ -264,6 +285,30 @@ class BucketDetailFragment : Fragment() {
 
     }
 
+    private fun getRandomComment(): String {
+
+        val commentList = listOf("하나씩 목표를 달성해볼까요?",
+                "시작이 반이라는 말이 있죠. 아자아자!",
+                "새로운 일을 시작하는 용기가 깃들기를",
+                "천 리 길도 한걸음부터",
+                "우리만의 페이스로 달성해봐요",
+                "당신은 해낼 수 있을 거에요",
+                "이제 도전을 시작해보는 건 어떨까요?",
+                "인생은 게으름과 자기자신의 싸움이래요",
+                "당신의 버킷리스트는 이제 이루어졌나요?",
+                "포기하고 싶을 순간에도 응원하고 있어요",
+                "잘못되는 것을 두려워말고 도전해봐요!")
+
+        val random = Random()
+        val randomNum = random.nextInt(commentList.size)
+
+        return commentList[randomNum]
+
+    }
+
+    private fun getImageSize(): Int {
+        return getScreenWidth(requireContext()) - dpToPx(60)
+    }
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
 
@@ -302,6 +347,32 @@ class BucketDetailFragment : Fragment() {
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.stopLoading()
+        }
+    }
+
+    class RedoBucketDialog(private val confirmAction: () -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "다시 도전하기"
+            CONTENT_MSG = "달성 횟수가 초기화 됩니다"
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "확인"
+            CANCEL_TEXT = "취소"
+            CANCEL_ABLE = false
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                confirmAction()
+                dismiss()
+            }
+        }
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+            }
         }
     }
 }
