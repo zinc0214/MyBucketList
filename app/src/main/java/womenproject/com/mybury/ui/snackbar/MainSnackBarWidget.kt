@@ -13,16 +13,16 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.util.Converter
 
 class MainSnackBarWidget(
-    parent: ViewGroup,
-    content: CustomSnackBarView
+        parent: ViewGroup,
+        content: CustomSnackBarView
 ) : BaseTransientBottomBar<MainSnackBarWidget>(parent, content, content) {
 
     init {
         getView().setBackgroundColor(
-            ContextCompat.getColor(
-                view.context,
-                android.R.color.transparent
-            )
+                ContextCompat.getColor(
+                        view.context,
+                        android.R.color.transparent
+                )
         )
         getView().setPadding(0, 0, 0, 0)
     }
@@ -30,18 +30,18 @@ class MainSnackBarWidget(
     companion object {
 
         fun make(
-            view: View, title: String, count: String, listener: View.OnClickListener
+                view: View, title: String, count: String, listener: View.OnClickListener
         ): MainSnackBarWidget? {
 
             val parent = view.findSuitableParent() ?: throw IllegalArgumentException(
-                "No suitable parent found from the given view. Please provide a valid view."
+                    "No suitable parent found from the given view. Please provide a valid view."
             )
 
             try {
                 val customView = LayoutInflater.from(view.context).inflate(
-                    R.layout.main_snack_view_widget, parent, false) as CustomSnackBarView
+                        R.layout.main_snack_view_widget, parent, false) as CustomSnackBarView
                 customView.apply {
-                    titleView.text = "\"${title}\" "
+                    titleView.text = "\"${title}"
                     countView.text = count
                     cancelView.setOnClickListener {
                         listener.onClick(view)
