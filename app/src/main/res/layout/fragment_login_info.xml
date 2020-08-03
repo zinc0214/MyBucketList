@@ -27,57 +27,57 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:gravity="center"
-                android:layout_marginTop="132dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="132dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/google_icon"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:drawableStart="@drawable/google_icon"
-                    android:textSize="14sp"
-                    android:textColor="@color/_222222"
                     android:text="@{activity.loginText}"
-                    tools:text="마마계정으\n로그인 되었습니디."
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/_222222"
+                    android:textSize="14sp"
+                    tools:text="마마계정으\n로그인 되었습니디." />
 
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_marginTop="45dp"
-                android:background="@drawable/app_info_button_background"
                 android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginStart="60dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginEnd="60dp"
-                android:layout_height="40dp">
+                android:background="@drawable/app_info_button_background">
 
                 <TextView
-                    android:textColor="@color/_797979"
-                    android:textSize="14sp"
-                    android:onClick="@{()->activity.googleLogoutClickListener()}"
-                    android:gravity="center"
-                    android:text="로그아웃"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:onClick="@{()->activity.googleLogoutClickListener()}"
+                    android:text="로그아웃"
+                    android:textColor="@color/_797979"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
             <TextView
-                android:onClick="@{()->activity.accountDeleteClickListener()}"
-                android:textSize="11sp"
-                android:textColor="@color/_797979"
-                android:text="@string/account_delete"
-                android:layout_marginTop="33dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="33dp"
+                android:onClick="@{()->activity.accountDeleteClickListener()}"
+                android:text="@string/account_delete"
+                android:textColor="@color/_797979"
+                android:textSize="11sp" />
         </LinearLayout>
 
     </RelativeLayout>

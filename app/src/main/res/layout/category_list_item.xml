@@ -13,11 +13,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/category_item_layout"
-        android:background="@color/_ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="10dp"
-        android:orientation="vertical">
+        android:background="@color/_ffffff"
+        android:orientation="vertical"
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,12 +31,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical">
+                android:layout_height="50dp">
 
                 <CheckBox
                     android:id="@+id/removeBox"
-                    style="@style/FilterDialogSubTextStyle"
+                    style="@style/CategoryDialogSubTextStyle"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_centerVertical="true"
@@ -56,7 +55,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="43dp"
                     android:layout_marginEnd="40dp"
-                    android:layout_toEndOf="@+id/removeBox"
                     android:background="@color/_00ffffff"
                     android:maxLength="12"
                     android:maxLines="1"

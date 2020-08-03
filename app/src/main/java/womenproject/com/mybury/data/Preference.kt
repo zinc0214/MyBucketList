@@ -17,6 +17,10 @@ class Preference {
         private const val REFRESH_TOKEN = "refresh_token"
         private const val SHOW_FILTER = "show_filter"
         private const val LISTUP_FILTER = "listup_filter"
+        private const val SHOW_DDAY_STATE = "show_dday_state"
+        private const val SHOW_DDAY_FILTER = "show_dday_filter"
+        private const val CLOSE_ALARM_3_DAYS = "close_alarm_3_days"
+        private const val IS_SHOWN_ALARM = "is_shown_alarm"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -25,10 +29,9 @@ class Preference {
             editor.apply()
         }
 
-        fun getAccountEmail(context: Context): String {
+        fun getAccountEmail(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(GOOGLE_ACCOUNT, "")
-            return data
+            return sp.getString(GOOGLE_ACCOUNT, "")
         }
 
         fun setMyBuryLoginComplete(context: Context, isComplete: Boolean) {
@@ -51,10 +54,9 @@ class Preference {
             editor.apply()
         }
 
-        fun getUserId(context: Context): String {
+        fun getUserId(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(USER_ID, "")
-            return data
+            return sp.getString(USER_ID, "")
         }
 
 
@@ -65,10 +67,9 @@ class Preference {
             editor.apply()
         }
 
-        fun getAccessToken(context: Context): String {
+        fun getAccessToken(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(ACCESS_TOKEN, "")
-            return data
+            return sp.getString(ACCESS_TOKEN, "")
         }
 
 
@@ -79,10 +80,9 @@ class Preference {
             editor.apply()
         }
 
-        fun getRefreshToken(context: Context): String {
+        fun getRefreshToken(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(REFRESH_TOKEN, "")
-            return data
+            return sp.getString(REFRESH_TOKEN, "")
         }
 
 
@@ -93,10 +93,9 @@ class Preference {
             editor.apply()
         }
 
-        fun getFilterForShow(context: Context) : String {
+        fun getFilterForShow(context: Context) : String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(SHOW_FILTER, ShowFilter.all.toString())
-            return data
+            return sp.getString(SHOW_FILTER, ShowFilter.all.toString())
         }
 
         fun setFilterListUp(context: Context, listUpFilter: ListUpFilter) {
@@ -106,9 +105,59 @@ class Preference {
             editor.apply()
         }
 
-        fun getFilterListUp(context: Context) : String {
+        fun getFilterListUp(context: Context) : String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            val data = sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
+            return sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
+        }
+
+        fun setShowDdayFilter(context: Context, ddayShow : Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(SHOW_DDAY_STATE, ddayShow)
+            editor.apply()
+        }
+
+        fun getShowDdayFilter(context: Context) : Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(SHOW_DDAY_STATE, false)
+            return data
+        }
+
+        fun setDdayFilerForShow(context: Context, showFilter: DdayShowFilter) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putString(SHOW_DDAY_FILTER, showFilter.toString())
+            editor.apply()
+        }
+
+        fun getDdayFilterForShow(context: Context) : String? {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            return sp.getString(SHOW_DDAY_FILTER, DdayShowFilter.all.toString())
+        }
+
+        fun setCloseAlarm3Days(context : Context, closeTime : Long) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putLong(CLOSE_ALARM_3_DAYS, closeTime)
+            editor.apply()
+        }
+
+        fun getCloseAlarm3Days(context: Context) : Long  {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getLong(CLOSE_ALARM_3_DAYS, 0)
+            return data
+        }
+
+        fun setEnableShowAlarm(context: Context, isShowed: Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(IS_SHOWN_ALARM, isShowed)
+            editor.apply()
+        }
+
+        fun getEnableShowAlarm(context: Context): Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(IS_SHOWN_ALARM, true)
             return data
         }
 
@@ -116,7 +165,7 @@ class Preference {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.clear()
-            editor.commit()
+            editor.apply()
         }
 
     }

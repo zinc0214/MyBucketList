@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
@@ -13,9 +14,12 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class BucketInfoViewModel : BaseViewModel() {
 
-
     @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: MoreCallBackAnyList, filter: String, sort: String) {
+    fun getMainBucketList(callback: MoreCallBackAny, filter: String, sort: String) {
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
         callback.start()
         apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
                 .subscribeOn(Schedulers.io())
@@ -23,7 +27,7 @@ class BucketInfoViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     when (response.retcode) {
                         "200" -> {
-                            callback.success(response.bucketlists)
+                            callback.success(response)
                         }
                         "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
@@ -44,18 +48,59 @@ class BucketInfoViewModel : BaseViewModel() {
 
     }
 
+
+    @SuppressLint("CheckResult")
+    fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
+        val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
+        callback.start()
+        apiInterface.postCancelBucket(accessToken, bucketRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ detailBucketItem ->
+                    when (detailBucketItem.retcode) {
+                        "200" -> {
+                            callback.success()
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                callback.restart()
+                            }
+
+                            override fun fail() {
+                                callback.fail()
+                            }
+
+                        })
+                        else -> callback.fail()
+                    }
+
+                }) {
+                    Log.e("myBury", "postCompleteBucket Fail : $it")
+                    callback.fail()
+                }
+
+    }
+
+
     @SuppressLint("CheckResult")
     fun getBucketListByCategory(callback: MoreCallBackAnyList, categoryId: String) {
-
+        if(accessToken==null) {
+            callback.fail()
+            return
+        }
         callback.start()
 
         apiInterface.requestCategoryBucketList(accessToken, categoryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response ->
-                    when {
-                        response.retcode == "200" -> response.bucketlists
-                        response.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
+                    when (response.retcode) {
+                        "200" -> response.bucketlists
+                        "301" -> getRefreshToken(object : SimpleCallBack {
                             override fun success() {
                                 callback.restart()
                             }
@@ -80,7 +125,10 @@ class BucketInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun getCategoryList(callback: MoreCallBackAnyList) {
-
+        if(accessToken==null || userId == null) {
+            callback.fail()
+            return
+        }
         apiInterface.requestBeforeWrite(accessToken, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

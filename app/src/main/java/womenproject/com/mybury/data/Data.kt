@@ -2,7 +2,6 @@ package womenproject.com.mybury.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
@@ -23,7 +22,7 @@ data class SignUpResponse(
 )
 
 data class UseUserIdRequest(
-        val userId: String
+        val userId: String?
 )
 
 data class DefaulProfileImg(
@@ -38,14 +37,18 @@ data class GetTokenResponse(
 )
 
 data class NewTokenRequest(
-        val userId: String,
-        val refreshToken: String
+        val userId: String?,
+        val refreshToken: String?
 )
 
 data class BucketRequest(
         var bucketlistId: String
 )
 
+data class StatusChangeBucketRequest(
+        val userId: String?,
+        var bucketlistId: String
+)
 
 data class SimpleResponse(
         val retcode: String
@@ -80,7 +83,7 @@ data class BucketItem(
         val category: Category,
         var userCount: Int = 0,
         val goalCount: Int = 1,
-        val dDay: Int = 0
+        val dDay: Int?
 ) : Parcelable
 
 @Parcelize
@@ -90,7 +93,7 @@ data class DetailBucketItem(
         val open: Boolean = false,
         val category: String,
         val userCount: Int = 0,
-        val goalCount: Int? = 0,
+        val goalCount: Int = 0,
         val dDate: String?,
         val dDay: Int,
         val imgUrl1: String? = null,
@@ -98,7 +101,6 @@ data class DetailBucketItem(
         val imgUrl3: String? = null,
         val retcode: String
 ) : Parcelable
-
 
 data class AddBucketItem(
         var title: String = "Title",
@@ -162,6 +164,11 @@ data class MyPageCategory(
 enum class ShowFilter {
     all, completed, started
 }
+
+enum class DdayShowFilter {
+    all, minus, plus
+}
+
 
 enum class ListUpFilter {
     updatedDt, createdDt

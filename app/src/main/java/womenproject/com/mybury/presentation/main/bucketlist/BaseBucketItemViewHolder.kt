@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.main.bucketlist
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.os.Handler
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -24,7 +23,8 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 10..
  */
 
-abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
+                                        private val showSnackBar: ((BucketItem) -> Unit)? = null) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem)
 
@@ -36,6 +36,8 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
     lateinit var userCountText: TextView
+    lateinit var ddayText : TextView
+    lateinit var ddayCountView : TextView
 
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
@@ -70,6 +72,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
                         if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             bucketItemImage.visibility = View.GONE
                             bucketItemLayout.isClickable = true
+                            ddayCountView.visibility = View.INVISIBLE
                         }
 
                     }, 900)
@@ -111,7 +114,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
     }
 
     open fun createOnClickBucketSuccessListener(
-            tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
+            tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             bucketSuccess(bucketItemInfo)
         }
@@ -131,6 +134,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
             override fun success() {
                 onBucketSuccessFinalButtonClickListener(bucketItemInfo)
                 bucketItemLayout.isEnabled = true
+                showSnackBar?.invoke(bucketItemInfo)
                 return
             }
 
@@ -143,7 +147,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding) : 
 
     }
 
-    open fun createOnClickBucketSuccessLayoutListener(tokenId: String, bucketItemInfo: BucketItem): View.OnClickListener {
+    open fun createOnClickBucketSuccessLayoutListener(tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
         }

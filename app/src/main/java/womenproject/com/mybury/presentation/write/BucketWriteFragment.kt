@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.write
 
+import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -90,10 +91,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         val cancelConfirm: (Boolean) -> Unit = {
             if (it) {
                 isCancelConfirm = it
-                activity!!.onBackPressed()
+                requireActivity().onBackPressed()
             }
         }
-        CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+        CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
@@ -182,7 +183,6 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             writeRegist.isEnabled = titleText.text.isNotBlank()
 
             titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
-            memoText.addTextChangedListener(memoTextChangedListener(viewDataBinding.memoText))
             memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
             memoImgLayout.setOnTouchListener(memoImgAddOnTouchListener())
 
@@ -304,7 +304,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (editText.lineCount > 2) {
+                if (editText.lineCount > 3) {
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
@@ -313,26 +313,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
     }
 
-    private fun memoTextChangedListener(editText: EditText): TextWatcher {
-
-        return object : TextWatcher {
-            var previousString = ""
-
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                previousString = s.toString()
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (editText.lineCount > 2) {
-                    editText.setText(previousString)
-                    editText.setSelection(editText.length())
-                }
-            }
-        }
-    }
-
+    @SuppressLint("ClickableViewAccessibility")
     private fun memoImgAddOnTouchListener(): View.OnTouchListener {
         return View.OnTouchListener { v, event ->
             when (event.action) {
@@ -347,15 +328,16 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun memoRemoveOnTouchListener(): View.OnTouchListener {
 
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoLayout.background = context!!.getDrawable(R.drawable.write_memo_press_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_press_background)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoLayout.background = context!!.getDrawable(R.drawable.write_memo_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_background)
                 }
             }
             false
@@ -380,7 +362,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteMemoImgAddDialogFragment(AddContentType.MEMO, checkMemoAddListener, memoAddListener, checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
+            WriteMemoImgAddDialogFragment(AddContentType.MEMO, checkMemoAddListener, memoAddListener, checkAddImgAbleListener, imgAddListener).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -400,7 +382,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         imgList[file.name] = file
         val id = file.name
-        val writeImgLayout = WriteImgLayout(this.context!!, id, removeImgListener, imgFieldClickListener).setUI(uri)
+        val writeImgLayout = WriteImgLayout(this.requireContext(), id, removeImgListener, imgFieldClickListener).setUI(uri)
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
         addImgList[viewDataBinding.imgLayout.childCount - 1] = id
@@ -423,7 +405,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             val id = it.value
             if (!id.isNullOrEmpty()) {
                 id.run {
-                    val writeImgLayout = WriteImgLayout(context!!, this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
+                    val writeImgLayout = WriteImgLayout(requireContext(), this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
                     if (!addImgList.values.contains(this)) {
                         addImgList[viewDataBinding.imgLayout.childCount] = this
                         addImgViewList[this] = writeImgLayout
@@ -473,12 +455,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun showImgWide(uri: Uri) {
         val showImgWideFragment = ShowImgWideFragment(uri)
-        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+        showImgWideFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun showImgWide(url: String) {
         val showImgWideFragment = ShowImgWideFragment(url)
-        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+        showImgWideFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
 
@@ -511,7 +493,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 currentCalendarDay = Calendar.getInstance().time
             }
             val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay!!)
-            calendarDialogFragment.show(activity!!.supportFragmentManager, "tag")
+            calendarDialogFragment.show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -529,7 +511,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteGoalCountDialogFragment(goalCount, goalCountSetListener).show(activity!!.supportFragmentManager, "tag")
+            WriteGoalCountDialogFragment(goalCount, goalCountSetListener).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -541,7 +523,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun selectCategoryListener(): View.OnClickListener {
         val categorySetListener: (Category) -> Unit = { category ->
             selectCategory = category
-            if (category.name.equals("없음")) {
+            if (category.name == "없음") {
                 viewDataBinding.categoryText.text = category.name
                 viewDataBinding.categoryText.setDisableTextColor()
                 viewDataBinding.categoryImg.setImage(R.drawable.category_disable)
@@ -554,16 +536,16 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory(it)).show(activity!!.supportFragmentManager, "tag")
+            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory(it)).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
 
     fun getBucketItemInfo(): AddBucketItem {
-        if (goal_count_text.text.toString() == "설정") {
-            goalCount = 1
+        goalCount = if (goal_count_text.text.toString() == "설정") {
+            1
         } else {
-            goalCount = goal_count_text.text.toString().toInt()
+            goal_count_text.text.toString().toInt()
         }
 
         var formDate = ""
@@ -578,19 +560,19 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     protected fun TextView.setEnableTextColor() {
-        this.setTextColor(context!!.resources.getColor(R.color._5a95ff))
+        this.setTextColor(requireContext().resources.getColor(R.color._5a95ff))
     }
 
-    protected fun TextView.setDisableTextColor() {
-        this.setTextColor(context!!.resources.getColor(R.color._888888))
+    private fun TextView.setDisableTextColor() {
+        this.setTextColor(requireContext().resources.getColor(R.color._888888))
     }
 
     protected fun ImageView.setImage(resource: Int) {
         this.background = resource.getDrawable()
     }
 
-    private fun Int.getDrawable(): Drawable {
-        return context!!.getDrawable(this)
+    private fun Int.getDrawable(): Drawable? {
+        return requireContext().getDrawable(this)
     }
 
     open fun initForUpdate() {}

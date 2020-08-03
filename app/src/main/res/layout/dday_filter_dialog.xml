@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="womenproject.com.mybury.presentation.main.FilterDialogFragment" />
+
+        <variable
+            name="filterSetClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="filterBoxClickListener"
+            type="android.view.View.OnClickListener" />
+
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/filter_layout_background"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/filter_dialog_top_background"
+            android:orientation="vertical">
+
+
+            <TextView
+                style="@style/FilterDialogCategoryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/visible_bucket" />
+
+
+        </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/minusCheckBox"
+            style="@style/FilterDialogSubTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:button="@drawable/filter_checkbox"
+            android:onClick="@{filterBoxClickListener}"
+            android:text="디데이가 지나지 않은 버킷리스트" />
+
+
+        <CheckBox
+            android:id="@+id/plusCheckBox"
+            style="@style/FilterDialogSubTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="20dp"
+            android:button="@drawable/filter_checkbox"
+            android:onClick="@{filterBoxClickListener}"
+            android:text="디데이가 지난 버킷리스트" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/filter_dialog_bottom_binder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:background="@drawable/filter_dialog_bottom_background"
+            android:onClick="@{filterSetClickListener}">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/filter_set"
+                android:textColor="#5a95ff"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

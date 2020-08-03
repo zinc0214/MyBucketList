@@ -50,336 +50,349 @@
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/_ffffff"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/write_cancel"
+                style="@style/writeTopTextStyle"
+                android:layout_marginStart="20dp"
+                android:onClick="@{cancelBtnClickListener}"
+                android:text="취소"
+                android:textColor="@color/_434343" />
+
+            <TextView
+                android:id="@+id/write_regist"
+                style="@style/writeTopTextStyle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:enabled="false"
+                android:onClick="@{registerBtnClickListener}"
+                android:text="등록" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/_ffffff"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp">
-
-                <TextView
-                    android:id="@+id/write_cancel"
-                    style="@style/writeTopTextStyle"
-                    android:layout_marginStart="20dp"
-                    android:onClick="@{cancelBtnClickListener}"
-                    android:text="취소"
-                    android:textColor="@color/_434343" />
+            android:layout_height="0.6dp"
+            android:background="@color/_dddddd" />
 
 
-                <TextView
-                    android:id="@+id/write_regist"
-                    style="@style/writeTopTextStyle"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:enabled="false"
-                    android:onClick="@{registerBtnClickListener}"
-                    android:text="등록" />
-
-            </RelativeLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="@color/_dddddd" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="118dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginRight="20dp"
+                    android:minHeight="118dp"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/titleText"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@android:color/transparent"
-                        android:gravity="top"
-                        android:hint="새로운 목표를 작성해보세요."
-                        android:lineSpacingExtra="5sp"
-                        android:maxLength="30"
-                        android:minHeight="52dp"
-                        android:textColor="@color/_888888"
-                        android:textColorHint="@color/_aaaaaa"
-                        android:textSize="18sp" />
-
-
-                    <RelativeLayout
-                        android:id="@+id/memo_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/write_memo_background"
-                        android:visibility="gone"
-                        tools:visibility="visible">
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/memoText"
+                            android:id="@+id/titleText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginEnd="33dp"
+                            android:layout_gravity="center_vertical"
                             android:background="@android:color/transparent"
                             android:gravity="top"
-                            android:hint="메모를 작성해주세요."
+                            android:hint="새로운 목표를 작성해보세요."
+                            android:lineSpacingExtra="5sp"
+                            android:maxLength="45"
+                            android:minHeight="52dp"
                             android:textColor="@color/_888888"
-                            android:textSize="11sp" />
+                            android:textColorHint="@color/_aaaaaa"
+                            android:textSize="18sp" />
+
 
                         <RelativeLayout
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_alignParentRight="true"
-                            android:onClick="@{memoRemoveListener}">
+                            android:id="@+id/memo_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/write_memo_background"
+                            android:minHeight="52dp"
+                            android:visibility="gone"
+                            tools:visibility="visible">
 
-                            <ImageView
-                                android:id="@+id/memo_remove_img"
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_marginTop="6dp"
-                                android:layout_marginRight="6dp"
-                                android:background="@drawable/close_btn" />
+                            <EditText
+                                android:id="@+id/memoText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="33dp"
+                                android:background="@android:color/transparent"
+                                android:gravity="top"
+                                android:hint="메모를 작성해주세요."
+                                android:paddingTop="12dp"
+                                android:lineSpacingExtra="5sp"
+                                android:paddingBottom="12dp"
+                                android:textColor="@color/_888888"
+                                android:textSize="13sp" />
+
+                            <RelativeLayout
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_alignParentRight="true"
+                                android:onClick="@{memoRemoveListener}">
+
+                                <ImageView
+                                    android:id="@+id/memo_remove_img"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_marginRight="6dp"
+                                    android:background="@drawable/close_btn" />
+
+                            </RelativeLayout>
 
                         </RelativeLayout>
 
-                    </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/img_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
 
 
-                    <LinearLayout
-                        android:id="@+id/img_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
-
-
+                        </LinearLayout>
                     </LinearLayout>
+
+
                 </LinearLayout>
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/memo_img_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginTop="22dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/memo_img_add_button_background"
-                android:onClick="@{memoImgAddListener}">
-
-                <TextView
-                    android:id="@+id/memo_img_text"
+                <LinearLayout
+                    android:id="@+id/memo_img_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/memo_img_add"
-                    android:drawablePadding="4dp"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="6dp"
-                    android:text="메모/이미지"
-                    android:textColor="@color/_5a95ff"
-                    android:textSize="11sp" />
+                    android:layout_gravity="right"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/memo_img_add_button_background"
+                    android:onClick="@{memoImgAddListener}">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/memo_img_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/memo_img_add"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="6dp"
+                        android:text="메모/이미지"
+                        android:textColor="@color/_5a95ff"
+                        android:textSize="11sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="@color/_dddddd"
-                android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}" />
+                </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/_ffffff"
-                android:gravity="center_vertical"
-                android:onClick="@{openSettingListener}"
-                android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}">
-
-                <ImageView
-                    android:id="@+id/open_img"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/open_enable"
-                    android:checked="true" />
-
-                <TextView
-                    android:id="@+id/open_text"
-                    style="@style/writeSettingListTitleTextStyle"
-                    android:text="@string/bucket_open"
-                    android:textColor="@color/_434343" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.6dp"
+                    android:background="@color/_dddddd"
+                    android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}" />
 
                 <RelativeLayout
-                    android:id="@+id/select_switch_layout"
-                    style="@style/writeSwitchLayoutStyle"
-                    android:visibility="visible">
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/_ffffff"
+                    android:gravity="center_vertical"
+                    android:onClick="@{openSettingListener}"
+                    android:visibility="@{writeViewModel.isOpenVisible ? View.VISIBLE : View.GONE}">
 
-                    <androidx.constraintlayout.motion.widget.MotionLayout
-                        android:id="@+id/open_switch_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentEnd="true"
+                    <ImageView
+                        android:id="@+id/open_img"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_centerVertical="true"
-                        app:layoutDescription="@xml/custom_switch_button">
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/open_enable"
+                        android:checked="true" />
 
-                        <androidx.constraintlayout.utils.widget.ImageFilterView
-                            android:id="@+id/switch_background"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/custom_switch_on"
-                            app:altSrc="@drawable/custom_switch_off" />
+                    <TextView
+                        android:id="@+id/open_text"
+                        style="@style/writeSettingListTitleTextStyle"
+                        android:text="@string/bucket_open"
+                        android:textColor="@color/_434343" />
 
-                        <ImageView
-                            android:id="@+id/switch_circle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="4dp"
-                            android:layout_marginStart="4dp"
-                            android:background="@drawable/custom_switch_circle"
-                            app:layout_constraintBottom_toBottomOf="@+id/switch_background"
-                            app:layout_constraintStart_toStartOf="@+id/switch_background"
-                            app:layout_constraintTop_toTopOf="@+id/switch_background" />
-                    </androidx.constraintlayout.motion.widget.MotionLayout>
+                    <RelativeLayout
+                        android:id="@+id/select_switch_layout"
+                        style="@style/writeSwitchLayoutStyle"
+                        android:visibility="visible">
+
+                        <androidx.constraintlayout.motion.widget.MotionLayout
+                            android:id="@+id/open_switch_btn"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:layoutDescription="@xml/custom_switch_button">
+
+                            <androidx.constraintlayout.utils.widget.ImageFilterView
+                                android:id="@+id/switch_background"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/custom_switch_on"
+                                app:altSrc="@drawable/custom_switch_off" />
+
+                            <ImageView
+                                android:id="@+id/switch_circle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
+                                android:layout_marginStart="4dp"
+                                android:background="@drawable/custom_switch_circle"
+                                app:layout_constraintBottom_toBottomOf="@+id/switch_background"
+                                app:layout_constraintStart_toStartOf="@+id/switch_background"
+                                app:layout_constraintTop_toTopOf="@+id/switch_background" />
+                        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="@color/_dddddd" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.6dp"
+                    android:background="@color/_dddddd" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/sub2_basic"
-                android:onClick="@{categorySelectListener}">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/sub2_basic"
+                    android:onClick="@{categorySelectListener}">
 
-                <ImageView
-                    android:id="@+id/category_img"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/category_disable"
-                    android:clickable="false" />
+                    <ImageView
+                        android:id="@+id/category_img"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/category_disable"
+                        android:clickable="false" />
 
-                <TextView
-                    style="@style/writeSettingListTitleTextStyle"
-                    android:text="카테고리"
-                    android:textColor="@color/_434343" />
-
-
-                <TextView
-                    android:id="@+id/category_text"
-                    style="@style/writeSettingListContentStyle"
-                    android:enabled="false"
-                    android:text="없음" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="@color/_dddddd" />
+                    <TextView
+                        style="@style/writeSettingListTitleTextStyle"
+                        android:text="카테고리"
+                        android:textColor="@color/_434343" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/sub2_basic"
-                android:onClick="@{ddayAddListener}">
+                    <TextView
+                        android:id="@+id/category_text"
+                        style="@style/writeSettingListContentStyle"
+                        android:enabled="false"
+                        android:text="없음" />
 
-                <ImageView
-                    android:id="@+id/dday_img"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/calendar_disable"
-                    android:clickable="false" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.6dp"
+                    android:background="@color/_dddddd" />
 
 
-                <TextView
-                    style="@style/writeSettingListTitleTextStyle"
-                    android:text="D-day"
-                    android:textColor="@color/_434343" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/sub2_basic"
+                    android:onClick="@{ddayAddListener}">
+
+                    <ImageView
+                        android:id="@+id/dday_img"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/calendar_disable"
+                        android:clickable="false" />
 
 
-                <TextView
-                    android:id="@+id/dday_text"
-                    style="@style/writeSettingListContentStyle"
-                    android:enabled="false"
-                    android:text="추가" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="@color/_dddddd" />
+                    <TextView
+                        style="@style/writeSettingListTitleTextStyle"
+                        android:text="D-day"
+                        android:textColor="@color/_434343" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/sub2_basic"
-                android:onClick="@{goalCountSettingListener}">
+                    <TextView
+                        android:id="@+id/dday_text"
+                        style="@style/writeSettingListContentStyle"
+                        android:enabled="false"
+                        android:text="추가" />
 
-                <ImageView
-                    android:id="@+id/count_img"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/target_count_disable"
-                    android:clickable="false" />
+                </RelativeLayout>
 
-                <TextView
-                    style="@style/writeSettingListTitleTextStyle"
-                    android:text="목표 달성 횟수"
-                    android:textColor="@color/_434343" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.6dp"
+                    android:background="@color/_dddddd" />
 
 
-                <TextView
-                    android:id="@+id/goal_count_text"
-                    style="@style/writeSettingListContentStyle"
-                    android:enabled="false"
-                    android:text="설정" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/sub2_basic"
+                    android:onClick="@{goalCountSettingListener}">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/count_img"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/target_count_disable"
+                        android:clickable="false" />
 
-        </LinearLayout>
+                    <TextView
+                        style="@style/writeSettingListTitleTextStyle"
+                        android:text="목표 달성 횟수"
+                        android:textColor="@color/_434343" />
 
-    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/goal_count_text"
+                        style="@style/writeSettingListContentStyle"
+                        android:enabled="false"
+                        android:text="설정" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.6dp"
+                    android:background="@color/_dddddd" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
 </layout>

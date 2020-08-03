@@ -5,6 +5,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
+import womenproject.com.mybury.data.Preference.Companion.getEnableShowAlarm
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.databinding.FragmentMainBinding
@@ -13,6 +17,8 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import java.util.*
 
 
 /**
@@ -46,7 +52,15 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private fun getMainBucketList() {
-        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAnyList {
+
+        val filterForShow = getFilterForShow(requireContext())
+        val filterListUp = getFilterListUp(requireContext())
+
+        if (filterForShow == null || filterListUp == null) {
+            return
+        }
+
+        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 getMainBucketList()
             }
@@ -60,8 +74,9 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                 startLoading()
             }
 
-            override fun success(value: List<Any>) {
-                if (value.isEmpty()) {
+            override fun success(value: Any) {
+                val response = value as BucketList
+                if (response.bucketlists.isEmpty()) {
                     viewDataBinding.blankImg.visibility = View.VISIBLE
                     viewDataBinding.bucketList.visibility = View.GONE
                     viewDataBinding.endImage.visibility = View.GONE
@@ -69,17 +84,54 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.blankImg.visibility = View.GONE
                     viewDataBinding.bucketList.visibility = View.VISIBLE
                     viewDataBinding.endImage.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(value as List<BucketItem>)
+                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
+                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(activity!!)) {
+                    showDdayPopup()
+                }
 
             }
-        }, getFilterForShow(context!!), getFilterListUp(context!!))
+        }, filterForShow, filterListUp)
+
+    }
+
+    private fun setBucketCancel(bucketId: String) {
+        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                setBucketCancel(bucketId)
+            }
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(activity!!.supportFragmentManager)
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                getMainBucketList()
+            }
+
+        }, bucketId)
 
     }
 
     private val filterChangedListener: () -> Unit = {
         initBucketListUI()
+    }
+
+    private fun isOpenablePopup(): Boolean {
+        val currentTime = Date().time
+        val daysOverTime = 1000 * 60 * 60 * 24 * 3 // 3일로  설정
+        return currentTime - getCloseAlarm3Days(requireContext()) >= daysOverTime
+    }
+
+    private fun showDdayPopup() {
+        val ddayAlarmDialogFragment = DdayAlarmDialogFragment(goToDday)
+        ddayAlarmDialogFragment.show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun createOnClickWriteListener(): View.OnClickListener {
@@ -89,10 +141,14 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         }
     }
 
+    private val goToDday: () -> Unit = {
+        createOnClickDdayListener.onClick(requireView())
+    }
+
     private fun createOnClickFilterListener(): View.OnClickListener {
         return View.OnClickListener {
             val filterDialogFragment = FilterDialogFragment(filterChangedListener)
-            filterDialogFragment.show(activity!!.supportFragmentManager, "tag")
+            filterDialogFragment.show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -103,12 +159,28 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         }
     }
 
-    private fun createOnClickDdayListener(): View.OnClickListener {
-        return View.OnClickListener {
-            val directions = MainFragmentDirections.actionMainBucketToMyPage()
-            it.findNavController().navigate(directions)
-        }
+    private val createOnClickDdayListener = View.OnClickListener {
+        val directions = MainFragmentDirections.actionMainBucketToDday()
+        it.findNavController().navigate(directions)
     }
 
+    private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
+        setBucketCancel(info.id)
+    }
+
+    private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
+        showCancelSnackBar(requireView(), info)
+    }
+
+    private fun showCancelSnackBar(view: View, info: BucketItem) {
+        val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
+        MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Preference.setEnableShowAlarm(requireContext(), false)
+    }
 
 }

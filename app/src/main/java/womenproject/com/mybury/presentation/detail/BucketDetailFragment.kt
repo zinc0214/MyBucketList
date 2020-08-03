@@ -1,39 +1,43 @@
 package womenproject.com.mybury.presentation.detail
 
-import android.util.Log
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
-import womenproject.com.mybury.data.Preference.Companion.getUserId
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
-import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
-import womenproject.com.mybury.util.ScreenUtils
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
+import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
+import java.util.*
 
+class BucketDetailFragment : Fragment() {
 
-/**
- * Created by HanAYeon on 2018. 11. 30..
- */
-
-class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDetailViewModel>() {
-
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_detail
-    override val viewModel: BucketDetailViewModel
-        get() = BucketDetailViewModel()
-
-    lateinit var bucketItemId: String
+    lateinit var viewDataBinding: FragmentBucketDetailBinding
+    lateinit var viewModel: BucketDetailViewModel
     lateinit var bucketItem: DetailBucketItem
-    private var screenWidth = 0
 
-    override fun initDataBinding() {
-        viewDataBinding.viewModel = viewModel
+    private lateinit var bucketItemId: String
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
+        viewModel = BucketDetailViewModel()
+        initDataBinding()
+        return viewDataBinding.root
+    }
+
+    private fun initDataBinding() {
         viewDataBinding.lifecycleOwner = this
 
         arguments?.let {
@@ -42,12 +46,9 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
             bucketItemId = bucketId!!
         }
 
-        screenWidth = ScreenUtils.getScreenWidth(viewDataBinding.root.context)
-
         loadBucketDetailInfo()
-
+        initObserve()
     }
-
 
     private fun loadBucketDetailInfo() {
         viewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
@@ -59,84 +60,77 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 startLoading()
             }
 
-            override fun success(detailBucketItem: Any) {
+            override fun success(value: Any) {
+                bucketItem = value as DetailBucketItem
+                setUpViews()
                 stopLoading()
-                setUpViews(detailBucketItem as DetailBucketItem)
-                bucketItem = detailBucketItem as DetailBucketItem
             }
 
             override fun fail() {
                 stopLoading()
             }
 
-        },  bucketItemId)
+        }, bucketItemId)
     }
 
-    private fun setUpViews(bucketInfo: DetailBucketItem) {
+    private fun setUpViews() {
+        viewDataBinding.apply {
+            detailInfo = bucketItem
+            backClickListener = setOnBackClickListener
+            moreClickListener = showMoreMenuLayout
+            countMinusClickListener = bucketCancelListener
+            countPlusClickListener = bucketCompleteListener
+            redoClickListener = bucketRedoListener
+            lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            isCategoryShow = bucketItem.category != "없음"
 
-        viewDataBinding.titleText.text = bucketInfo.title
-        viewDataBinding.memo.text = bucketInfo.memo
-        viewDataBinding.lockText.text = if (bucketInfo.open) "공개" else "비공개"
-        viewDataBinding.categoryText.text = bucketInfo.category
-
-        if (bucketInfo.dDate.isNullOrEmpty()) {
-            viewDataBinding.ddayLayout.visibility = View.GONE
-        } else {
-            if(bucketInfo.dDay < 0) {
-                val dday = bucketInfo.dDay.toString().replace("-","")
-                viewDataBinding.dday.text = "${bucketInfo.dDate}(D+${dday})"
+            if (bucketItem.dDate != null) {
+                bucketItem.dDay.apply {
+                    isMinusDday = this >= 0
+                    ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
+                }
+                ddayLayout.visibility = View.VISIBLE
             } else {
-                viewDataBinding.dday.text = "${bucketInfo.dDate}(D-${bucketInfo.dDay})"
+                ddayLayout.visibility = View.GONE
             }
+
+            comment = getRandomComment()
+
+            imageLayout.layoutParams.height = getImageSize()
+            imageLayout.layoutParams.width = getImageSize()
+
+            val viewPager = viewDataBinding.viewPager
+            val imgList = setImgList(bucketItem)
+            val showWideListener: (String) -> Unit = { showImgWide(it) }
+            val viewPagerAdapter = BucketDetailImageViewPageAdapter(requireContext(), imgList, showWideListener)
+            viewPager.adapter = viewPagerAdapter
+            viewDataBinding.tabLayout.setupWithViewPager(viewPager)
+
+            val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
+            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
+            isCount = isShowCountLayout
+            isDone = isCompleted
+            isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
+
+
+            when (imgList.size) {
+                0 -> {
+                    viewDataBinding.tabLayout.visibility = View.GONE
+                    viewDataBinding.imageLayout.visibility = View.GONE
+                }
+                1 -> {
+                    viewDataBinding.tabLayout.visibility = View.GONE
+                }
+                else -> {
+                    viewDataBinding.tabLayout.visibility = View.VISIBLE
+                    viewDataBinding.imageLayout.visibility = View.VISIBLE
+                }
+            }
+
+            executePendingBindings()
+
         }
 
-        viewDataBinding.currentCount.text = "${bucketInfo.userCount}/${bucketInfo.goalCount}"
-        viewDataBinding.completeText.text = "${bucketInfo.userCount}회 완료"
-
-        viewDataBinding.bucketMoreMenu = showMoreMenuLayout(bucketInfo)
-        viewDataBinding.bucketCompleteListener = bucketCompleteListener()
-
-        val viewPager = viewDataBinding.moreImage.viewPager
-        val imgList = setImgList(bucketInfo)
-        val showWideListener: (String) -> Unit = { showImgWide(it) }
-        val viewPagerAdapter = BucketDetailImageViewPageAdapter(this.context!!, imgList, showWideListener)
-        viewPager.adapter = viewPagerAdapter
-        viewDataBinding.tabLayout.setupWithViewPager(viewPager)
-
-        when (imgList.size) {
-            0 -> {
-                viewDataBinding.tabLayout.visibility = View.INVISIBLE
-                viewDataBinding.moreImage.layout.visibility = View.GONE
-                viewDataBinding.oneImage.layout.visibility = View.VISIBLE
-                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
-                viewDataBinding.oneImage.backgroundImage
-                        .setImageDrawable(resources.getDrawable(R.drawable.gradient_background))
-            }
-            1 -> {
-                viewDataBinding.tabLayout.visibility = View.INVISIBLE
-                viewDataBinding.moreImage.layout.visibility = View.GONE
-                viewDataBinding.oneImage.layout.visibility = View.VISIBLE
-                viewDataBinding.oneImage.layout.layoutParams.height = screenWidth
-                Glide.with(context!!).load(imgList[0])
-                        .override(screenWidth,screenWidth)
-                        .centerCrop().placeholder(
-                                R.drawable.gradient_background).into(viewDataBinding.oneImage.backgroundImage)
-                viewDataBinding.oneImage.backgroundImage.setOnClickListener { showImgWide(imgList[0]) }
-            }
-            else -> {
-                viewDataBinding.moreImage.layout.layoutParams.height = screenWidth
-                viewDataBinding.oneImage.layout.visibility = View.GONE
-                viewDataBinding.moreImage.layout.visibility = View.VISIBLE
-            }
-        }
-
-        if (bucketInfo.userCount >= bucketInfo.goalCount ?:0) {
-            viewDataBinding.completeLayout.visibility = View.VISIBLE
-            viewDataBinding.completeText.text = "달성 완료! 대단해요"
-            viewDataBinding.completeText.isEnabled = false
-        }
-
-        viewDataBinding.backButton.setOnClickListener(backBtnOnClickListener())
     }
 
     private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
@@ -153,70 +147,92 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
         return imgList
     }
 
-    private fun showMoreMenuLayout(bucketItem: DetailBucketItem) = View.OnClickListener {
+    private fun showImgWide(url: String) {
+        val showImgWideFragment = ShowImgWideFragment(url)
+        showImgWideFragment.show(requireActivity().supportFragmentManager, "tag")
+    }
+
+    private val setOnBackClickListener = View.OnClickListener {
+        requireActivity().onBackPressed()
+    }
+
+    private val showMoreMenuLayout = View.OnClickListener {
         if (viewDataBinding.detailMoreLayout.visibility == View.GONE) {
             viewDataBinding.detailMoreLayout.visibility = View.VISIBLE
         } else {
             viewDataBinding.detailMoreLayout.visibility = View.GONE
         }
 
-        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener(bucketItem)
-        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener()
+        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
+        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener
     }
 
-    private fun createOnClickBucketUpdateListener(bucketItem: DetailBucketItem): View.OnClickListener {
-        return View.OnClickListener {
-            Log.e("ayham", "gpgin")
-            val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
-            directions.bucket = bucketItem
-            directions.bucketId = bucketItemId
-            this.findNavController().navigate(directions)
-            viewDataBinding.detailMoreLayout.visibility = View.GONE
-        }
-    }
-
-    private fun deleteBucketListener(): View.OnClickListener {
-        return View.OnClickListener {
-            val deleteYes: () -> Unit = {
-                deleteBucket()
-            }
-            DeleteBucketDialog(deleteYes).show(activity!!.supportFragmentManager)
-        }
-    }
-
-    private fun deleteBucket() {
-        Log.e("ayham", "gpgin")
-
-        val userId = UseUserIdRequest(getUserId(context!!))
-        viewModel.deleteBucketListener(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                deleteBucket()
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                stopLoading()
-                Toast.makeText(context!!, "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
-                activity!!.onBackPressed()
-            }
-
-            override fun fail() {
-                stopLoading()
-                Toast.makeText(context!!, "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }, userId, bucketItemId)
+    private val createOnClickBucketUpdateListener = View.OnClickListener {
+        val directions = BucketDetailFragmentDirections.actionDetailToUpdate()
+        directions.bucket = bucketItem
+        directions.bucketId = bucketItemId
+        this.findNavController().navigate(directions)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
-    private fun bucketCompleteListener(): View.OnClickListener {
-        return View.OnClickListener {
-            bucketComplete()
+    private val deleteBucketListener = View.OnClickListener {
+        val deleteYes: () -> Unit = {
+            deleteBucket()
+        }
+        DeleteBucketDialog(deleteYes).show(requireActivity().supportFragmentManager)
+    }
+
+    private fun deleteBucket() {
+        val userId = UseUserIdRequest(Preference.getUserId(requireContext()))
+        viewModel.deleteBucketListener(userId, bucketItemId)
+        viewDataBinding.detailMoreLayout.visibility = View.GONE
+    }
+
+    private val bucketCompleteListener = View.OnClickListener {
+        bucketComplete()
+    }
+
+    private val bucketRedoListener = View.OnClickListener {
+        val confirmAction: () -> Unit = {
+            viewModel.redoBucketList(bucketItemId)
+        }
+        RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
+    }
+
+    private fun initObserve() {
+        viewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
+        viewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
+        viewModel.isReDoSuccess.observe(viewLifecycleOwner, isRedoSuccessObserver)
+    }
+
+    private val isDeleteSuccessObserver = Observer<Boolean> {
+        if (it == true) {
+            stopLoading()
+            Toast.makeText(requireContext(), "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
+            requireActivity().onBackPressed()
+        } else {
+            stopLoading()
+            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private val isRedoSuccessObserver = Observer<Boolean> {
+        if (it == true) {
+            stopLoading()
+            loadBucketDetailInfo()
+        } else {
+            stopLoading()
+            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val isShowLoading = Observer<Boolean> {
+        if (it == true) {
+            startLoading()
+        } else {
+            stopLoading()
+        }
+    }
 
     private fun bucketComplete() {
         viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
@@ -241,9 +257,57 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
 
     }
 
-    private fun showImgWide(url: String) {
-        val showImgWideFragment = ShowImgWideFragment(url)
-        showImgWideFragment.show(activity!!.supportFragmentManager, "tag")
+    private val bucketCancelListener = View.OnClickListener {
+        bucketCancel()
+    }
+
+
+    private fun bucketCancel() {
+        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                bucketComplete()
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun success() {
+                loadBucketDetailInfo()
+            }
+
+            override fun fail() {
+                stopLoading()
+                Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+        }, bucketItemId)
+
+    }
+
+    private fun getRandomComment(): String {
+
+        val commentList = listOf("하나씩 목표를 달성해볼까요?",
+                "시작이 반이라는 말이 있죠. 아자아자!",
+                "새로운 일을 시작하는 용기가 깃들기를",
+                "천 리 길도 한걸음부터",
+                "우리만의 페이스로 달성해봐요",
+                "당신은 해낼 수 있을 거에요",
+                "이제 도전을 시작해보는 건 어떨까요?",
+                "인생은 게으름과 자기자신의 싸움이래요",
+                "당신의 버킷리스트는 이제 이루어졌나요?",
+                "포기하고 싶을 순간에도 응원하고 있어요",
+                "잘못되는 것을 두려워말고 도전해봐요!")
+
+        val random = Random()
+        val randomNum = random.nextInt(commentList.size)
+
+        return commentList[randomNum]
+
+    }
+
+    private fun getImageSize(): Int {
+        return getScreenWidth(requireContext()) - dpToPx(60)
     }
 
     class DeleteBucketDialog(private val deleteYes: () -> Unit) : BaseNormalDialogFragment() {
@@ -270,7 +334,45 @@ class BucketDetailFragment : BaseFragment<FragmentBucketDetailBinding, BucketDet
                 dismiss()
             }
         }
+    }
 
+    fun startLoading() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.startLoading()
+        }
+    }
+
+    fun stopLoading() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.stopLoading()
+        }
+    }
+
+    class RedoBucketDialog(private val confirmAction: () -> Unit) : BaseNormalDialogFragment() {
+
+        init {
+            TITLE_MSG = "다시 도전하기"
+            CONTENT_MSG = "달성 횟수가 초기화 됩니다"
+            CANCEL_BUTTON_VISIBLE = true
+            GRADIENT_BUTTON_VISIBLE = false
+            CONFIRM_TEXT = "확인"
+            CANCEL_TEXT = "취소"
+            CANCEL_ABLE = false
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                confirmAction()
+                dismiss()
+            }
+        }
+
+        override fun createOnClickCancelListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+            }
+        }
     }
 }
-

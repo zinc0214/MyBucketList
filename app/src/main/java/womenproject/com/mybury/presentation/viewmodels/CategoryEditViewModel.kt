@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.*
@@ -16,6 +15,11 @@ class CategoryInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
+        if(accessToken==null || userId == null) {
+            callBack.fail()
+            return
+        }
+
         // 카테고리 제거
         val list = ArrayList<String>()
         for(i in categoryId) {
@@ -47,6 +51,11 @@ class CategoryInfoViewModel : BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun addCategoryItem(categoryName: String, callBack: Simple3CallBack) {
+        if(accessToken==null || userId == null) {
+            callBack.fail()
+            return
+        }
+
         callBack.start()
         val request = AddCategoryRequest(userId, categoryName)
         apiInterface.addNewCategoryItem(accessToken, request)
@@ -73,22 +82,32 @@ class CategoryInfoViewModel : BaseViewModel() {
     }
 
     @SuppressLint("CheckResult")
-    fun editCategoryItem(category : Category, categoryName: String, changeCategoryState: Simple3CallBack) {
-        changeCategoryState.start()
+    fun editCategoryItem(category : Category, categoryName: String, callBack: Simple3CallBack) {
+        if(accessToken==null || userId == null) {
+            callBack.fail()
+            return
+        }
+
+        callBack.start()
 
         val request = EditCategoryNameRequest(userId, category.id, categoryName)
         apiInterface.editCategoryItemName(accessToken, request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    changeCategoryState.success()
+                    callBack.success()
                 }) {
-                   changeCategoryState.fail()
+                   callBack.fail()
                 }
     }
 
     @SuppressLint("CheckResult")
     fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
+        if(accessToken==null || userId == null) {
+            callBack.fail()
+            return
+        }
+
         var idList = arrayListOf<String>()
         for(i in list) {
             idList.add(i.id)

@@ -6,20 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.*
+import womenproject.com.mybury.data.BASE_ITEM
+import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.COUNT_ITEM
+import womenproject.com.mybury.data.SUCCEED_ITEM
 import womenproject.com.mybury.databinding.BucketItemBaseBinding
 import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.databinding.BucketItemSucceedBinding
 import womenproject.com.mybury.databinding.DdayBucketItemSucceedBinding
-import womenproject.com.mybury.presentation.main.bucketlist.BaseNormalBucketItemViewHolder
 import womenproject.com.mybury.presentation.main.bucketlist.CountBucketItemViewHolder
-import womenproject.com.mybury.presentation.main.bucketlist.SucceedBucketItemViewHolder
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
 
-class DdayBucketEachListAdapter(val bucketList: List<BucketItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DdayBucketEachListAdapter(val bucketList: List<BucketItem>, private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         Log.e(this.toString(), "getItemViewType is Use")
         return checkBucketType(position)
@@ -29,8 +29,8 @@ class DdayBucketEachListAdapter(val bucketList: List<BucketItem>) : RecyclerView
 
         return when (viewType) {
             SUCCEED_ITEM -> DdaySucceedBucketItemViewHolder(DdayBucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            COUNT_ITEM -> CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            COUNT_ITEM -> CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
+            else -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
         }
     }
 

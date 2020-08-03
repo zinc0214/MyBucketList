@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -50,6 +51,8 @@ class MainActivity : BaseActiviy() {
         loadingImg = binding.loadingLayout.loadingImg
         loadingImg.setImageResource(R.drawable.loading_anim)
         animationDrawable = loadingImg.drawable as AnimationDrawable
+
+        Preference.setEnableShowAlarm(this, true)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -70,6 +73,7 @@ class MainActivity : BaseActiviy() {
     override fun onBackPressed() {
         super.onBackPressed()
     }
+
 }
 
 class NetworkFailDialog : BaseNormalDialogFragment() {
@@ -86,7 +90,7 @@ class NetworkFailDialog : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 
@@ -106,7 +110,7 @@ class CanNotGoMainDialog : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 }
@@ -126,7 +130,7 @@ class UserAlreadyExist : BaseNormalDialogFragment() {
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 }
