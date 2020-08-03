@@ -12,9 +12,10 @@
     <string name="doing_bucket">진행중인 버킷리스트</string>
     <string name="done_bucket">완료된 버킷리스트</string>
     <string name="filter_standard">정렬 기준</string>
+    <string name="show_list">표시 항목</string>
     <string name="sort_by_update">업데이트 순</string>
     <string name="sort_by_written">등록 순</string>
-    <string name="show_dday_state">D-day 표시 </string>
+    <string name="show_dday_state">D-day</string>
     <string name="filter_set">적용</string>
 
     <string name="dialog_cancel">취소</string>

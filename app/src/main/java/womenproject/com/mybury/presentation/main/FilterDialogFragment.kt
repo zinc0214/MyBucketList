@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.main
 
 import android.app.ActionBar
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import womenproject.com.mybury.R
@@ -43,7 +42,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun initShowFilter() {
-        val filter = getFilterForShow(context!!)
+        val filter = getFilterForShow(requireContext())
 
         when (filter) {
             "all" -> {
@@ -69,7 +68,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
 
 
     private fun initListUpFilter() {
-        val filter = getFilterListUp(context!!)
+        val filter = getFilterListUp(requireContext())
         when (filter) {
             "updatedDt" -> {
                 viewDataBinding.radioBtnUpdate.isChecked = true
@@ -87,7 +86,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun initShowDdayState() {
-        val filter = getShowDdayFilter(context!!)
+        val filter = getShowDdayFilter(requireContext())
         viewDataBinding.showDdayState.isChecked = filter
         dday = filter
     }
@@ -135,24 +134,24 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
 
     private fun setShowFilter() {
         if (started && complete) {
-            setFilerForShow(context!!, ShowFilter.all)
+            setFilerForShow(requireContext(), ShowFilter.all)
         } else if (started) {
-            setFilerForShow(context!!, ShowFilter.started)
+            setFilerForShow(requireContext(), ShowFilter.started)
         } else if (complete) {
-            setFilerForShow(context!!, ShowFilter.completed)
+            setFilerForShow(requireContext(), ShowFilter.completed)
         }
     }
 
     private fun setListUpFilter() {
         if (update) {
-            setFilterListUp(context!!, ListUpFilter.updatedDt)
+            setFilterListUp(requireContext(), ListUpFilter.updatedDt)
         } else {
-            setFilterListUp(context!!, ListUpFilter.createdDt)
+            setFilterListUp(requireContext(), ListUpFilter.createdDt)
         }
     }
 
     private fun setShowDdayState() {
-        setShowDdayFilter(context!!, dday)
+        setShowDdayFilter(requireContext(), dday)
     }
 
 }
