@@ -34,7 +34,7 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         val view = layoutInflater!!.inflate(R.layout.detail_image_item, null)
         val imageView = view.findViewById(R.id.background_image) as ImageView
-        imageView.setOnClickListener { v -> showWideImg.invoke(images[position]) }
+        imageView.setOnClickListener { showWideImg.invoke(images[position]) }
 
         try {
             Glide.with(view).load(images[position])
