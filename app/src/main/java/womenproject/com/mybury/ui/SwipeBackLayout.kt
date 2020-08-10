@@ -1,6 +1,5 @@
 package womenproject.com.mybury.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -13,10 +12,44 @@ import android.widget.ScrollView
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.viewpager.widget.ViewPager
-import womenproject.com.mybury.presentation.MainActivity
-import kotlin.math.abs
+import womenproject.com.mybury.presentation.base.BaseActiviy
 
+/**
+ * Created by HanAYeon on 2019-05-14.
+ */
 
+/*
+ * Copyright 2015 Eric Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Swipe or Pull to finish a Activity.
+ *
+ *
+ * This layout must be a root layout and contains only one direct child view.
+ *
+ *
+ * The activity must use a theme that with translucent style.
+ * <style name="Theme.Swipe.Back" parent="AppTheme">
+<item name="android:windowIsTranslucent">true</item>
+<item name="android:windowBackground">@android:color/transparent</item>
+</style>
+ *
+ *
+ * Created by Eric on 15/1/8.
+ */
 class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ViewGroup(context, attrs) {
 
     private var dragDirectMode = DragDirectMode.EDGE
@@ -51,19 +84,20 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private var swipeBackListener: SwipeBackListener? = null
 
-    private var lastY = 0f
-    private var newY = 0f
-    private var offsetY = 0f
+    internal var lastY = 0f
+    internal var newY = 0f
+    internal var offsetY = 0f
 
-    private var lastX = 0f
-    private var newX = 0f
-    private var offsetX = 0f
+    internal var lastX = 0f
+    internal var newX = 0f
+    internal var offsetX = 0f
 
     private val dragRange: Int
         get() {
-            return when (dragEdge) {
-                DragEdge.TOP, DragEdge.BOTTOM -> verticalDragRange
-                DragEdge.LEFT, DragEdge.RIGHT -> horizontalDragRange
+            when (dragEdge) {
+                SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> return verticalDragRange
+                SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> return horizontalDragRange
+                else -> return verticalDragRange
             }
         }
 
@@ -83,6 +117,42 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         BOTTOM
     }
 
+    fun setDragEdge(dragEdge: DragEdge) {
+        this.dragEdge = dragEdge
+    }
+
+    fun setDragDirectMode(dragDirectMode: DragDirectMode) {
+        this.dragDirectMode = dragDirectMode
+        if (dragDirectMode == DragDirectMode.VERTICAL) {
+            this.dragEdge = DragEdge.TOP
+        } else if (dragDirectMode == DragDirectMode.HORIZONTAL) {
+            this.dragEdge = DragEdge.LEFT
+        }
+    }
+
+    /**
+     * Set the anchor of calling finish.
+     *
+     * @param offset
+     */
+    fun setFinishAnchor(offset: Float) {
+        finishAnchor = offset
+    }
+
+    /**
+     * Whether allow to finish activity by fling the layout.
+     *
+     * @param b
+     */
+    fun setEnableFlingBack(b: Boolean) {
+        enableFlingBack = b
+    }
+
+    @Deprecated("")
+    fun setOnPullToBackListener(listener: SwipeBackListener) {
+        swipeBackListener = listener
+    }
+
     fun setOnSwipeBackListener(listener: SwipeBackListener) {
         swipeBackListener = listener
     }
@@ -93,9 +163,8 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         chkDragable()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun chkDragable() {
-        setOnTouchListener { _, motionEvent ->
+        setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 lastY = motionEvent.rawY
                 lastX = motionEvent.rawX
@@ -110,11 +179,11 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
                 lastX = newX
 
                 when (dragEdge) {
-                    DragEdge.TOP, DragEdge.BOTTOM -> {
+                    SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> {
                         setEnablePullToBack(offsetY > offsetX)
                         setEnablePullToBack(offsetY < offsetX)
                     }
-                    DragEdge.LEFT, DragEdge.RIGHT -> setEnablePullToBack(offsetY < offsetX)
+                    SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> setEnablePullToBack(offsetY < offsetX)
                 }
             }
 
@@ -126,7 +195,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         scrollChild = view
     }
 
-    private fun setEnablePullToBack(b: Boolean) {
+    fun setEnablePullToBack(b: Boolean) {
         enablePullToBack = b
         Log.i(TAG, "enablePullToBack:$enablePullToBack")
     }
@@ -203,9 +272,9 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         verticalDragRange = h
         horizontalDragRange = w
 
-        finishAnchor = when (dragEdge) {
-            DragEdge.TOP, DragEdge.BOTTOM -> if (finishAnchor > 0) finishAnchor else verticalDragRange * BACK_FACTOR
-            DragEdge.LEFT, DragEdge.RIGHT -> if (finishAnchor > 0) finishAnchor else horizontalDragRange * BACK_FACTOR
+        when (dragEdge) {
+            SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> finishAnchor = if (finishAnchor > 0) finishAnchor else verticalDragRange * BACK_FACTOR
+            SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> finishAnchor = if (finishAnchor > 0) finishAnchor else horizontalDragRange * BACK_FACTOR
         }
     }
 
@@ -248,7 +317,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     private fun finish() {
-        val act = MainActivity()
+        val act = BaseActiviy()
         act.overridePendingTransition(0, android.R.anim.fade_out)
 
     }
@@ -331,9 +400,11 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         }
 
         override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
-            draggingOffset = when (dragEdge) {
-                DragEdge.TOP, DragEdge.BOTTOM -> Math.abs(top)
-                DragEdge.LEFT, DragEdge.RIGHT -> Math.abs(left)
+            when (dragEdge) {
+                SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> draggingOffset = Math.abs(top)
+                SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> draggingOffset = Math.abs(left)
+                else -> {
+                }
             }
 
             //The proportion of the sliding.
@@ -366,19 +437,19 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
             val finalLeft: Int
             val finalTop: Int
             when (dragEdge) {
-                DragEdge.LEFT -> {
+                SwipeBackLayout.DragEdge.LEFT -> {
                     finalLeft = if (isBack) horizontalDragRange else 0
                     smoothScrollToX(finalLeft)
                 }
-                DragEdge.RIGHT -> {
+                SwipeBackLayout.DragEdge.RIGHT -> {
                     finalLeft = if (isBack) -horizontalDragRange else 0
                     smoothScrollToX(finalLeft)
                 }
-                DragEdge.TOP -> {
+                SwipeBackLayout.DragEdge.TOP -> {
                     finalTop = if (isBack) verticalDragRange else 0
                     smoothScrollToY(finalTop)
                 }
-                DragEdge.BOTTOM -> {
+                SwipeBackLayout.DragEdge.BOTTOM -> {
                     finalTop = if (isBack) -verticalDragRange else 0
                     smoothScrollToY(finalTop)
                 }
@@ -389,10 +460,10 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private fun backBySpeed(xvel: Float, yvel: Float): Boolean {
         when (dragEdge) {
-            DragEdge.TOP, DragEdge.BOTTOM -> if (abs(yvel) > abs(xvel) && abs(yvel) > AUTO_FINISHED_SPEED_LIMIT) {
+            SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> if (Math.abs(yvel) > Math.abs(xvel) && Math.abs(yvel) > AUTO_FINISHED_SPEED_LIMIT) {
                 return if (dragEdge == DragEdge.TOP) !canChildScrollUp() else !canChildScrollDown()
             }
-            DragEdge.LEFT, DragEdge.RIGHT -> if (abs(xvel) > abs(yvel) && abs(xvel) > AUTO_FINISHED_SPEED_LIMIT) {
+            SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> if (Math.abs(xvel) > Math.abs(yvel) && Math.abs(xvel) > AUTO_FINISHED_SPEED_LIMIT) {
                 return if (dragEdge == DragEdge.LEFT) !canChildScrollLeft() else !canChildScrollRight()
             }
         }
