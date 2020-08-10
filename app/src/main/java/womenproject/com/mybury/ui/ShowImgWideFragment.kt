@@ -1,12 +1,10 @@
 package womenproject.com.mybury.ui
 
-import android.app.ActionBar
 import android.net.Uri
-import android.util.Log
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.databinding.ImgWideLayoutBinding
+import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 
 /**
@@ -43,7 +41,7 @@ class ShowImgWideFragment() : BaseDialogFragment<ImgWideLayoutBinding>() {
         if(uri != null) {
             viewDataBinding.imgView.setImageURI(uri)
         } else {
-            Glide.with(context!!).load(url).centerCrop().into(viewDataBinding.imgView)
+            Glide.with(requireContext()).load(url).centerCrop().into(viewDataBinding.imgView)
         }
 
 
