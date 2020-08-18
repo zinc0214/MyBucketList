@@ -1,10 +1,7 @@
 package womenproject.com.mybury.presentation.mypage
 
 
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -69,7 +66,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
             }
         })
 
@@ -160,7 +157,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private val createOnClickHomeListener = View.OnClickListener {
         popupClickListener()
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     private val createOnClickDdayListListener = View.OnClickListener {

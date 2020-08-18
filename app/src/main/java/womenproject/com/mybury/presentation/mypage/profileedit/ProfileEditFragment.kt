@@ -46,12 +46,12 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     val cancelConfirm: (Boolean) -> Unit = {
         if (it) {
             isCancelConfirm = it
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
     }
 
     override fun initDataBinding() {
-        imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         getMyProfileInfo()
         viewDataBinding.title = "프로필 수정"
     }
@@ -92,7 +92,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._434343))
+                viewDataBinding.nicknameEditText.setTextColor(requireContext().getColor(R.color._434343))
                 setSaveBtnEnabled()
             }
 
@@ -161,7 +161,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             }
 
             override fun success() {
-                Toast.makeText(context!!, "프로필이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "프로필이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 stopLoading()
 
                 lastNickname = viewDataBinding.nicknameEditText.text.toString()
@@ -218,7 +218,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     private val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
-        Glide.with(context!!).load(uri).centerCrop().into(viewDataBinding.profileImg)
+        Glide.with(requireContext()).load(uri).centerCrop().into(viewDataBinding.profileImg)
         defaultImg = file.toString()
         imgUrl = file
         useDetailImg = false
@@ -227,7 +227,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     private val profileImageEditClickLister = View.OnClickListener {
         WriteMemoImgAddDialogFragment(AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
-                checkAddImgAbleListener, imgAddListener).show(activity!!.supportFragmentManager, "tag")
+                checkAddImgAbleListener, imgAddListener).show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun cancelClickListener() = View.OnClickListener {
@@ -236,7 +236,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
     private fun cancelClickAction() {
         if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
-            CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+            CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
         } else {
             if (isKeyboardUp) {
                 imm.hideSoftInputFromWindow(view!!.windowToken, 0)
@@ -258,7 +258,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             try {
                 if (heightDiff < 500) {
                     viewDataBinding.nicknameEditText.clearFocus()
-                    viewDataBinding.nicknameEditText.setTextColor(context!!.getColor(R.color._888888))
+                    viewDataBinding.nicknameEditText.setTextColor(requireContext().getColor(R.color._888888))
                     viewDataBinding.badgeLayout.visibility = View.VISIBLE
                     isKeyboardUp = false
                 } else {

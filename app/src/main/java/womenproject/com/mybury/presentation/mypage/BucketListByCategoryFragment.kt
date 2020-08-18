@@ -73,7 +73,7 @@ class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBi
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {

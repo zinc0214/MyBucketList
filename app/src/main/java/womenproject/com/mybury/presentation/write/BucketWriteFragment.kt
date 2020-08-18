@@ -119,7 +119,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun fail() {
-                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
                 stopLoading()
             }
         })
@@ -197,10 +197,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
                 override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
                     if (p0!!.targetPosition.toString() == "0.0") {
-                        openImg.background = context!!.getDrawable(R.drawable.open_enable)
+                        openImg.background = requireContext().getDrawable(R.drawable.open_enable)
                         open = true
                     } else {
-                        openImg.background = context!!.getDrawable(R.drawable.open_disable)
+                        openImg.background = requireContext().getDrawable(R.drawable.open_disable)
                         open = false
                     }
                 }
@@ -268,7 +268,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                activity!!.onBackPressed()
+                requireActivity().onBackPressed()
             }
 
             override fun fail() {

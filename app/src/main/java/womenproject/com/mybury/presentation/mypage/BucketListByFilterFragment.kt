@@ -48,7 +48,7 @@ class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBind
         viewDataBinding.bucketList.layoutManager = layoutManager
         viewDataBinding.bucketList.hasFixedSize()
 
-        getFilterListUp(context!!)?.let {
+        getFilterListUp(requireContext())?.let {
             viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
                 override fun restart() {
                     initBucketListUI()
@@ -81,7 +81,7 @@ class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBind
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {

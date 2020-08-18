@@ -67,7 +67,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {
@@ -87,7 +87,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
-                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(activity!!)) {
+                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
                     showDdayPopup()
                 }
 
@@ -104,7 +104,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {

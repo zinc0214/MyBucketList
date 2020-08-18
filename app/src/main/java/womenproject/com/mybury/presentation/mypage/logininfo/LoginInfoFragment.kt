@@ -48,7 +48,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         viewDataBinding.activity = this
     }
 
-    fun getLoginText() = run { "${getAccountEmail(context!!)} 계정으로\n로그인하였습니다." }
+    fun getLoginText() = run { "${getAccountEmail(requireContext())} 계정으로\n로그인하였습니다." }
 
     fun accountDeleteClickListener() {
         val startDeleting: () -> Unit = {
@@ -62,7 +62,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
             this.activity?.finish()
         }
 
-        AccountDeleteDialogFragment(startDeleting, animEnd).show(activity!!.supportFragmentManager, "tag")
+        AccountDeleteDialogFragment(startDeleting, animEnd).show(requireActivity().supportFragmentManager, "tag")
     }
 
     fun googleLogoutClickListener() {
@@ -72,10 +72,10 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
 
     @SuppressLint("CheckResult")
     private fun signOutMyBury() {
-        val userIdRequest = UseUserIdRequest(Preference.getUserId(context!!))
-        val accessToken = getAccessToken(context!!)
+        val userIdRequest = UseUserIdRequest(Preference.getUserId(requireContext()))
+        val accessToken = getAccessToken(requireContext())
         if (accessToken == null) {
-            LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
+            LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
             return
         }
 
@@ -85,7 +85,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                 .subscribe({ response ->
                     when (response.retcode) {
                         "200" -> {
-                            allClear(context!!)
+                            allClear(requireContext())
                             isSucessDelete = true
                         }
                         "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {
@@ -94,14 +94,14 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                             }
 
                             override fun fail() {
-                                LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
+                                LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
                             }
                         })
-                        else -> LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
+                        else -> LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
                     }
 
                 }) {
-                    LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(activity!!.supportFragmentManager, "tag")
+                    LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
                 }
 
     }
@@ -111,7 +111,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-        googleSignInClient = GoogleSignIn.getClient(activity!!, gso)
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         auth = FirebaseAuth.getInstance()
 
     }
@@ -119,9 +119,9 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
     private fun signOut() {
         auth.signOut()
 
-        googleSignInClient.signOut().addOnCompleteListener(activity!!) {
-            setMyBuryLoginComplete(context!!, false)
-            LogoutSuccess().show(activity!!.supportFragmentManager)
+        googleSignInClient.signOut().addOnCompleteListener(requireActivity()) {
+            setMyBuryLoginComplete(requireContext(), false)
+            LogoutSuccess().show(requireActivity().supportFragmentManager)
         }
     }
 

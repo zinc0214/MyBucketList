@@ -3,7 +3,6 @@ package womenproject.com.mybury.presentation.update
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.navigation.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
@@ -49,8 +48,8 @@ class BucketUpdateFragment : BucketWriteFragment() {
             viewDataBinding.openSwitchBtn.transitionToStart()
         } else {
             viewDataBinding.openSwitchBtn.transitionToEnd()
-            viewDataBinding.openText.text = context!!.resources.getString(R.string.bucket_close)
-            viewDataBinding.openImg.background = context!!.getDrawable(R.drawable.open_disable)
+            viewDataBinding.openText.text = requireContext().resources.getString(R.string.bucket_close)
+            viewDataBinding.openImg.background = requireContext().getDrawable(R.drawable.open_disable)
         }
 
         if (!bucketItem.category.equals("없음")) {
@@ -109,7 +108,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
                 stopLoading()
                 Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                activity!!.onBackPressed()
+                requireActivity().onBackPressed()
             }
 
             override fun fail() {
@@ -145,10 +144,10 @@ class BucketUpdateFragment : BucketWriteFragment() {
         val cancelConfirm: (Boolean) -> Unit = {
             if (it) {
                 isCancelConfirm = it
-                activity!!.onBackPressed()
+                requireActivity().onBackPressed()
             }
         }
-        CancelDialog(cancelConfirm).show(activity!!.supportFragmentManager, "tag")
+        CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
     }
 
     class CancelDialog(private val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
