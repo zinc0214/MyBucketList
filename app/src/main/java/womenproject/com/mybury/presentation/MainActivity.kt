@@ -16,13 +16,13 @@ import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
  */
 
 class MainActivity : BaseActiviy() {
-
 
     private lateinit var binding: ActivityMainBinding
 
@@ -53,6 +53,7 @@ class MainActivity : BaseActiviy() {
         animationDrawable = loadingImg.drawable as AnimationDrawable
 
         Preference.setEnableShowAlarm(this, true)
+        setStatusBar(this, R.color._ffffff)
     }
 
     override fun onSupportNavigateUp(): Boolean {
