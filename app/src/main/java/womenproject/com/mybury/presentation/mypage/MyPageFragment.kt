@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.ShowFilter
@@ -101,19 +100,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
-          //  val scrollLayout = mypageScrollLayout.contentScrollLayout.layoutParams as LinearLayout.LayoutParams
-
             appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
                 if (p1 == -384) {
                     mypageScrollLayout.ddayLayout.visibility = View.GONE
-               //     scrollLayout.topMargin = 50
-                //    mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.GONE
                     popupClickListener()
                 } else if (p1 == 0) {
                     mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-            //        scrollLayout.topMargin = 0
-              //      mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.VISIBLE
                 }
 
@@ -130,11 +123,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             if (num == 1) {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
                 viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
-                DefaulProfileImg().bury
             } else {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
                 viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
-                DefaulProfileImg().my
             }
         } else {
             Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileLargeImg)

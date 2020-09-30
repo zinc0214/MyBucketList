@@ -18,7 +18,6 @@ class EditCategoryListAdapter(private val bucketCategoryList: List<Category>,
 
 
     private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
-  //  private val categoryList = bucketCategoryList as MutableList<Category>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
