@@ -91,6 +91,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     showDdayPopup()
                 }
 
+                // startAdMob()
+
             }
         }, filterForShow, filterListUp)
 

@@ -97,4 +97,11 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             a.stopLoading()
         }
     }
+
+    fun startAdMob() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            // a.startAdMob()
+        }
+    }
 }
