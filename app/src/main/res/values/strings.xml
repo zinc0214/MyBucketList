@@ -41,4 +41,9 @@
     <string name="bucket_count"><![CDATA[<font color=#95bbff>%s</font><font color=#b4b4b4>%s</font>]]></string>
     <string name="dday_bucket_count"><![CDATA[<font color=#fecf6a>%s</font><font color=#b4b4b4>%s</font>]]></string>
     <string name="alarm_close"><u>3일 동안 그만보기</u></string>
+    <string name="my_page_more_menu_profile_edit">프로필 수정</string>
+    <string name="my_page_more_menu_login_info">로그인 정보</string>
+    <string name="my_page_more_menu_alarm">알림</string>
+    <string name="my_page_more_menu_app_info">앱 정보</string>
+    <string name="my_page_more_menu_support">마이버리 후원하기</string>
 </resources>

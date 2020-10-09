@@ -176,6 +176,14 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
+            android:id="@+id/action_my_page_to_mybury_support"
+            app:destination="@id/mybury_support_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
             android:id="@+id/action_my_page_to_bucket_item_by_category"
             app:destination="@id/bucket_list_by_category_fragment"
             app:enterAnim="@anim/slide_in_right"
@@ -251,9 +259,9 @@
 
     <fragment
         android:id="@+id/profile_edit_fragment"
-        android:label="ProfileEditFragment"
         android:name="womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditFragment"
-        tools:layout="@layout/fragment_profile_edit"/>
+        android:label="ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit" />
 
 
     <fragment
@@ -270,7 +278,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
-
     </fragment>
 
     <fragment
@@ -278,6 +285,14 @@
         android:name="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment"
         android:label="LoginInfoFragment"
         tools:layout="@layout/fragment_login_info">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mybury_support_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.support.MyBurySupportFragment"
+        android:label="MyBurySupportFragment"
+        tools:layout="@layout/fragment_mybury_support">
 
     </fragment>
 

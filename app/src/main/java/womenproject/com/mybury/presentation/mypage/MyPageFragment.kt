@@ -97,6 +97,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
+            mypageMoreMenuLarge.supportClickListener = myBurySupportClickListener
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
@@ -189,13 +190,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         popupClickListener()
     }
 
+    private val myBurySupportClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
+        it.findNavController().navigate(directions)
+        popupClickListener()
+    }
     private val doingBucketListClickListener = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()
         it.findNavController().navigate(directions)
     }
 
-    private val doneBucketListerClickListener =  View.OnClickListener {
+    private val doneBucketListerClickListener = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.completed.toString()
         it.findNavController().navigate(directions)
