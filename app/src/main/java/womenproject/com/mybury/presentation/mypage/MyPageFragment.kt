@@ -33,7 +33,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         get() = MyPageViewModel()
 
     private val bucketInfoViewModel = BucketInfoViewModel()
+    private var isAdsShow = false
+
     override fun initDataBinding() {
+
+        arguments?.let {
+            val args = MyPageFragmentArgs.fromBundle(it)
+            val argIsAdsShow = args.isAdsShow
+            this.isAdsShow = argIsAdsShow
+        }
+
         setCategoryList()
     }
 
@@ -143,6 +152,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     private val createOnClickWriteListener = View.OnClickListener {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToWrite()
+        directions.isAdsShow = isAdsShow
         it.findNavController().navigate(directions)
 
     }

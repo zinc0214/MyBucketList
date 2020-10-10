@@ -50,6 +50,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
+    var isAdsShow = false
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -62,6 +63,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     override fun initDataBinding() {
         getCategory()
+        loadArgument()
+    }
+
+    open fun loadArgument() {
+        arguments?.let {
+            val args = BucketWriteFragmentArgs.fromBundle(it)
+            val argIsAdsShow = args.isAdsShow
+            this.isAdsShow = argIsAdsShow
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -269,6 +279,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
                 requireActivity().onBackPressed()
+
+                if (isAdsShow) startAdMob()
             }
 
             override fun fail() {

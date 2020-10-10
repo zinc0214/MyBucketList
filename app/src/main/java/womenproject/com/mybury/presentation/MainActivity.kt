@@ -141,15 +141,12 @@ class MainActivity : BaseActiviy() {
         binding.loadingLayout.layout.visibility = View.GONE
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
+    public fun showAds() {
         if (interstitialAd.isLoaded) {
             interstitialAd.show()
         } else {
             Log.d("ayhan", "The interstitial wasn't loaded yet.");
         }
-
     }
 
 }

@@ -24,13 +24,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     override fun initForUpdate() {
 
-        arguments?.let {
-            val args = BucketUpdateFragmentArgs.fromBundle(it)
-            val bucket = args.bucket
-            val id = args.bucketId
-            bucketItem = bucket!!
-            bucketId = id!!
-        }
+        loadArgument()
 
         viewModel.bucketItem = bucketItem
         if(alreadyImgList.isNullOrEmpty()) {
@@ -77,7 +71,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
         if (bucketItem.goalCount != null && bucketItem.goalCount.toString() != "1") {
             viewDataBinding.goalCountText.text = bucketItem.goalCount.toString()
-            goalCount = bucketItem.goalCount?:0
+            goalCount = bucketItem.goalCount ?: 0
             viewDataBinding.goalCountText.setEnableTextColor()
             viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
         }
@@ -85,6 +79,15 @@ class BucketUpdateFragment : BucketWriteFragment() {
         viewDataBinding.writeRegist.isEnabled = true
     }
 
+    override fun loadArgument() {
+        arguments?.let {
+            val args = BucketUpdateFragmentArgs.fromBundle(it)
+            val bucket = args.bucket
+            val id = args.bucketId
+            bucketItem = bucket!!
+            bucketId = id!!
+        }
+    }
 
     override fun bucketAddOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
