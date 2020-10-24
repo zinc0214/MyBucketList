@@ -25,7 +25,6 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BucketI
 
     }
 
-
     // BillingClient 초기화
     private fun initBilling() {
 
@@ -33,13 +32,12 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BucketI
         skuListToQuery.add("ice_cream")
         skuListToQuery.add("chicken")
 
-
         billingClient = BillingClient.newBuilder(requireContext()).enablePendingPurchases().setListener(this)
                 .build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    queryPurchases()
+                   // queryPurchases()
                     setUpView()
                 }
             }
@@ -57,22 +55,21 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BucketI
             Log.e("ayhan", "queryPurchases: BillingClient is not ready")
         }
 
-        // InApp 결제에 대한 쿼리가 존재하는지 확인한다
-        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (result.purchasesList == null) {
-            Log.e("ayhan", "No existing in app purchases found.")
-        } else {
-            Log.e("ayhan", "Existing purchases: ${result.purchasesList}")
-        }
+        // InApp 결제한 적이 있는 아이템으 ㅣ정보를  확인한다
+        /* val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+         if (result.purchasesList == null) {
+             Log.e("ayhan", "No existing in app purchases found.")
+         } else {
+             Log.e("ayhan", "Existing purchases: ${result.purchasesList}")
+         }*/
     }
-
 
     private fun setUpView() {
-        viewDataBinding.iceCreamPurchase.setOnClickListener { purchasItme(1) }
-        viewDataBinding.chickenPurchase.setOnClickListener { purchasItme(0) }
+        viewDataBinding.iceCreamPurchase.setOnClickListener { purchaseItem(1) }
+        viewDataBinding.chickenPurchase.setOnClickListener { purchaseItem(0) }
     }
 
-    private fun purchasItme(listNumber: Int) {
+    private fun purchaseItem(listNumber: Int) {
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(skuListToQuery).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()
