@@ -20,6 +20,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -280,7 +281,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 isCancelConfirm = true
                 requireActivity().onBackPressed()
 
-                if (isAdsShow) startAdMob()
+                if (isAdsShow && BuildConfig.DEBUG) startAdMob()
             }
 
             override fun fail() {

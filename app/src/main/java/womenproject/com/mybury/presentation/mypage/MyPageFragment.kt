@@ -122,6 +122,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             })
 
+            mypageMoreMenuLarge.myBurySupport.visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
+
             seyMyProfileImg(_myPageInfo.imageUrl)
         }
 
