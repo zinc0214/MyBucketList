@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.view.View
 import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseDialogFragment
-import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.WriteCategoryDialogBinding
+import womenproject.com.mybury.presentation.base.BaseDialogFragment
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.ui.WriteItemLayout
 
 
@@ -40,7 +40,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
 
     private fun addCategoryListener() : View.OnClickListener {
         return View.OnClickListener {
-            AddCategoryDialog(moveToAddCategory).show(activity!!.supportFragmentManager, "tag")
+            AddCategoryDialog(moveToAddCategory).show(requireActivity().supportFragmentManager, "tag")
             dismiss()
         }
     }
@@ -51,7 +51,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
             dismiss()
         }
 
-        val writeImgLayout = WriteItemLayout(this.context!!, categorySelectListener).setUI(category)
+        val writeImgLayout = WriteItemLayout(this.requireContext(), categorySelectListener).setUI(category)
         viewDataBinding.categoryListLayout.addView(writeImgLayout)
     }
 

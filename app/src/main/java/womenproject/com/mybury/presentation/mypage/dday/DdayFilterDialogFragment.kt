@@ -7,10 +7,8 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DdayShowFilter
 import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.setDdayFilerForShow
-import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.DdayFilterDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
-import kotlin.math.min
 
 class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<DdayFilterDialogBinding>() {
     override val layoutResourceId: Int
@@ -37,7 +35,7 @@ class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : Ba
     }
 
     private fun initShowFilter() {
-        val filter = getDdayFilterForShow(context!!)
+        val filter = getDdayFilterForShow(requireContext())
 
         when (filter) {
             "all" -> {
@@ -72,11 +70,11 @@ class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : Ba
 
     private fun setShowFilter() {
         if (plus &&  minus) {
-            setDdayFilerForShow(context!!, DdayShowFilter.all)
+            setDdayFilerForShow(requireContext(), DdayShowFilter.all)
         } else if (minus) {
-            setDdayFilerForShow(context!!, DdayShowFilter.minus)
+            setDdayFilerForShow(requireContext(), DdayShowFilter.minus)
         } else if (plus) {
-            setDdayFilerForShow(context!!, DdayShowFilter.plus)
+            setDdayFilerForShow(requireContext(), DdayShowFilter.plus)
         }
     }
 

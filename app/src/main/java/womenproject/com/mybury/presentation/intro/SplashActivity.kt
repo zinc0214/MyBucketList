@@ -3,20 +3,21 @@ package womenproject.com.mybury.presentation.intro
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import womenproject.com.mybury.MyBuryApplication.Companion.context
-import womenproject.com.mybury.R
-import kotlin.random.Random
 import android.os.Handler
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import womenproject.com.mybury.MyBuryApplication.Companion.context
+import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import kotlin.random.Random
 
 
 class SplashActivity : AppCompatActivity() {
@@ -28,8 +29,10 @@ class SplashActivity : AppCompatActivity() {
         val num = Random.nextInt(2)
         if (num == 1) {
             setContentView(R.layout.splash_white)
+            setStatusBar(this, R.color._ffffff)
         } else {
             setContentView(R.layout.splash_blue)
+            setStatusBar(this, R.color._4656e8)
         }
 
         val hd = Handler()

@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import womenproject.com.mybury.presentation.MainActivity
 
 
@@ -57,7 +56,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
 
     private fun checkNetworkConnect() {
         if (BaseViewModel().isNetworkDisconnect()) {
-            BaseNetworkFragment().show(activity!!.supportFragmentManager, "tag")
+            BaseNetworkFragment().show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -72,12 +71,12 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     fun backBtnOnClickListener() = View.OnClickListener {
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     fun onBackPressedFragment() {
         isCancelConfirm = true
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     open fun actionByBackButton() {
@@ -96,6 +95,13 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.stopLoading()
+        }
+    }
+
+    fun startAdMob() {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.showAds()
         }
     }
 }

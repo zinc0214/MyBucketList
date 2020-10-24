@@ -51,7 +51,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
                 override fun fail() {
                     stopLoading()
-                    NetworkFailDialog().show(activity!!.supportFragmentManager)
+                    NetworkFailDialog().show(requireActivity().supportFragmentManager)
                 }
             }, it)
         }
@@ -76,7 +76,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {

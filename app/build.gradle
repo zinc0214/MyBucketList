@@ -38,13 +38,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
+
+    // 얘는 그지같은 문제가 있으므로 일단 업데이트 보류
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta8'
+
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.material:material:1.3.0-alpha01'
+
+    // 얘는 그지같은 문제가 있으므로 일단 업데이트 보류
+    implementation 'com.google.android.material:material:1.3.0-alpha02'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
 
@@ -81,21 +87,34 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.0"
 
     //google login
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+    implementation 'com.google.firebase:firebase-analytics:17.6.0'
 
     // firebase crashlytics
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
 
     // Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 
     // coroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 
     // kotlin - ktx
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha06'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01'
+
+    // in app review
+    implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation 'com.google.android.play:core:1.8.2'
+
+    // google abMob
+    implementation 'com.google.android.gms:play-services-ads:19.4.0'
+
+    // in app billing
+    implementation 'com.android.billingclient:billing:3.0.1'
+    implementation 'com.android.billingclient:billing-ktx:3.0.1'
+
+    implementation 'com.google.android.gms:play-services-base:17.4.0'
 }
 
 repositories {

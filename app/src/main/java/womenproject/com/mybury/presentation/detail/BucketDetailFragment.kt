@@ -250,7 +250,7 @@ class BucketDetailFragment : Fragment() {
 
             override fun fail() {
                 stopLoading()
-                Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 
         }, bucketItemId)
@@ -278,7 +278,7 @@ class BucketDetailFragment : Fragment() {
 
             override fun fail() {
                 stopLoading()
-                Toast.makeText(context!!, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 
         }, bucketItemId)

@@ -20,6 +20,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
@@ -50,6 +51,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
+    var isAdsShow = false
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_write
@@ -62,6 +64,15 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     override fun initDataBinding() {
         getCategory()
+        loadArgument()
+    }
+
+    open fun loadArgument() {
+        arguments?.let {
+            val args = BucketWriteFragmentArgs.fromBundle(it)
+            val argIsAdsShow = args.isAdsShow
+            this.isAdsShow = argIsAdsShow
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,7 +130,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
 
             override fun fail() {
-                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
                 stopLoading()
             }
         })
@@ -197,10 +208,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             openSwitchBtn.setTransitionListener(object : MotionLayout.TransitionListener {
                 override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
                     if (p0!!.targetPosition.toString() == "0.0") {
-                        openImg.background = context!!.getDrawable(R.drawable.open_enable)
+                        openImg.background = requireContext().getDrawable(R.drawable.open_enable)
                         open = true
                     } else {
-                        openImg.background = context!!.getDrawable(R.drawable.open_disable)
+                        openImg.background = requireContext().getDrawable(R.drawable.open_disable)
                         open = false
                     }
                 }
@@ -268,7 +279,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                activity!!.onBackPressed()
+                requireActivity().onBackPressed()
+
+                if (isAdsShow && BuildConfig.DEBUG) startAdMob()
             }
 
             override fun fail() {

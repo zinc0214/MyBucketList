@@ -219,6 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:lineSpacingExtra="7sp"
+                        android:autoLink="web"
                         android:text="@{detailInfo.memo}"
                         android:textColor="@color/_797979"
                         android:textSize="14sp"

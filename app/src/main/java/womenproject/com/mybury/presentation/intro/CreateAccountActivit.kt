@@ -279,9 +279,9 @@ class CancelDialog : BaseNormalDialogFragment() {
 
     override fun createOnClickCancelListener(): View.OnClickListener {
         return View.OnClickListener {
-            Preference.allClear(context!!)
+            Preference.allClear(requireContext())
             dismiss()
-            activity!!.finish()
+            requireActivity().finish()
         }
     }
 
