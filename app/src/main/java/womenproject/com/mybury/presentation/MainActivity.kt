@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
@@ -10,19 +11,25 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
  */
 
 class MainActivity : BaseActiviy() {
-
 
     private lateinit var binding: ActivityMainBinding
 
@@ -32,6 +39,7 @@ class MainActivity : BaseActiviy() {
     private lateinit var loadingImg: ImageView
     private lateinit var animationDrawable: AnimationDrawable
 
+    private lateinit var interstitialAd: InterstitialAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +61,73 @@ class MainActivity : BaseActiviy() {
         animationDrawable = loadingImg.drawable as AnimationDrawable
 
         Preference.setEnableShowAlarm(this, true)
+        setStatusBar(this, R.color._ffffff)
+
+        initAdMob()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun initAdMob() {
+
+        MobileAds.initialize(this) { }
+        interstitialAd = InterstitialAd(this)
+
+        //"ca-app-pub-3940256099942544/1033173712" 는 구글에서 테스트용으로 공개한 Test Ad Id - 배포시 실제 Id 로 변경 해야 함
+        /*
+            @안드로이드용 테스트광고 ID -- (https://developers.google.com/admob/unity/test-ads?hl=ko)
+            - 배너 광고: ca-app-pub-3940256099942544/6300978111
+            - 전면 광고: ca-app-pub-3940256099942544/1033173712
+            - 보상형 동영상 광고: ca-app-pub-3940256099942544/5224354917
+            - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
+        */
+
+        //"ca-app-pub-3940256099942544/1033173712" 는 구글에서 테스트용으로 공개한 Test Ad Id - 배포시 실제 Id 로 변경 해야 함
+        /*
+            @안드로이드용 테스트광고 ID -- (https://developers.google.com/admob/unity/test-ads?hl=ko)
+            - 배너 광고: ca-app-pub-3940256099942544/6300978111
+            - 전면 광고: ca-app-pub-3940256099942544/1033173712
+            - 보상형 동영상 광고: ca-app-pub-3940256099942544/5224354917
+            - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
+        */
+
+        interstitialAd.adUnitId = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712"
+        else "ca-app-pub-6302671173915322/8119781606"
+
+        //광고 이벤트리스너 등록
+
+        //광고 이벤트리스너 등록
+        interstitialAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                Log.d("ayhan", "onAdLoaded")
+            }
+
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.d("ayhan", "onAdFailedToLoad")
+            }
+
+            override fun onAdOpened() {
+                Log.d("ayhan", "onAdOpened")
+            }
+
+            override fun onAdClicked() {
+                Log.d("ayhan", "onAdClicked")
+            }
+
+            override fun onAdLeftApplication() {
+                Log.d("ayhan", "onAdLeftApplication")
+            }
+
+            override fun onAdClosed() {
+                Log.d("ayhan", "onAdClosed")
+                // Code to be executed when the interstitial ad is closed.
+                interstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
+
+        interstitialAd.loadAd(AdRequest.Builder().build())
     }
 
 
@@ -70,8 +141,12 @@ class MainActivity : BaseActiviy() {
         binding.loadingLayout.layout.visibility = View.GONE
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    public fun showAds() {
+        if (interstitialAd.isLoaded) {
+            interstitialAd.show()
+        } else {
+            Log.d("ayhan", "The interstitial wasn't loaded yet.");
+        }
     }
 
 }

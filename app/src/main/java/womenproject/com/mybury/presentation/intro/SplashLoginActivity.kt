@@ -34,6 +34,7 @@ import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
 
 class SplashLoginActivity : AppCompatActivity() {
@@ -64,11 +65,11 @@ class SplashLoginActivity : AppCompatActivity() {
             } else {
                 signIn()
             }
-
         }
 
         val hd = Handler()
         hd.postDelayed(splashhandler(), 1000)
+        setStatusBar(this, R.color._4656e8)
     }
 
     override fun onResume() {

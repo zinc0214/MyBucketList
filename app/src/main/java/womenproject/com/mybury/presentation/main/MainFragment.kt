@@ -33,6 +33,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     override val viewModel: BucketInfoViewModel
         get() = BucketInfoViewModel()
 
+    private var currentBucketSize = 0
     override fun initDataBinding() {
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
@@ -67,7 +68,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {
@@ -87,10 +88,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
-                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(activity!!)) {
+                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
                     showDdayPopup()
                 }
-
+                currentBucketSize = response.bucketlists.size
             }
         }, filterForShow, filterListUp)
 
@@ -104,7 +105,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {
@@ -137,6 +138,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     private fun createOnClickWriteListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MainFragmentDirections.actionMainBucketToBucketWrite()
+            directions.isAdsShow = currentBucketSize > 4
             it.findNavController().navigate(directions)
         }
     }
@@ -155,6 +157,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     private fun createOnClickMyPageListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MainFragmentDirections.actionMainBucketToMyPage()
+            directions.isAdsShow = currentBucketSize > 4
             it.findNavController().navigate(directions)
         }
     }

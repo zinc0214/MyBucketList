@@ -95,6 +95,11 @@
         android:name="womenproject.com.mybury.presentation.write.BucketWriteFragment"
         android:label="Write">
 
+        <argument
+            android:name="isAdsShow"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
         <action
             android:id="@+id/action_write_to_category_edit"
             app:destination="@id/category_edit_fragment"
@@ -109,6 +114,11 @@
         android:name="womenproject.com.mybury.presentation.mypage.MyPageFragment"
         android:label="MyPage"
         tools:layout="@layout/fragment_my_page">
+
+        <argument
+            android:name="isAdsShow"
+            android:defaultValue="false"
+            app:argType="boolean" />
 
         <action
             android:id="@+id/action_my_page_to_home"
@@ -170,6 +180,14 @@
         <action
             android:id="@+id/action_my_page_to_alarm_setting"
             app:destination="@id/alarm_setting_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_my_page_to_mybury_support"
+            app:destination="@id/mybury_support_fragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -251,9 +269,9 @@
 
     <fragment
         android:id="@+id/profile_edit_fragment"
-        android:label="ProfileEditFragment"
         android:name="womenproject.com.mybury.presentation.mypage.profileedit.ProfileEditFragment"
-        tools:layout="@layout/fragment_profile_edit"/>
+        android:label="ProfileEditFragment"
+        tools:layout="@layout/fragment_profile_edit" />
 
 
     <fragment
@@ -270,7 +288,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
-
     </fragment>
 
     <fragment
@@ -278,6 +295,14 @@
         android:name="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment"
         android:label="LoginInfoFragment"
         tools:layout="@layout/fragment_login_info">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mybury_support_fragment"
+        android:name="womenproject.com.mybury.presentation.mypage.support.MyBurySupportFragment"
+        android:label="MyBurySupportFragment"
+        tools:layout="@layout/fragment_mybury_support">
 
     </fragment>
 

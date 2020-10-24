@@ -1,8 +1,6 @@
 package womenproject.com.mybury.presentation.main
 
 import android.app.ActionBar
-import android.text.Html
-import android.util.Log
 import android.view.View
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.setCloseAlarm3Days
@@ -34,7 +32,7 @@ class DdayAlarmDialogFragment(private var goToDday: () -> Unit) : BaseDialogFrag
 
     private val closeAlarm3Days = View.OnClickListener {
         val time = Date().time
-        setCloseAlarm3Days(context!!, time)
+        setCloseAlarm3Days(requireContext(), time)
         dismiss()
     }
 }

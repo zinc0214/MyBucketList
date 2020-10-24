@@ -67,7 +67,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun initDataBinding() {
         isCancelConfirm = false
 
-        imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
@@ -95,7 +95,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager)
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
         })
     }
@@ -118,7 +118,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     editCategoryItem(it, name)
                 }
                 AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
-                        .show(activity!!.supportFragmentManager)
+                        .show(requireActivity().supportFragmentManager)
             }
         }
 
@@ -141,7 +141,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         val categoryAdd: (String) -> Unit = {
             addNewCategory(it)
         }
-        AddCategoryDialogFragment(originCategoryList, null, categoryAdd).show(activity!!.supportFragmentManager)
+        AddCategoryDialogFragment(originCategoryList, null, categoryAdd).show(requireActivity().supportFragmentManager)
     }
 
     private fun editCategoryItem(category: Category, newName: String) {

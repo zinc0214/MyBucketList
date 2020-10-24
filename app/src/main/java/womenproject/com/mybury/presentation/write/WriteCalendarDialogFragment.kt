@@ -6,17 +6,17 @@ import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
-import womenproject.com.mybury.R
-import womenproject.com.mybury.presentation.base.BaseDialogFragment
-import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
-import womenproject.com.mybury.ui.CurrentDateDecorator
-import android.widget.EditText
-import android.view.ViewGroup
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.write_calendar_dialog.*
+import womenproject.com.mybury.R
+import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
+import womenproject.com.mybury.presentation.base.BaseDialogFragment
+import womenproject.com.mybury.ui.CurrentDateDecorator
 import java.util.*
 
 
@@ -71,7 +71,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     private fun setCalendarViewListener() {
 
         colorizeDatePicker(viewDataBinding.datePicker)
-        dateTimePickerTextColour(viewDataBinding.datePicker, context!!.getColor(R.color._5a95ff))
+        dateTimePickerTextColour(viewDataBinding.datePicker, requireContext().getColor(R.color._5a95ff))
 
         viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
             if (date.year < 2219) {

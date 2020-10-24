@@ -1,17 +1,13 @@
 package womenproject.com.mybury.presentation.mypage
 
 
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.ShowFilter
@@ -37,7 +33,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         get() = MyPageViewModel()
 
     private val bucketInfoViewModel = BucketInfoViewModel()
+    private var isAdsShow = false
+
     override fun initDataBinding() {
+
+        arguments?.let {
+            val args = MyPageFragmentArgs.fromBundle(it)
+            val argIsAdsShow = args.isAdsShow
+            this.isAdsShow = argIsAdsShow
+        }
+
         setCategoryList()
     }
 
@@ -69,7 +74,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             override fun fail() {
                 stopLoading()
-                NetworkFailDialog().show(activity!!.supportFragmentManager, "tag")
+                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
             }
         })
 
@@ -101,26 +106,23 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
+            mypageMoreMenuLarge.supportClickListener = myBurySupportClickListener
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
-
-          //  val scrollLayout = mypageScrollLayout.contentScrollLayout.layoutParams as LinearLayout.LayoutParams
 
             appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
                 if (p1 == -384) {
                     mypageScrollLayout.ddayLayout.visibility = View.GONE
-               //     scrollLayout.topMargin = 50
-                //    mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.GONE
                     popupClickListener()
                 } else if (p1 == 0) {
                     mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-            //        scrollLayout.topMargin = 0
-              //      mypageScrollLayout.contentScrollLayout.layoutParams = scrollLayout
                     headerLayout.moreBtn.visibility = View.VISIBLE
                 }
 
             })
+
+            mypageMoreMenuLarge.myBurySupport.visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
             seyMyProfileImg(_myPageInfo.imageUrl)
         }
@@ -133,11 +135,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             if (num == 1) {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
                 viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
-                DefaulProfileImg().bury
             } else {
                 viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
                 viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
-                DefaulProfileImg().my
             }
         } else {
             Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileLargeImg)
@@ -154,13 +154,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     private val createOnClickWriteListener = View.OnClickListener {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToWrite()
+        directions.isAdsShow = isAdsShow
         it.findNavController().navigate(directions)
 
     }
 
     private val createOnClickHomeListener = View.OnClickListener {
         popupClickListener()
-        activity!!.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     private val createOnClickDdayListListener = View.OnClickListener {
@@ -201,13 +202,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         popupClickListener()
     }
 
+    private val myBurySupportClickListener = View.OnClickListener {
+        val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
+        it.findNavController().navigate(directions)
+        popupClickListener()
+    }
     private val doingBucketListClickListener = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()
         it.findNavController().navigate(directions)
     }
 
-    private val doneBucketListerClickListener =  View.OnClickListener {
+    private val doneBucketListerClickListener = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.completed.toString()
         it.findNavController().navigate(directions)
