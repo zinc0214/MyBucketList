@@ -161,6 +161,14 @@ data class MyPageCategory(
         val count: Int
 ) : Parcelable
 
+@Parcelize
+data class PurchasableItem(
+        val id: String,
+        val name: String,
+        val price: String,
+        var isPurchasable: Boolean = true
+) : Parcelable
+
 enum class ShowFilter {
     all, completed, started
 }

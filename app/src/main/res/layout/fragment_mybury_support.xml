@@ -1,26 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="supportPrice"
+            type="String" />
+
+        <variable
+            name="backBtnOnClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="supportOnClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/_fafafa">
 
-        <Button
-            android:id="@+id/iceCreamPurchase"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/topLayout"
+            layout="@layout/top_back_btn_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="아이스크림 구매"
+            app:backBtnOnClickListener="@{backBtnOnClickListener}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="마이버리 후원하기" />
+
+        <TextView
+            android:id="@+id/supportDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="85dp"
+            android:layout_marginEnd="36dp"
+            android:text="@string/mybury_support_desc"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/chickenPurchase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="아이스크림 구매"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/purchaseItemListView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iceCreamPurchase" />
+            app:layout_constraintTop_toBottomOf="@id/supportDesc"
+            tools:listitem="@layout/purchase_item" />
+
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@drawable/divider"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toTopOf="@+id/supportPriceTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/supportPriceTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/_ffffff"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@{`현재까지 지원해주신 후원금 :` + supportPrice + `원`}"
+            android:textColor="@color/_666666"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/supportButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="현재까지 찌원해주신 후원금 : 8900원" />
+
+        <TextView
+            android:id="@+id/supportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/support_button_background"
+            android:gravity="center"
+            android:minHeight="60dp"
+            android:onClick="@{supportOnClickListener::onClick}"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="응원 하기"
+            android:textColor="@color/_ffffff"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

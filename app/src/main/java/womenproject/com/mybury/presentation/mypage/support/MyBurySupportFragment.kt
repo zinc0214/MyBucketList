@@ -1,36 +1,74 @@
 package womenproject.com.mybury.presentation.mypage.support
 
+import android.text.Html
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.android.billingclient.api.*
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 
-class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BaseViewModel>(),
+class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>(),
         PurchasesUpdatedListener,
         PurchaseHistoryResponseListener {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_mybury_support
 
-    override val viewModel: BaseViewModel
-        get() = BaseViewModel()
-
+    override val viewModel: MyBurySupportViewModel
+        get() = MyBurySupportViewModel()
 
     private lateinit var billingClient: BillingClient
-    private val purchasableList = ArrayList<String>()
+    private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
+    private val purchasableItemIds = ArrayList<String>()
+    private val purchasedItemIds = ArrayList<String>()
+    private lateinit var purchasableItems: List<PurchasableItem>
 
     override fun initDataBinding() {
-        initBillingClient()
+        val myBurySupportViewModel = ViewModelProvider(this).get(MyBurySupportViewModel::class.java)
 
+        myBurySupportViewModel.getPurchasableItem {
+            Toast.makeText(context, "GET FAIL", Toast.LENGTH_SHORT).show()
+        }
+        myBurySupportViewModel.purchaseItem.observe(viewLifecycleOwner, Observer {
+            Log.e("ayhan", "GO!!!")
+            purchasableItems = it
+            initBillingClient(it)
+        })
+    }
+
+    private fun setUpViews(purchasers: List<PurchasableItem>) {
+        viewDataBinding.apply {
+            purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
+            purchaseItemListAdapter = PurchaseItemListAdapter(purchasers)
+            purchaseItemListView.adapter = purchaseItemListAdapter
+
+            topLayout.title = "마이버리 후원하기"
+            val desc: String = requireContext().getString(R.string.mybury_support_desc)
+            supportDesc.text = Html.fromHtml(String.format(desc))
+
+            supportOnClickListener = View.OnClickListener {
+                val num = purchasableItemIds.indexOfFirst { it == purchaseItemListAdapter.selectedItemNum?.id }
+                Log.e("ayhan", "Purchase Num : $num")
+                purchaseItem(num)
+            }
+
+            backBtnOnClickListener = View.OnClickListener {
+                onBackPressedFragment()
+            }
+        }
     }
 
     /**
      *  BillingClient 초기화
      */
-    private fun initBillingClient() {
+    private fun initBillingClient(items: List<PurchasableItem>) {
         billingClient = BillingClient.newBuilder(requireContext()).enablePendingPurchases().setListener(this)
                 .build()
         billingClient.startConnection(object : BillingClientStateListener {
@@ -38,8 +76,8 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BaseVie
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     getAcknowledgePurchasedItem()
                     getAllPurchasedItem()
-                    setPurchasableList()
-                    setUpViews()
+                    setPurchasableList(items)
+                    setUpViews(purchasableItems)
                 }
             }
 
@@ -69,6 +107,8 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BaseVie
             Log.d("TAG", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
                 //결쩨된 내역에 대한 처리
+                Log.d("ayhan", "Alredy Purchased :... ${it.sku} ")
+                purchasedItemIds.add(it.sku)
             }
         }
     }
@@ -85,17 +125,32 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BaseVie
     /**
      * 구매 가능한 리스트의 아이템을 추가한다.
      */
-    private fun setPurchasableList() {
+    private fun setPurchasableList(list: List<PurchasableItem>) {
 
         // Google PlayConsole 의 상품Id 와 동일하게 적어준다
-        purchasableList.add("always_item") // 중복해서 무제한으로 살 수 있는 아이템
-        purchasableList.add("one_item") // 1번만 살 수 있는 아이템
+        list.forEach { item ->
+            Log.e("ayhan", "id...? :${item.id}")
+            if (purchasedItemIds.none { it == item.id }) {
+                purchasableItemIds.add(item.id)
+            }
+        }
+
+        purchasedItemCheck()
     }
 
+    private fun purchasedItemCheck() {
 
-    private fun setUpViews() {
-        //   viewDataBinding.buyOnceButton.setOnClickListener { purchaseItem(1) }
-        //   viewDataBinding.buyAlwaysButton.setOnClickListener { purchaseItem(0) }
+        Log.e("ayhan", " purchasedItemIds : ${purchasedItemIds.size}. ${purchasableItemIds.size}")
+        purchasedItemIds.forEach { purchasedId ->
+
+            Log.e("ayhan", "purchasedItemCheck :${purchasedId}")
+
+            purchasableItems.filter { it.id == purchasedId }.forEach {
+                Log.e("ayhan", "id...?222 :${purchasedId}")
+                it.isPurchasable = false
+            }
+        }
+
     }
 
 
@@ -105,12 +160,13 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BaseVie
      */
     private fun purchaseItem(listNumber: Int) {
         val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(purchasableList).setType(BillingClient.SkuType.INAPP)
+        params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
             if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
                 val flowParams =
                         BillingFlowParams.newBuilder().setSkuDetails(skuDetails[listNumber]).build()
                 billingClient.launchBillingFlow(requireActivity(), flowParams)
+                Log.e("ayhan", " skuDetails[listNumber] : ${skuDetails[listNumber].title}")
             } else {
                 Log.e("TAG", "No sku found from query")
             }
