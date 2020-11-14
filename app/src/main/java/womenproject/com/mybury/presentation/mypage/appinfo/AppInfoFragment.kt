@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
@@ -31,7 +31,7 @@ class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>()
 
     override fun initDataBinding() {
         startLoading()
-        viewModelL = ViewModelProviders.of(this).get(AppInfoViewModel::class.java)
+        viewModelL = ViewModelProvider(this).get(AppInfoViewModel::class.java)
 
         viewModelL.latelyVersion.observe(this, Observer {
             setUpViews()
