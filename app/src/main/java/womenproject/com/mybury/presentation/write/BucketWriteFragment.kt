@@ -279,9 +279,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
-                requireActivity().onBackPressed()
-
                 if (isAdsShow && BuildConfig.DEBUG) startAdMob()
+                requireActivity().onBackPressed()
             }
 
             override fun fail() {
