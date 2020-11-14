@@ -93,7 +93,7 @@ class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBi
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
-        showCancelSnackBar(view!!, info)
+        showCancelSnackBar(requireView(), info)
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
