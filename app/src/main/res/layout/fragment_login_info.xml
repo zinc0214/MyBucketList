@@ -14,26 +14,34 @@
             type="womenproject.com.mybury.presentation.mypage.logininfo.LoginInfoFragment" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/_fafafa"
         android:orientation="vertical">
 
         <include
             android:id="@+id/back_layout"
-            layout="@layout/top_back_btn_layout" />
+            layout="@layout/top_back_btn_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="top|center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/back_layout">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="132dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -46,7 +54,7 @@
                     android:text="@{activity.loginText}"
                     android:textColor="@color/_222222"
                     android:textSize="14sp"
-                    tools:text="마마계정으\n로그인 되었습니디." />
+                    tools:text="마마계정으로\n로그인 되었습니디." />
 
             </LinearLayout>
 
@@ -80,6 +88,6 @@
                 android:textSize="11sp" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
