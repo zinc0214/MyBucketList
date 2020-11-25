@@ -1,46 +1,87 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import womenproject.com.mybury.data.PurchasableItem
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import womenproject.com.mybury.data.PurchasedItem
+import womenproject.com.mybury.data.SupportInfo
+import womenproject.com.mybury.data.UseUserIdRequest
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class MyBurySupportViewModel : BaseViewModel() {
 
-    private val _purchaseItem = MutableLiveData<List<PurchasableItem>>()
-    val purchaseItem: LiveData<List<PurchasableItem>> = _purchaseItem
+    private val _supportInfo = MutableLiveData<SupportInfo>()
+    val supportInfo: LiveData<SupportInfo> = _supportInfo
 
-    @SuppressLint("CheckResult")
     fun getPurchasableItem(fail: () -> Unit) {
         if (accessToken == null || userId == null) {
-            fail()
+            fail.invoke()
             return
         }
-        Log.e("ayhan", "isHere?")
-        val iceCream = PurchasableItem("ice_cream", "차가운 아이스크림", "1000")
-        val chicken = PurchasableItem("chicken", "존맛탱 치킨", "2000")
-        val hamburger = PurchasableItem("hamburger", "아무튼 햄버거", "3000")
 
-        _purchaseItem.value = listOf(iceCream, chicken, hamburger, chicken, hamburger, hamburger, iceCream)
+        viewModelScope.launch(Dispatchers.IO) {
 
-        Log.e("ayhan", " _purchaseItem.value : ${_purchaseItem.value!!.size}")
+            val userIdRequest = UseUserIdRequest(userId)
+            try {
+                apiInterface.getSupportItem(accessToken, userIdRequest).apply {
+                    withContext(Dispatchers.Main) {
+                        when (this@apply.retcode) {
+                            "200" -> _supportInfo.value = this@apply
+                            "301" -> getRefreshToken(object : SimpleCallBack {
+                                override fun success() {
+                                    _supportInfo.value = this@apply
+                                }
 
-        /* apiInterface.requestBeforeWrite(accessToken, userId)
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe({ response ->
-                     when (response.retcode) {
-                         "200" -> {
+                                override fun fail() {
+                                    fail.invoke()
+                                }
+                            })
+                            else -> fail.invoke()
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    fail.invoke()
+                }
+            }
+        }
+    }
 
-                         }
-                         "301" -> retry()
-                         else -> fail()
-                     }
-                 }) {
-                     Log.e("myBury", "getCategoryListFail : $it")
-                     fail()
-                 }*/
+    fun purchasedItem(itemId: String, successCallBack: () -> Unit, fail: () -> Unit) {
+        if (accessToken == null || userId == null) {
+            fail.invoke()
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            val purchasedItem = PurchasedItem(itemId, userId)
+
+            try {
+                apiInterface.requestSupportItem(accessToken, purchasedItem).apply {
+                    withContext(Dispatchers.Main) {
+                        when (this@apply.retcode) {
+                            "200" -> successCallBack.invoke()
+                            "301" -> getRefreshToken(object : SimpleCallBack {
+                                override fun success() {
+                                    successCallBack.invoke()
+                                }
+
+                                override fun fail() {
+                                    fail.invoke()
+                                }
+                            })
+                            else -> fail.invoke()
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,6 +23,7 @@ import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
 
@@ -32,6 +34,7 @@ import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 class MainActivity : BaseActiviy() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var supportViewModel: MyBurySupportViewModel
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -40,6 +43,7 @@ class MainActivity : BaseActiviy() {
     private lateinit var animationDrawable: AnimationDrawable
 
     private lateinit var interstitialAd: InterstitialAd
+    private var isAdShow = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +55,21 @@ class MainActivity : BaseActiviy() {
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
         val baseViewModel = BaseViewModel()
+        supportViewModel = MyBurySupportViewModel()
 
         if (baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
         }
+
+        supportViewModel.getPurchasableItem {
+            // Do Something
+        }
+
+        supportViewModel.supportInfo.observe(this, Observer { info ->
+            info.totalPrice.let {
+                isAdShow = it.toInt() < 10000
+            }
+        })
 
         loadingImg = binding.loadingLayout.loadingImg
         loadingImg.setImageResource(R.drawable.loading_anim)
@@ -142,11 +157,16 @@ class MainActivity : BaseActiviy() {
     }
 
     public fun showAds() {
-        if (interstitialAd.isLoaded) {
+        Log.e("ayhan", "isAdShow : $isAdShow")
+        if (interstitialAd.isLoaded && isAdShow) {
             interstitialAd.show()
         } else {
             Log.d("ayhan", "The interstitial wasn't loaded yet.");
         }
+    }
+
+    fun setSupportPrice(price: Int) {
+        isAdShow = price < 10000
     }
 
 }

@@ -162,12 +162,28 @@ data class MyPageCategory(
 ) : Parcelable
 
 @Parcelize
+data class SupportInfo(
+        val supportItems: List<PurchasableItem>,
+        val totalPrice: String = "0",
+        val retcode: String
+) : Parcelable
+
+@Parcelize
 data class PurchasableItem(
         val id: String,
-        val name: String,
-        val price: String,
+        val itemName: String,
+        val itemPrice: String,
+        val itemImg: String,
+        val googleKey: String,
         var isPurchasable: Boolean = true
 ) : Parcelable
+
+@Parcelize
+data class PurchasedItem(
+        val itemId: String,
+        val userId: String
+) : Parcelable
+
 
 enum class ShowFilter {
     all, completed, started

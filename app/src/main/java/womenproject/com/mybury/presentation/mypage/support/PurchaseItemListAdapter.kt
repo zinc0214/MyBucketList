@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.databinding.PurchaseItemBinding
@@ -38,7 +39,17 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
 
         fun bind(item: PurchasableItem) {
             binding.info = item
-            Log.e("ayhan", "item.isPurchasable :  ${item.name} ,, ${item.isPurchasable}")
+            Log.e("ayhan", "item.isPurchasable :  ${item.itemName} ,, ${item.isPurchasable}")
+
+            try {
+                Glide.with(binding.imageView).load(item.itemImg)
+                        .override(300, 300)
+                        .placeholder(R.drawable.gradient_background)
+                        .into(binding.imageView)
+            } catch (ex: IllegalArgumentException) {
+                Log.e("Glide-tag", "....")
+            }
+
 
             if (!item.isPurchasable) {
                 itemView.isEnabled = false

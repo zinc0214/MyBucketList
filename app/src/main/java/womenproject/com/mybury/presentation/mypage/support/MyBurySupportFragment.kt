@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.android.billingclient.api.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.PurchasableItem
+import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 
 class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>(),
@@ -28,35 +30,41 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
     private val purchasableItemIds = ArrayList<String>()
     private val purchasedItemIds = ArrayList<String>()
-    private lateinit var purchasableItems: List<PurchasableItem>
+    private lateinit var supportInfo: SupportInfo
+
+    private var purchasedItem: PurchasableItem? = null
 
     override fun initDataBinding() {
         val myBurySupportViewModel = ViewModelProvider(this).get(MyBurySupportViewModel::class.java)
 
         myBurySupportViewModel.getPurchasableItem {
-            Toast.makeText(context, "GET FAIL", Toast.LENGTH_SHORT).show()
+            ShowClosePopup { onBackPressedFragment() }.show(requireActivity().supportFragmentManager, "TAG")
         }
-        myBurySupportViewModel.purchaseItem.observe(viewLifecycleOwner, Observer {
-            Log.e("ayhan", "GO!!!")
-            purchasableItems = it
-            initBillingClient(it)
+        myBurySupportViewModel.supportInfo.observe(viewLifecycleOwner, Observer { info ->
+            supportInfo = info
+            supportInfo.supportItems.forEach {
+                it.isPurchasable = true
+            }
+            initBillingClient(info.supportItems)
         })
+
+        viewDataBinding.topLayout.title = "마이버리 후원하기"
+        val desc: String = requireContext().getString(R.string.mybury_support_desc)
+        viewDataBinding.supportDesc.text = Html.fromHtml(String.format(desc))
+        viewDataBinding.supportPrice = ""
     }
 
-    private fun setUpViews(purchasers: List<PurchasableItem>) {
+    private fun setUpViews(supportInfo: SupportInfo) {
         viewDataBinding.apply {
             purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
-            purchaseItemListAdapter = PurchaseItemListAdapter(purchasers)
+            purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems)
             purchaseItemListView.adapter = purchaseItemListAdapter
 
-            topLayout.title = "마이버리 후원하기"
-            val desc: String = requireContext().getString(R.string.mybury_support_desc)
-            supportDesc.text = Html.fromHtml(String.format(desc))
-
+            supportPrice = supportInfo.totalPrice ?: ""
             supportOnClickListener = View.OnClickListener {
-                val num = purchasableItemIds.indexOfFirst { it == purchaseItemListAdapter.selectedItemNum?.id }
-                Log.e("ayhan", "Purchase Num : $num")
-                purchaseItem(num)
+                purchaseItemListAdapter.selectedItemNum?.let {
+                    purchaseItem(it.googleKey)
+                }
             }
 
             backBtnOnClickListener = View.OnClickListener {
@@ -77,12 +85,12 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
                     getAcknowledgePurchasedItem()
                     getAllPurchasedItem()
                     setPurchasableList(items)
-                    setUpViews(purchasableItems)
+                    setUpViews(supportInfo)
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                Log.e("TAG", "Service Disconnected.")
+                Log.e("mybury", "Service Disconnected.")
             }
         })
     }
@@ -102,12 +110,11 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
         // 인앱결제된 내역을 확인한다
         val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
         if (result.purchasesList == null) {
-            Log.d("TAG", "No existing in app purchases found.")
+            Log.d("mybury", "No existing in app purchases found.")
         } else {
-            Log.d("TAG", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
+            Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
                 //결쩨된 내역에 대한 처리
-                Log.d("ayhan", "Alredy Purchased :... ${it.sku} ")
                 purchasedItemIds.add(it.sku)
             }
         }
@@ -129,46 +136,38 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
         // Google PlayConsole 의 상품Id 와 동일하게 적어준다
         list.forEach { item ->
-            Log.e("ayhan", "id...? :${item.id}")
-            if (purchasedItemIds.none { it == item.id }) {
-                purchasableItemIds.add(item.id)
+            if (purchasedItemIds.none { it == item.googleKey }) {
+                purchasableItemIds.add(item.googleKey)
             }
         }
-
         purchasedItemCheck()
     }
 
     private fun purchasedItemCheck() {
-
-        Log.e("ayhan", " purchasedItemIds : ${purchasedItemIds.size}. ${purchasableItemIds.size}")
         purchasedItemIds.forEach { purchasedId ->
-
-            Log.e("ayhan", "purchasedItemCheck :${purchasedId}")
-
-            purchasableItems.filter { it.id == purchasedId }.forEach {
-                Log.e("ayhan", "id...?222 :${purchasedId}")
+            supportInfo.supportItems.filter { it.googleKey == purchasedId }.forEach {
                 it.isPurchasable = false
             }
         }
-
     }
-
 
     /**
      * 아이템을 구매하기 위해서는 구매가능한 아이템 리스트와 확인이 필요하다.
      * 리스트가 존재할 경우 실제 구매를 할 수 있다.
      */
-    private fun purchaseItem(listNumber: Int) {
+    private fun purchaseItem(purchaseId: String) {
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
             if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
+                purchasedItem = supportInfo.supportItems.firstOrNull { it.googleKey == purchaseId }
+                val purchaseItem = skuDetails.first { it.sku == purchaseId }
                 val flowParams =
-                        BillingFlowParams.newBuilder().setSkuDetails(skuDetails[listNumber]).build()
+                        BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()
                 billingClient.launchBillingFlow(requireActivity(), flowParams)
-                Log.e("ayhan", " skuDetails[listNumber] : ${skuDetails[listNumber].title}")
+                Log.e("mybury", " skuDetails[listNumber] : ${purchaseItem.title}")
             } else {
-                Log.e("TAG", "No sku found from query")
+                Log.e("mybury", "No sku found from query")
             }
         }
     }
@@ -185,21 +184,14 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
-                    if (it.sku == "always_item") {
-                        purchaseAlways(it.purchaseToken)
-                    } else {
-                        purchaseOnce(it.purchaseToken)
-                    }
-
+                    purchaseAlways(it.purchaseToken)
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
-                Log.d("TAG", "You've cancelled the Google play billing process...")
+                Log.d("mybury", "You've cancelled the Google play billing process...")
             }
             else -> {
-                Log.e(
-                        "TAG",
-                        "Item not found or Google play billing error... : ${billingResult.responseCode}"
+                Log.e("mybury", "Item not found or Google play billing error... : ${billingResult.responseCode}"
                 )
             }
         }
@@ -214,7 +206,7 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             if (!purchaseHistoryList.isNullOrEmpty()) {
                 // 가장 최근에 구매된 아이템을 확인할 수 있다.
                 purchaseHistoryList.forEach {
-                    Log.d("TAG", "Previous Purchase Item : ${it.originalJson}")
+                    Log.d("mybury", "Previous Purchase Item : ${it.originalJson}")
                 }
             }
         }
@@ -226,9 +218,19 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                "구매가 성공했습니다! 1 ".showToast()
+                purchasedItem?.let {
+                    viewModel.purchasedItem(it.id, {
+                        "구매가 성공했습니다!".showToast()
+                        val updatePrice = supportInfo.totalPrice.toInt() + it.itemPrice.toInt()
+                        viewDataBinding.supportPrice = updatePrice.toString()
+                        setCurrentSupportPrice(updatePrice)
+                    }, {
+                        // 실패하면 어쩌지
+                    })
+                }
+
             } else {
-                Log.e("TAG", "FAIL : ${billingResult.responseCode}")
+                Log.e("mybury", "FAIL : ${billingResult.responseCode}")
             }
         }
     }
@@ -248,6 +250,25 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     }
 
     private fun String.showToast() {
-        Toast.makeText(requireActivity(), this, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
+    }
+}
+
+class ShowClosePopup(private val back: () -> Unit) : BaseNormalDialogFragment() {
+
+    init {
+        TITLE_MSG = "아무튼 안됨"
+        CONTENT_MSG = "후원가능한 아이템로드에 실패했습니다."
+        CANCEL_BUTTON_VISIBLE = false
+        GRADIENT_BUTTON_VISIBLE = true
+        CONFIRM_TEXT = "확인"
+        CANCEL_ABLE = false
+    }
+
+    override fun createOnClickConfirmListener(): View.OnClickListener {
+        return View.OnClickListener {
+            dismiss()
+            back.invoke()
+        }
     }
 }

@@ -1,14 +1,14 @@
 package womenproject.com.mybury.data.network
 
 import io.reactivex.Observable
-import okhttp3.*
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import womenproject.com.mybury.data.*
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.http.Headers
 
 
 /**
@@ -54,13 +54,18 @@ interface RetrofitInterface {
 
 
     @GET("/home")
-    fun requestHomeBucketList(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String, @Query("sort") sort: String): Observable<BucketList>
+    fun requestHomeBucketList(@Header("X-Auth-Token") token: String,
+                              @Query("userId") userId: String,
+                              @Query("filter") filter: String,
+                              @Query("sort") sort: String): Observable<BucketList>
 
     @GET("/category")
-    fun requestCategoryBucketList(@Header("X-Auth-Token") token: String, @Query("categoryId") userId: String): Observable<BucketList>
+    fun requestCategoryBucketList(@Header("X-Auth-Token") token: String, @Query("categoryId") categoryId: String): Observable<BucketList>
 
     @GET("/bucketlist/{bucketId}")
-    fun requestDetailBucketList(@Header("X-Auth-Token") token: String, @Path("bucketId") bucketId: String, @Query("userId") userId: String): Observable<DetailBucketItem>
+    fun requestDetailBucketList(@Header("X-Auth-Token") token: String,
+                                @Path("bucketId") bucketId: String,
+                                @Query("userId") userId: String): Observable<DetailBucketItem>
 
     @POST("/complete")
     fun postCompleteBucket(@Header("X-Auth-Token") token: String,
@@ -68,16 +73,18 @@ interface RetrofitInterface {
 
     @POST("/cancel")
     fun postCancelBucket(@Header("X-Auth-Token") token: String,
-                           @Body bucketRequest: StatusChangeBucketRequest): Observable<SimpleResponse>
+                         @Body bucketRequest: StatusChangeBucketRequest): Observable<SimpleResponse>
 
 
     @POST("/redo")
     suspend fun postRedoBucket(@Header("X-Auth-Token") token: String,
-                         @Body bucketRequest: StatusChangeBucketRequest): SimpleResponse
+                               @Body bucketRequest: StatusChangeBucketRequest): SimpleResponse
 
 
     @GET("/dDay")
-    fun requestDdayBucketListResult(@Header("X-Auth-Token") token: String, @Query("userId") userId: String, @Query("filter") filter: String): Observable<DdayBucketListRespone>
+    fun requestDdayBucketListResult(@Header("X-Auth-Token") token: String,
+                                    @Query("userId") userId: String,
+                                    @Query("filter") filter: String): Observable<DdayBucketListRespone>
 
     @GET("/beforeWrite")
     fun requestBeforeWrite(@Header("X-Auth-Token") token: String, @Query("userId") userId: String): Observable<BucketCategory>
@@ -92,9 +99,9 @@ interface RetrofitInterface {
                           @Part memo: MultipartBody.Part,
                           @Part categoryId: MultipartBody.Part,
                           @Part userId: MultipartBody.Part,
-                          @Part image1: MultipartBody.Part ? = null,
-                          @Part image2: MultipartBody.Part ? = null,
-                          @Part image3: MultipartBody.Part ? = null): Observable<SimpleResponse>
+                          @Part image1: MultipartBody.Part? = null,
+                          @Part image2: MultipartBody.Part? = null,
+                          @Part image3: MultipartBody.Part? = null): Observable<SimpleResponse>
 
 
     @POST("/bucketlist/{bucketId}")
@@ -125,7 +132,7 @@ interface RetrofitInterface {
 
     @POST("/category/edit_name")
     fun editCategoryItemName(@Header("X-Auth-Token") token: String,
-                           @Body categoryId: EditCategoryNameRequest): Observable<SimpleResponse>
+                             @Body categoryId: EditCategoryNameRequest): Observable<SimpleResponse>
 
     @POST("/category/edit_priority")
     fun changeCategoryList(@Header("X-Auth-Token") token: String,
@@ -141,6 +148,17 @@ interface RetrofitInterface {
 
     @HTTP(method = "DELETE", path = "/withdrawal", hasBody = true)
     fun postSignOut(@Header("X-Auth-Token") token: String, @Body userId: UseUserIdRequest): Observable<SimpleResponse>
+
+    // 후원 아이템 리스트
+    @POST("/support_items")
+    suspend fun getSupportItem(@Header("X-Auth-Token") token: String,
+                               @Body userId: UseUserIdRequest): SupportInfo
+
+    // 후원하기
+    @POST("/support")
+    suspend fun requestSupportItem(@Header("X-Auth-Token") token: String,
+                                   @Body purchasedItem: PurchasedItem): SimpleResponse
+
 
 }
 
