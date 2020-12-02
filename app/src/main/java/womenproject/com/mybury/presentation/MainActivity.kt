@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.android.billingclient.api.*
@@ -26,7 +28,10 @@ import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.main.MainFragment
+import womenproject.com.mybury.presentation.main.MainFragmentDirections
 import womenproject.com.mybury.presentation.main.SupportDialogFragment
+import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
@@ -199,14 +204,27 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
 
     private fun showSupportDialogFragment() {
-        val fragment = SupportDialogFragment({
-
+        val fragment = SupportDialogFragment()
+        fragment.setButtonAction({
+            purchaseItem("cheer_3300")
+            fragment.dismiss()
         }, {
+            val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)
+            val currentFragment = parentFragment?.childFragmentManager?.fragments?.get(0)
+
+            if (currentFragment is MainFragment) {
+                val directions = MainFragmentDirections.actionMainBucketToMyburySupport()
+                findNavController(R.id.nav_fragment).navigate(directions)
+            } else {
+                val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
+                findNavController(R.id.nav_fragment).navigate(directions)
+            }
+
+            fragment.dismiss()
 
         })
         fragment.show(supportFragmentManager, "tag")
     }
-
 
     /**
      *  BillingClient 초기화
@@ -297,6 +315,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
             if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
                 purchasedItem = supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
+                if (purchasedItem == null) {
+                    Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    return@querySkuDetailsAsync
+                }
                 val purchaseItem = skuDetails.first { it.sku == purchaseId }
                 val flowParams =
                         BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()

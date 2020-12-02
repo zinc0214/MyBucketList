@@ -6,9 +6,13 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentSupportDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
-class SupportDialogFragment(private val goToPurchase: () -> Unit, private val goToDetail: () -> Unit) : BaseDialogFragment<FragmentSupportDialogBinding>() {
+class SupportDialogFragment() : BaseDialogFragment<FragmentSupportDialogBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_support_dialog
+
+
+    private lateinit var goToPurchase: () -> Unit
+    private lateinit var goToDetail: () -> Unit
 
     override fun onResume() {
         super.onResume()
@@ -16,6 +20,11 @@ class SupportDialogFragment(private val goToPurchase: () -> Unit, private val go
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.dialogFragmentWidth)
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
+    }
+
+    fun setButtonAction(goToPurchase: () -> Unit, goToDetail: () -> Unit) {
+        this.goToPurchase = goToPurchase
+        this.goToDetail = goToDetail
     }
 
     override fun initDataBinding() {
