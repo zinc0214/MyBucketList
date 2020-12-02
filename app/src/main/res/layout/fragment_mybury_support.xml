@@ -23,41 +23,45 @@
         android:layout_height="match_parent"
         android:background="@color/_fafafa">
 
-        <include
-            android:id="@+id/topLayout"
-            layout="@layout/top_back_btn_layout"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:backBtnOnClickListener="@{backBtnOnClickListener}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="마이버리 후원하기" />
-
-        <TextView
-            android:id="@+id/supportDesc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="85dp"
-            android:layout_marginEnd="36dp"
-            android:text="@string/mybury_support_desc"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/purchaseItemListView"
-            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="64dp"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/supportDesc"
-            tools:listitem="@layout/purchase_item" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/supportDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="19dp"
+                    android:layout_marginEnd="36dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9sp"
+                    android:text="@string/mybury_support_desc"
+                    android:textSize="11sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/purchaseItemListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="12dp"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/purchase_item" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <ImageView
             android:id="@+id/divider"
@@ -102,6 +106,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
+
+        <include
+            android:id="@+id/topLayout"
+            layout="@layout/top_back_btn_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backBtnOnClickListener="@{backBtnOnClickListener}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="마이버리 후원하기" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
