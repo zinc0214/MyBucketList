@@ -48,4 +48,5 @@
     <string name="my_page_more_menu_support">마이버리 후원하기</string>
 
     <string name="mybury_support_desc"><![CDATA[<font color=#666666>개발자들을 위해 맛있는 응원을 해줄 수 있습니다.\n</font><font color=#5a95ff>10000원 이상 후원해주신 분에게는 광고 제거 기능이</font> 제공됩니다.]]></string>
+    <string name="mybury_dialog_desc"><![CDATA[한번의 후원으로\n<font color=#5a95ff>마이버리를 광고없이 평생 무료로</font>\n사용하실 수 있어요!]]></string>
 </resources>

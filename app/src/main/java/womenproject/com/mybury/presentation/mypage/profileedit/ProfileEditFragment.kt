@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -258,7 +259,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             try {
                 if (heightDiff < 500) {
                     viewDataBinding.nicknameEditText.clearFocus()
-                    viewDataBinding.nicknameEditText.setTextColor(requireContext().getColor(R.color._888888))
+                    viewDataBinding.nicknameEditText.setTextColor(getColor(context!!, R.color._888888))
                     viewDataBinding.badgeLayout.visibility = View.VISIBLE
                     isKeyboardUp = false
                 } else {
