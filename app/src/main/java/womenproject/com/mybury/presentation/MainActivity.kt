@@ -83,7 +83,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         supportViewModel.supportInfo.observe(this, Observer { info ->
             info.totalPrice.let {
-                isAdShow = it.toInt() < 10000
+                isAdShow = it.toInt() < SUPPORT_PRICE
             }
             initBillingClient(info.supportItems)
             supportInfo = info
@@ -188,7 +188,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     fun setSupportPrice(price: Int) {
-        isAdShow = price < 10000
+        isAdShow = price < SUPPORT_PRICE
     }
 
     fun purchaseSelectItem(id: String, purchaseSuccess: (String) -> Unit, purchaseFail: () -> Unit) {
@@ -381,6 +381,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 Log.e("TAG", "FAIL : ${billingResult.responseCode}")
             }
         }
+    }
+
+    companion object {
+        private const val SUPPORT_PRICE = 50000
     }
 
 
