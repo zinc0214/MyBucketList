@@ -6,7 +6,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.FragmentSupportDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
-class SupportDialogFragment() : BaseDialogFragment<FragmentSupportDialogBinding>() {
+class SupportDialogFragment : BaseDialogFragment<FragmentSupportDialogBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_support_dialog
 

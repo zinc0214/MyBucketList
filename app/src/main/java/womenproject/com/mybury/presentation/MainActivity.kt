@@ -206,7 +206,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun showSupportDialogFragment() {
         val fragment = SupportDialogFragment()
         fragment.setButtonAction({
-            purchaseItem("cheer_3300")
+            purchaseItem("cheer_11000")
             fragment.dismiss()
         }, {
             val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)

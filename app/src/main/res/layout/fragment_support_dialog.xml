@@ -71,7 +71,7 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="10,000원"
+                android:text="11,000원"
                 android:textColor="@color/_ffffff"
                 android:textSize="14sp"
                 android:textStyle="bold" />
