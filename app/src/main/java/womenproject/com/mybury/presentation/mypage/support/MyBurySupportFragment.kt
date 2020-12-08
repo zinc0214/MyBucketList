@@ -1,8 +1,9 @@
 package womenproject.com.mybury.presentation.mypage.support
 
-import android.text.Html
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.SupportInfo
@@ -10,6 +11,7 @@ import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
+
 
 class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>() {
 
@@ -22,9 +24,6 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
 
     override fun initDataBinding() {
-        viewDataBinding.topLayout.title = "마이버리 후원하기"
-        val desc: String = requireContext().getString(R.string.mybury_support_desc)
-        viewDataBinding.supportDesc.text = Html.fromHtml(String.format(desc))
         viewDataBinding.supportPrice = ""
 
         getSupportInfo().apply {
@@ -60,6 +59,30 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             backBtnOnClickListener = View.OnClickListener {
                 onBackPressedFragment()
             }
+
+            collapsibleToolbar.setTransitionListener(object : MotionLayout.TransitionListener {
+                override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                }
+
+                override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+
+                }
+
+                override fun onTransitionChange(p0: MotionLayout, p1: Int, p2: Int, p3: Float) {
+                    Log.e("ayhahn", ": p0.targetPosition : ${p0.targetPosition}")
+                    if (p0.targetPosition >= 0.5F) {
+                        titleMotionLayout.transitionToEnd()
+                    } else {
+                        titleMotionLayout.transitionToStart()
+                    }
+
+                }
+
+                override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+
+                }
+
+            })
         }
     }
 
