@@ -31,6 +31,7 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.main.MainFragment
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
 import womenproject.com.mybury.presentation.main.SupportDialogFragment
+import womenproject.com.mybury.presentation.main.SupportSuccessDialogFragment
 import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
@@ -378,7 +379,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 purchasedItem?.let {
                     supportViewModel.purchasedItem(it.id, {
-                        purchaseSuccess(it.itemPrice)
+                        //purchaseSuccess(it.itemPrice)
+                        showSupportPurchaseSuccessDialog()
                     }, {
                         // 실패하면 어쩌지
                         purchaseFail()
@@ -403,6 +405,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 Log.e("TAG", "FAIL : ${billingResult.responseCode}")
             }
         }
+    }
+
+    private fun showSupportPurchaseSuccessDialog() {
+        val supportSuccessDialogFragment = SupportSuccessDialogFragment()
+        supportSuccessDialogFragment.show(supportFragmentManager, "tag")
     }
 
     companion object {
