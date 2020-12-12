@@ -6,7 +6,6 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
-        <KeyFrameSet></KeyFrameSet>
         <OnSwipe motion:dragDirection="dragUp" />
     </Transition>
 
@@ -26,7 +25,7 @@
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="34dp" />
+            android:layout_marginTop="48dp" />
         <Constraint
             android:id="@+id/desc"
             android:layout_width="match_parent"

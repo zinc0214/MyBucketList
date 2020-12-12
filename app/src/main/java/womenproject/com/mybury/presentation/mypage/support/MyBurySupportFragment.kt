@@ -70,7 +70,7 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
                 override fun onTransitionChange(p0: MotionLayout, p1: Int, p2: Int, p3: Float) {
                     Log.e("ayhahn", ": p0.targetPosition : ${p0.targetPosition}")
-                    if (p0.targetPosition >= 0.5F) {
+                    if (p0.targetPosition >= 0.3F) {
                         titleMotionLayout.transitionToEnd()
                     } else {
                         titleMotionLayout.transitionToStart()
