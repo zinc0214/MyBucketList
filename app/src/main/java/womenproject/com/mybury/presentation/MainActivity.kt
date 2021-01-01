@@ -126,44 +126,33 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
         */
 
-        //"ca-app-pub-3940256099942544/1033173712" 는 구글에서 테스트용으로 공개한 Test Ad Id - 배포시 실제 Id 로 변경 해야 함
-        /*
-            @안드로이드용 테스트광고 ID -- (https://developers.google.com/admob/unity/test-ads?hl=ko)
-            - 배너 광고: ca-app-pub-3940256099942544/6300978111
-            - 전면 광고: ca-app-pub-3940256099942544/1033173712
-            - 보상형 동영상 광고: ca-app-pub-3940256099942544/5224354917
-            - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
-        */
-
         interstitialAd.adUnitId = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712"
         else "ca-app-pub-6302671173915322/8119781606"
 
         //광고 이벤트리스너 등록
-
-        //광고 이벤트리스너 등록
         interstitialAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                Log.d("ayhan", "onAdLoaded")
+                Log.d("myBury", "onAdLoaded")
             }
 
             override fun onAdFailedToLoad(errorCode: Int) {
-                Log.d("ayhan", "onAdFailedToLoad")
+                Log.d("myBury", "onAdFailedToLoad")
             }
 
             override fun onAdOpened() {
-                Log.d("ayhan", "onAdOpened")
+                Log.d("myBury", "onAdOpened")
             }
 
             override fun onAdClicked() {
-                Log.d("ayhan", "onAdClicked")
+                Log.d("myBury", "onAdClicked")
             }
 
             override fun onAdLeftApplication() {
-                Log.d("ayhan", "onAdLeftApplication")
+                Log.d("myBury", "onAdLeftApplication")
             }
 
             override fun onAdClosed() {
-                Log.d("ayhan", "onAdClosed")
+                Log.d("myBury", "onAdClosed")
                 // Code to be executed when the interstitial ad is closed.
                 interstitialAd.loadAd(AdRequest.Builder().build())
                 showSupportDialogFragment()
@@ -185,11 +174,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     public fun showAds() {
-        Log.e("ayhan", "isAdShow : $isAdShow")
+        Log.e("myBury", "isAdShow : $isAdShow")
         if (interstitialAd.isLoaded && isAdShow) {
             interstitialAd.show()
         } else {
-            Log.d("ayhan", "The interstitial wasn't loaded yet.");
+            Log.d("myBury", "The interstitial wasn't loaded yet.");
         }
     }
 
@@ -207,7 +196,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun showSupportDialogFragment() {
         val fragment = SupportDialogFragment()
         fragment.setButtonAction({
-            purchaseItem("cheer_11000")
+            purchaseItem("cheer.11000")
             fragment.dismiss()
         }, {
             val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)
@@ -413,7 +402,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     companion object {
-        private const val SUPPORT_PRICE = 50000
+        private const val SUPPORT_PRICE = 80000
     }
 
 
