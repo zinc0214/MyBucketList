@@ -22,6 +22,7 @@ import com.google.android.gms.ads.MobileAds
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.isAlreadySupportShow
 import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
@@ -155,7 +156,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 Log.d("myBury", "onAdClosed")
                 // Code to be executed when the interstitial ad is closed.
                 interstitialAd.loadAd(AdRequest.Builder().build())
-                showSupportDialogFragment()
+                if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
+                    showSupportDialogFragment()
+                }
+
             }
         }
 

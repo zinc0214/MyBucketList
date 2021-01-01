@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.main
 import android.app.ActionBar
 import android.text.Html
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.Preference.Companion.setAlreadySupportShow
 import womenproject.com.mybury.databinding.FragmentSupportDialogBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
@@ -34,6 +35,8 @@ class SupportDialogFragment : BaseDialogFragment<FragmentSupportDialogBinding>()
 
             val desc: String = requireContext().getString(R.string.mybury_dialog_desc)
             viewDataBinding.subDesc.text = Html.fromHtml(String.format(desc))
+
+            setAlreadySupportShow(requireContext(), true)
         }
     }
 }

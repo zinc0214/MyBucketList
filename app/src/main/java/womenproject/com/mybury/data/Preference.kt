@@ -21,6 +21,7 @@ class Preference {
         private const val SHOW_DDAY_FILTER = "show_dday_filter"
         private const val CLOSE_ALARM_3_DAYS = "close_alarm_3_days"
         private const val IS_SHOWN_ALARM = "is_shown_alarm"
+        private const val IS_ALREADY_SUPPORT_SHOW = "is_already_support_show"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -160,6 +161,20 @@ class Preference {
             val data = sp.getBoolean(IS_SHOWN_ALARM, true)
             return data
         }
+
+        fun setAlreadySupportShow(context: Context, isShowed: Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(IS_ALREADY_SUPPORT_SHOW, isShowed)
+            editor.apply()
+        }
+
+        fun isAlreadySupportShow(context: Context): Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(IS_ALREADY_SUPPORT_SHOW, false)
+            return data
+        }
+
 
         fun allClear(context: Context) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
