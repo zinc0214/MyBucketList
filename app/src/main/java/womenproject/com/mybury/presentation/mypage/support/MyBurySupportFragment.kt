@@ -11,7 +11,7 @@ import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
-
+import womenproject.com.mybury.ui.SupportItemDecoration
 
 class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>() {
 
@@ -38,6 +38,8 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     private fun setUpViews(supportInfo: SupportInfo) {
         viewDataBinding.apply {
             purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
+            val itemDecoration = SupportItemDecoration()
+            purchaseItemListView.addItemDecoration(itemDecoration)
             purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems)
             purchaseItemListView.adapter = purchaseItemListAdapter
 
