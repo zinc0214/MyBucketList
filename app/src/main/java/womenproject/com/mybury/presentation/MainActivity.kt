@@ -63,9 +63,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private var purchasedItem: PurchasableItem? = null
 
 
-    public var supportInfo: SupportInfo? = null
-    public lateinit var purchaseSuccess: (String) -> Unit
-    public lateinit var purchaseFail: () -> Unit
+    var supportInfo: SupportInfo? = null
+    private lateinit var purchaseSuccess: (String) -> Unit
+    lateinit var purchaseFail: () -> Unit
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -260,7 +260,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         } else {
             Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
-                //결쩨된 내역에 대한 처리
+                //결제된 내역에 대한 처리
                 purchasedItemIds.add(it.sku)
             }
         }
@@ -358,7 +358,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             if (!purchaseHistoryList.isNullOrEmpty()) {
                 // 가장 최근에 구매된 아이템을 확인할 수 있다.
                 purchaseHistoryList.forEach {
-                    Log.d("mybury", "Previous Purchase Item : ${it.originalJson}")
+                    Log.d("mybury", "Previous Purchase Item : ${it.sku}, ${it.signature}, ${it.purchaseToken}")
                 }
             }
         }
@@ -406,7 +406,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     companion object {
-        private const val SUPPORT_PRICE = 80000
+        private const val SUPPORT_PRICE = 10000
     }
 
 
