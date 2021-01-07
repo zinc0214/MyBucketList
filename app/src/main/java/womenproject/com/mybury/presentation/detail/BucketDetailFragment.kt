@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.detail
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,7 +82,6 @@ class BucketDetailFragment : Fragment() {
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
-            lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
             isCategoryShow = bucketItem.category != "없음"
 
             if (bucketItem.dDate != null) {
@@ -111,6 +111,10 @@ class BucketDetailFragment : Fragment() {
             isCount = isShowCountLayout
             isDone = isCompleted
             isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
+
+            val desc: String = requireContext().getString(R.string.bucket_least_count)
+            currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
+
 
 
             when (imgList.size) {
