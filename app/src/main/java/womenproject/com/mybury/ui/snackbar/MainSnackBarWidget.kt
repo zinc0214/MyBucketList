@@ -57,7 +57,7 @@ class MainSnackBarWidget(
 
                 return MainSnackBarWidget(parent, customView).setDuration(1500)
             } catch (e: Exception) {
-                Log.e("exception", e.message)
+                e.message?.let { Log.e("exception", it) }
             }
             return null
         }
