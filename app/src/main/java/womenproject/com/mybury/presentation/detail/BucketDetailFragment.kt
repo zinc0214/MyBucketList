@@ -30,6 +30,7 @@ class BucketDetailFragment : Fragment() {
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
+    private var isFirstSucceddTime = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -115,8 +116,6 @@ class BucketDetailFragment : Fragment() {
             val desc: String = requireContext().getString(R.string.bucket_least_count)
             currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
 
-
-
             when (imgList.size) {
                 0 -> {
                     viewDataBinding.tabLayout.visibility = View.GONE
@@ -129,6 +128,18 @@ class BucketDetailFragment : Fragment() {
                     viewDataBinding.tabLayout.visibility = View.VISIBLE
                     viewDataBinding.imageLayout.visibility = View.VISIBLE
                 }
+            }
+
+            contentView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY > 10 && !isCompleted) {
+                    bottomDivider.visibility = View.VISIBLE
+                } else {
+                    bottomDivider.visibility = View.GONE
+                }
+            }
+
+            if (isFirstSucceddTime) {
+                contentView.post { contentView.fullScroll(View.FOCUS_DOWN) }
             }
 
             executePendingBindings()
@@ -249,6 +260,9 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun success() {
+                if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
+                    isFirstSucceddTime = true
+                }
                 loadBucketDetailInfo()
             }
 

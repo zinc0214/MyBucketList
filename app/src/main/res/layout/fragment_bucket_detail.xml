@@ -109,6 +109,7 @@
             android:layout_below="@+id/divider"
             android:fillViewport="true"
             app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -264,6 +265,7 @@
                     tools:layout_width="50dp" />
 
                 <LinearLayout
+                    android:id="@+id/succedLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -272,10 +274,10 @@
                     android:layout_marginBottom="30dp"
                     android:orientation="vertical"
                     android:visibility="@{isDone ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                    app:layout_constraintBottom_toTopOf="@id/bottomSpace"
                     app:layout_constraintVertical_bias="1"
                     tools:visibility="visible">
 
@@ -324,7 +326,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:layout_marginBottom="20dp"
                         android:gravity="center"
                         android:onClick="@{redoClickListener::onClick}"
                         android:paddingTop="10dp"
@@ -333,6 +334,14 @@
                         android:textColor="@color/_5a95ff"
                         android:textSize="13sp" />
                 </LinearLayout>
+
+                <androidx.legacy.widget.Space
+                    android:id="@+id/bottomSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -353,6 +362,18 @@
                 android:id="@+id/detail_more_menu"
                 layout="@layout/detail_more_menu" />
         </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/bottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/_e5e5e5"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+            app:layout_constraintTop_toBottomOf="@id/contentView"
+            app:layout_constraintVertical_bias="0"
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomLayout"
