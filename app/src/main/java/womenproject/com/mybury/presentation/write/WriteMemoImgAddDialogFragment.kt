@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -183,7 +182,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("HHmmss").format(Date())
         val imageFileName = "mybury_" + timeStamp + "_"
-        val storageDir = File("${Environment.getExternalStorageDirectory()}/mybury/")
+        val storageDir = File("${requireContext().getExternalFilesDir(null)}/mybury/")
         if (!storageDir.exists()) {
             storageDir.mkdirs()
         }
@@ -317,7 +316,8 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
                 e.printStackTrace()
             }
 
-            val folder = File("${Environment.getExternalStorageDirectory()}/mybury/")
+
+            val folder = File("${requireContext().getExternalFilesDir(null)}/mybury/")
             val tempFile = File(folder.toString(), croppedFileName!!.name)
             currentImgFile = tempFile
             photoUri = FileProvider.getUriForFile(requireContext(),
