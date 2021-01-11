@@ -30,7 +30,7 @@ class BucketDetailFragment : Fragment() {
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
-    private var isFirstSucceddTime = false
+    private var isFirstSucceedTime = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -83,6 +83,7 @@ class BucketDetailFragment : Fragment() {
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
+            memoReadMoreClickListener = readeMoreClickListener
             isCategoryShow = bucketItem.category != "없음"
 
             if (bucketItem.dDate != null) {
@@ -138,7 +139,7 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            if (isFirstSucceddTime) {
+            if (isFirstSucceedTime) {
                 contentView.post { contentView.fullScroll(View.FOCUS_DOWN) }
             }
 
@@ -214,6 +215,11 @@ class BucketDetailFragment : Fragment() {
         RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
     }
 
+    private val readeMoreClickListener = View.OnClickListener {
+        viewDataBinding.bucketMemo.maxLines = Int.MAX_VALUE
+        viewDataBinding.memoArrow.visibility = View.GONE
+    }
+
     private fun initObserve() {
         viewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
         viewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
@@ -261,7 +267,7 @@ class BucketDetailFragment : Fragment() {
 
             override fun success() {
                 if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
-                    isFirstSucceddTime = true
+                    isFirstSucceedTime = true
                 }
                 loadBucketDetailInfo()
             }
