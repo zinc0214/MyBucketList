@@ -24,14 +24,14 @@
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/filter_layout_background"
+        android:background="@drawable/shape_ffffff_r4"
         android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:background="@drawable/filter_dialog_top_background"
+            android:background="@drawable/shape_f6fcff_top_r4"
             android:orientation="vertical">
 
 
@@ -134,12 +134,12 @@
             android:layout_width="match_parent"
             android:layout_height="0.6dp"
             android:layout_marginTop="39dp"
-            android:background="@drawable/filter_dialog_bottom_binder" />
+            android:background="@drawable/shape_eaeaea" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:background="@drawable/filter_dialog_bottom_background"
+            android:background="@drawable/shape_press_ffffff_fafafa_bottom_r4"
             android:onClick="@{filterSetClickListener}">
 
             <TextView

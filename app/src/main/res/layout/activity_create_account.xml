@@ -29,7 +29,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="36dp"
-                        android:background="@drawable/mypage_profile_img_background_border"
+                        android:background="@drawable/shape_00ffffff_r26_strk_06_e8e8e8"
                         android:padding="0.5dp">
 
                         <androidx.cardview.widget.CardView
@@ -59,7 +59,7 @@
                         android:layout_below="@+id/profile_img_view_layout"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="12dp"
-                        android:background="@drawable/profile_img_edit_background"
+                        android:background="@drawable/shape_ffffff_r16_strk_06_5a95ff"
                         android:gravity="center"
                         android:paddingStart="20dp"
                         android:paddingTop="7dp"

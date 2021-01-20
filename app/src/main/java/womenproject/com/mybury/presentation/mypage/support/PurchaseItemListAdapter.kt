@@ -44,7 +44,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
             try {
                 Glide.with(binding.imageView).load(item.itemImg)
                         .override(300, 300)
-                        .placeholder(R.drawable.gradient_background)
+                        .placeholder(R.drawable.shape_gradient)
                         .into(binding.imageView)
             } catch (ex: IllegalArgumentException) {
                 Log.e("Glide-tag", "....")
@@ -54,7 +54,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
             if (!item.isPurchasable) {
                 itemView.isEnabled = false
                 itemView.isClickable = false
-                binding.contentLayout.background = binding.root.context.getDrawable(R.drawable.purchase_item_disable_background)
+                binding.contentLayout.background = binding.root.context.getDrawable(R.drawable.shape_b4b4b4_r12)
             }
 
             if (checkedPosition == -1) {

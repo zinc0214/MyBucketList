@@ -25,7 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/write_dialog_background"
+            android:background="@drawable/shape_ffffff_r4"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -65,7 +65,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="47dp"
-                android:background="@drawable/filter_dialog_bottom_background"
+                android:background="@drawable/shape_press_ffffff_fafafa_bottom_r4"
                 android:onClick="@{doToDdayClickListener}">
 
                 <TextView

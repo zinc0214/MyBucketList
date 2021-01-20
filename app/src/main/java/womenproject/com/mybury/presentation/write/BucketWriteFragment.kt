@@ -346,10 +346,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_press_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
                 }
             }
             false

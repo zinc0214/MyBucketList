@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -18,7 +16,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/write_dialog_background"
+        android:background="@drawable/shape_ffffff_r4"
         android:orientation="vertical">
 
         <TextView
@@ -36,7 +34,7 @@
             android:layout_height="36dp"
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
-            android:background="@drawable/write_goal_count_text_background">
+            android:background="@drawable/shape_ffffff_r4_strk_06_d8d8d8">
 
 
             <EditText

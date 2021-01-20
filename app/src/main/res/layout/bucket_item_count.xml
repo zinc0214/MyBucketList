@@ -62,7 +62,7 @@
                         android:id="@+id/bucket_succeed_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/bucket_item_succeed_background" />
+                        android:background="@drawable/shape_66859ecc_r4" />
 
                     <ImageView
                         android:id="@+id/bucket_item_image"
@@ -70,7 +70,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:background="@drawable/bucket_item_base_background" />
+                        android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/content_layout"

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -33,7 +31,7 @@
 
         <TextView
             android:id="@+id/write_item_text"
-            android:textColor="@color/write_item_text"
+            android:textColor="@color/press_434343_99434343"
             android:textSize="14sp"
             android:text="@{title}"
             android:gravity="center"

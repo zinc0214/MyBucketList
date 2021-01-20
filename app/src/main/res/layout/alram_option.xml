@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,8 +52,8 @@
                 android:id="@+id/switch_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/custom_switch_on"
-                app:altSrc="@drawable/custom_switch_off" />
+                android:src="@drawable/shape_5a95ff_r100_strk_06_e8e8e8"
+                app:altSrc="@drawable/shape_dddddd_r100_strk_06_e8e8e8" />
 
             <ImageView
                 android:id="@+id/switch_circle"
@@ -62,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_marginStart="4dp"
-                android:background="@drawable/custom_switch_circle"
+                android:background="@drawable/shape_oval_ffffff_size18"
                 app:layout_constraintBottom_toBottomOf="@+id/switch_background"
                 app:layout_constraintStart_toStartOf="@+id/switch_background"
                 app:layout_constraintTop_toTopOf="@+id/switch_background" />

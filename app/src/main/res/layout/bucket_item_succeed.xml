@@ -37,7 +37,7 @@
                     android:id="@+id/bucket_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bucket_item_succeed_background" />
+                    android:background="@drawable/shape_66859ecc_r4" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

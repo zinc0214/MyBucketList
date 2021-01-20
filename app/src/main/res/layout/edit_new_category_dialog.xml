@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/dialog_background"
+        android:background="@drawable/shape_ffffff_r4"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/category_add_dialog_background"
+                android:background="@drawable/shape_5a95ff_bottom_r4"
                 android:text="확인"
                 android:textColor="@color/_ffffff"
                 android:textSize="14sp"

@@ -31,7 +31,7 @@ class WriteCategoryDialogFragment(private var userCategory : List<Category>,
     override fun initDataBinding() {
         viewDataBinding.addCategory.title = "카테고리 추가"
         viewDataBinding.addCategory.itemClickListener = addCategoryListener()
-        context?.resources?.getColor(R.color.write_add_item_text)?.let { viewDataBinding.addCategory.writeItemText.setTextColor(it) }
+        context?.resources?.getColor(R.color.press_5a95ff_995a95ff)?.let { viewDataBinding.addCategory.writeItemText.setTextColor(it) }
 
         for (category in userCategory) {
             addCategoryItem(category)

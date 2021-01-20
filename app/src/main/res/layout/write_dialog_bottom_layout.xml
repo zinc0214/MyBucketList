@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -11,7 +9,9 @@
             name="cancelButtonClickListener"
             type="android.view.View.OnClickListener" />
 
-        w<variable
+        w
+
+        <variable
             name="confirmButtonClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -22,7 +22,7 @@
         android:id="@+id/base_layout"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="@drawable/base_dialog_bottom_sheet_background"
+        android:background="@drawable/shape_fafafa_bottom_r_4"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -65,7 +65,7 @@
                 style="@style/baseDialogButtonTextStyle"
                 android:onClick="@{confirmButtonClickListener}"
                 android:text="@string/dialog_confirm"
-                android:textColor="@color/dialog_btn_enable_color" />
+                android:textColor="@color/enable_5a95ff_b4b4b4" />
 
         </LinearLayout>
 

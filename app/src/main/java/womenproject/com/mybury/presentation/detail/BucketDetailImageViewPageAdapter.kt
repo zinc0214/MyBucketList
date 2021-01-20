@@ -38,8 +38,8 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
 
         try {
             Glide.with(view).load(images[position])
-                    .override(screenWidth,screenWidth)
-                    .placeholder(R.drawable.gradient_background).into(imageView)
+                    .override(screenWidth, screenWidth)
+                    .placeholder(R.drawable.shape_gradient).into(imageView)
         } catch (ex: IllegalArgumentException) {
             Log.e("Glide-tag", imageView.tag.toString())
         }

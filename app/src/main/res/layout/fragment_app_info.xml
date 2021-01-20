@@ -81,7 +81,7 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="7dp"
                 android:text="@{version_text}"
-                android:textColor="@color/update_color"
+                android:textColor="@color/enable_aaaaaa_5a95ff"
                 android:textSize="12sp"
                 tools:text="최신 버전 업데이트" />
 

@@ -180,7 +180,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         Preference.setEnableShowAlarm(requireContext(), false)

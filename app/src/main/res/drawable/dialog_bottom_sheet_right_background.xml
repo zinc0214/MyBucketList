@@ -2,13 +2,10 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 체크박스 해제상태 -->
     <item
-        android:drawable="@drawable/dialog_bottom_sheet_right_normal_background"
-        android:state_pressed="false" />
+        android:drawable="@drawable/shape_fafafa_bottom_right_r4" android:state_pressed="false" />
     <!-- 체크박스 선택상태 -->
-    <item
-        android:drawable="@drawable/dialog_bottom_sheet_right_press_background"
-        android:state_pressed="true" />
+    <item android:drawable="@drawable/shape_e8e8e8_bottom_right_r4" android:state_pressed="true" />
     <!-- default state -->
-    <item android:drawable="@drawable/dialog_bottom_sheet_right_normal_background" />
+    <item android:drawable="@drawable/shape_fafafa_bottom_right_r4" />
 </selector>
 

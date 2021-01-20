@@ -2,14 +2,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 체크박스 해제상태 -->
     <item
-        android:drawable="@drawable/profile_edit_unfocus"
-        android:state_focused="false" />
+        android:drawable="@drawable/shape_ffffff_r2_strk_06_dddddd" android:state_focused="false" />
     <!-- 체크박스 선택상태 -->
-    <item
-        android:drawable="@drawable/profile_edit_focus"
-        android:state_focused="true" />
+    <item android:drawable="@drawable/shape_ffffff_r2_strk_06_5a95ff" android:state_focused="true" />
     <!-- default state -->
-    <item android:drawable="@drawable/profile_edit_unfocus" />
+    <item android:drawable="@drawable/shape_ffffff_r2_strk_06_dddddd" />
 </selector>
 
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/purchase_item_base_background" android:state_selected="false" />
-    <item android:drawable="@drawable/purchase_item_click_background" android:state_selected="true" />
-    <item android:drawable="@drawable/purchase_item_disable_background" android:state_enabled="false" />
-    <item android:drawable="@drawable/purchase_item_base_background" />
+    <item android:drawable="@drawable/shape_ffffff_r12" android:state_selected="false" />
+    <item android:drawable="@drawable/shape_ffffff_r12_strk_1_5a95ff" android:state_selected="true" />
+    <item android:drawable="@drawable/shape_b4b4b4_r12" android:state_enabled="false" />
+    <item android:drawable="@drawable/shape_ffffff_r12" />
 </selector>
 

@@ -20,7 +20,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/write_dialog_background"
+        android:background="@drawable/shape_ffffff_r4"
         android:orientation="vertical">
 
         <RelativeLayout

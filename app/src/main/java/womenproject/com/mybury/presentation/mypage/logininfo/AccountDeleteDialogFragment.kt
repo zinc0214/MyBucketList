@@ -87,6 +87,6 @@ class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
 
 
     private fun setDoneSuccessUIButton() {
-        viewDataBinding.lastBucketItem.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+        viewDataBinding.lastBucketItem.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 }

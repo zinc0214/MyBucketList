@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/mypage_category_edit_background"
+                    android:background="@drawable/shape_00ffffff_r13_strk_06_5a95ff"
                     android:gravity="center"
                     android:onClick="@{categoryEditClickListener}"
                     android:paddingStart="6dp"

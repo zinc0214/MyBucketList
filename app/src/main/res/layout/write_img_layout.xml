@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/dday_bucket_item_success_background" />
+                    android:background="@drawable/shape_ffca5a_r4" />
 
                 <RelativeLayout
                     android:layout_alignParentRight="true"
@@ -49,7 +49,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:background="@drawable/write_img_remove_circle" />
+                        android:background="@drawable/shape_oval_b3ffffff_16" />
 
                     <ImageView
                         android:layout_marginRight="6dp"

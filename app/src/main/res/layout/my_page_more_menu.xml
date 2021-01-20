@@ -54,7 +54,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="84dp"
             android:layout_marginEnd="40dp"
-            android:background="@drawable/bucket_item_base_background"
+            android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8"
             android:orientation="vertical"
             android:padding="10dp">
 

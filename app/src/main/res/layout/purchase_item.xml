@@ -61,7 +61,7 @@
                 android:layout_marginBottom="18dp"
                 android:gravity="center"
                 android:text="@{info.itemPrice}"
-                android:textColor="@color/purchase_price_color"
+                android:textColor="@color/select_666666_5a95ff"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

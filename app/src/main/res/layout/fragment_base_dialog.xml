@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <data>
@@ -35,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/dialog_background"
+        android:background="@drawable/shape_ffffff_r4"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -86,7 +84,7 @@
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/base_dialog_bottom_sheet_background"
+                android:background="@drawable/shape_fafafa_bottom_r_4"
                 android:orientation="horizontal">
 
                 <TextView
