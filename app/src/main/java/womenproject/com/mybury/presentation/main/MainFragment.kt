@@ -67,12 +67,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
             }
 
             override fun fail() {
-                //stopLoading()
                 NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {
-                //startLoading()
             }
 
             override fun success(value: Any) {
