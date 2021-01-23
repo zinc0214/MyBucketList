@@ -5,7 +5,7 @@ import android.view.View
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.databinding.BucketItemBaseBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.presentation.main.bucketlist.BaseNormalBucketItemViewHolder
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
@@ -14,7 +14,7 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  */
 
 
-class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding,
+class DdayNormalBucketItemViewHolder(private val binding: ItemBucketDoingSimpleBinding,
                                      private val showSnackBar: ((BucketItem) -> Unit)) : BaseNormalBucketItemViewHolder(binding, showSnackBar) {
 
     override fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
@@ -23,7 +23,7 @@ class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding,
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)
         }
-        bucketItemImage.setBackgroundResource(R.drawable.bucket_item_dday_background)
+        bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_ffca5a)
 
     }
 
@@ -33,19 +33,19 @@ class DdayNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding,
 
     override fun setFinalSuccessUIBackground() {
         super.setFinalSuccessUIBackground()
-        bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)
+        bucketItemImage.setBackgroundResource(R.drawable.shape_ffca5a_r4)
     }
 
     override fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._e8e8e8)
-        bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+        bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
 
     }
 
     override fun setDdayColor() {
         binding.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
         binding.successButtonLayout.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
-        binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
+        binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_33cca248_r4)
 
         binding.ddayTextView.visibility = View.GONE
     }

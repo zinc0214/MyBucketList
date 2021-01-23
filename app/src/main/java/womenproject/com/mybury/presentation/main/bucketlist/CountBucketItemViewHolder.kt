@@ -15,7 +15,7 @@ import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
-import womenproject.com.mybury.databinding.BucketItemCountBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingCountBinding
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
@@ -24,7 +24,7 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 class CountBucketItemViewHolder(
         private val isDdayUI: Boolean,
-        private val binding: BucketItemCountBinding,
+        private val binding: ItemBucketDoingCountBinding,
         private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.ViewHolder(binding.root) {
 
     private val successImageView = binding.successButtonView.successImg
@@ -73,7 +73,7 @@ class CountBucketItemViewHolder(
             binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
             binding.horizontalProgressBar.progressDrawable = MyBuryApplication.context.getDrawable(R.drawable.dday_horizontal_progressbar)
             binding.successButtonView.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
-            binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.dday_bucket_item_succeed_background)
+            binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_33cca248_r4)
             binding.userCount.text = formattingCountText
             binding.ddayTextView.visibility = View.GONE
         }
@@ -130,9 +130,9 @@ class CountBucketItemViewHolder(
             progressButton.setProgress(animation.animatedValue as Float)
         }
         if (isDdayUI) {
-            binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_item_dday_background)
+            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_ffca5a)
         } else {
-            binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_item_successing_background)
+            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_a6c6ff)
         }
     }
 
@@ -151,9 +151,9 @@ class CountBucketItemViewHolder(
         circularProgressBar.visibility = View.GONE
 
         if (isDdayUI) {
-            binding.bucketItemImage.setBackgroundResource(R.drawable.dday_bucket_item_success_background)
+            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffca5a_r4)
         } else {
-            binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
+            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_a6c6ff_r4)
         }
     }
 
@@ -163,7 +163,7 @@ class CountBucketItemViewHolder(
 
     private fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._e8e8e8)
-        binding.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_item_base_background)
+        binding.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 
 

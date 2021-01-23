@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.android.billingclient.api.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -18,28 +22,51 @@ import com.google.android.gms.ads.MobileAds
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.isAlreadySupportShow
+import womenproject.com.mybury.data.PurchasableItem
+import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.main.*
+import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
+import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import womenproject.com.mybury.util.showToast
 
 
 /**
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainActivity : BaseActiviy() {
+class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var supportViewModel: MyBurySupportViewModel
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var loadingImg: ImageView
+    private lateinit var supportLoadingImg: ImageView
     private lateinit var animationDrawable: AnimationDrawable
+    private lateinit var supportAnimationDrawable: AnimationDrawable
 
     private lateinit var interstitialAd: InterstitialAd
+    private var isAdShow = true
+
+    private lateinit var billingClient: BillingClient
+
+    private val purchasableItemIds = ArrayList<String>()
+    private val purchasedItemIds = ArrayList<String>()
+    private var purchasedItem: PurchasableItem? = null
+
+
+    var supportInfo: SupportInfo? = null
+    private lateinit var purchaseSuccess: () -> Unit
+    lateinit var purchaseFail: () -> Unit
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +78,32 @@ class MainActivity : BaseActiviy() {
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
         val baseViewModel = BaseViewModel()
+        supportViewModel = MyBurySupportViewModel()
 
         if (baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
         }
 
+        supportViewModel.getPurchasableItem {
+            // Do Something
+        }
+
+        supportViewModel.supportInfo.observe(this, Observer { info ->
+            setSupportPrice(info.totalPrice.toInt())
+            initBillingClient(info.supportItems)
+            supportInfo = info
+            supportInfo?.supportItems?.forEach {
+                it.isPurchasable = true
+            }
+        })
+
         loadingImg = binding.loadingLayout.loadingImg
         loadingImg.setImageResource(R.drawable.loading_anim)
         animationDrawable = loadingImg.drawable as AnimationDrawable
+
+        supportLoadingImg = binding.supportLoadingLayout.loadingImg
+        supportLoadingImg.setImageResource(R.drawable.loading_anim)
+        supportAnimationDrawable = supportLoadingImg.drawable as AnimationDrawable
 
         Preference.setEnableShowAlarm(this, true)
         setStatusBar(this, R.color._ffffff)
@@ -84,46 +129,39 @@ class MainActivity : BaseActiviy() {
             - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
         */
 
-        //"ca-app-pub-3940256099942544/1033173712" 는 구글에서 테스트용으로 공개한 Test Ad Id - 배포시 실제 Id 로 변경 해야 함
-        /*
-            @안드로이드용 테스트광고 ID -- (https://developers.google.com/admob/unity/test-ads?hl=ko)
-            - 배너 광고: ca-app-pub-3940256099942544/6300978111
-            - 전면 광고: ca-app-pub-3940256099942544/1033173712
-            - 보상형 동영상 광고: ca-app-pub-3940256099942544/5224354917
-            - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
-        */
-
         interstitialAd.adUnitId = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712"
         else "ca-app-pub-6302671173915322/8119781606"
 
         //광고 이벤트리스너 등록
-
-        //광고 이벤트리스너 등록
         interstitialAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                Log.d("ayhan", "onAdLoaded")
+                Log.d("myBury", "onAdLoaded")
             }
 
             override fun onAdFailedToLoad(errorCode: Int) {
-                Log.d("ayhan", "onAdFailedToLoad")
+                Log.d("myBury", "onAdFailedToLoad")
             }
 
             override fun onAdOpened() {
-                Log.d("ayhan", "onAdOpened")
+                Log.d("myBury", "onAdOpened")
             }
 
             override fun onAdClicked() {
-                Log.d("ayhan", "onAdClicked")
+                Log.d("myBury", "onAdClicked")
             }
 
             override fun onAdLeftApplication() {
-                Log.d("ayhan", "onAdLeftApplication")
+                Log.d("myBury", "onAdLeftApplication")
             }
 
             override fun onAdClosed() {
-                Log.d("ayhan", "onAdClosed")
+                Log.d("myBury", "onAdClosed")
                 // Code to be executed when the interstitial ad is closed.
                 interstitialAd.loadAd(AdRequest.Builder().build())
+                if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
+                    showSupportDialogFragment()
+                }
+
             }
         }
 
@@ -131,23 +169,280 @@ class MainActivity : BaseActiviy() {
     }
 
 
-    public fun startLoading() {
+    fun startLoading() {
         animationDrawable.start()
         binding.loadingLayout.layout.visibility = View.VISIBLE
     }
 
-    public fun stopLoading() {
+    fun stopLoading() {
         animationDrawable.stop()
         binding.loadingLayout.layout.visibility = View.GONE
     }
 
-    public fun showAds() {
-        if (interstitialAd.isLoaded) {
+    fun showAds() {
+        Log.e("myBury", "isAdShow : $isAdShow")
+        if (interstitialAd.isLoaded && isAdShow) {
             interstitialAd.show()
         } else {
-            Log.d("ayhan", "The interstitial wasn't loaded yet.");
+            Log.d("myBury", "The interstitial wasn't loaded yet.");
         }
     }
+
+    fun setSupportPrice(price: Int) {
+        isAdShow = price < SUPPORT_PRICE || BuildConfig.DEBUG
+    }
+
+    fun purchaseSelectItem(id: String, purchaseSuccess: () -> Unit, purchaseFail: () -> Unit) {
+        purchaseItem(id)
+        this.purchaseSuccess = purchaseSuccess
+        this.purchaseFail = purchaseFail
+    }
+
+    private fun showSupportDialogFragment() {
+        val fragment = SupportDialogFragment()
+        fragment.setButtonAction({
+            purchaseItem("cheer.11000")
+            fragment.dismiss()
+        }, {
+            val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)
+            val currentFragment = parentFragment?.childFragmentManager?.fragments?.get(0)
+
+            if (currentFragment is MainFragment) {
+                val directions = MainFragmentDirections.actionMainBucketToMyburySupport()
+                findNavController(R.id.nav_fragment).navigate(directions)
+            } else {
+                val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
+                findNavController(R.id.nav_fragment).navigate(directions)
+            }
+
+            fragment.dismiss()
+
+        })
+        fragment.show(supportFragmentManager, "tag")
+    }
+
+    /**
+     *  BillingClient 초기화
+     */
+    private fun initBillingClient(items: List<PurchasableItem>) {
+        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this)
+                .build()
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    getAcknowledgePurchasedItem()
+                    getAllPurchasedItem()
+                    setPurchasableList(items)
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                Log.e("mybury", "Service Disconnected.")
+            }
+        })
+    }
+
+    /**
+     * 최근에 결제한 아이템을 확인하는 목적
+     * checkPurchaseHistory function 과 다르게  consumeAsync 를 통해 구매된 상품도 확인할 수 있다.
+     * !!주의!! 아이템 Id 로만 가져오기 때문에 여러번 구매하더라도 가장 최근의 제품만 가져온다.
+     */
+    fun getAllPurchasedItem() {
+        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP, this)
+    }
+
+    /**
+     * 구매 가능한 리스트의 아이템을 추가한다.
+     */
+    private fun setPurchasableList(list: List<PurchasableItem>) {
+
+        // Google PlayConsole 의 상품Id 와 동일하게 적어준다
+        list.forEach { item ->
+            if (purchasedItemIds.none { it == item.googleKey }) {
+                purchasableItemIds.add(item.googleKey)
+            }
+        }
+        purchasedItemCheck()
+    }
+
+    private fun purchasedItemCheck() {
+        purchasedItemIds.forEach { purchasedId ->
+            supportInfo?.supportItems?.filter { it.googleKey == purchasedId }?.forEach {
+                it.isPurchasable = false
+            }
+        }
+    }
+
+
+    /**
+     * 아이템을 구매하기 위해서는 구매가능한 아이템 리스트와 확인이 필요하다.
+     * 리스트가 존재할 경우 실제 구매를 할 수 있다.
+     */
+    private fun purchaseItem(purchaseId: String) {
+        val params = SkuDetailsParams.newBuilder()
+        params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
+        billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
+            if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
+                purchasedItem = supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
+                if (purchasedItem == null) {
+                    Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    return@querySkuDetailsAsync
+                }
+                val purchaseItem = skuDetails.first { it.sku == purchaseId }
+                val flowParams =
+                        BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()
+                billingClient.launchBillingFlow(this, flowParams)
+                Log.e("mybury", " skuDetails[listNumber] : ${purchaseItem.title}")
+            } else {
+                Log.e("mybury", "No sku found from query")
+            }
+        }
+    }
+
+    /**
+     * 구매 방식에 대해 처리한다. item 의 id 에 따라서
+     * purchaseAlways 또는 purchaseOnce 로 보낸다.
+     * (바텀에 결제 화면이 뜬 시점)
+     */
+    override fun onPurchasesUpdated(
+            billingResult: BillingResult,
+            purchaseList: MutableList<Purchase>?
+    ) {
+        Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}")
+
+        when (billingResult.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
+                purchaseList?.forEach {
+                    // TODO : 이 시점에 토큰을 서버에 전달한다.
+                    purchaseAlways(it.purchaseToken)
+                }
+            }
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
+                Log.d("mybury", "You've cancelled the Google play billing process...")
+                "결제가 취소되었습니다".showToast(this)
+                purchaseFail.invoke()
+            }
+            else -> {
+                "결제가 실패했습니다".showToast(this)
+                purchaseFail.invoke()
+            }
+        }
+    }
+
+    // 최근 구매한 아이템을 알고자 할 때 사용
+    override fun onPurchaseHistoryResponse(
+            billingResult: BillingResult,
+            purchaseHistoryList: MutableList<PurchaseHistoryRecord>?
+    ) {
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            if (!purchaseHistoryList.isNullOrEmpty()) {
+                // 가장 최근에 구매된 아이템을 확인할 수 있다.
+                purchaseHistoryList.forEach {
+
+                    //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있지만, getAcknowledgePurchasedItem 목록에는 없다면 성공한 것으로 간주한다.
+
+                    Log.d("mybury", "Previous Purchase Item : ${it.sku}, ${it.signature}, ${it.purchaseToken}. ${it}")
+                }
+            }
+        }
+    }
+
+    /**
+     * 이미 결제한 적이 있는 아이템을 보여주지 않아야 하는 경우 또는
+     * 선택을 비활성화 시켜야 하는 경우 등에 사용할 function
+     * acknowledgePurchase 을 통해 구매된 제품만 확인할 수 있다.
+     */
+    fun getAcknowledgePurchasedItem() {
+
+        // BillingClient 의 준비가 되지않은 상태라면 돌려보낸다
+        if (!billingClient.isReady) {
+            return
+        }
+
+        // 인앱결제된 내역을 확인한다
+        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+        if (result.purchasesList == null) {
+            Log.d("mybury", "No existing in app purchases found.")
+        } else {
+            Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
+            result.purchasesList?.forEach {
+                //결제된 내역에 대한 처리
+
+                //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
+                Log.d("ayhan", "Bought is Fail??? : ${it.orderId} \n ${it.sku} \n ${it.purchaseToken} \n ${it.purchaseState} \n ${it.originalJson}")
+                // purchasedItemIds.add(it.sku)
+            }
+        }
+    }
+
+    // 소비성 (계속 구매 가능한) 제품 구매시
+    private fun purchaseAlways(purchaseToken: String) {
+        val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
+        billingClient.consumeAsync(consumeParams) { billingResult, _ ->
+
+            Log.d("ayhan", "TOKEN : $purchaseToken, ${billingResult.responseCode}")
+
+            startSupportLoading()
+
+            when (billingResult.responseCode) {
+                BillingClient.BillingResponseCode.OK -> {
+                    purchasedItem?.let {
+                        supportViewModel.purchasedItem(it.id, {
+                            showSupportPurchaseSuccessDialog()
+                            stopSupportLoading()
+                            purchaseSuccess.invoke()
+                        }, {
+                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                            stopSupportLoading()
+                        })
+                    }
+                }
+                else -> {
+                    Log.e("mybury", "FAIL : ${billingResult.responseCode}")
+                    showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                    stopSupportLoading()
+                }
+            }
+        }
+    }
+
+    // 일회성 제품 구매시
+    private fun purchaseOnce(purchaseToken: String) {
+        val params = AcknowledgePurchaseParams.newBuilder()
+                .setPurchaseToken(purchaseToken)
+                .build()
+        billingClient.acknowledgePurchase(params) { billingResult ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            } else {
+                Log.e("TAG", "FAIL : ${billingResult.responseCode}")
+            }
+        }
+    }
+
+    private fun showSupportPurchaseSuccessDialog() {
+        val supportSuccessDialogFragment = SupportSuccessDialogFragment()
+        supportSuccessDialogFragment.show(supportFragmentManager, "tag")
+    }
+
+    private fun showSupportPurchaseFailDialog(token: String, errorCode: String) {
+        val supportFailDialogFragment = SupportFailDialogFragment(token, errorCode)
+        supportFailDialogFragment.show(supportFragmentManager, "tag")
+    }
+
+    private fun startSupportLoading() {
+        supportAnimationDrawable.start()
+        binding.supportLoadingLayout.layout.visibility = View.VISIBLE
+    }
+
+    private fun stopSupportLoading() {
+        supportAnimationDrawable.stop()
+        binding.supportLoadingLayout.layout.visibility = View.GONE
+    }
+
+    companion object {
+        private const val SUPPORT_PRICE = 10000
+    }
+
 
 }
 

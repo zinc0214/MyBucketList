@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="doToDdayClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="close3DaysClickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_ffffff_r4"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/supportSuccessImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="57dp"
+                android:src="@drawable/bury_alarm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="D-Day 알림"
+                android:textColor="@color/_222222"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:gravity="center_horizontal"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:text="다가온 목표들이 있어요!\n버리와 같이 확인하러 가볼까요?"
+                android:textColor="@color/_888888"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="35dp"
+                android:background="@color/_dbdbdb" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:background="@drawable/shape_press_ffffff_fafafa_bottom_r4"
+                android:onClick="@{doToDdayClickListener}">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="확인"
+                    android:textColor="#5a95ff"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/alarmCloseTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:onClick="@{close3DaysClickListener::onClick}"
+            android:text="@string/alarm_close"
+            android:textColor="@color/_c4c4c4"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+</layout>

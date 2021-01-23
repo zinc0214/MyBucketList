@@ -2,10 +2,10 @@ package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.databinding.DdayBucketItemSucceedBinding
+import womenproject.com.mybury.databinding.ItemDdayBucketSucceedBinding
 import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder
 
-class DdaySucceedBucketItemViewHolder(private val binding: DdayBucketItemSucceedBinding) : BaseBucketItemViewHolder(binding) {
+class DdaySucceedBucketItemViewHolder(private val binding: ItemDdayBucketSucceedBinding) : BaseBucketItemViewHolder(binding) {
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {

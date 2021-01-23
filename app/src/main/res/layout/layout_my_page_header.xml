@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <variable
+            name="moreClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="doingBucketListClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="doneBucketListClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <womenproject.com.mybury.ui.CollapsibleToolbar
+        android:id="@+id/constraintToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/_fafafa"
+        android:fitsSystemWindows="true"
+        android:minHeight="128dp"
+        app:layoutDescription="@xml/my_page_header"
+        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/shape_gradient" />
+
+        <ImageView
+            android:id="@+id/whiteBackground"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8" />
+
+
+        <ImageButton
+            android:id="@+id/more_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/my_page_more"
+            android:onClick="@{moreClickListener}"
+            app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
+            app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
+
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/large_profile_cardview"
+            android:layout_width="@dimen/image_width"
+            android:layout_height="@dimen/image_width"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="72dp"
+            android:shadowColor="@color/_ffffff"
+            app:border_width="2dp"
+            app:cardBackgroundColor="@color/_dddddd"
+            app:cardCornerRadius="26dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/background"
+            app:layout_constraintStart_toStartOf="@+id/background"
+            app:layout_constraintTop_toTopOf="@+id/background"
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <ImageView
+                android:id="@+id/profile_large_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0.5dp"
+                android:background="@drawable/default_profile_bury" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/_434343"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/whiteBackground"
+            app:layout_constraintStart_toStartOf="@id/whiteBackground"
+            app:layout_constraintTop_toBottomOf="@+id/large_profile_cardview"
+            tools:text="닉네임" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/small_profile_cardview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:shadowColor="@color/_ffffff"
+            app:border_width="2dp"
+            app:cardBackgroundColor="@color/_dddddd"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/background"
+            app:layout_constraintStart_toStartOf="@+id/background"
+            app:layout_constraintTop_toTopOf="@+id/background">
+
+            <ImageView
+                android:id="@+id/profile_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:background="@drawable/default_profile_bury" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <RelativeLayout
+            android:id="@+id/bucket_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:onClick="@{doingBucketListClickListener}"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/doingLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/startCountText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/_a6c6ff"
+                    android:textSize="14sp"
+                    tools:text="10" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="진행중"
+                    android:textAlignment="center"
+                    android:textColor="@color/_a6c6ff"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/completeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_toRightOf="@+id/doingLayout"
+                android:gravity="center"
+                android:onClick="@{doneBucketListClickListener}"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/completeCountText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/_a6c6ff"
+                    android:textSize="14sp"
+                    tools:text="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="완료"
+                    android:textAlignment="center"
+                    android:textColor="@color/_a6c6ff"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </womenproject.com.mybury.ui.CollapsibleToolbar>
+
+</layout>

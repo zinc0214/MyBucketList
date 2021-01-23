@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="30dp"
                     tools:itemCount="5"
-                    tools:listitem="@layout/bucket_item_base" />
+                    tools:listitem="@layout/item_bucket_doing_simple" />
 
                 <ImageView
                     android:id="@+id/end_image"
@@ -45,7 +45,7 @@
 
         <include
             android:id="@+id/header_layout"
-            layout="@layout/top_back_btn_layout"/>
+            layout="@layout/layout_top_back_btn" />
 
     </RelativeLayout>
 

@@ -2,20 +2,15 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 체크박스 해제상태 -->
     <item
-        android:drawable="@drawable/category_unselect_background"
-        android:state_enabled="true"
+        android:drawable="@drawable/shape_ffffff_strk_06_cccccc" android:state_enabled="true"
         android:state_checked="false" />
     <!-- 체크박스 선택상태 -->
-    <item
-        android:drawable="@drawable/category_select_background"
-        android:state_enabled="true"
+    <item android:drawable="@drawable/shape_a6c6ff" android:state_enabled="true"
         android:state_checked="true" />
 
-    <item
-        android:drawable="@drawable/category_enable_background"
-        android:state_enabled="false" />
+    <item android:drawable="@drawable/shape_f3f3f3_strk_06_dddddd" android:state_enabled="false" />
 
     <!-- default state -->
-    <item android:drawable="@drawable/category_unselect_background" />
+    <item android:drawable="@drawable/shape_ffffff_strk_06_cccccc" />
 </selector>
 

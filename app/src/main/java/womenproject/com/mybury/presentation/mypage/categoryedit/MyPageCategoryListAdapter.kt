@@ -4,9 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.MyPageCategory
-import womenproject.com.mybury.databinding.MypageCategoryItemBinding
+import womenproject.com.mybury.databinding.ItemMypageCategoryBinding
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
@@ -18,7 +17,7 @@ class MyPageCategoryListAdapter(context: Context?, bucketCategoryList: MutableLi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        myPageCategoryListViewHolder = MyPageCategoryListViewHolder(MypageCategoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        myPageCategoryListViewHolder = MyPageCategoryListViewHolder(ItemMypageCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         return myPageCategoryListViewHolder
     }
 

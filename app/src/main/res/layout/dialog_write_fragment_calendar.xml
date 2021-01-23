@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+
+        <variable
+            name="leftArrowClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="rightArrowClickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/shape_ffffff_r4"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="36dp">
+
+            <ImageView
+                android:id="@+id/left_arrow_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="58dp"
+                android:background="@drawable/calendar_left_arrow"
+                android:onClick="@{leftArrowClickListener}" />
+
+            <TextView
+                android:id="@+id/date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/_222222"
+                android:textSize="16sp" />
+
+
+            <ImageView
+                android:id="@+id/right_arrow_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="58dp"
+                android:background="@drawable/calendar_left_arrow"
+                android:onClick="@{rightArrowClickListener}"
+                android:scaleX="-1" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:animationCache="false"
+                app:mcv_allowClickDaysOutsideCurrentMonth="true"
+                app:mcv_calendarMode="month"
+                app:mcv_selectionColor="@color/_5a95ff"
+                app:mcv_showOtherDates="defaults" />
+
+            <LinearLayout
+                android:id="@+id/date_picker_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:textSize="15sp">
+
+                <DatePicker
+                    android:id="@+id/date_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <include
+            android:id="@+id/bottom_sheet"
+            layout="@layout/dialog_write_fragment_bottom_layout" />
+    </LinearLayout>
+
+</layout>

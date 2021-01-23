@@ -132,7 +132,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:background="@drawable/write_memo_background"
+                            android:background="@drawable/shape_f3f3f3_r4"
                             android:minHeight="52dp"
                             android:visibility="gone"
                             tools:visibility="visible">
@@ -263,8 +263,8 @@
                                 android:id="@+id/switch_background"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/custom_switch_on"
-                                app:altSrc="@drawable/custom_switch_off" />
+                                android:src="@drawable/shape_5a95ff_r100_strk_06_e8e8e8"
+                                app:altSrc="@drawable/shape_dddddd_r100_strk_06_e8e8e8" />
 
                             <ImageView
                                 android:id="@+id/switch_circle"
@@ -272,7 +272,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="4dp"
                                 android:layout_marginStart="4dp"
-                                android:background="@drawable/custom_switch_circle"
+                                android:background="@drawable/shape_oval_ffffff_size18"
                                 app:layout_constraintBottom_toBottomOf="@+id/switch_background"
                                 app:layout_constraintStart_toStartOf="@+id/switch_background"
                                 app:layout_constraintTop_toTopOf="@+id/switch_background" />
@@ -291,7 +291,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@drawable/sub2_basic"
+                    android:background="@drawable/shape_ffffff_f0f0f0"
                     android:onClick="@{categorySelectListener}">
 
                     <ImageView
@@ -326,7 +326,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@drawable/sub2_basic"
+                    android:background="@drawable/shape_ffffff_f0f0f0"
                     android:onClick="@{ddayAddListener}">
 
                     <ImageView
@@ -362,7 +362,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@drawable/sub2_basic"
+                    android:background="@drawable/shape_ffffff_f0f0f0"
                     android:onClick="@{goalCountSettingListener}">
 
                     <ImageView

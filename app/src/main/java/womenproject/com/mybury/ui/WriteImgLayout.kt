@@ -3,16 +3,13 @@ package womenproject.com.mybury.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.widget.*
-import androidx.cardview.widget.CardView
+import android.view.View.OnTouchListener
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.img_wide_layout.view.*
-import kotlinx.android.synthetic.main.write_img_layout.view.*
 import womenproject.com.mybury.R
 
 
@@ -25,7 +22,7 @@ class WriteImgLayout internal constructor(context: Context,
     private lateinit var cardViewLayout : RelativeLayout
 
     fun setUI(uri: Uri): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.widget_write_add_img, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
       //  imgView.setImageURI(uri)
@@ -54,10 +51,10 @@ class WriteImgLayout internal constructor(context: Context,
 
 
     fun setAleadyUI(url : String): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.widget_write_add_img, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
-        Glide.with(view).load(url).centerCrop().placeholder(R.drawable.gradient_background).into(imgView)
+        Glide.with(view).load(url).centerCrop().placeholder(R.drawable.shape_gradient).into(imgView)
 
         cardViewLayout = view.findViewById(R.id.img_all_layout)
         cardViewLayout.setOnClickListener {
@@ -75,19 +72,20 @@ class WriteImgLayout internal constructor(context: Context,
         return view
     }
 
-    private fun imgRemoveBtnOnTouchListener(): View.OnTouchListener {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun imgRemoveBtnOnTouchListener() = OnTouchListener { _, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                cardViewLayout.foreground = context.getDrawable(R.drawable.shape_33ffffff_r4)
 
-        return View.OnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    cardViewLayout.foreground = context.getDrawable(R.drawable.img_remove_btn_press_background)
-
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    cardViewLayout.foreground = context.getDrawable(R.drawable.tranperant_background)
-                }
             }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                cardViewLayout.foreground = context.getDrawable(R.drawable.shape_00ffffff_r4)
+            }
+            else -> {
+                // Do Nothing
+            }
+        }
             false
         }
-    }
 }

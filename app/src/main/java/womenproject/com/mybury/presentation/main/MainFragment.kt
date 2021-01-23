@@ -67,12 +67,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
             }
 
             override fun fail() {
-                stopLoading()
                 NetworkFailDialog().show(requireActivity().supportFragmentManager)
             }
 
             override fun start() {
-                startLoading()
             }
 
             override fun success(value: Any) {
@@ -87,7 +85,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.endImage.visibility = View.VISIBLE
                     viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
-                stopLoading()
+                //stopLoading()
                 if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
                     showDdayPopup()
                 }
@@ -179,7 +177,6 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
         MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

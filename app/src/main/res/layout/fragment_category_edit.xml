@@ -42,7 +42,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/_ffffff"
                         android:overScrollMode="never"
-                        tools:listitem="@layout/category_list_item" />
+                        tools:listitem="@layout/item_category" />
 
                     <Space
                         android:id="@+id/space"
@@ -85,7 +85,7 @@
                         android:enabled="false"
                         android:onClick="@{()->fragment.setCategoryDeleteListener()}"
                         android:text="삭제"
-                        android:textColor="@color/edit_enable_color" />
+                        android:textColor="@color/enable_5a95ff_dddddd" />
 
                     <TextView
                         android:id="@+id/confirm_text"
@@ -118,7 +118,7 @@
 
             <include
                 android:id="@+id/back_layout"
-                layout="@layout/top_back_btn_layout" />
+                layout="@layout/layout_top_back_btn" />
 
         </RelativeLayout>
 

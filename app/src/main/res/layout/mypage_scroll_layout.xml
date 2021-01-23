@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/mypage_category_edit_background"
+                    android:background="@drawable/shape_00ffffff_r13_strk_06_5a95ff"
                     android:gravity="center"
                     android:onClick="@{categoryEditClickListener}"
                     android:paddingStart="6dp"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:listitem="@layout/mypage_category_item" />
+                tools:listitem="@layout/item_mypage_category" />
         </LinearLayout>
 
 

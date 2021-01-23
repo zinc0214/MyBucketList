@@ -3,9 +3,9 @@ package womenproject.com.mybury.presentation.main.bucketlist
 import android.view.View
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
-import womenproject.com.mybury.databinding.BucketItemSucceedBinding
+import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
 
-class SucceedBucketItemViewHolder(private val binding: BucketItemSucceedBinding) : BaseBucketItemViewHolder(binding) {
+class SucceedBucketItemViewHolder(private val binding: ItemBucketSucceedBinding) : BaseBucketItemViewHolder(binding) {
 
     override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -14,25 +15,28 @@
             type="android.view.View.OnClickListener" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/_fafafa">
 
         <include
             android:id="@+id/back_layout"
-            layout="@layout/top_back_btn_layout" />
-
+            layout="@layout/layout_top_back_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="58dp"
-            android:layout_marginTop="105dp"
-            android:layout_marginEnd="58dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/back_layout">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -42,17 +46,17 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="마이버리 "
                 android:textColor="@color/_434343"
                 android:textSize="16sp" />
 
             <LinearLayout
-                android:layout_marginTop="4dp"
-                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/current_version_info"
@@ -77,64 +81,70 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="7dp"
                 android:text="@{version_text}"
-                android:textColor="@color/update_color"
+                android:textColor="@color/enable_aaaaaa_5a95ff"
                 android:textSize="12sp"
                 tools:text="최신 버전 업데이트" />
 
             <include
                 android:id="@+id/use_eula"
-                layout="@layout/app_info_button"
+                layout="@layout/widget_app_info_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="32dp" />
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="60dp" />
 
             <include
                 android:id="@+id/privacy_eula"
-                layout="@layout/app_info_button"
+                layout="@layout/widget_app_info_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="60dp" />
 
             <include
                 android:id="@+id/open_source"
-                layout="@layout/app_info_button"
+                layout="@layout/widget_app_info_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="8dp" />
-
-            <TextView
-                android:textSize="10sp"
-                android:textColor="@color/_aaaaaa"
-                android:text="마이버리 개발자"
-                android:layout_marginTop="45dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:textSize="10sp"
-                android:textColor="@color/_aaaaaa"
-                android:text="김가은, 안예지, 이명선, 한아연"
+                android:layout_marginStart="60dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="60dp" />
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:text="마이버리 개발자"
+                android:textColor="@color/_aaaaaa"
+                android:textSize="10sp" />
 
 
             <TextView
-                android:id="@+id/volunteer"
-                android:layout_width="133dp"
-                android:layout_height="26dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/app_info_button_background"
-                android:gravity="center"
-                android:onClick="@{supportClickListener}"
-                android:text="후원하러 가기:)"
-                android:textColor="@color/_797979"
-                android:textSize="12sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/developer_list"
+                android:textColor="@color/_aaaaaa"
+                android:textSize="10sp" />
+
+            <!--
+                        <TextView
+                            android:id="@+id/volunteer"
+                            android:layout_width="133dp"
+                            android:layout_height="26dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/app_info_button_background"
+                            android:gravity="center"
+                            android:onClick="@{supportClickListener}"
+                            android:text="후원하러 가기:)"
+                            android:textColor="@color/_797979"
+                            android:textSize="12sp" />-->
 
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

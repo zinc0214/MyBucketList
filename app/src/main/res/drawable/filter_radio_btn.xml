@@ -12,8 +12,7 @@
                 </shape>
             </item>
             <!-- 이미지 영역 -->
-            <item android:drawable="@drawable/radiobtn_nonselect_background"
-                android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
+            <item android:drawable="@drawable/shape_oval_ffffff_10" android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
         </layer-list>
     </item>
     <!-- SELECTED -->
@@ -28,8 +27,7 @@
                 </shape>
             </item>
             <!-- 이미지 영역 -->
-            <item android:drawable="@drawable/radiobtn_select_background"
-                android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
+            <item android:drawable="@drawable/shape_oval_5a95ff_10" android:top="5dp" android:right="5dp" android:bottom="5dp" android:left="5dp" />
         </layer-list>
     </item>
 </selector>

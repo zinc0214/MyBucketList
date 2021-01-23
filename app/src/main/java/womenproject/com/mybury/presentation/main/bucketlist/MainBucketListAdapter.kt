@@ -7,9 +7,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.*
-import womenproject.com.mybury.databinding.BucketItemBaseBinding
-import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.databinding.BucketItemSucceedBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingCountBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
+import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
 
 
@@ -26,11 +26,11 @@ open class MainBucketListAdapter(val bucketList: List<BucketItem>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            SUCCEED_ITEM -> SucceedBucketItemViewHolder(BucketItemSucceedBinding.inflate(
+            SUCCEED_ITEM -> SucceedBucketItemViewHolder(ItemBucketSucceedBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
-            COUNT_ITEM -> CountBucketItemViewHolder(NORMAL, BucketItemCountBinding.inflate(
+            COUNT_ITEM -> CountBucketItemViewHolder(NORMAL, ItemBucketDoingCountBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false), showSnackBar)
-            else -> BaseNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(
+            else -> BaseNormalBucketItemViewHolder(ItemBucketDoingSimpleBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false), showSnackBar)
         }
     }

@@ -14,7 +14,7 @@ class WriteItemLayout internal constructor(context: Context, private var categor
 
     fun setUI(category: Category): View {
 
-        val view = LayoutInflater.from(context).inflate(R.layout.write_dialog_item, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.widget_write_fragment_add_item, this, false)
 
         val textView = view.findViewById<TextView>(R.id.write_item_text)
         textView.text = category.name

@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.detail
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ class BucketDetailFragment : Fragment() {
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
+    private var isFirstSucceedTime = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -81,7 +83,7 @@ class BucketDetailFragment : Fragment() {
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
             redoClickListener = bucketRedoListener
-            lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            memoReadMoreClickListener = readeMoreClickListener
             isCategoryShow = bucketItem.category != "없음"
 
             if (bucketItem.dDate != null) {
@@ -112,6 +114,8 @@ class BucketDetailFragment : Fragment() {
             isDone = isCompleted
             isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
+            val desc: String = requireContext().getString(R.string.bucket_least_count)
+            currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
 
             when (imgList.size) {
                 0 -> {
@@ -125,6 +129,18 @@ class BucketDetailFragment : Fragment() {
                     viewDataBinding.tabLayout.visibility = View.VISIBLE
                     viewDataBinding.imageLayout.visibility = View.VISIBLE
                 }
+            }
+
+            contentView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY > 10 && !isCompleted) {
+                    bottomDivider.visibility = View.VISIBLE
+                } else {
+                    bottomDivider.visibility = View.GONE
+                }
+            }
+
+            if (isFirstSucceedTime) {
+                contentView.post { contentView.fullScroll(View.FOCUS_DOWN) }
             }
 
             executePendingBindings()
@@ -199,6 +215,11 @@ class BucketDetailFragment : Fragment() {
         RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
     }
 
+    private val readeMoreClickListener = View.OnClickListener {
+        viewDataBinding.bucketMemo.maxLines = Int.MAX_VALUE
+        viewDataBinding.memoArrow.visibility = View.GONE
+    }
+
     private fun initObserve() {
         viewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
         viewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
@@ -245,6 +266,9 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun success() {
+                if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
+                    isFirstSucceedTime = true
+                }
                 loadBucketDetailInfo()
             }
 
