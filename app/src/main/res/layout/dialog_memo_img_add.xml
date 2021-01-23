@@ -20,19 +20,19 @@
 
             <include
                 android:id="@+id/add_memo_layout"
-                layout="@layout/write_dialog_item"/>
+                layout="@layout/widget_write_fragment_add_item" />
 
             <include
                 android:id="@+id/add_album_img_layout"
-                layout="@layout/write_dialog_item" />
+                layout="@layout/widget_write_fragment_add_item" />
 
             <include
                 android:id="@+id/add_cam_img_layout"
-                layout="@layout/write_dialog_item" />
+                layout="@layout/widget_write_fragment_add_item" />
 
             <include
                 android:id="@+id/set_base_profile_img"
-                layout="@layout/write_dialog_item" />
+                layout="@layout/widget_write_fragment_add_item" />
         </LinearLayout>
 
     </LinearLayout>

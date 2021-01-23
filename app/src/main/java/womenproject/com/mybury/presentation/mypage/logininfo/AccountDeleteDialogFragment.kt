@@ -9,7 +9,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.AccountDelectDialogBinding
+import womenproject.com.mybury.databinding.DialogAccountDelectBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
@@ -18,11 +18,11 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 15..
  */
 
-class AccountDeleteDialogFragment(private val startDeleting : () -> Unit,
-                                  private val isAnimEnd : () -> Unit ) : BaseDialogFragment<AccountDelectDialogBinding>() {
+class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
+                                  private val isAnimEnd: () -> Unit) : BaseDialogFragment<DialogAccountDelectBinding>() {
 
     override val layoutResourceId: Int
-        get() = R.layout.account_delect_dialog
+        get() = R.layout.dialog_account_delect
 
 
     val animFadeOut = AnimationUtils.loadAnimation(MyBuryApplication.context, R.anim.fade_out)

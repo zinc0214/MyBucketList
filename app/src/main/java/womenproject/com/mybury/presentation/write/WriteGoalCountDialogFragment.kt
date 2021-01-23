@@ -3,14 +3,13 @@ package womenproject.com.mybury.presentation.write
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.graphics.Rect
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import womenproject.com.mybury.R
+import womenproject.com.mybury.databinding.DialogWriteFragmentGoalCountBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
-import womenproject.com.mybury.databinding.WriteGoalCountDialogBinding
 import womenproject.com.mybury.ui.EditTextInputFilter
 
 /**
@@ -19,7 +18,7 @@ import womenproject.com.mybury.ui.EditTextInputFilter
 
 
 @SuppressLint("ValidFragment")
-class WriteGoalCountDialogFragment(private var currentCount : Int, private var goalCountSetListener: (String) -> Unit) : BaseDialogFragment<WriteGoalCountDialogBinding>() {
+class WriteGoalCountDialogFragment(private var currentCount: Int, private var goalCountSetListener: (String) -> Unit) : BaseDialogFragment<DialogWriteFragmentGoalCountBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -31,7 +30,7 @@ class WriteGoalCountDialogFragment(private var currentCount : Int, private var g
 
 
     override val layoutResourceId: Int
-        get() = R.layout.write_goal_count_dialog
+        get() = R.layout.dialog_write_fragment_goal_count
 
 
     override fun initDataBinding() {

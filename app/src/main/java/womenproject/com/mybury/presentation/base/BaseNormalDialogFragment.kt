@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.FragmentBaseDialogBinding
+import womenproject.com.mybury.databinding.DialogFragmentBaseBinding
 
 /**
  * Created by HanAYeon on 2018. 12. 4..
@@ -32,17 +32,16 @@ open class BaseNormalDialogFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val binding = DataBindingUtil.inflate<FragmentBaseDialogBinding>(
-                inflater, R.layout.fragment_base_dialog, container, false).apply {
-            viewModel = BaseDialogViewModel()
+        val binding = DataBindingUtil.inflate<DialogFragmentBaseBinding>(
+                inflater, R.layout.dialog_fragment_base, container, false).apply {
             title = TITLE_MSG
             content = CONTENT_MSG
             cancelText.text = CANCEL_TEXT
             confirmText.text = CONFIRM_TEXT
-            cancelText.visibility = if(CANCEL_BUTTON_VISIBLE) View.VISIBLE else View.GONE
-            gradientLayout.visibility = if(GRADIENT_BUTTON_VISIBLE) View.VISIBLE else View.GONE
-            baseLayout.visibility = if(GRADIENT_BUTTON_VISIBLE) View.GONE else View.VISIBLE
-            binderImg.visibility = if(GRADIENT_BUTTON_VISIBLE) View.GONE else View.VISIBLE
+            cancelText.visibility = if (CANCEL_BUTTON_VISIBLE) View.VISIBLE else View.GONE
+            gradientLayout.visibility = if (GRADIENT_BUTTON_VISIBLE) View.VISIBLE else View.GONE
+            baseLayout.visibility = if (GRADIENT_BUTTON_VISIBLE) View.GONE else View.VISIBLE
+            binderImg.visibility = if (GRADIENT_BUTTON_VISIBLE) View.GONE else View.VISIBLE
             cancelButtonClickListener = createOnClickCancelListener()
             confirmButtonClickListener = createOnClickConfirmListener()
         }

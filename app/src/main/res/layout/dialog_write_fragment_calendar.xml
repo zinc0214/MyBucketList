@@ -99,7 +99,7 @@
 
         <include
             android:id="@+id/bottom_sheet"
-            layout="@layout/write_dialog_bottom_layout" />
+            layout="@layout/dialog_write_fragment_bottom_layout" />
     </LinearLayout>
 
 </layout>

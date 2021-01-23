@@ -12,9 +12,9 @@ import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import kotlinx.android.synthetic.main.write_calendar_dialog.*
+import kotlinx.android.synthetic.main.dialog_write_fragment_calendar.*
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.WriteCalendarDialogBinding
+import womenproject.com.mybury.databinding.DialogWriteFragmentCalendarBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.CurrentDateDecorator
 import java.util.*
@@ -25,10 +25,10 @@ import java.util.*
  */
 
 @SuppressLint("ValidFragment")
-class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) -> Unit, private var calendarDay: Date) : BaseDialogFragment<WriteCalendarDialogBinding>() {
+class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) -> Unit, private var calendarDay: Date) : BaseDialogFragment<DialogWriteFragmentCalendarBinding>() {
 
     override val layoutResourceId: Int
-        get() = R.layout.write_calendar_dialog
+        get() = R.layout.dialog_write_fragment_calendar
 
     private var dday = ""
 

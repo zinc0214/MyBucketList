@@ -22,7 +22,7 @@ class WriteImgLayout internal constructor(context: Context,
     private lateinit var cardViewLayout : RelativeLayout
 
     fun setUI(uri: Uri): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.widget_write_add_img, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
       //  imgView.setImageURI(uri)
@@ -51,7 +51,7 @@ class WriteImgLayout internal constructor(context: Context,
 
 
     fun setAleadyUI(url : String): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.write_img_layout, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.widget_write_add_img, this, false)
 
         val imgView = view.findViewById<ImageView>(R.id.write_img)
         Glide.with(view).load(url).centerCrop().placeholder(R.drawable.shape_gradient).into(imgView)

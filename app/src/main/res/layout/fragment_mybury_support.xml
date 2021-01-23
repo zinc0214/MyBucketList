@@ -91,7 +91,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/topLayout"
-                tools:listitem="@layout/purchase_item" />
+                tools:listitem="@layout/item_support_purchase" />
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

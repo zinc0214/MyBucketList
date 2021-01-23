@@ -10,9 +10,9 @@ import womenproject.com.mybury.data.BASE_ITEM
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.COUNT_ITEM
 import womenproject.com.mybury.data.SUCCEED_ITEM
-import womenproject.com.mybury.databinding.BucketItemBaseBinding
-import womenproject.com.mybury.databinding.BucketItemCountBinding
-import womenproject.com.mybury.databinding.DdayBucketItemSucceedBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingCountBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
+import womenproject.com.mybury.databinding.ItemDdayBucketSucceedBinding
 import womenproject.com.mybury.presentation.main.bucketlist.CountBucketItemViewHolder
 
 /**
@@ -28,9 +28,9 @@ class DdayBucketEachListAdapter(val bucketList: List<BucketItem>, private val sh
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when (viewType) {
-            SUCCEED_ITEM -> DdaySucceedBucketItemViewHolder(DdayBucketItemSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            COUNT_ITEM -> CountBucketItemViewHolder(true, BucketItemCountBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
-            else -> DdayNormalBucketItemViewHolder(BucketItemBaseBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
+            SUCCEED_ITEM -> DdaySucceedBucketItemViewHolder(ItemDdayBucketSucceedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            COUNT_ITEM -> CountBucketItemViewHolder(true, ItemBucketDoingCountBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
+            else -> DdayNormalBucketItemViewHolder(ItemBucketDoingSimpleBinding.inflate(LayoutInflater.from(parent.context), parent, false), showSnackBar)
         }
     }
 

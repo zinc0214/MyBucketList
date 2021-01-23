@@ -23,7 +23,7 @@ class CustomSnackBarView @JvmOverloads constructor(
     lateinit var cardView: CardView
 
     init {
-        View.inflate(context, R.layout.main_snack_bar_view, this)
+        View.inflate(context, R.layout.widget_main_snack_bar_view, this)
         clipToPadding = false
         this.titleView = findViewById(R.id.bucketTitle)
         this.countView = findViewById(R.id.bucketCount)

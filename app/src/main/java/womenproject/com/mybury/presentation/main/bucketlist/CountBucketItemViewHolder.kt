@@ -15,7 +15,7 @@ import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
-import womenproject.com.mybury.databinding.BucketItemCountBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingCountBinding
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
@@ -24,7 +24,7 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 
 class CountBucketItemViewHolder(
         private val isDdayUI: Boolean,
-        private val binding: BucketItemCountBinding,
+        private val binding: ItemBucketDoingCountBinding,
         private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.ViewHolder(binding.root) {
 
     private val successImageView = binding.successButtonView.successImg

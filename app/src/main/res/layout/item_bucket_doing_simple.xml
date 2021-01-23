@@ -87,7 +87,7 @@
 
                         <include
                             android:id="@+id/success_button_layout"
-                            layout="@layout/bucket_succeed_button"
+                            layout="@layout/widget_bucket_done_button"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_alignParentEnd="true"

@@ -9,7 +9,7 @@
 
         <include
             android:id="@+id/top_layout"
-            layout="@layout/top_back_btn_layout" />
+            layout="@layout/layout_top_back_btn" />
 
 
             <LinearLayout

@@ -4,12 +4,12 @@ import android.app.ActionBar
 import android.text.Html
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.setAlreadySupportShow
-import womenproject.com.mybury.databinding.FragmentSupportDialogBinding
+import womenproject.com.mybury.databinding.DialogSupportOnceBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
-class SupportDialogFragment : BaseDialogFragment<FragmentSupportDialogBinding>() {
+class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
     override val layoutResourceId: Int
-        get() = R.layout.fragment_support_dialog
+        get() = R.layout.dialog_support_once
 
 
     private lateinit var goToPurchase: () -> Unit

@@ -386,7 +386,7 @@
 
             <include
                 android:id="@+id/detail_more_menu"
-                layout="@layout/detail_more_menu" />
+                layout="@layout/widget_detail_more_menu" />
         </RelativeLayout>
 
 

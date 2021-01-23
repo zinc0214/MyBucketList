@@ -33,7 +33,7 @@
 
             <include
                 android:id="@+id/add_category"
-                layout="@layout/write_dialog_item" />
+                layout="@layout/widget_write_fragment_add_item" />
 
         </LinearLayout>
 

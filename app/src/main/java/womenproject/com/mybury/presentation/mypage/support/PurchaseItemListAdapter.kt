@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.PurchasableItem
-import womenproject.com.mybury.databinding.PurchaseItemBinding
+import womenproject.com.mybury.databinding.ItemSupportPurchaseBinding
 
 class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem>) :
         RecyclerView.Adapter<PurchaseItemListAdapter.PurchaseViewHolder>() {
@@ -23,7 +23,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
     private var checkedPosition = purchasableItems.indexOfFirst { it.isPurchasable }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            PurchaseViewHolder(PurchaseItemBinding.inflate(
+            PurchaseViewHolder(ItemSupportPurchaseBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false))
 
 
@@ -35,7 +35,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
         return purchasableItems.size
     }
 
-    inner class PurchaseViewHolder(private val binding: PurchaseItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PurchaseViewHolder(private val binding: ItemSupportPurchaseBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PurchasableItem) {
             binding.info = item

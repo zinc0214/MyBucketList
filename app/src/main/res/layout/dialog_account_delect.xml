@@ -22,11 +22,11 @@
 
         <include
             android:id="@+id/bottom_sheet"
-            layout="@layout/main_bottom_sheet" />
+            layout="@layout/layout_main_bottom_sheet" />
 
         <include
             android:id="@+id/main_toolbar"
-            layout="@layout/main_toolbar" />
+            layout="@layout/layout_main_toolbar" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -51,7 +51,7 @@
 
                     <include
                         android:id="@+id/last_bucket_item"
-                        layout="@layout/bucket_item_base_for_end" />
+                        layout="@layout/item_bucket_done_simple" />
                 </LinearLayout>
 
                 <ImageView

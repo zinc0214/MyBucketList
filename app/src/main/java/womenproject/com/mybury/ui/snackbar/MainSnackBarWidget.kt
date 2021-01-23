@@ -39,7 +39,7 @@ class MainSnackBarWidget(
 
             try {
                 val customView = LayoutInflater.from(view.context).inflate(
-                        R.layout.main_snack_view_widget, parent, false) as CustomSnackBarView
+                        R.layout.widget_main_snack_view, parent, false) as CustomSnackBarView
                 customView.apply {
                     titleView.text = "\"${title}"
                     countView.text = count

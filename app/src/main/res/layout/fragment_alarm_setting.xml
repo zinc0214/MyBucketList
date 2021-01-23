@@ -21,7 +21,7 @@
 
         <include
             android:id="@+id/back_layout"
-            layout="@layout/top_back_btn_layout" />
+            layout="@layout/layout_top_back_btn" />
 
 
         <LinearLayout
@@ -32,11 +32,11 @@
 
             <include
                 android:id="@+id/dday_alram"
-                layout="@layout/alram_option"/>
+                layout="@layout/widget_alarm_option" />
 
             <include
                 android:id="@+id/event_alarm"
-                layout="@layout/alram_option"/>
+                layout="@layout/widget_alarm_option" />
         </LinearLayout>
     </RelativeLayout>
 

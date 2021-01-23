@@ -22,7 +22,7 @@
 
                 <include
                     android:id="@+id/header_layout"
-                    layout="@layout/my_page_header"/>
+                    layout="@layout/layout_my_page_header" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -34,7 +34,7 @@
 
             <include
                 android:id="@+id/mypage_bottom_sheet"
-                layout="@layout/mypage_bottom_sheet" />
+                layout="@layout/layout_mypage_bottom_sheet_with_add_btn" />
 
 
 
@@ -43,7 +43,7 @@
 
         <include
             android:id="@+id/mypage_more_menu_large"
-            layout="@layout/my_page_more_menu"
+            layout="@layout/layout_my_page_more_menu"
             android:visibility="gone"
             tools:visibliry="visible"/>
 

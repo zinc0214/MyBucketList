@@ -2,21 +2,19 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewTreeObserver
-import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.databinding.CategoryListItemBinding
-import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.databinding.ItemCategoryBinding
 import womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
+import womenproject.com.mybury.ui.ItemDragListener
 
-class EditCategoryListViewHolder(private val binding: CategoryListItemBinding,
+class EditCategoryListViewHolder(private val binding: ItemCategoryBinding,
                                  private val dragListener: ItemDragListener,
                                  private val checkedListener: ItemCheckedListener,
-                                 private val editCategoryName : (Category) -> Unit)
+                                 private val editCategoryName: (Category) -> Unit)
     : RecyclerView.ViewHolder(binding.root) {
 
     private var isKeyBoardShown = false

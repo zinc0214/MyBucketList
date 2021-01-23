@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:itemCount="2"
-            tools:listitem="@layout/bucket_item_base" />
+            tools:listitem="@layout/item_bucket_doing_simple" />
 
 
     </LinearLayout>

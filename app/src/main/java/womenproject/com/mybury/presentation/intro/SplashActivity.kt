@@ -13,7 +13,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
-import womenproject.com.mybury.databinding.SplashWithLoginBinding
+import womenproject.com.mybury.databinding.LayoutSplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
@@ -22,16 +22,16 @@ import kotlin.random.Random
 
 class SplashActivity : AppCompatActivity() {
 
-    lateinit var binding: SplashWithLoginBinding
+    lateinit var binding: LayoutSplashWithLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         val num = Random.nextInt(2)
         if (num == 1) {
-            setContentView(R.layout.splash_white)
+            setContentView(R.layout.layout_splash_white)
             setStatusBar(this, R.color._ffffff)
         } else {
-            setContentView(R.layout.splash_blue)
+            setContentView(R.layout.layout_splash_blue)
             setStatusBar(this, R.color._4656e8)
         }
 

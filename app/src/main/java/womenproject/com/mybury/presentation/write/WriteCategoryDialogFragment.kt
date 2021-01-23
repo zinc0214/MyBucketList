@@ -5,27 +5,27 @@ import android.app.ActionBar
 import android.view.View
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.databinding.WriteCategoryDialogBinding
+import womenproject.com.mybury.databinding.DialogWriteFragmentCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.ui.WriteItemLayout
 
 
 @SuppressLint("ValidFragment")
-class WriteCategoryDialogFragment(private var userCategory : List<Category>,
-                                  private var categorySetListener : (Category) -> Unit,
-                                  private var moveToAddCategory: () -> Unit): BaseDialogFragment<WriteCategoryDialogBinding>() {
+class WriteCategoryDialogFragment(private var userCategory: List<Category>,
+                                  private var categorySetListener: (Category) -> Unit,
+                                  private var moveToAddCategory: () -> Unit) : BaseDialogFragment<DialogWriteFragmentCategoryBinding>() {
 
     override fun onResume() {
         super.onResume()
 
         val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
-        val dialogHeight = if(userCategory.size < 5) ActionBar.LayoutParams.WRAP_CONTENT else resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
+        val dialogHeight = if (userCategory.size < 5) ActionBar.LayoutParams.WRAP_CONTENT else resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
     override val layoutResourceId: Int
-        get() = R.layout.write_category_dialog
+        get() = R.layout.dialog_write_fragment_category
 
 
     override fun initDataBinding() {

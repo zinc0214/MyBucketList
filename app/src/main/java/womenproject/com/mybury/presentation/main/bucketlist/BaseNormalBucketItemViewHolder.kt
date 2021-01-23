@@ -5,13 +5,13 @@ import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
-import womenproject.com.mybury.databinding.BucketItemBaseBinding
+import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 
 /**
  * Created by HanAYeon on 2019. 1. 9..
  */
 
-open class BaseNormalBucketItemViewHolder(private val binding: BucketItemBaseBinding,
+open class BaseNormalBucketItemViewHolder(private val binding: ItemBucketDoingSimpleBinding,
                                           private val showSnackBar: ((BucketItem) -> Unit))
     : BaseBucketItemViewHolder(binding, showSnackBar) {
 

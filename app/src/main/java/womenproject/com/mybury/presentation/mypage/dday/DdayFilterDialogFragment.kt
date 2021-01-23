@@ -7,12 +7,12 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DdayShowFilter
 import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.setDdayFilerForShow
-import womenproject.com.mybury.databinding.DdayFilterDialogBinding
+import womenproject.com.mybury.databinding.DialogDdayFilterBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
-class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<DdayFilterDialogBinding>() {
+class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<DialogDdayFilterBinding>() {
     override val layoutResourceId: Int
-        get() = R.layout.dday_filter_dialog
+        get() = R.layout.dialog_dday_filter
 
     private var plus = false
     private var minus = false

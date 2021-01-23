@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.base.BaseDialogViewModel" />
-
-        <variable
             name="title"
             type="String" />
 

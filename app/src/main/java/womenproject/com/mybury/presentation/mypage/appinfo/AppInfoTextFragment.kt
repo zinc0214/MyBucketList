@@ -7,7 +7,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
-import womenproject.com.mybury.databinding.TextViewLayoutBinding
+import womenproject.com.mybury.databinding.LayoutTitleViewBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import java.io.BufferedReader
 import java.io.IOException
@@ -19,17 +19,17 @@ import java.io.InputStreamReader
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoTextFragment : BaseFragment<TextViewLayoutBinding, AppInfoViewModel>() {
+class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewModel>() {
 
     override val layoutResourceId: Int
-        get() = R.layout.text_view_layout
+        get() = R.layout.layout_title_view
 
     override val viewModel: AppInfoViewModel
         get() = AppInfoViewModel()
 
     private lateinit var type: String
     private lateinit var webSettings: WebSettings
-    private lateinit var webView : WebView
+    private lateinit var webView: WebView
 
     override fun initDataBinding() {
         arguments?.let {
