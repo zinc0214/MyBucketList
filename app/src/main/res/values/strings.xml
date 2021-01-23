@@ -54,4 +54,5 @@
     <string name="bucket_least_count"><![CDATA[완료까지 <font color=#5a95ff>%s회</font> 남았어요]]></string>
     <string name="support_loading_desc">결제중입니다. 잠시만 기다려주세요.</string>
     <string name="support_error_go_to_email">문의하러 가기</string>
+    <string name="developer_list">김가은, 김하늘, 서태원\n안예지, 이명선, 한아연</string>
 </resources>

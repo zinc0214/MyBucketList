@@ -125,22 +125,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="김가은, 안예지, 이명선, 한아연"
+                android:text="@string/developer_list"
                 android:textColor="@color/_aaaaaa"
                 android:textSize="10sp" />
 
-
-            <TextView
-                android:id="@+id/volunteer"
-                android:layout_width="133dp"
-                android:layout_height="26dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/app_info_button_background"
-                android:gravity="center"
-                android:onClick="@{supportClickListener}"
-                android:text="후원하러 가기:)"
-                android:textColor="@color/_797979"
-                android:textSize="12sp" />
+            <!--
+                        <TextView
+                            android:id="@+id/volunteer"
+                            android:layout_width="133dp"
+                            android:layout_height="26dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/app_info_button_background"
+                            android:gravity="center"
+                            android:onClick="@{supportClickListener}"
+                            android:text="후원하러 가기:)"
+                            android:textColor="@color/_797979"
+                            android:textSize="12sp" />-->
 
         </LinearLayout>
 
