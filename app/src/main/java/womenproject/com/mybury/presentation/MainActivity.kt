@@ -313,15 +313,18 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
+                    // TODO : 이 시점에 토큰을 서버에 전달한다.
                     purchaseAlways(it.purchaseToken)
                 }
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
                 Log.d("mybury", "You've cancelled the Google play billing process...")
                 "결제가 취소되었습니다".showToast(this)
+                purchaseFail.invoke()
             }
             else -> {
                 "결제가 실패했습니다".showToast(this)
+                purchaseFail.invoke()
             }
         }
     }
@@ -381,21 +384,24 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
             startSupportLoading()
 
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchasedItem?.let {
-                    supportViewModel.purchasedItem(it.id, {
-                        showSupportPurchaseSuccessDialog()
-                        stopSupportLoading()
-                        purchaseSuccess.invoke()
-                    }, {
-                        showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                        stopSupportLoading()
-                    })
+            when (billingResult.responseCode) {
+                BillingClient.BillingResponseCode.OK -> {
+                    purchasedItem?.let {
+                        supportViewModel.purchasedItem(it.id, {
+                            showSupportPurchaseSuccessDialog()
+                            stopSupportLoading()
+                            purchaseSuccess.invoke()
+                        }, {
+                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                            stopSupportLoading()
+                        })
+                    }
                 }
-            } else {
-                Log.e("mybury", "FAIL : ${billingResult.responseCode}")
-                showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                stopSupportLoading()
+                else -> {
+                    Log.e("mybury", "FAIL : ${billingResult.responseCode}")
+                    showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                    stopSupportLoading()
+                }
             }
         }
     }

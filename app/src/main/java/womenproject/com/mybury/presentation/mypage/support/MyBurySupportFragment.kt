@@ -72,7 +72,6 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
                         setCurrentSupportPrice(updatePrice)
                         isCurrentSupporting = false
                     }, {
-                        "구매에 실패했습니다.".showToast()
                         isCurrentSupporting = false
                     })
                 }
