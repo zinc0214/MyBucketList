@@ -1,7 +1,9 @@
 package womenproject.com.mybury.presentation.mypage.support
 
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import womenproject.com.mybury.R
@@ -21,6 +23,23 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
         get() = MyBurySupportViewModel()
 
     private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
+    private var isCurrentSupporting = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val goToActionCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isCurrentSupporting) {
+                    // 결제가 끝나지 않는 상태에서는 ignore back button
+                } else {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
+    }
 
     override fun initDataBinding() {
         viewDataBinding.supportPrice = ""
@@ -45,14 +64,16 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             supportPrice = supportInfo.totalPrice
 
             supportOnClickListener = View.OnClickListener {
+                isCurrentSupporting = true
                 purchaseItemListAdapter.selectedItemNum?.let { item ->
                     purchaseSelectItem(item.googleKey, {
-                        val updatePrice = viewDataBinding.supportPrice.toString().toInt() + item.itemPrice.toInt()
-                        viewDataBinding.supportPrice = updatePrice.toString()
+                        val updatePrice = supportPrice.toString().toInt() + item.itemPrice.toInt()
+                        supportPrice = updatePrice.toString()
                         setCurrentSupportPrice(updatePrice)
-                        "구매에 성공했습니다.".showToast()
+                        isCurrentSupporting = false
                     }, {
                         "구매에 실패했습니다.".showToast()
+                        isCurrentSupporting = false
                     })
                 }
             }
@@ -85,7 +106,6 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             })
         }
     }
-
 
     private fun String.showToast() {
         Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()

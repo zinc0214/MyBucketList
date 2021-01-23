@@ -122,7 +122,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         } else null
     }
 
-    fun purchaseSelectItem(id: String, purchaseSuccess: (String) -> Unit, purchaseFail: () -> Unit) {
+    fun purchaseSelectItem(id: String, purchaseSuccess: () -> Unit, purchaseFail: () -> Unit) {
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.purchaseSelectItem(id, purchaseSuccess, purchaseFail)
