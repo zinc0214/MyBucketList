@@ -5,10 +5,10 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/_cc000000"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
-        <ImageView
+        <ProgressBar
             android:id="@+id/loading_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

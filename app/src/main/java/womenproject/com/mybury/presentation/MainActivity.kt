@@ -1,10 +1,8 @@
 package womenproject.com.mybury.presentation
 
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -48,10 +46,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
-    private lateinit var loadingImg: ImageView
-    private lateinit var supportLoadingImg: ImageView
-    private lateinit var animationDrawable: AnimationDrawable
-    private lateinit var supportAnimationDrawable: AnimationDrawable
+    //  private lateinit var loadingImg: ImageView
+    //  private lateinit var supportLoadingImg: ImageView
+    // private lateinit var animationDrawable: AnimationDrawable
+    //  private lateinit var supportAnimationDrawable: AnimationDrawable
 
     private lateinit var interstitialAd: InterstitialAd
     private var isAdShow = true
@@ -65,7 +63,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
     var supportInfo: SupportInfo? = null
     private lateinit var purchaseSuccess: () -> Unit
-    lateinit var purchaseFail: () -> Unit
+    private lateinit var purchaseFail: () -> Unit
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,13 +95,13 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             }
         })
 
-        loadingImg = binding.loadingLayout.loadingImg
-        loadingImg.setImageResource(R.drawable.loading_anim)
-        animationDrawable = loadingImg.drawable as AnimationDrawable
+        purchaseFail = {
+            // DO NoTHING
+        }
 
-        supportLoadingImg = binding.supportLoadingLayout.loadingImg
-        supportLoadingImg.setImageResource(R.drawable.loading_anim)
-        supportAnimationDrawable = supportLoadingImg.drawable as AnimationDrawable
+        purchaseSuccess = {
+            // DO NoTHING
+        }
 
         Preference.setEnableShowAlarm(this, true)
         setStatusBar(this, R.color._ffffff)
@@ -170,12 +168,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
 
     fun startLoading() {
-        animationDrawable.start()
         binding.loadingLayout.layout.visibility = View.VISIBLE
     }
 
     fun stopLoading() {
-        animationDrawable.stop()
         binding.loadingLayout.layout.visibility = View.GONE
     }
 
@@ -382,25 +378,25 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
             Log.d("ayhan", "TOKEN : $purchaseToken, ${billingResult.responseCode}")
 
-            startSupportLoading()
+            startLoading()
 
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
                     purchasedItem?.let {
                         supportViewModel.purchasedItem(it.id, {
                             showSupportPurchaseSuccessDialog()
-                            stopSupportLoading()
+                            stopLoading()
                             purchaseSuccess.invoke()
                         }, {
                             showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                            stopSupportLoading()
+                            stopLoading()
                         })
                     }
                 }
                 else -> {
                     Log.e("mybury", "FAIL : ${billingResult.responseCode}")
                     showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                    stopSupportLoading()
+                    stopLoading()
                 }
             }
         }
@@ -429,21 +425,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         supportFailDialogFragment.show(supportFragmentManager, "tag")
     }
 
-    private fun startSupportLoading() {
-        supportAnimationDrawable.start()
-        binding.supportLoadingLayout.layout.visibility = View.VISIBLE
-    }
-
-    private fun stopSupportLoading() {
-        supportAnimationDrawable.stop()
-        binding.supportLoadingLayout.layout.visibility = View.GONE
-    }
-
     companion object {
         private const val SUPPORT_PRICE = 10000
     }
-
-
 }
 
 class NetworkFailDialog : BaseNormalDialogFragment() {
