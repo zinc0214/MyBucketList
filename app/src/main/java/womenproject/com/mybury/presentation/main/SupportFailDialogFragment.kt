@@ -10,7 +10,7 @@ import womenproject.com.mybury.databinding.DialogSupportFailBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
 
-class SupportFailDialogFragment(private val token: String, private val errorCode: String, ) : BaseDialogFragment<DialogSupportFailBinding>() {
+class SupportFailDialogFragment(private val token: String, private val errorCode: String) : BaseDialogFragment<DialogSupportFailBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_support_fail
 

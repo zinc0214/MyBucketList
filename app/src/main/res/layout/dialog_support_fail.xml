@@ -13,48 +13,72 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/_4D000000">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/shape_ffffff_r4">
 
-        <ImageView
-            android:id="@+id/supportFailImg"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            app:layout_constraintVertical_bias="0.4"
-            android:src="@drawable/seekbar_thumb"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/support_fail_title"
+            android:textAlignment="center"
+            android:textColor="@color/_222222"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/errorDescTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
+            android:layout_marginTop="17dp"
             android:layout_marginEnd="25dp"
             android:gravity="center"
             android:text="@{`결제 오류가 발생했습니다.\n 개발자에게 문의해주세요.\nErrorCode :` + errorCode}"
-            android:textColor="@color/_ffffff"
+            android:textColor="@color/_888888"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/supportFailImg"
+            app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="결제 오류가 발생했습니다." />
 
         <TextView
             android:id="@+id/goToEmailTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
-            android:textColor="@color/_cbd9ea"
             android:text="@string/support_error_go_to_email"
+            android:textColor="@color/_5a95ff"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/errorDescTextView" />
+
+        <TextView
+            style="@style/baseDialogButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/main_button"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            android:text="@string/dialog_confirm"
+            android:textColor="@color/_ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/goToEmailTextView" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
