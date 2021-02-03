@@ -44,7 +44,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
             try {
                 Glide.with(binding.imageView).load(item.itemImg)
                         .override(300, 300)
-                        .placeholder(R.drawable.shape_gradient)
+                        .placeholder(R.drawable.place_holder)
                         .into(binding.imageView)
             } catch (ex: IllegalArgumentException) {
                 Log.e("Glide-tag", "....")
