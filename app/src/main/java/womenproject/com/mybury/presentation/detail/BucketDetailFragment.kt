@@ -143,8 +143,7 @@ class BucketDetailFragment : Fragment() {
                 contentView.post { contentView.fullScroll(View.FOCUS_DOWN) }
             }
 
-            executePendingBindings()
-
+            viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2) View.VISIBLE else View.GONE
         }
 
     }

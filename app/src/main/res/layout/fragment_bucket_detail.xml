@@ -243,6 +243,7 @@
                             android:layout_height="20dp"
                             android:onClick="@{memoReadMoreClickListener::onClick}"
                             android:src="@drawable/detail_memo_arrow"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/bucketMemo" />
