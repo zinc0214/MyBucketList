@@ -59,7 +59,6 @@
             app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
 
 
-
         <androidx.cardview.widget.CardView
             android:id="@+id/large_profile_cardview"
             android:layout_width="@dimen/image_width"
