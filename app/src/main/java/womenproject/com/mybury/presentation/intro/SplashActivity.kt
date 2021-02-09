@@ -16,7 +16,10 @@ import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import womenproject.com.mybury.util.isConnectionOn
 import kotlin.random.Random
 
 
@@ -35,11 +38,15 @@ class SplashActivity : AppCompatActivity() {
             setStatusBar(this, R.color._4656e8)
         }
 
-        val hd = Handler()
-        hd.postDelayed(splashhandler(), 1000)
+        if (!this.isConnectionOn()) {
+            NetworkFailDialog().show(supportFragmentManager, "tag")
+        } else {
+            val hd = Handler()
+            hd.postDelayed(Splashhandler(), 1000)
+        }
     }
 
-    private inner class splashhandler : Runnable {
+    private inner class Splashhandler : Runnable {
         override fun run() {
             initToken()
         }
@@ -69,7 +76,9 @@ class SplashActivity : AppCompatActivity() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
                 }) {
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    WarningDialogFragment {
+                        finish()
+                    }.show(supportFragmentManager, "tag")
                     Log.e("myBury", "getLoginToken Fail : $it")
                 }
 

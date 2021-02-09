@@ -32,7 +32,6 @@
 
     <string name="account_delete"><u>계정삭제</u></string>
 
-
     <string name="bucket_open">공개 설정</string>
     <string name="bucket_close">비공개 설정</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
@@ -46,4 +45,7 @@
     <string name="my_page_more_menu_alarm">알림</string>
     <string name="my_page_more_menu_app_info">앱 정보</string>
     <string name="my_page_more_menu_support">마이버리 후원하기</string>
+
+    <string name="warning_desc"><![CDATA[<font color=#5a95ff>서비스 안정화를 위해 잠시 서버 점검중</font>입니다.<br>조금만 기다려주세요.]]></string>
+
 </resources>
