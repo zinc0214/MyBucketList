@@ -34,6 +34,7 @@ import womenproject.com.mybury.databinding.LayoutSplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
 
@@ -127,33 +128,6 @@ class SplashLoginActivity : AppCompatActivity() {
         finish()
     }
 
-/*
-    @SuppressLint("CheckResult")
-    private fun loadUserId(email: String) {
-        val emailDataClass = SignUpCheckRequest(email)
-
-        apiInterface.postSignUp(emailDataClass)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    when (response.retcode) {
-                        "200" -> {
-                            setUserId(this, response.userId)
-                            goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
-                        }
-                        "401" -> {
-                            UserAlreadyExist().show(supportFragmentManager, "tag")
-                        }
-                        else -> {
-                            CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                        }
-                    }
-                }) {
-                    Log.e("myBury", "PostSignUpResponse Fail: $it")
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                }
-    }*/
-
     @SuppressLint("CheckResult")
     private fun initToken() {
 
@@ -171,7 +145,9 @@ class SplashLoginActivity : AppCompatActivity() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
                 }) {
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    WarningDialogFragment {
+                        finish()
+                    }.show(supportFragmentManager, "tag")
                     Log.e("myBury", "getLoginToken Fail : $it")
                 }
 
