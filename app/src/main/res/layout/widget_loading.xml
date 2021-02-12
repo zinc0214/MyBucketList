@@ -15,13 +15,15 @@
             android:contentDescription="로딩중입니다."
             android:src="@drawable/loading_background" />
 
-        <ProgressBar
+        <ImageView
             android:id="@+id/loading_img"
+            style="?android:attr/progressBarStyle"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:contentDescription="@null"
-            android:src="@drawable/loading_anim" />
+            android:importantForAccessibility="no"
+            android:indeterminateDuration="1000"
+            android:src="@drawable/circular_loading" />
 
     </RelativeLayout>
 </layout>

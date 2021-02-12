@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -105,6 +106,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         Preference.setEnableShowAlarm(this, true)
         setStatusBar(this, R.color._ffffff)
+
+        val animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
+        binding.loadingLayout.loadingImg.animation = animation
 
         initAdMob()
     }
