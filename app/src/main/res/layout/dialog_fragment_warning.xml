@@ -12,6 +12,10 @@
             type="String" />
 
         <variable
+            name="grayDesc"
+            type="String" />
+
+        <variable
             name="timeIsVisible"
             type="Boolean" />
 
@@ -75,6 +79,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
                 android:gravity="center"
+                android:text="@{grayDesc}"
                 android:textColor="@color/_222222"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -92,6 +97,7 @@
             android:layout_height="0.6dp"
             android:layout_marginTop="28dp"
             android:background="@color/_dbdbdb"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@+id/confirmButton"
             app:layout_constraintTop_toBottomOf="@id/timeTextView" />
 

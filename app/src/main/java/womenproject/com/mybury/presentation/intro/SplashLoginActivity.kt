@@ -34,7 +34,7 @@ import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
-import womenproject.com.mybury.presentation.main.WarningDialogFragment
+import womenproject.com.mybury.presentation.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
 

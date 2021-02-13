@@ -17,7 +17,7 @@ import womenproject.com.mybury.databinding.SplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.NetworkFailDialog
-import womenproject.com.mybury.presentation.main.WarningDialogFragment
+import womenproject.com.mybury.presentation.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.isConnectionOn
 import kotlin.random.Random
@@ -81,7 +81,7 @@ class SplashActivity : AppCompatActivity() {
                     }.show(supportFragmentManager, "tag")
                     Log.e("myBury", "getLoginToken Fail : $it")
                 }
-
-
     }
+
+
 }
