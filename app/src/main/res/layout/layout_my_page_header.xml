@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="myPageInfo"
+            type="womenproject.com.mybury.data.MyPageInfo" />
+
+        <variable
             name="moreClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -20,178 +24,184 @@
     </data>
 
     <womenproject.com.mybury.ui.CollapsibleToolbar
-        android:id="@+id/constraintToolbar"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/_fafafa"
-        android:fitsSystemWindows="true"
-        android:minHeight="128dp"
-        app:layoutDescription="@xml/my_page_header"
-        app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/layout_my_page_header_xml_constraintlayout_scene">
 
         <ImageView
-            android:id="@+id/background"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/blueBackgroundImageView"
+            android:layout_width="match_parent"
+            android:layout_height="192dp"
+            android:background="@drawable/shape_gradient"
+            android:importantForAccessibility="no"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/blueBackgroundUnderImageView"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:background="@drawable/shape_gradient"
+            android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/shape_gradient" />
+            app:layout_constraintTop_toBottomOf="@id/whiteBackgroundImageView" />
 
         <ImageView
-            android:id="@+id/whiteBackground"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8" />
-
+            android:id="@+id/whiteBackgroundImageView"
+            android:layout_width="0dp"
+            android:layout_height="212dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8"
+            android:importantForAccessibility="no"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/more_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/moreButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/my_page_more"
+            android:contentDescription="@string/mypage_more_button"
             android:onClick="@{moreClickListener}"
-            app:layout_constraintEnd_toEndOf="@+id/whiteBackground"
-            app:layout_constraintTop_toTopOf="@+id/whiteBackground" />
+            android:src="@drawable/my_page_more"
+            app:layout_constraintEnd_toEndOf="@id/whiteBackgroundImageView"
+            app:layout_constraintTop_toTopOf="@id/whiteBackgroundImageView" />
 
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/myProfileBackgroundImage"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="28dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/my_profile_large_background"
+            app:altSrc="@drawable/my_profile_small_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/whiteBackgroundImageView" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/large_profile_cardview"
-            android:layout_width="@dimen/image_width"
-            android:layout_height="@dimen/image_width"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="72dp"
-            android:shadowColor="@color/_ffffff"
-            app:border_width="2dp"
-            app:cardBackgroundColor="@color/_dddddd"
-            app:cardCornerRadius="26dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="@+id/background"
-            app:layout_constraintStart_toStartOf="@+id/background"
-            app:layout_constraintTop_toTopOf="@+id/background"
-            app:layout_constraintVertical_chainStyle="packed">
-
-            <ImageView
-                android:id="@+id/profile_large_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="0.5dp"
-                android:background="@drawable/default_profile_bury" />
-
-        </androidx.cardview.widget.CardView>
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/myProfileImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/profile_image_desc"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_profile_bury"
+            app:layout_constraintBottom_toBottomOf="@id/myProfileBackgroundImage"
+            app:layout_constraintEnd_toEndOf="@id/myProfileBackgroundImage"
+            app:layout_constraintStart_toStartOf="@id/myProfileBackgroundImage"
+            app:layout_constraintTop_toTopOf="@id/myProfileBackgroundImage" />
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:id="@+id/nicknameTextView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="38dp"
             android:gravity="center"
+            android:lineSpacingExtra="8sp"
+            android:text="@{myPageInfo.name}"
             android:textColor="@color/_434343"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/whiteBackground"
-            app:layout_constraintStart_toStartOf="@id/whiteBackground"
-            app:layout_constraintTop_toBottomOf="@+id/large_profile_cardview"
-            tools:text="닉네임" />
+            app:layout_constraintEnd_toEndOf="@id/whiteBackgroundImageView"
+            app:layout_constraintStart_toStartOf="@id/whiteBackgroundImageView"
+            app:layout_constraintTop_toBottomOf="@id/myProfileImage"
+            tools:text="아이디가 슈룽룽룽" />
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/small_profile_cardview"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:shadowColor="@color/_ffffff"
-            app:border_width="2dp"
-            app:cardBackgroundColor="@color/_dddddd"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="@+id/background"
-            app:layout_constraintStart_toStartOf="@+id/background"
-            app:layout_constraintTop_toTopOf="@+id/background">
-
-            <ImageView
-                android:id="@+id/profile_img_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:background="@drawable/default_profile_bury" />
-
-        </androidx.cardview.widget.CardView>
-
-
-        <RelativeLayout
-            android:id="@+id/bucket_count"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bucketCountLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:onClick="@{doingBucketListClickListener}"
-            android:orientation="horizontal"
+            android:layout_marginTop="14dp"
+            app:layout_constraintEnd_toEndOf="@id/whiteBackgroundImageView"
+            app:layout_constraintStart_toStartOf="@id/whiteBackgroundImageView"
+            app:layout_constraintTop_toBottomOf="@id/nicknameTextView">
+
+            <TextView
+                android:id="@+id/startedCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:gravity="center"
+                android:minWidth="42dp"
+                android:minHeight="24dp"
+                android:onClick="@{doingBucketListClickListener}"
+                android:textColor="@color/_a6c6ff"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@id/completedCountTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="43" />
+
+            <TextView
+                android:id="@+id/completedCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:gravity="center"
+                android:minWidth="42dp"
+                android:minHeight="24dp"
+                android:onClick="@{doneBucketListClickListener}"
+                android:textColor="@color/_a6c6ff"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/startedCountTextView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="43" />
+
+            <TextView
+                android:id="@+id/startedDescTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:minWidth="42dp"
+                android:minHeight="16dp"
+                android:onClick="@{doingBucketListClickListener}"
+                android:text="@string/mypage_started_count_desc"
+                android:textColor="@color/_a6c6ff"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@id/completedDescTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/startedCountTextView" />
+
+            <TextView
+                android:id="@+id/completedDescTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="100dp"
+                android:gravity="center"
+                android:minWidth="42dp"
+                android:minHeight="16dp"
+                android:onClick="@{doneBucketListClickListener}"
+                android:text="@string/mypage_completed_count_desc"
+                android:textColor="@color/_a6c6ff"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/startedDescTextView"
+                app:layout_constraintTop_toBottomOf="@id/completedCountTextView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/mypage_scroll_layout"
+            layout="@layout/mypage_scroll_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:id="@+id/doingLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/startCountText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/_a6c6ff"
-                    android:textSize="14sp"
-                    tools:text="10" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="진행중"
-                    android:textAlignment="center"
-                    android:textColor="@color/_a6c6ff"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/completeLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
-                android:layout_toRightOf="@+id/doingLayout"
-                android:gravity="center"
-                android:onClick="@{doneBucketListClickListener}"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/completeCountText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textColor="@color/_a6c6ff"
-                    android:textSize="14sp"
-                    tools:text="1" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="완료"
-                    android:textAlignment="center"
-                    android:textColor="@color/_a6c6ff"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/whiteBackgroundImageView" />
 
     </womenproject.com.mybury.ui.CollapsibleToolbar>
-
 </layout>

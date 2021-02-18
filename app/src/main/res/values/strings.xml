@@ -57,4 +57,8 @@
     <string name="support_fail_title">결제 오류</string>
 
     <string name="warning_desc"><![CDATA[<font color=#5a95ff>서비스 안정화를 위해 잠시 서버 점검중</font>입니다.<br>조금만 기다려주세요.]]></string>
+    <string name="profile_image_desc">프로필 이미지</string>
+    <string name="mypage_started_count_desc">진행중</string>
+    <string name="mypage_completed_count_desc">완료</string>
+    <string name="mypage_more_button">더보기 옵션</string>
 </resources>

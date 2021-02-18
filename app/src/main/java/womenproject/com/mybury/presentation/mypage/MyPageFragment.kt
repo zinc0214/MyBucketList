@@ -2,10 +2,10 @@ package womenproject.com.mybury.presentation.mypage
 
 
 import android.view.View
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.MyPageCategory
@@ -64,9 +64,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                 val layoutManager = LinearLayoutManager(context)
 
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
+                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
 
                 setUpView(info)
             }
@@ -84,23 +84,43 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
         viewDataBinding.apply {
 
-            headerLayout.moreClickListener = moreButtonOnClickListener
-            headerLayout.doingBucketListClickListener = doingBucketListClickListener
-            headerLayout.doneBucketListClickListener = doneBucketListerClickListener
-            headerLayout.startCountText.text = _myPageInfo.startedCount.toString()
-            headerLayout.completeCountText.text = _myPageInfo.completedCount.toString()
-            headerLayout.name.text = _myPageInfo.name
+            headerLayout.apply {
+                myPageInfo = _myPageInfo
 
-            headerLayout.background
+                moreClickListener = moreButtonOnClickListener
+                doingBucketListClickListener = doingBucketListClickListener
+                doneBucketListClickListener = doneBucketListerClickListener
+                startedCountTextView.text = _myPageInfo.startedCount.toString()
+                completedCountTextView.text = _myPageInfo.completedCount.toString()
 
-            mypageScrollLayout.dDayCountText.text = _myPageInfo.dDayCount.toString()
+                mypageScrollLayout.dDayCountText.text = _myPageInfo.dDayCount.toString()
+
+                constraintLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+                    override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+
+                    }
+
+                    override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+                        mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                    }
+
+                    override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+
+                    }
+
+                    override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                        mypageScrollLayout.ddayLayout.visibility = View.GONE
+                    }
+                })
+
+            }
 
 
             mypageBottomSheet.homeClickListener = createOnClickHomeListener
             mypageBottomSheet.writeClickListener = createOnClickWriteListener
 
-            mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
-            mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
+            headerLayout.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
+            headerLayout.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
 
             mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
@@ -108,19 +128,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
             mypageMoreMenuLarge.supportClickListener = myBurySupportClickListener
 
+
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
-            appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, p1 ->
-                if (p1 == -384) {
-                    mypageScrollLayout.ddayLayout.visibility = View.GONE
-                    headerLayout.moreBtn.visibility = View.GONE
-                    popupClickListener()
-                } else if (p1 == 0) {
-                    mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-                    headerLayout.moreBtn.visibility = View.VISIBLE
-                }
-
-            })
 
             mypageMoreMenuLarge.myBurySupport.visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
@@ -133,15 +143,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
             if (num == 1) {
-                viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
-                viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+                viewDataBinding.headerLayout.myProfileImage.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my, null))
             } else {
-                viewDataBinding.headerLayout.profileLargeImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
-                viewDataBinding.headerLayout.profileImgView.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+                viewDataBinding.headerLayout.myProfileImage.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury, null))
             }
         } else {
-            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileLargeImg)
-            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImgView)
+            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.myProfileImage)
         }
     }
 

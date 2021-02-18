@@ -1,54 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/motionLayout"
+        <include
+            android:id="@+id/header_layout"
+            layout="@layout/layout_my_page_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/_fafafa"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent" />
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:background="@color/_fafafa"
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="0dp">
-
-                <include
-                    android:id="@+id/header_layout"
-                    layout="@layout/layout_my_page_header" />
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-
-            <include
-                android:id="@+id/mypage_scroll_layout"
-                layout="@layout/mypage_scroll_layout" />
-
-
-            <include
-                android:id="@+id/mypage_bottom_sheet"
-                layout="@layout/layout_mypage_bottom_sheet_with_add_btn" />
-
-
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+        <include
+            android:id="@+id/mypage_bottom_sheet"
+            layout="@layout/layout_mypage_bottom_sheet_with_add_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <include
             android:id="@+id/mypage_more_menu_large"
             layout="@layout/layout_my_page_more_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:visibliry="visible"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibliry="visible" />
 
-    </RelativeLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
 

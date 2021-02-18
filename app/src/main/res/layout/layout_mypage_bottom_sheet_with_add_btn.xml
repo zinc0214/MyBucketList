@@ -39,9 +39,12 @@
 
         <include
             android:id="@+id/bottom_menu_sheet"
-            app:myPageClickListener="@{myPageClickListener}"
+            layout="@layout/layout_mypage_bottom_menu_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:homeClickListener="@{homeClickListener}"
-            layout="@layout/layout_mypage_bottom_menu_sheet" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:myPageClickListener="@{myPageClickListener}" />
 
         <ImageView
             android:id="@+id/plus"
@@ -49,11 +52,11 @@
             android:layout_height="36dp"
             android:layout_centerInParent="true"
             android:background="@drawable/add_bucket_list"
+            android:onClick="@{writeClickListener}"
             app:layout_constraintBottom_toBottomOf="@id/bottomLayout"
-            app:layout_constraintTop_toTopOf="@id/bottomLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:onClick="@{writeClickListener}" />
+            app:layout_constraintTop_toTopOf="@id/bottomLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
