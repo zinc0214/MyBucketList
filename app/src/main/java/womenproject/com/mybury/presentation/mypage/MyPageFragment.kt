@@ -101,15 +101,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     }
 
                     override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-                        mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+
                     }
 
                     override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-
+                        if (p0!!.targetPosition.toString() == "0.0") {
+                            mypageScrollLayout.ddayLayout.visibility = View.GONE
+                        } else {
+                            mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                        }
                     }
 
                     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                        mypageScrollLayout.ddayLayout.visibility = View.GONE
+
                     }
                 })
 
@@ -143,12 +147,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
             if (num == 1) {
-                viewDataBinding.headerLayout.myProfileImage.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my, null))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my, null))
             } else {
-                viewDataBinding.headerLayout.myProfileImage.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury, null))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury, null))
             }
         } else {
-            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.myProfileImage)
+            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImg)
         }
     }
 

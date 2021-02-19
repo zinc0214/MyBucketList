@@ -28,5 +28,7 @@
 
     <dimen name="_200">200dp</dimen>
     <dimen name="_24">24dp</dimen>
+    <dimen name="_26">26dp</dimen>
+    <dimen name="_14">14dp</dimen>
 
 </resources>
