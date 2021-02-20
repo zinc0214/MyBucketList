@@ -7,11 +7,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/header_layout"
-            layout="@layout/layout_my_page_header"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:fitsSystemWindows="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="268dp"
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+                <include
+                    android:id="@+id/header_layout"
+                    layout="@layout/layout_my_page_header" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <include
+                android:id="@+id/mypage_scroll_layout"
+                layout="@layout/mypage_scroll_layout" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <include
             android:id="@+id/mypage_bottom_sheet"
@@ -33,7 +54,6 @@
             tools:visibliry="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
 
 

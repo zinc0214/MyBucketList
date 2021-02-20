@@ -15,86 +15,94 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/content_scroll_layout"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
-        android:descendantFocusability="blocksDescendants"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:showIn="@layout/mypage_scroll_layout">
 
-        <RelativeLayout
-            android:id="@+id/dday_layout"
+        <LinearLayout
+            android:id="@+id/content_scroll_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/mypage_ddaylist_background"
-            android:gravity="center_vertical"
-            android:minHeight="50dp"
-            android:onClick="@{ddayListClickListener}">
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/dday_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="14dp"
-                android:text="D-day 버킷리스트"
-                android:textColor="@color/_434343"
-                android:textSize="14sp" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/mypage_ddaylist_background"
+                android:gravity="center_vertical"
+                android:minHeight="50dp"
+                android:onClick="@{ddayListClickListener}">
 
-            <TextView
-                android:id="@+id/dDayCountText"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    android:text="D-day 버킷리스트"
+                    android:textColor="@color/_434343"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/dDayCountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="15dp"
+                    android:textColor="@color/_ffca5a"
+                    tools:text="10" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:textColor="@color/_ffca5a"
-                tools:text="10" />
+                android:layout_marginTop="16dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카테고리"
+                    android:textColor="@color/_5a95ff"
+                    android:textSize="12sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/shape_00ffffff_r13_strk_06_5a95ff"
+                    android:gravity="center"
+                    android:onClick="@{categoryEditClickListener}"
+                    android:paddingStart="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="2dp"
+                    android:text="편집"
+                    android:textColor="@color/_5a95ff"
+                    android:textSize="11sp" />
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mypage_category_recyclerview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="카테고리"
-                android:textColor="@color/_5a95ff"
-                android:textSize="12sp" />
+                android:layout_marginTop="6dp"
+                android:overScrollMode="never"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/item_mypage_category" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/shape_00ffffff_r13_strk_06_5a95ff"
-                android:gravity="center"
-                android:onClick="@{categoryEditClickListener}"
-                android:paddingStart="6dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="2dp"
-                android:text="편집"
-                android:textColor="@color/_5a95ff"
-                android:textSize="11sp" />
-        </RelativeLayout>
+        </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mypage_category_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:overScrollMode="never"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_mypage_category" />
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

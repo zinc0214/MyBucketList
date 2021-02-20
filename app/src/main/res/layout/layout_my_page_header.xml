@@ -27,7 +27,11 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutDescription="@xml/layout_my_page_header_xml_constraintlayout_scene">
+        android:background="@color/_fafafa"
+        android:minHeight="128dp"
+        app:layoutDescription="@xml/layout_my_page_header_xml_constraintlayout_scene"
+        android:fitsSystemWindows="false"
+        app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
         <ImageView
             android:id="@+id/blueBackgroundImageView"
@@ -36,16 +40,6 @@
             android:background="@drawable/shape_gradient"
             android:importantForAccessibility="no"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/blueBackgroundUnderImageView"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:background="@drawable/shape_gradient"
-            android:importantForAccessibility="no"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/whiteBackgroundImageView" />
 
         <ImageView
             android:id="@+id/whiteBackgroundImageView"
@@ -189,17 +183,6 @@
                 app:layout_constraintTop_toBottomOf="@id/completedCountTextView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include
-            android:id="@+id/mypage_scroll_layout"
-            layout="@layout/mypage_scroll_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/whiteBackgroundImageView" />
 
     </womenproject.com.mybury.ui.CollapsibleToolbar>
 </layout>

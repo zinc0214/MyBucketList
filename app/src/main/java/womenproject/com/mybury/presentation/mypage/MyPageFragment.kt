@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.mypage
 
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.findNavController
@@ -64,9 +65,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                 val layoutManager = LinearLayoutManager(context)
 
-                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
-                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.headerLayout.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
 
                 setUpView(info)
             }
@@ -88,8 +89,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 myPageInfo = _myPageInfo
 
                 moreClickListener = moreButtonOnClickListener
-                doingBucketListClickListener = doingBucketListClickListener
-                doneBucketListClickListener = doneBucketListerClickListener
+                doingBucketListClickListener = doingBucketListClick
+                doneBucketListClickListener = doneBucketListClick
                 startedCountTextView.text = _myPageInfo.startedCount.toString()
                 completedCountTextView.text = _myPageInfo.completedCount.toString()
 
@@ -105,15 +106,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     }
 
                     override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                        if (p0!!.targetPosition.toString() == "0.0") {
-                            mypageScrollLayout.ddayLayout.visibility = View.GONE
+                        if (p0?.targetPosition!! == 0.0f) {
+                            //      mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
                         } else {
-                            mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                            //       mypageScrollLayout.ddayLayout.visibility = View.GONE
                         }
                     }
 
                     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-
+                        val targetPosition: Float = p0?.targetPosition ?: 0.0f
+                        if (targetPosition == 1.0f) {
+                            mypageScrollLayout.ddayLayout.visibility = View.GONE
+                        } else if (targetPosition == 0.0f) {
+                            mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                        }
                     }
                 })
 
@@ -123,8 +129,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageBottomSheet.homeClickListener = createOnClickHomeListener
             mypageBottomSheet.writeClickListener = createOnClickWriteListener
 
-            headerLayout.mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
-            headerLayout.mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
+            mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
+            mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
 
             mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
@@ -143,6 +149,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun seyMyProfileImg(imgUrl: String?) {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
@@ -218,13 +225,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         it.findNavController().navigate(directions)
         popupClickListener()
     }
-    private val doingBucketListClickListener = View.OnClickListener {
+    private val doingBucketListClick = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()
         it.findNavController().navigate(directions)
     }
 
-    private val doneBucketListerClickListener = View.OnClickListener {
+    private val doneBucketListClick = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.completed.toString()
         it.findNavController().navigate(directions)
