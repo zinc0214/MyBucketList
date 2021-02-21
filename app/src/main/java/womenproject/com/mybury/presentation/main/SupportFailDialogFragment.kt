@@ -2,7 +2,6 @@ package womenproject.com.mybury.presentation.main
 
 import android.app.ActionBar
 import android.content.Intent
-import android.graphics.Paint
 import android.net.Uri
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
@@ -20,27 +19,28 @@ class SupportFailDialogFragment(private val token: String, private val errorCode
         val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
         dialog?.window?.setDimAmount(0.8F)
+        dialog?.setCanceledOnTouchOutside(false)
 
     }
 
     override fun initDataBinding() {
         viewDataBinding.errorCode = errorCode
-        viewDataBinding.goToEmailTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        //  viewDataBinding.goToEmailTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         viewDataBinding.goToEmailTextView.setOnClickListener { goToSendEmail() }
+        viewDataBinding.closeButton.setOnClickListener { dismiss() }
     }
 
-
     private fun goToSendEmail() {
-        val email = Intent(Intent.ACTION_SEND)
-        email.data = Uri.parse("mailto: mybury.info@gmail.com")
-        email.putExtra(Intent.EXTRA_EMAIL, arrayListOf("mybury.info@gmail.com"))
-        email.putExtra(Intent.EXTRA_SUBJECT, "< 마이버리 후원하기 결제 실패 문의>")
-        email.putExtra(Intent.EXTRA_TEXT, "아래의 정보를 그대로 전송해주세요. \n\n ======================" +
+        val send = Intent(Intent.ACTION_SENDTO)
+        val uriText = "mailto:" + Uri.encode("mybury.info@gmail.com") +
+                "?subject=" + Uri.encode("< 마이버리 후원하기 결제 실패 문의>") +
+                "&body=" + Uri.encode("아래의 정보를 그대로 전송해주세요. \n\n ======================" +
                 "\n\n 앱 버전 (AppVersion) + ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})" +
-                "\n\n Puschase TOEKN : $token \n\n ErrorCode : $errorCode" +
+                "\n\n Purchase Token : $token \n\n ErrorCode : $errorCode" +
                 "\n\n ===================")
-        email.type = "message/rfc822"
-        startActivity(email)
+        val uri = Uri.parse(uriText)
 
+        send.data = uri
+        startActivity(Intent.createChooser(send, "Send Support Error mail..."))
     }
 }
