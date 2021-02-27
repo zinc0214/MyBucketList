@@ -159,6 +159,11 @@ interface RetrofitInterface {
     suspend fun requestSupportItem(@Header("X-Auth-Token") token: String,
                                    @Body purchasedItem: PurchasedItem): SimpleResponse
 
+    // 후원하기 성공 또는 실패 여부 전달
+    @POST("/support_edit")
+    suspend fun editSupportResult(@Header("X-Auth-Token") token: String,
+                                  @Body purchasedResult: PurchasedResult): SimpleResponse
+
 
 }
 

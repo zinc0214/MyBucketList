@@ -459,7 +459,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
             addImgList = tmpImgList
 
-            alreadyImgList.forEach { num, str ->
+            alreadyImgList.forEach { (num, str) ->
                 if (id == str) {
                     alreadyImgList[num] = null
                 }

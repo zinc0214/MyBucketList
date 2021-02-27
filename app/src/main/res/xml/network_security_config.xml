@@ -5,5 +5,6 @@
         <domain includeSubdomains="true">https://www.my-bury.com/privacy_policy</domain>
         <domain includeSubdomains="true">https://www.my-bury.com/terms_of_use</domain>
         <domain includeSubdomains="true">www.my-bury.com</domain>
+        <domain includeSubdomains="true">52.91.76.188</domain>
     </domain-config>
 </network-security-config>

@@ -39,7 +39,7 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
 
         fun bind(item: PurchasableItem) {
             binding.info = item
-            Log.e("myBury", "item.isPurchasable :  ${item.itemName} ,, ${item.isPurchasable}")
+            Log.e("myBury", "item.isPurchasable :  ${item.itemName} ,, ${item.dpYn}")
 
             try {
                 Glide.with(binding.imageView).load(item.itemImg)

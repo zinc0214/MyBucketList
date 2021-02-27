@@ -47,10 +47,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
-    //  private lateinit var loadingImg: ImageView
-    //  private lateinit var supportLoadingImg: ImageView
-    // private lateinit var animationDrawable: AnimationDrawable
-    //  private lateinit var supportAnimationDrawable: AnimationDrawable
 
     private lateinit var interstitialAd: InterstitialAd
     private var isAdShow = true
@@ -65,6 +61,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     var supportInfo: SupportInfo? = null
     private lateinit var purchaseSuccess: () -> Unit
     private lateinit var purchaseFail: () -> Unit
+
+    private var acknowledgePurchaseItemIsFail = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -184,7 +182,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         if (interstitialAd.isLoaded && isAdShow) {
             interstitialAd.show()
         } else {
-            Log.d("myBury", "The interstitial wasn't loaded yet.");
+            Log.d("myBury", "The interstitial wasn't loaded yet.")
         }
     }
 
@@ -335,14 +333,31 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             purchaseHistoryList: MutableList<PurchaseHistoryRecord>?
     ) {
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+
+            val recentSupport = supportInfo?.recentSupport ?: return
+
             if (!purchaseHistoryList.isNullOrEmpty()) {
                 // 가장 최근에 구매된 아이템을 확인할 수 있다.
-                purchaseHistoryList.forEach {
+                purchaseHistoryList.forEach { history ->
 
                     //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있지만, getAcknowledgePurchasedItem 목록에는 없다면 성공한 것으로 간주한다.
+                    Log.d("mybury", "Previous Purchase Item : ${history.sku}, ${history.signature}, ${history.purchaseToken}. ${history}")
 
-                    Log.d("mybury", "Previous Purchase Item : ${it.sku}, ${it.signature}, ${it.purchaseToken}. ${it}")
                 }
+
+                // purchaseHistoryList 에 토큰이 존재하면서 acknowledgePurchaseItemIsFail == true 이면 실패한 것으로 간주.
+                // 아니라면 성공한 것으로 간주한다.
+                val purchasedFailItem = purchaseHistoryList.firstOrNull { it.purchaseToken == recentSupport.token }
+//
+//                if (purchasedFailItem == null) {
+//                    // 아무것도 하지 않는다.
+//                } else if (!acknowledgePurchaseItemIsFail && !recentSupport.susYn.isYes()) {
+//                    supportViewModel.editSuccessItem(recentSupport.token, "Y", {
+//                        PurchasedItemUpdateSuccess().show(supportFragmentManager, "PurchasedItemUpdateSuccess")
+//                    }, {
+//                        stopLoading()
+//                    })
+//                }
             }
         }
     }
@@ -359,18 +374,40 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             return
         }
 
+        val recentSupport = supportInfo?.recentSupport ?: return
+
         // 인앱결제된 내역을 확인한다
         val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
         if (result.purchasesList == null) {
             Log.d("mybury", "No existing in app purchases found.")
+            return
         } else {
+            startLoading()
             Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
                 //결제된 내역에 대한 처리
-
                 //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
                 Log.d("ayhan", "Bought is Fail??? : ${it.orderId} \n ${it.sku} \n ${it.purchaseToken} \n ${it.purchaseState} \n ${it.originalJson}")
                 // purchasedItemIds.add(it.sku)
+            }
+
+            // 만약 purchasesList 의 토큰값과 일치하는 값이 있다면 "실패한 아이템" 이 존재하는 것으로 확인
+            // 이 아이템의 purchaseState 가 2이면 실패로 표기 그 외의 경우에는 넘어간다.
+            val purchasedFailItem = result.purchasesList?.firstOrNull { it.purchaseToken == recentSupport.token }
+
+            if (purchasedFailItem == null) {
+                // 없는 것으로 간주. 아무것도 하지 않는다.
+                acknowledgePurchaseItemIsFail = false
+            } else {
+                // 실패한 것오로 간주
+                if (purchasedFailItem.purchaseState == 2) {
+                    acknowledgePurchaseItemIsFail = true
+                    supportViewModel.editSuccessItem(recentSupport.token, "N", {
+                        stopLoading()
+                    }, {
+                        stopLoading()
+                    })
+                }
             }
         }
     }
@@ -387,20 +424,33 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
                     purchasedItem?.let {
-                        supportViewModel.purchasedItem(it.id, {
+                        supportViewModel.purchasedItem(it.id, purchaseToken, "Y", {
                             showSupportPurchaseSuccessDialog()
                             stopLoading()
                             purchaseSuccess.invoke()
+                            supportViewModel.getPurchasableItem {
+                                // do nothing...
+                            }
                         }, {
-                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
                             stopLoading()
+                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                            purchaseFail.invoke()
                         })
                     }
                 }
                 else -> {
                     Log.e("mybury", "FAIL : ${billingResult.responseCode}")
-                    showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                    stopLoading()
+                    purchasedItem?.let {
+                        supportViewModel.purchasedItem(it.id, purchaseToken, "N", {
+                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                            stopLoading()
+                            purchaseFail.invoke()
+                        }, {
+                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
+                            stopLoading()
+                            purchaseFail.invoke()
+                        })
+                    }
                 }
             }
         }
@@ -413,6 +463,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 .build()
         billingClient.acknowledgePurchase(params) { billingResult ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                // do something
             } else {
                 Log.e("TAG", "FAIL : ${billingResult.responseCode}")
             }
@@ -492,3 +543,22 @@ class UserAlreadyExist : BaseNormalDialogFragment() {
         }
     }
 }
+
+class PurchasedItemUpdateSuccess : BaseNormalDialogFragment() {
+
+    init {
+        TITLE_MSG = "후원금액 갱신"
+        CONTENT_MSG = "이전에 실패한 후원에 대해 확인하여 금액이 변경되었습니다."
+        CANCEL_BUTTON_VISIBLE = false
+        GRADIENT_BUTTON_VISIBLE = true
+        CONFIRM_TEXT = "확인"
+        CANCEL_ABLE = true
+    }
+
+    override fun createOnClickConfirmListener(): View.OnClickListener {
+        return View.OnClickListener {
+            dismiss()
+        }
+    }
+}
+
