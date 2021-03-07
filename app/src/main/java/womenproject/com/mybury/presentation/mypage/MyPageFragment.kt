@@ -2,6 +2,8 @@ package womenproject.com.mybury.presentation.mypage
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.findNavController
@@ -137,6 +139,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
             mypageMoreMenuLarge.supportClickListener = myBurySupportClickListener
+            mypageMoreMenuLarge.contactClickListener = contactToMyBuryClickListener
 
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
@@ -225,6 +228,17 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         it.findNavController().navigate(directions)
         popupClickListener()
     }
+
+    private val contactToMyBuryClickListener = View.OnClickListener {
+        val send = Intent(Intent.ACTION_SENDTO)
+        val uriText = "mailto:" + Uri.encode("mybury.info@gmail.com") +
+                "?subject=" + Uri.encode("< 마이버리 문의 >")
+        val uri = Uri.parse(uriText)
+
+        send.data = uri
+        startActivity(Intent.createChooser(send, "마이버리 문의하기"))
+    }
+
     private val doingBucketListClick = View.OnClickListener {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()

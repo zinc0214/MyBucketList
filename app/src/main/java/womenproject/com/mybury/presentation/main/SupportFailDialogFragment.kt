@@ -33,7 +33,7 @@ class SupportFailDialogFragment(private val token: String, private val errorCode
     private fun goToSendEmail() {
         val send = Intent(Intent.ACTION_SENDTO)
         val uriText = "mailto:" + Uri.encode("mybury.info@gmail.com") +
-                "?subject=" + Uri.encode("< 마이버리 후원하기 결제 실패 문의>") +
+                "?subject=" + Uri.encode("< 마이버리 후원하기 결제 실패 문의 >") +
                 "&body=" + Uri.encode("아래의 정보를 그대로 전송해주세요. \n\n ======================" +
                 "\n\n 앱 버전 (AppVersion) + ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})" +
                 "\n\n Purchase Token : $token \n\n ErrorCode : $errorCode" +
@@ -41,6 +41,6 @@ class SupportFailDialogFragment(private val token: String, private val errorCode
         val uri = Uri.parse(uriText)
 
         send.data = uri
-        startActivity(Intent.createChooser(send, "Send Support Error mail..."))
+        startActivity(Intent.createChooser(send, "마이버리 후원 문의하기"))
     }
 }
