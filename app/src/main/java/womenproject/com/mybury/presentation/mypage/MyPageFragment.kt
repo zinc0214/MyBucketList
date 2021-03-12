@@ -19,7 +19,6 @@ import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import kotlin.random.Random
 
@@ -35,7 +34,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
     override val viewModel: MyPageViewModel
         get() = MyPageViewModel()
 
-    private val bucketInfoViewModel = BucketInfoViewModel()
     private var isAdsShow = false
 
     override fun initDataBinding() {
@@ -131,21 +129,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
             mypageBottomSheet.homeClickListener = createOnClickHomeListener
             mypageBottomSheet.writeClickListener = createOnClickWriteListener
 
+            mypageScrollLayout.goToMyBurySupportClickListener = myBurySupportClickListener
             mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
             mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
 
             mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
-            mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
+             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
-            mypageMoreMenuLarge.supportClickListener = myBurySupportClickListener
             mypageMoreMenuLarge.contactClickListener = contactToMyBuryClickListener
 
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
-
-
-            mypageMoreMenuLarge.myBurySupport.visibility = if (BuildConfig.DEBUG) View.VISIBLE else View.GONE
 
             seyMyProfileImg(_myPageInfo.imageUrl)
         }

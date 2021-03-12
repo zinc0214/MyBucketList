@@ -28,12 +28,6 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="supportClickListener"
-            type="android.view.View.OnClickListener" />
-
-
-
-        <variable
             name="isAlarmVisible"
             type="boolean" />
 
@@ -130,19 +124,6 @@
                 android:onClick="@{contactClickListener}"
                 android:paddingStart="8dp"
                 android:text="@string/my_page_more_menu_contact"
-                android:textColor="@color/_434343"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/myBurySupport"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/write_dialog_item_background"
-                android:gravity="center_vertical"
-                android:onClick="@{supportClickListener}"
-                android:paddingStart="8dp"
-                android:text="@string/my_page_more_menu_support"
                 android:textColor="@color/_434343"
                 android:textSize="14sp" />
 
