@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.detail
 
+import android.animation.Animator
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class BucketDetailFragment : Fragment() {
 
     private lateinit var bucketItemId: String
     private var isFirstSucceedTime = false
+    private var needToShowLoad = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -59,17 +61,25 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun start() {
-                startLoading()
+                if (needToShowLoad) {
+                    startLoading()
+                }
+
             }
 
             override fun success(value: Any) {
                 bucketItem = value as DetailBucketItem
                 setUpViews()
-                stopLoading()
+                if (needToShowLoad) {
+                    stopLoading()
+                }
+
             }
 
             override fun fail() {
-                stopLoading()
+                if (needToShowLoad) {
+                    stopLoading()
+                }
             }
 
         }, bucketItemId)
@@ -255,24 +265,46 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun bucketComplete() {
+        viewDataBinding.successLottieView.visibility = View.VISIBLE
+        viewDataBinding.successLottieView.playAnimation()
+
+        viewDataBinding.successLottieView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+                // do nothing
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                viewDataBinding.successLottieView.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                // do nothing
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+                // do nothing
+            }
+
+        })
         viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 bucketComplete()
             }
 
             override fun start() {
-                startLoading()
+
             }
 
             override fun success() {
                 if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
                     isFirstSucceedTime = true
                 }
+                needToShowLoad = false
                 loadBucketDetailInfo()
             }
 
             override fun fail() {
-                stopLoading()
+
                 Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 

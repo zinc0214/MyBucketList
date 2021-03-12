@@ -115,6 +115,9 @@ dependencies {
     implementation 'com.android.billingclient:billing-ktx:3.0.2'
 
     implementation 'com.google.android.gms:play-services-base:17.5.0'
+
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.0.7'
 }
 
 repositories {
