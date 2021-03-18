@@ -92,18 +92,25 @@ class BucketDetailFragment : Fragment() {
             moreClickListener = showMoreMenuLayout
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
-            redoClickListener = bucketRedoListener
             memoReadMoreClickListener = readeMoreClickListener
             isCategoryShow = bucketItem.category != "없음"
+
+            detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
+            detailMoreMenu.deleteOnClickListener = deleteBucketListener
+            detailMoreMenu.redoClickListener = bucketRedoListener
+
+            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
 
             if (bucketItem.dDate != null) {
                 bucketItem.dDay.apply {
                     isMinusDday = this >= 0
                     ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
                 }
-                ddayLayout.visibility = View.VISIBLE
+                ddayPlusLayout.visibility = View.VISIBLE
+                minusLayout.visibility = View.VISIBLE
             } else {
-                ddayLayout.visibility = View.GONE
+                ddayPlusLayout.visibility = View.GONE
+                minusLayout.visibility = View.GONE
             }
 
             comment = getRandomComment()
@@ -119,9 +126,8 @@ class BucketDetailFragment : Fragment() {
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
             val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
-            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
-            isCount = isShowCountLayout
             isDone = isCompleted
+            isCount = isShowCountLayout
             isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
             val desc: String = requireContext().getString(R.string.bucket_least_count)
@@ -147,10 +153,6 @@ class BucketDetailFragment : Fragment() {
                 } else {
                     bottomDivider.visibility = View.GONE
                 }
-            }
-
-            if (isFirstSucceedTime) {
-                contentView.post { contentView.fullScroll(View.FOCUS_DOWN) }
             }
 
             viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2) View.VISIBLE else View.GONE
@@ -187,9 +189,6 @@ class BucketDetailFragment : Fragment() {
         } else {
             viewDataBinding.detailMoreLayout.visibility = View.GONE
         }
-
-        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
-        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener
     }
 
     private val createOnClickBucketUpdateListener = View.OnClickListener {
@@ -392,6 +391,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     fun startLoading() {
+        viewDataBinding.detailMoreLayout.visibility = View.GONE
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.startLoading()

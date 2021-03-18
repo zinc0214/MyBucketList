@@ -96,6 +96,7 @@ data class DetailBucketItem(
         val goalCount: Int = 0,
         val dDate: String?,
         val dDay: Int,
+        val succeedDay:String?,
         val imgUrl1: String? = null,
         val imgUrl2: String? = null,
         val imgUrl3: String? = null,

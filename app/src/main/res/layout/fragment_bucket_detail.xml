@@ -121,10 +121,9 @@
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
-                    android:id="@+id/ddayLayout"
+                    android:id="@+id/topBannerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -133,10 +132,47 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/_5a95ff"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:visibility="@{isDone ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="달성완료"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{detailInfo.succeedDay}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="2020.10.02" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/minusLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/_febc30"
                         android:paddingStart="30dp"
                         android:paddingEnd="30dp"
-                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{!isDone &amp;&amp; isMinusDday ? View.VISIBLE : View.GONE}"
                         tools:visibility="gone">
 
                         <TextView
@@ -179,8 +215,10 @@
                         android:textSize="12sp"
                         android:textStyle="bold"
                         android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
+                        tools:visibility="gone"
                         tools:text="D+10" />
                 </RelativeLayout>
+
 
                 <LinearLayout
                     android:id="@+id/bucketContentLayout"
@@ -192,7 +230,7 @@
                     android:paddingEnd="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ddayLayout"
+                    app:layout_constraintTop_toBottomOf="@id/topBannerLayout"
                     app:layout_goneMarginTop="28dp">
 
                     <TextView
@@ -266,9 +304,7 @@
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true">
+                        android:layout_height="match_parent">
 
                     </androidx.viewpager.widget.ViewPager>
 
@@ -290,77 +326,6 @@
                     app:tabIndicatorHeight="0dp"
                     app:tabPaddingStart="0dp"
                     tools:layout_width="50dp" />
-
-                <LinearLayout
-                    android:id="@+id/succedLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:orientation="vertical"
-                    android:visibility="@{isDone ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toTopOf="@id/bottomSpace"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tabLayout"
-                    app:layout_constraintVertical_bias="1"
-                    tools:visibility="visible">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/complete_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="-8dp"
-                        android:visibility="visible">
-
-                        <ImageView
-                            android:id="@+id/bury"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bury_profile"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/complete_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginTop="1dp"
-                            android:src="@drawable/bury_speech_complete"
-                            app:layout_constraintStart_toEndOf="@+id/bury"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/succedTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_66859ecc_r4"
-                        android:gravity="center"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="14dp"
-                        android:text="달성 완료! 대단해요"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/restartTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center"
-                        android:onClick="@{redoClickListener::onClick}"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="다시 도전하기"
-                        android:textColor="@color/_5a95ff"
-                        android:textSize="13sp" />
-                </LinearLayout>
 
                 <androidx.legacy.widget.Space
                     android:id="@+id/bottomSpace"
@@ -562,8 +527,8 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/successLottieView"
-            android:layout_width="230dp"
-            android:layout_height="230dp"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
