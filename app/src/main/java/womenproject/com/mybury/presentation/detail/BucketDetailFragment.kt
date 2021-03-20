@@ -34,8 +34,8 @@ class BucketDetailFragment : Fragment() {
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
-    private var isFirstSucceedTime = false
-    private var needToShowLoad = true
+    private var isLoadForSucceed = false
+    private var memoArrowIsClicked = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -64,7 +64,7 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun start() {
-                if (needToShowLoad) {
+                if (!isLoadForSucceed) {
                     startLoading()
                 }
 
@@ -73,14 +73,14 @@ class BucketDetailFragment : Fragment() {
             override fun success(value: Any) {
                 bucketItem = value as DetailBucketItem
                 setUpViews()
-                if (needToShowLoad) {
+                if (!isLoadForSucceed) {
                     stopLoading()
                 }
 
             }
 
             override fun fail() {
-                if (needToShowLoad) {
+                if (!isLoadForSucceed) {
                     stopLoading()
                 }
             }
@@ -157,7 +157,7 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2) View.VISIBLE else View.GONE
+            viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
         }
 
     }
@@ -228,6 +228,7 @@ class BucketDetailFragment : Fragment() {
     private val readeMoreClickListener = View.OnClickListener {
         viewDataBinding.bucketMemo.maxLines = Int.MAX_VALUE
         viewDataBinding.memoArrow.visibility = View.GONE
+        memoArrowIsClicked = true
     }
 
     private fun initObserve() {
@@ -266,6 +267,43 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun bucketComplete() {
+
+        if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
+            isLoadForSucceed = true
+        } else {
+            isLoadForSucceed = false
+        }
+
+        if (isLoadForSucceed) {
+            succeddBucketListAction()
+        }
+
+        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+            override fun restart() {
+                bucketComplete()
+            }
+
+            override fun start() {
+
+            }
+
+            override fun success() {
+                loadBucketDetailInfo()
+            }
+
+            override fun fail() {
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+
+        }, bucketItemId)
+
+    }
+
+    private val bucketCancelListener = View.OnClickListener {
+        bucketCancel()
+    }
+
+    private fun succeddBucketListAction() {
         viewDataBinding.successLottieView.visibility = View.VISIBLE
         viewDataBinding.successLottieView.playAnimation()
 
@@ -291,36 +329,8 @@ class BucketDetailFragment : Fragment() {
             }
 
         })
-        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                bucketComplete()
-            }
-
-            override fun start() {
-
-            }
-
-            override fun success() {
-                if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
-                    isFirstSucceedTime = true
-                }
-                needToShowLoad = false
-                loadBucketDetailInfo()
-            }
-
-            override fun fail() {
-
-                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-        }, bucketItemId)
 
     }
-
-    private val bucketCancelListener = View.OnClickListener {
-        bucketCancel()
-    }
-
 
     private fun bucketCancel() {
         viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
