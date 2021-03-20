@@ -106,19 +106,17 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     }
 
                     override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
-                        if (p0?.targetPosition!! == 0.0f) {
-                            //      mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
-                        } else {
-                            //       mypageScrollLayout.ddayLayout.visibility = View.GONE
-                        }
+
                     }
 
                     override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                         val targetPosition: Float = p0?.targetPosition ?: 0.0f
                         if (targetPosition == 1.0f) {
                             mypageScrollLayout.ddayLayout.visibility = View.GONE
+                            mypageScrollLayout.supportLayout.visibility = View.GONE
                         } else if (targetPosition == 0.0f) {
                             mypageScrollLayout.ddayLayout.visibility = View.VISIBLE
+                            mypageScrollLayout.supportLayout.visibility = View.VISIBLE
                         }
                     }
                 })
