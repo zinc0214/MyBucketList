@@ -37,6 +37,11 @@
             type="Boolean" />
 
         <variable
+            name="isPlusDay"
+            type="Boolean" />
+
+
+        <variable
             name="ddayText"
             type="String" />
 
@@ -173,7 +178,7 @@
                         android:background="@color/_febc30"
                         android:paddingStart="30dp"
                         android:paddingEnd="30dp"
-                        android:visibility="@{!isDone &amp;&amp; isMinusDday ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{isMinusDday ? View.VISIBLE : View.GONE}"
                         tools:visibility="gone">
 
                         <TextView
@@ -215,7 +220,7 @@
                         android:textColor="@color/_ffffff"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{isPlusDay ? View.VISIBLE : View.GONE}"
                         tools:text="D+10"
                         tools:visibility="gone" />
                 </RelativeLayout>

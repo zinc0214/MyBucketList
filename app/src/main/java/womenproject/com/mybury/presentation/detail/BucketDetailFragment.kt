@@ -11,9 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.isAlreadyBucketRetryGuideShow
+import womenproject.com.mybury.data.Preference.Companion.setAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
@@ -101,16 +104,15 @@ class BucketDetailFragment : Fragment() {
 
             val isCompleted = bucketItem.goalCount <= bucketItem.userCount
 
-            if (bucketItem.dDate != null) {
+            if (bucketItem.dDate != null && !isCompleted) {
                 bucketItem.dDay.apply {
                     isMinusDday = this >= 0
+                    isPlusDay = this < 0
                     ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
                 }
-                ddayPlusLayout.visibility = View.VISIBLE
-                minusLayout.visibility = View.VISIBLE
             } else {
-                ddayPlusLayout.visibility = View.GONE
-                minusLayout.visibility = View.GONE
+                isMinusDday = false
+                isPlusDay = false
             }
 
             comment = getRandomComment()
@@ -274,6 +276,10 @@ class BucketDetailFragment : Fragment() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 viewDataBinding.successLottieView.visibility = View.GONE
+                if (isAlreadyBucketRetryGuideShow(requireContext()) || BuildConfig.DEBUG) {
+                    BucketRetryGuideDialogFragment().show(requireActivity().supportFragmentManager, "tag")
+                    setAlreadyBucketRetryGuideShow(requireContext(), true)
+                }
             }
 
             override fun onAnimationCancel(animation: Animator?) {
