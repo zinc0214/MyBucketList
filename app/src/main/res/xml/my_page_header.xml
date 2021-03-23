@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:motion="http://schemas.android.com/apk/res-auto">
+<MotionScene>
 
-    <Transition
+    <!--<Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="1000"
@@ -227,5 +225,5 @@
             motion:touchAnchorId="@id/whiteBackground"
             motion:touchAnchorSide="top" />
 
-    </Transition>
+    </Transition>-->
 </MotionScene>

@@ -13,33 +13,40 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
-import womenproject.com.mybury.databinding.SplashWithLoginBinding
+import womenproject.com.mybury.databinding.LayoutSplashWithLoginBinding
 import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import womenproject.com.mybury.util.isConnectionOn
 import kotlin.random.Random
 
 
 class SplashActivity : AppCompatActivity() {
 
-    lateinit var binding: SplashWithLoginBinding
+    lateinit var binding: LayoutSplashWithLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         val num = Random.nextInt(2)
         if (num == 1) {
-            setContentView(R.layout.splash_white)
+            setContentView(R.layout.layout_splash_white)
             setStatusBar(this, R.color._ffffff)
         } else {
-            setContentView(R.layout.splash_blue)
+            setContentView(R.layout.layout_splash_blue)
             setStatusBar(this, R.color._4656e8)
         }
 
-        val hd = Handler()
-        hd.postDelayed(splashhandler(), 1000)
+        if (!this.isConnectionOn()) {
+            NetworkFailDialog().show(supportFragmentManager, "tag")
+        } else {
+            val hd = Handler()
+            hd.postDelayed(Splashhandler(), 1000)
+        }
     }
 
-    private inner class splashhandler : Runnable {
+    private inner class Splashhandler : Runnable {
         override fun run() {
             initToken()
         }
@@ -69,10 +76,10 @@ class SplashActivity : AppCompatActivity() {
                         CanNotGoMainDialog().show(supportFragmentManager, "tag")
                     }
                 }) {
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    WarningDialogFragment {
+                        finish()
+                    }.show(supportFragmentManager, "tag")
                     Log.e("myBury", "getLoginToken Fail : $it")
                 }
-
-
     }
 }

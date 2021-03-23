@@ -4,14 +4,14 @@ import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.MyPageCategory
-import womenproject.com.mybury.databinding.MypageCategoryItemBinding
+import womenproject.com.mybury.databinding.ItemMypageCategoryBinding
 import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 
 /**
  * Created by HanAYeon on 2019. 4. 30..
  */
 
-class MyPageCategoryListViewHolder(private val binding: MypageCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class MyPageCategoryListViewHolder(private val binding: ItemMypageCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(category: MyPageCategory) {
         binding.apply {

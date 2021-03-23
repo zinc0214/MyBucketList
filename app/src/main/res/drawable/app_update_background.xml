@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/app_update_disable" android:state_enabled="false" />
-    <item android:drawable="@drawable/app_update_enable" android:state_enabled="true" />
-    <item android:drawable="@drawable/memo_img_add_button_press_background" android:state_pressed="true" />
-    <item android:drawable="@drawable/app_update_disable" />
+    <item android:drawable="@drawable/shape_ffffff_r16_strk_06_dddddd" android:state_enabled="false" />
+    <item android:drawable="@drawable/shape_ffffff_r16_strk_06_5a95ff" android:state_enabled="true" />
+    <item android:drawable="@drawable/shape_fafafa_r16_strk_12_5a95ff" android:state_pressed="true" />
+    <item android:drawable="@drawable/shape_ffffff_r16_strk_06_dddddd" />
 </selector>
 

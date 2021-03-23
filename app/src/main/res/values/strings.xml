@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">마이버리</string>
+    <string name="mybury_email">mybury.info@gmail.com</string>
 
     <!-- API URL-->
     <string name="naver_adult_api">https://openapi.naver.com/</string>
@@ -32,7 +33,6 @@
 
     <string name="account_delete"><u>계정삭제</u></string>
 
-
     <string name="bucket_open">공개 설정</string>
     <string name="bucket_close">비공개 설정</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
@@ -46,4 +46,26 @@
     <string name="my_page_more_menu_alarm">알림</string>
     <string name="my_page_more_menu_app_info">앱 정보</string>
     <string name="my_page_more_menu_support">마이버리 후원하기</string>
+    <string name="my_page_more_menu_contact">문의하기</string>
+
+    <string name="mybury_support_desc"><![CDATA[<font color=#666666>개발자들을 위해 맛있는 응원을 해줄 수 있습니다.<br></font><font color=#5a95ff>10000원 이상 후원해주신 분에게는 광고 제거 기능이</font> 제공됩니다.]]></string>
+    <string name="mybury_dialog_desc"><![CDATA[<font color=#5a95ff>마이버리를 광고 없이<br>평생 무료로 사용해 보세요!</font><br>후원금은 개발자의 간식비로 사용됩니다.]]></string>
+
+
+    <!-- 후원하기 -->
+    <string name="bucket_least_count"><![CDATA[완료까지 <font color=#5a95ff>%s회</font> 남았어요]]></string>
+    <string name="support_loading_desc">결제중입니다. 잠시만 기다려주세요.</string>
+    <string name="support_error_desc">오류의 원인으로\n다음과 같은 문제가 있을 수 있습니다.</string>
+    <string name="support_error_go_to_email">문의하러 가기 > </string>
+    <string name="support_error_list">- 네트워크 문제로 인한 결제 지연\n- 서버 접속 실패</string>
+    <string name="support_fail_title">결제 오류</string>
+
+    <string name="warning_desc"><![CDATA[<font color=#5a95ff>서비스 안정화를 위해 잠시 서버 점검중</font>입니다.<br>조금만 기다려주세요.]]></string>
+    <string name="profile_image_desc">프로필 이미지</string>
+    <string name="mypage_started_count_desc">진행중</string>
+    <string name="mypage_completed_count_desc">완료</string>
+    <string name="mypage_more_button">더보기 옵션</string>
+    <string name="developer_list">김가은, 김하늘, 서태원\n안예지, 이명선, 한아연</string>
+    <string name="bucket_retry_guide_desc">더보기에서 다시 도전해보세요!</string>
+
 </resources>

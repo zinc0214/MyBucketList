@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/shape_ffffff_r4"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="7dp">
+
+            <include
+                android:id="@+id/add_memo_layout"
+                layout="@layout/widget_write_fragment_add_item" />
+
+            <include
+                android:id="@+id/add_album_img_layout"
+                layout="@layout/widget_write_fragment_add_item" />
+
+            <include
+                android:id="@+id/add_cam_img_layout"
+                layout="@layout/widget_write_fragment_add_item" />
+
+            <include
+                android:id="@+id/set_base_profile_img"
+                layout="@layout/widget_write_fragment_add_item" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

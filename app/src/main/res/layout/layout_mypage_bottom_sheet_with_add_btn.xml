@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="writeClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="myPageClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="homeClickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/main_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/main_bottom_background"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <include
+            android:id="@+id/bottom_menu_sheet"
+            layout="@layout/layout_mypage_bottom_menu_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:homeClickListener="@{homeClickListener}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:myPageClickListener="@{myPageClickListener}" />
+
+        <ImageView
+            android:id="@+id/plus"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/add_bucket_list"
+            android:onClick="@{writeClickListener}"
+            app:layout_constraintBottom_toBottomOf="@id/bottomLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bottomLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

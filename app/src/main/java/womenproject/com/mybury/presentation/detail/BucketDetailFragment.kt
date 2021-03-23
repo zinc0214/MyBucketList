@@ -1,6 +1,8 @@
 package womenproject.com.mybury.presentation.detail
 
+import android.animation.Animator
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.Preference.Companion.isAlreadyBucketRetryGuideShow
+import womenproject.com.mybury.data.Preference.Companion.setAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
@@ -29,6 +34,8 @@ class BucketDetailFragment : Fragment() {
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
+    private var isLoadForSucceed = false
+    private var memoArrowIsClicked = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
@@ -57,17 +64,25 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun start() {
-                startLoading()
+                if (!isLoadForSucceed) {
+                    startLoading()
+                }
+
             }
 
             override fun success(value: Any) {
                 bucketItem = value as DetailBucketItem
                 setUpViews()
-                stopLoading()
+                if (!isLoadForSucceed) {
+                    stopLoading()
+                }
+
             }
 
             override fun fail() {
-                stopLoading()
+                if (!isLoadForSucceed) {
+                    stopLoading()
+                }
             }
 
         }, bucketItemId)
@@ -80,18 +95,24 @@ class BucketDetailFragment : Fragment() {
             moreClickListener = showMoreMenuLayout
             countMinusClickListener = bucketCancelListener
             countPlusClickListener = bucketCompleteListener
-            redoClickListener = bucketRedoListener
-            lessCount = (bucketItem.goalCount - bucketItem.userCount).toString()
+            memoReadMoreClickListener = readeMoreClickListener
             isCategoryShow = bucketItem.category != "없음"
 
-            if (bucketItem.dDate != null) {
+            detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
+            detailMoreMenu.deleteOnClickListener = deleteBucketListener
+            detailMoreMenu.redoClickListener = bucketRedoListener
+
+            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
+
+            if (bucketItem.dDate != null && !isCompleted) {
                 bucketItem.dDay.apply {
                     isMinusDday = this >= 0
+                    isPlusDay = this < 0
                     ddayText = if (this >= 0) this.toString() else this.toString().replace("-", "")
                 }
-                ddayLayout.visibility = View.VISIBLE
             } else {
-                ddayLayout.visibility = View.GONE
+                isMinusDday = false
+                isPlusDay = false
             }
 
             comment = getRandomComment()
@@ -107,11 +128,12 @@ class BucketDetailFragment : Fragment() {
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
             val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
-            val isCompleted = bucketItem.goalCount <= bucketItem.userCount
-            isCount = isShowCountLayout
             isDone = isCompleted
+            isCount = isShowCountLayout
             isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
+            val desc: String = requireContext().getString(R.string.bucket_least_count)
+            currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
 
             when (imgList.size) {
                 0 -> {
@@ -127,8 +149,15 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            executePendingBindings()
+            contentView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY > 10 && !isCompleted) {
+                    bottomDivider.visibility = View.VISIBLE
+                } else {
+                    bottomDivider.visibility = View.GONE
+                }
+            }
 
+            viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
         }
 
     }
@@ -162,9 +191,6 @@ class BucketDetailFragment : Fragment() {
         } else {
             viewDataBinding.detailMoreLayout.visibility = View.GONE
         }
-
-        viewDataBinding.detailMoreMenu.updateOnClickListener = createOnClickBucketUpdateListener
-        viewDataBinding.detailMoreMenu.deleteOnClickListener = deleteBucketListener
     }
 
     private val createOnClickBucketUpdateListener = View.OnClickListener {
@@ -197,6 +223,12 @@ class BucketDetailFragment : Fragment() {
             viewModel.redoBucketList(bucketItemId)
         }
         RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
+    }
+
+    private val readeMoreClickListener = View.OnClickListener {
+        viewDataBinding.bucketMemo.maxLines = Int.MAX_VALUE
+        viewDataBinding.memoArrow.visibility = View.GONE
+        memoArrowIsClicked = true
     }
 
     private fun initObserve() {
@@ -235,13 +267,24 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun bucketComplete() {
+
+        if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
+            isLoadForSucceed = true
+        } else {
+            isLoadForSucceed = false
+        }
+
+        if (isLoadForSucceed) {
+            succeddBucketListAction()
+        }
+
         viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 bucketComplete()
             }
 
             override fun start() {
-                startLoading()
+
             }
 
             override fun success() {
@@ -249,7 +292,6 @@ class BucketDetailFragment : Fragment() {
             }
 
             override fun fail() {
-                stopLoading()
                 Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
 
@@ -261,6 +303,34 @@ class BucketDetailFragment : Fragment() {
         bucketCancel()
     }
 
+    private fun succeddBucketListAction() {
+        viewDataBinding.successLottieView.visibility = View.VISIBLE
+        viewDataBinding.successLottieView.playAnimation()
+
+        viewDataBinding.successLottieView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+                // do nothing
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                viewDataBinding.successLottieView.visibility = View.GONE
+                if (isAlreadyBucketRetryGuideShow(requireContext()) || BuildConfig.DEBUG) {
+                    BucketRetryGuideDialogFragment().show(requireActivity().supportFragmentManager, "tag")
+                    setAlreadyBucketRetryGuideShow(requireContext(), true)
+                }
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                // do nothing
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+                // do nothing
+            }
+
+        })
+
+    }
 
     private fun bucketCancel() {
         viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
@@ -337,6 +407,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     fun startLoading() {
+        viewDataBinding.detailMoreLayout.visibility = View.GONE
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.startLoading()

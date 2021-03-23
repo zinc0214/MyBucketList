@@ -88,7 +88,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
         addUpdateListener { animation ->
             progressButton.setProgress(animation.animatedValue as Float)
         }
-        bucketItemImage.setBackgroundResource(R.drawable.bucket_item_successing_background)
+        bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_a6c6ff)
     }
 
     open fun setFinalSuccessUIButton() {
@@ -102,12 +102,12 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
         bucketTitle.setTextColor(context.resources.getColor(R.color._ffffff))
         circularProgressBar.visibility = View.GONE
 
-        bucketItemImage.setBackgroundResource(R.drawable.bucket_item_success_background)
+        bucketItemImage.setBackgroundResource(R.drawable.shape_a6c6ff_r4)
     }
 
     open fun setDoneSuccessUIButton() {
         successImageView.backgroundTintList = context.getColorStateList(R.color._e8e8e8)
-        bucketItemImage.background = context.getDrawable(R.drawable.bucket_item_base_background)
+        bucketItemImage.background = context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 
     open fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {

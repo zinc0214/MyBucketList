@@ -32,14 +32,14 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
 
         val screenWidth = getScreenWidth(context)
         layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
-        val view = layoutInflater!!.inflate(R.layout.detail_image_item, null)
+        val view = layoutInflater!!.inflate(R.layout.item_detail_image, null)
         val imageView = view.findViewById(R.id.background_image) as ImageView
         imageView.setOnClickListener { showWideImg.invoke(images[position]) }
 
         try {
             Glide.with(view).load(images[position])
-                    .override(screenWidth,screenWidth)
-                    .placeholder(R.drawable.gradient_background).into(imageView)
+                    .override(screenWidth, screenWidth)
+                    .placeholder(R.drawable.place_holder).into(imageView)
         } catch (ex: IllegalArgumentException) {
             Log.e("Glide-tag", imageView.tag.toString())
         }

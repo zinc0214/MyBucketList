@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.presentation.MainActivity
 
 
@@ -104,4 +105,29 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             a.showAds()
         }
     }
+
+    fun setCurrentSupportPrice(price: Int) {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.setSupportPrice(price)
+        }
+    }
+
+
+    fun getSupportInfo(): SupportInfo? {
+        return if (activity is MainActivity) {
+            val a = activity as MainActivity
+            if (a.supportInfo == null) null
+            else a.supportInfo
+        } else null
+    }
+
+    fun purchaseSelectItem(id: String, purchaseSuccess: () -> Unit, purchaseFail: () -> Unit) {
+        if (activity is MainActivity) {
+            val a = activity as MainActivity
+            a.purchaseSelectItem(id, purchaseSuccess, purchaseFail)
+        }
+    }
+
+
 }

@@ -29,15 +29,20 @@
             type="android.view.View.OnClickListener" />
 
         <variable
+            name="memoReadMoreClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="isMinusDday"
             type="Boolean" />
 
         <variable
-            name="ddayText"
-            type="String" />
+            name="isPlusDay"
+            type="Boolean" />
+
 
         <variable
-            name="lessCount"
+            name="ddayText"
             type="String" />
 
         <variable
@@ -66,15 +71,16 @@
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/_ffffff">
 
         <RelativeLayout
             android:id="@+id/topLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/_ffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -103,31 +109,72 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="0.6dp"
-            android:layout_below="@id/topLayout"
-            android:background="@color/_dddddd" />
+            android:background="@color/_dddddd"
+            app:layout_constraintTop_toBottomOf="@id/topLayout" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/contentView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/divider"
-            android:background="@color/_ffffff"
-            android:fillViewport="true">
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:paddingBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_goneMarginBottom="20dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
-                    android:id="@+id/ddayLayout"
+                    android:id="@+id/topBannerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="visible">
 
                     <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/_5a95ff"
+                        android:paddingStart="30dp"
+                        android:paddingEnd="30dp"
+                        android:visibility="@{isDone ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="달성완료"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:text="@{detailInfo.completedDt}"
+                            android:visibility="@{detailInfo.completedDt != null ? View.VISIBLE : View.GONE}"
+                            android:textColor="@color/_ffffff"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="2020.10.02" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/minusLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/_febc30"
@@ -175,9 +222,11 @@
                         android:textColor="@color/_ffffff"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:visibility="@{isMinusDday ? View.GONE : View.VISIBLE}"
-                        tools:text="D+10" />
+                        android:visibility="@{isPlusDay ? View.VISIBLE : View.GONE}"
+                        tools:text="D+10"
+                        tools:visibility="gone" />
                 </RelativeLayout>
+
 
                 <LinearLayout
                     android:id="@+id/bucketContentLayout"
@@ -189,7 +238,7 @@
                     android:paddingEnd="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ddayLayout"
+                    app:layout_constraintTop_toBottomOf="@id/topBannerLayout"
                     app:layout_goneMarginTop="28dp">
 
                     <TextView
@@ -213,29 +262,72 @@
                         android:textStyle="bold"
                         tools:text="우와 여기 존맛이야 꺄꺄꺄" />
 
-                    <TextView
-                        android:id="@+id/bucketMemo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:lineSpacingExtra="7sp"
-                        android:autoLink="web"
-                        android:text="@{detailInfo.memo}"
-                        android:textColor="@color/_797979"
-                        android:textSize="14sp"
-                        tools:text="이명선,한아연,안예지는 김가은을 빼고 맛집탐험을 하러간다! 우리빼고 퇴사하다니! 배신자! 엉엉 가지마.." />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/bucketMemo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autoLink="web"
+                            android:ellipsize="end"
+                            android:lineSpacingExtra="7sp"
+                            android:maxLines="2"
+                            android:text="@{detailInfo.memo}"
+                            android:textColor="@color/_797979"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toStartOf="@id/memoArrow"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="이명선,한아연,안예지는 김가은을 빼고 맛집탐험을 하러간다!우리빼고 퇴사하다니! 배신자! 엉엉 가지마..가지마랄라ㅏ라라라ㅐㅏ내ㅏ" />
+
+                        <ImageView
+                            android:id="@+id/memoArrow"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:onClick="@{memoReadMoreClickListener::onClick}"
+                            android:src="@drawable/detail_memo_arrow"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/bucketMemo" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/imageLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bucketContentLayout"
+                    app:layout_goneMarginTop="24dp">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </androidx.viewpager.widget.ViewPager>
+
+                </RelativeLayout>
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="5dp"
                     android:layout_gravity="end"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="30dp"
-                    android:background="@drawable/detail_image_selector_background"
+                    android:background="@drawable/shape_cbd9ea_r4"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bucketContentLayout"
+                    app:layout_constraintTop_toBottomOf="@id/imageLayout"
                     app:tabBackground="@drawable/image_tab_selector"
                     app:tabGravity="center"
                     app:tabIndicator="@null"
@@ -243,277 +335,13 @@
                     app:tabPaddingStart="0dp"
                     tools:layout_width="50dp" />
 
-                <RelativeLayout
-                    android:id="@+id/imageLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tabLayout"
-                    app:layout_goneMarginTop="24dp">
-
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/viewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true">
-
-                    </androidx.viewpager.widget.ViewPager>
-
-                </RelativeLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/doingLayout"
+                <androidx.legacy.widget.Space
+                    android:id="@+id/bottomSpace"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="50dp"
-                    android:visibility="@{isCount ? View.VISIBLE : View.GONE}"
+                    android:layout_height="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageLayout"
-                    app:layout_constraintVertical_bias="1"
-                    tools:layout_marginTop="24dp"
-                    tools:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/currentStateTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="진행상황"
-                        android:textColor="@color/_4a63ed"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/currentCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(detailInfo.userCount)}"
-                        android:textColor="@color/_4a63ed"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@id/minusButton"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/minusButton"
-                        tools:text="10" />
-
-                    <ImageView
-                        android:id="@+id/minusButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginEnd="19dp"
-                        android:onClick="@{countMinusClickListener::onClick}"
-                        android:src="@drawable/count_minus"
-                        app:layout_constraintEnd_toStartOf="@id/currentCountTextView"
-                        app:layout_constraintTop_toBottomOf="@id/currentStateTextView" />
-
-                    <ImageView
-                        android:id="@+id/plusButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="19dp"
-                        android:layout_marginTop="7dp"
-                        android:onClick="@{countPlusClickListener::onClick}"
-                        android:src="@drawable/count_plus"
-                        app:layout_constraintStart_toEndOf="@id/currentCountTextView"
-                        app:layout_constraintTop_toBottomOf="@id/currentStateTextView" />
-
-                    <TextView
-                        android:id="@+id/lessCountTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="@{`완료까지 `+lessCount+`회 남았어요`}"
-                        android:textColor="@color/_aaaaaa"
-                        android:textSize="13sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/minusButton"
-                        tools:text="완료까지 10회 남았어요" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/commentLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="30dp"
-                    android:visibility="@{isShowComment ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toTopOf="@id/successLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageLayout"
-                    app:layout_constraintVertical_bias="1"
-                    tools:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="8dp"
-                        android:layout_centerInParent="true"
-                        android:background="@color/_fff0b0"
-                        app:layout_constraintBottom_toBottomOf="@id/commentTextView"
-                        app:layout_constraintEnd_toEndOf="@id/commentTextView"
-                        app:layout_constraintStart_toStartOf="@id/commentTextView"
-                        app:layout_constraintTop_toTopOf="@id/commentTextView" />
-
-                    <TextView
-                        android:id="@+id/commentTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:text="@{comment}"
-                        android:textSize="14dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/starImgView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:src="@drawable/comment_star"
-                    android:visibility="@{isShowComment ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toTopOf="@id/commentLayout"
-                    app:layout_constraintEnd_toEndOf="@id/commentLayout"
-                    app:layout_constraintStart_toEndOf="@id/commentLayout"
-                    app:layout_constraintTop_toTopOf="@id/commentLayout"
-                    tools:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/successLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="33dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:orientation="vertical"
-                    android:visibility="@{!isCount &amp;&amp; !isDone ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageLayout"
-                    app:layout_constraintVertical_bias="1"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/sucessButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/start_mybury_bg_enable"
-                        android:gravity="center"
-                        android:onClick="@{countPlusClickListener::onClick}"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp"
-                        android:text="달성 완료"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="15sp"
-                        tools:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/restartTextViewNoUse"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="20dp"
-                        android:gravity="center"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:textColor="@color/_5a95ff"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toTopOf="@+id/sucessButton"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:orientation="vertical"
-                    android:visibility="@{isDone ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageLayout"
-                    app:layout_constraintVertical_bias="1"
-                    tools:visibility="visible">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/complete_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="-8dp"
-                        android:visibility="visible">
-
-                        <ImageView
-                            android:id="@+id/bury"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bury_profile"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/complete_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginTop="1dp"
-                            android:src="@drawable/bury_speech_complete"
-                            app:layout_constraintStart_toEndOf="@+id/bury"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/succedTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bucket_item_succeed_background"
-                        android:gravity="center"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="14dp"
-                        android:text="달성 완료! 대단해요"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/restartTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="20dp"
-                        android:gravity="center"
-                        android:onClick="@{redoClickListener::onClick}"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="다시 도전하기"
-                        android:textColor="@color/_5a95ff"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -526,12 +354,198 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
             android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
             <include
                 android:id="@+id/detail_more_menu"
-                layout="@layout/detail_more_menu" />
+                layout="@layout/widget_detail_more_menu" />
         </RelativeLayout>
-    </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/bottomDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/_e5e5e5"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottomLayout"
+            app:layout_constraintTop_toBottomOf="@id/contentView"
+            app:layout_constraintVertical_bias="0"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="30dp"
+            android:visibility="@{isDone ? View.GONE : View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contentView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/doingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="24dp"
+                android:visibility="@{isCount ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="1"
+                tools:layout_marginTop="24dp"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/currentStateTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/bucket_least_count"
+                    android:textColor="@color/_aaaaaa"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/currentCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{String.valueOf(detailInfo.userCount)}"
+                    android:textColor="@color/_434343"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/minusButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/minusButton"
+                    tools:text="10" />
+
+                <ImageView
+                    android:id="@+id/minusButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="19dp"
+                    android:onClick="@{countMinusClickListener::onClick}"
+                    android:src="@drawable/count_minus"
+                    app:layout_constraintEnd_toStartOf="@id/currentCountTextView"
+                    app:layout_constraintTop_toBottomOf="@id/currentStateTextView" />
+
+                <ImageView
+                    android:id="@+id/plusButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="19dp"
+                    android:layout_marginTop="7dp"
+                    android:onClick="@{countPlusClickListener::onClick}"
+                    android:src="@drawable/count_plus"
+                    app:layout_constraintStart_toEndOf="@id/currentCountTextView"
+                    app:layout_constraintTop_toBottomOf="@id/currentStateTextView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/commentLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:visibility="@{isShowComment ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@id/successLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="1"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_centerInParent="true"
+                    android:background="@color/_fff0b0"
+                    app:layout_constraintBottom_toBottomOf="@id/commentTextView"
+                    app:layout_constraintEnd_toEndOf="@id/commentTextView"
+                    app:layout_constraintStart_toStartOf="@id/commentTextView"
+                    app:layout_constraintTop_toTopOf="@id/commentTextView" />
+
+                <TextView
+                    android:id="@+id/commentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:text="@{comment}"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/starImgView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:src="@drawable/comment_star"
+                android:visibility="@{isShowComment ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@id/commentLayout"
+                app:layout_constraintEnd_toEndOf="@id/commentLayout"
+                app:layout_constraintStart_toEndOf="@id/commentLayout"
+                app:layout_constraintTop_toTopOf="@id/commentLayout"
+                tools:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/successLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="30dp"
+                android:minHeight="56dp"
+                android:orientation="vertical"
+                android:visibility="@{!isCount &amp;&amp; !isDone ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/sucessButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_gradient_r4"
+                    android:gravity="center"
+                    android:onClick="@{countPlusClickListener::onClick}"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:text="달성 완료"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="15sp"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/successLottieView"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/success" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

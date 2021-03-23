@@ -3,7 +3,7 @@ package womenproject.com.mybury.ui
 import android.net.Uri
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.ImgWideLayoutBinding
+import womenproject.com.mybury.databinding.LayoutImgWideBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 
@@ -11,15 +11,16 @@ import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
  * Created by HanAYeon on 2019-05-14.
  */
 
-class ShowImgWideFragment() : BaseDialogFragment<ImgWideLayoutBinding>() {
+class ShowImgWideFragment() : BaseDialogFragment<LayoutImgWideBinding>() {
 
-    private var uri : Uri ?= null
-    private var url : String ?= null
+    private var uri: Uri? = null
+    private var url: String? = null
 
     constructor(uri: Uri) : this() {
         this.uri = uri
     }
-    constructor(url : String) : this() {
+
+    constructor(url: String) : this() {
         this.url = url
     }
 
@@ -34,7 +35,7 @@ class ShowImgWideFragment() : BaseDialogFragment<ImgWideLayoutBinding>() {
 
 
     override val layoutResourceId: Int
-        get() = R.layout.img_wide_layout
+        get() = R.layout.layout_img_wide
 
 
     override fun initDataBinding() {

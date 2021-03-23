@@ -1,131 +1,132 @@
 package womenproject.com.mybury.presentation.mypage.support
 
-import android.util.Log
-import com.android.billingclient.api.*
+import android.os.Bundle
+import android.view.View
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import womenproject.com.mybury.R
+import womenproject.com.mybury.data.SupportInfo
+import womenproject.com.mybury.data.isYes
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
+import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
+import womenproject.com.mybury.ui.SupportItemDecoration
 
-class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, BucketInfoViewModel>(),
-        PurchasesUpdatedListener,
-        PurchaseHistoryResponseListener {
-
-    private lateinit var billingClient: BillingClient
-    val skuListToQuery = ArrayList<String>()
+class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>() {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_mybury_support
 
-    override val viewModel: BucketInfoViewModel
-        get() = BucketInfoViewModel()
+    override val viewModel: MyBurySupportViewModel
+        get() = MyBurySupportViewModel()
+
+    private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
+    private var isCurrentSupporting = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val goToActionCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isCurrentSupporting) {
+                    // 결제가 끝나지 않는 상태에서는 ignore back button
+                } else {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
+    }
 
     override fun initDataBinding() {
-        initBilling()
+        viewDataBinding.supportPrice = ""
 
-    }
-
-    // BillingClient 초기화
-    private fun initBilling() {
-
-        // Google PlayConsole 의 상품Id 와 동일하게 적어준다
-        skuListToQuery.add("ice_cream")
-        skuListToQuery.add("chicken")
-
-        billingClient = BillingClient.newBuilder(requireContext()).enablePendingPurchases().setListener(this)
-                .build()
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                   // queryPurchases()
-                    setUpView()
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                Log.e("ayhan", "Service Disconnected...")
-            }
-        })
-    }
-
-    // BillingSetUp 이 완료되었을 때 필요한 할 일 설정
-    fun queryPurchases() {
-        // BillingClient 의 준비가 되지않은 상태라면 돌려보낸다
-        if (!billingClient.isReady) {
-            Log.e("ayhan", "queryPurchases: BillingClient is not ready")
-        }
-
-        // InApp 결제한 적이 있는 아이템으 ㅣ정보를  확인한다
-        /* val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-         if (result.purchasesList == null) {
-             Log.e("ayhan", "No existing in app purchases found.")
-         } else {
-             Log.e("ayhan", "Existing purchases: ${result.purchasesList}")
-         }*/
-    }
-
-    private fun setUpView() {
-        viewDataBinding.iceCreamPurchase.setOnClickListener { purchaseItem(1) }
-        viewDataBinding.chickenPurchase.setOnClickListener { purchaseItem(0) }
-    }
-
-    private fun purchaseItem(listNumber: Int) {
-        val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(skuListToQuery).setType(BillingClient.SkuType.INAPP)
-        billingClient.querySkuDetailsAsync(params.build()
-        ) { result, skuDetails ->
-            if (result.responseCode == BillingClient.BillingResponseCode.OK && skuDetails != null) {
-                Log.e("ayhan", "querySkuDetailsAsync : $skuDetails,,, ${skuDetails[listNumber].title}")
-                purchaseGoods(skuDetails[listNumber])
+        getSupportInfo().apply {
+            if (this == null) {
+                ShowClosePopup { onBackPressedFragment() }.show(requireActivity().supportFragmentManager, "TAG")
             } else {
-                Log.e("ayhan", "No sku found from query")
+                setUpViews(this)
             }
         }
     }
 
-    private fun purchaseGoods(skuDetail: SkuDetails) {
-        val parms = BillingFlowParams.newBuilder().setSkuDetails(skuDetail).build()
-        val responseCode = billingClient.launchBillingFlow(requireActivity(), parms)
-        Log.e("ayhan", "purchaes : ${responseCode.responseCode}, ${responseCode.debugMessage}")
-    }
+    private fun setUpViews(supportInfo: SupportInfo) {
+        viewDataBinding.apply {
+            purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
+            val itemDecoration = SupportItemDecoration()
+            purchaseItemListView.addItemDecoration(itemDecoration)
+            purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems.filter { it.dpYn.isYes() })
+            purchaseItemListView.adapter = purchaseItemListAdapter
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchaseList: MutableList<Purchase>?) {
-        when (billingResult.responseCode) {
-            BillingClient.BillingResponseCode.OK -> {
-                for (purchase in purchaseList!!) {
-                    acknowledgePurchase(purchase.purchaseToken)
+            supportPrice = supportInfo.totalPrice
+
+            supportOnClickListener = View.OnClickListener {
+                isCurrentSupporting = true
+                purchaseItemListAdapter.selectedItemNum?.let { item ->
+                    purchaseSelectItem(item.googleKey, {
+                        val updatePrice = supportPrice.toString().toInt() + item.itemPrice.toInt()
+                        supportPrice = updatePrice.toString()
+                        setCurrentSupportPrice(updatePrice)
+                        isCurrentSupporting = false
+                    }, {
+                        isCurrentSupporting = false
+                    })
                 }
             }
-            BillingClient.BillingResponseCode.USER_CANCELED -> {
-                Log.e("ayhan", "You've cancelled the Google play billing process...")
-            }
-            else -> {
-                Log.e("ayhan", "Item not found or Google play billing error... : ${billingResult.responseCode}")
-            }
-        }
-    }
 
-    private fun acknowledgePurchase(purchaseToken: String) {
-        val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
-
-        billingClient.consumeAsync(consumeParams) { billingResult, st ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                Log.e("ayhan", "Item is Go!! , ${billingResult.debugMessage} , ${billingResult.responseCode}, ${st}")
-            } else {
-                Log.e("ayhan", "Item is Go!! , ${billingResult.debugMessage}, ${billingResult.responseCode}, ${st}")
+            backBtnOnClickListener = View.OnClickListener {
+                onBackPressedFragment()
             }
-        }
-    }
 
-    override fun onPurchaseHistoryResponse(billingResult: BillingResult, purchaseHistoryList: MutableList<PurchaseHistoryRecord>?) {
-        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-            if (!purchaseHistoryList.isNullOrEmpty()) {
-                for (purchase in purchaseHistoryList) {
-                    // 구매된 목록 확인
-                    Log.e("ayhan", "is Alreay Purches = $purchase")
+            collapsibleToolbar.setTransitionListener(object : MotionLayout.TransitionListener {
+                override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
                 }
-            }
-        }
 
+                override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+
+                }
+
+                override fun onTransitionChange(p0: MotionLayout, p1: Int, p2: Int, p3: Float) {
+                    if (p0.targetPosition >= 0.3F) {
+                        titleMotionLayout.transitionToEnd()
+                    } else {
+                        titleMotionLayout.transitionToStart()
+                    }
+
+                }
+
+                override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+
+                }
+
+            })
+        }
+    }
+
+    private fun String.showToast() {
+        Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
+    }
+}
+
+class ShowClosePopup(private val back: () -> Unit) : BaseNormalDialogFragment() {
+
+    init {
+        TITLE_MSG = "아무튼 안됨"
+        CONTENT_MSG = "후원가능한 아이템로드에 실패했습니다."
+        CANCEL_BUTTON_VISIBLE = false
+        GRADIENT_BUTTON_VISIBLE = true
+        CONFIRM_TEXT = "확인"
+        CANCEL_ABLE = false
+    }
+
+    override fun createOnClickConfirmListener(): View.OnClickListener {
+        return View.OnClickListener {
+            dismiss()
+            back.invoke()
+        }
     }
 }

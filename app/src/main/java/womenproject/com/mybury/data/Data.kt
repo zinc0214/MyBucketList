@@ -92,6 +92,7 @@ data class DetailBucketItem(
         val memo: String = "",
         val open: Boolean = false,
         val category: String,
+        val completedDt : String ?= null,
         val userCount: Int = 0,
         val goalCount: Int = 0,
         val dDate: String?,
@@ -161,6 +162,48 @@ data class MyPageCategory(
         val count: Int
 ) : Parcelable
 
+@Parcelize
+data class SupportInfo(
+        val supportItems: List<PurchasableItem>,
+        val totalPrice: String = "0",
+        val recentSupport: RecentSupport,
+        val retcode: String
+) : Parcelable
+
+@Parcelize
+data class PurchasableItem(
+        val id: String,
+        val itemName: String,
+        val itemPrice: String,
+        val itemImg: String,
+        val googleKey: String,
+        var dpYn: String,  //결제 성공여부
+        var isPurchasable: Boolean = true
+) : Parcelable
+
+@Parcelize
+data class RecentSupport(
+        val seq: Int,
+        val itemId: String,
+        var userId: String,
+        val token: String,
+        val susYn: String
+) : Parcelable
+
+@Parcelize
+data class PurchasedItem(
+        val itemId: String,
+        val userId: String,
+        val token: String,
+        val susYn: String
+) : Parcelable
+
+data class PurchasedResult(
+        val userId: String,
+        val token: String,
+        val susYn: String
+)
+
 enum class ShowFilter {
     all, completed, started
 }
@@ -184,3 +227,7 @@ val BASE_ITEM = 2
 
 val DDAY = true
 val NORMAL = false
+
+fun String.isYes(): Boolean {
+    return this == "Y"
+}

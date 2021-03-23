@@ -83,8 +83,8 @@ internal fun ProgressButton.init(attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     drawable = parseGradientDrawable(
-        typedArrayBg?.getDrawable(0)
-            ?: ContextCompat.getDrawable(getContext(), R.drawable.shape_default)!!
+            typedArrayBg?.getDrawable(0)
+                    ?: ContextCompat.getDrawable(getContext(), R.drawable.shape_00ffffff_r4)!!
     )
 
     setBackground(drawable)

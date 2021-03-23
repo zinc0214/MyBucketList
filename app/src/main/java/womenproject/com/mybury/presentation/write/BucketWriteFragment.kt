@@ -279,9 +279,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 stopLoading()
                 Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
                 isCancelConfirm = true
+                if (isAdsShow || BuildConfig.DEBUG) {
+                    startAdMob()
+                }
                 requireActivity().onBackPressed()
-
-                if (isAdsShow && BuildConfig.DEBUG) startAdMob()
             }
 
             override fun fail() {
@@ -347,10 +348,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_press_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.write_memo_background)
+                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
                 }
             }
             false
@@ -458,7 +459,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
             addImgList = tmpImgList
 
-            alreadyImgList.forEach { num, str ->
+            alreadyImgList.forEach { (num, str) ->
                 if (id == str) {
                     alreadyImgList[num] = null
                 }

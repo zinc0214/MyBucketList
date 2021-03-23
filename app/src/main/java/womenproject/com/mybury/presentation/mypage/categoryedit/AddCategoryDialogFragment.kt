@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.databinding.EditNewCategoryDialogBinding
+import womenproject.com.mybury.databinding.DialogEditNewCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
 
@@ -14,7 +14,7 @@ import womenproject.com.mybury.presentation.base.BaseDialogFragment
 class AddCategoryDialogFragment(private var currentList: List<Category>,
                                 private var currentName: String?,
                                 private var newCategoryName: (String) -> Unit)
-    : BaseDialogFragment<EditNewCategoryDialogBinding>() {
+    : BaseDialogFragment<DialogEditNewCategoryBinding>() {
 
     override fun onResume() {
         super.onResume()
@@ -25,7 +25,7 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
     }
 
     override val layoutResourceId: Int
-        get() = R.layout.edit_new_category_dialog
+        get() = R.layout.dialog_edit_new_category
 
 
     override fun initDataBinding() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:drawable="@drawable/mypage_category_unpress" android:state_pressed="false" />
-<item android:drawable="@drawable/mypage_category_press" android:state_pressed="true" />
-<item android:drawable="@drawable/mypage_category_unpress" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_06_e8e8e8" android:state_pressed="false" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_13_a6c6ff" android:state_pressed="true" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_06_e8e8e8" />
 </selector>
 

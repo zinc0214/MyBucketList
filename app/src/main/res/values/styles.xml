@@ -102,7 +102,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/register_text_color</item>
+        <item name="android:textColor">@color/enable_5a95ff_b4b4b4</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
 
@@ -130,7 +130,7 @@
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:textColor">@color/write_enable_color</item>
+        <item name="android:textColor">@color/enable_5a95ff_888888</item>
     </style>
 
 
@@ -159,7 +159,7 @@
 
     <style name="CalendarDate" parent="TextAppearance.MaterialCalendarWidget.Date">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/calendar_date_color</item>
+        <item name="android:textColor">@color/check_ffffff_888888</item>
     </style>
 
 

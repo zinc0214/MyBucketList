@@ -21,6 +21,8 @@ class Preference {
         private const val SHOW_DDAY_FILTER = "show_dday_filter"
         private const val CLOSE_ALARM_3_DAYS = "close_alarm_3_days"
         private const val IS_SHOWN_ALARM = "is_shown_alarm"
+        private const val IS_ALREADY_SUPPORT_SHOW = "is_already_support_show"
+        private const val IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE = "is_already_show_bucket_retry_guide"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -60,7 +62,7 @@ class Preference {
         }
 
 
-        fun setAccessToken(context: Context, token:String) {
+        fun setAccessToken(context: Context, token: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(ACCESS_TOKEN, token)
@@ -73,7 +75,7 @@ class Preference {
         }
 
 
-        fun setRefreshToken(context: Context, token:String) {
+        fun setRefreshToken(context: Context, token: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putString(REFRESH_TOKEN, token)
@@ -93,7 +95,7 @@ class Preference {
             editor.apply()
         }
 
-        fun getFilterForShow(context: Context) : String? {
+        fun getFilterForShow(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             return sp.getString(SHOW_FILTER, ShowFilter.all.toString())
         }
@@ -105,19 +107,19 @@ class Preference {
             editor.apply()
         }
 
-        fun getFilterListUp(context: Context) : String? {
+        fun getFilterListUp(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             return sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
         }
 
-        fun setShowDdayFilter(context: Context, ddayShow : Boolean) {
+        fun setShowDdayFilter(context: Context, ddayShow: Boolean) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putBoolean(SHOW_DDAY_STATE, ddayShow)
             editor.apply()
         }
 
-        fun getShowDdayFilter(context: Context) : Boolean {
+        fun getShowDdayFilter(context: Context): Boolean {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getBoolean(SHOW_DDAY_STATE, false)
             return data
@@ -130,19 +132,19 @@ class Preference {
             editor.apply()
         }
 
-        fun getDdayFilterForShow(context: Context) : String? {
+        fun getDdayFilterForShow(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             return sp.getString(SHOW_DDAY_FILTER, DdayShowFilter.all.toString())
         }
 
-        fun setCloseAlarm3Days(context : Context, closeTime : Long) {
+        fun setCloseAlarm3Days(context: Context, closeTime: Long) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.putLong(CLOSE_ALARM_3_DAYS, closeTime)
             editor.apply()
         }
 
-        fun getCloseAlarm3Days(context: Context) : Long  {
+        fun getCloseAlarm3Days(context: Context): Long {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getLong(CLOSE_ALARM_3_DAYS, 0)
             return data
@@ -161,13 +163,38 @@ class Preference {
             return data
         }
 
+        fun setAlreadySupportShow(context: Context, isShowed: Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(IS_ALREADY_SUPPORT_SHOW, isShowed)
+            editor.apply()
+        }
+
+        fun isAlreadySupportShow(context: Context): Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(IS_ALREADY_SUPPORT_SHOW, false)
+            return data
+        }
+
+        fun setAlreadyBucketRetryGuideShow(context: Context, isShowed: Boolean) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.putBoolean(IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE, isShowed)
+            editor.apply()
+        }
+
+        fun isAlreadyBucketRetryGuideShow(context: Context) : Boolean{
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val data = sp.getBoolean(IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE, false)
+            return data
+        }
+
         fun allClear(context: Context) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
             editor.clear()
             editor.apply()
         }
-
     }
 
 }

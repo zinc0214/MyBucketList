@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.databinding.CategoryListItemBinding
+import womenproject.com.mybury.databinding.ItemCategoryBinding
 import womenproject.com.mybury.ui.ItemActionListener
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
@@ -21,7 +21,7 @@ class EditCategoryListAdapter(private val bucketCategoryList: List<Category>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        editCategoryListViewHolder = EditCategoryListViewHolder(CategoryListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        editCategoryListViewHolder = EditCategoryListViewHolder(ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false),
                 dragListener, checkedListener, editCategoryName)
         return editCategoryListViewHolder
     }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="activity"
+            type="womenproject.com.mybury.presentation.mypage.logininfo.AccountDeleteDialogFragment" />
+
+        <variable
+            name="endClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/_ffffff">
+
+        <include
+            android:id="@+id/bottom_sheet"
+            layout="@layout/layout_main_bottom_sheet" />
+
+        <include
+            android:id="@+id/main_toolbar"
+            layout="@layout/layout_main_toolbar" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/_4D000000">
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/last_bucket_layout"
+                    android:layout_width="344dp"
+                    android:layout_height="64dp"
+                    android:layout_below="@+id/close_img"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-64dp">
+
+                    <include
+                        android:id="@+id/last_bucket_item"
+                        layout="@layout/item_bucket_done_simple" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/close_img"
+                    android:layout_width="344dp"
+                    android:layout_height="300dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/close_character" />
+
+                <TextView
+                    android:id="@+id/end_content_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/last_bucket_layout"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="버킷리스트를 완료해주세요."
+                    android:textColor="@color/_ffffff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

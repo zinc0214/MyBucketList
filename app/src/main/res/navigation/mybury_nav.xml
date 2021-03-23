@@ -21,10 +21,10 @@
         <action
             android:id="@+id/action_main_bucket_to_bucket_write"
             app:destination="@id/bucket_write_fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
 
         <action
             android:id="@+id/action_main_bucket_to_my_page"
@@ -37,6 +37,15 @@
             app:destination="@id/dday_bucket_list_fragment"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_main_bucket_to_mybury_support"
+            app:destination="@id/mybury_support_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
 
     </fragment>
 
@@ -131,10 +140,10 @@
         <action
             android:id="@+id/action_my_page_to_write"
             app:destination="@id/bucket_write_fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
 
         <action
             android:id="@+id/action_my_page_to_dday"
@@ -334,7 +343,7 @@
         android:id="@+id/app_info_text_fragment"
         android:name="womenproject.com.mybury.presentation.mypage.appinfo.AppInfoTextFragment"
         android:label="AppInfoTextFragment"
-        tools:layout="@layout/text_view_layout">
+        tools:layout="@layout/layout_title_view">
 
         <argument
             android:name="type"

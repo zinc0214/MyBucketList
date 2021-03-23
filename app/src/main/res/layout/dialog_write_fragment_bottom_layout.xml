@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+
+        <variable
+            name="cancelButtonClickListener"
+            type="android.view.View.OnClickListener" />
+
+        w
+
+        <variable
+            name="confirmButtonClickListener"
+            type="android.view.View.OnClickListener" />
+
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/base_layout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/shape_fafafa_bottom_r_4"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/_dbdbdb"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:background="@drawable/dialog_bottom_sheet_left_background"
+                android:id="@+id/cancel_text"
+                style="@style/baseDialogButtonTextStyle"
+                android:onClick="@{cancelButtonClickListener}"
+                android:text="@string/dialog_cancel"
+                android:textColor="@color/_b4b4b4" />
+
+            <ImageView
+                android:layout_width="0.6dp"
+                android:layout_height="match_parent"
+                android:background="@color/_dbdbdb" />
+
+            <TextView
+                android:background="@drawable/dialog_bottom_sheet_right_background"
+                android:id="@+id/confirm_text"
+                style="@style/baseDialogButtonTextStyle"
+                android:onClick="@{confirmButtonClickListener}"
+                android:text="@string/dialog_confirm"
+                android:textColor="@color/enable_5a95ff_b4b4b4" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</layout>

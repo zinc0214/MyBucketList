@@ -12,7 +12,7 @@ import womenproject.com.mybury.data.Preference.Companion.setFilerForShow
 import womenproject.com.mybury.data.Preference.Companion.setFilterListUp
 import womenproject.com.mybury.data.Preference.Companion.setShowDdayFilter
 import womenproject.com.mybury.data.ShowFilter
-import womenproject.com.mybury.databinding.MainFilterDialogBinding
+import womenproject.com.mybury.databinding.DialogMainFilterBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
 /**
@@ -20,9 +20,9 @@ import womenproject.com.mybury.presentation.base.BaseDialogFragment
  */
 
 
-open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<MainFilterDialogBinding>() {
+open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<DialogMainFilterBinding>() {
     override val layoutResourceId: Int
-        get() = R.layout.main_filter_dialog
+        get() = R.layout.dialog_main_filter
 
     private var started = false
     private var complete = false

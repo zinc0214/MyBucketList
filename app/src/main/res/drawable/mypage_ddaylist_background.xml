@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/mypage_dday_background" android:state_pressed="false" />
-    <item android:drawable="@drawable/bucket_item_dday_background" android:state_pressed="true" />
-    <item android:drawable="@drawable/mypage_dday_background" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_06_ffca5a" android:state_pressed="false" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_13_ffca5a" android:state_pressed="true" />
+    <item android:drawable="@drawable/shape_ffffff_r4_strk_06_ffca5a" />
 </selector>
 

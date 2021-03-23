@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -21,8 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import womenproject.com.mybury.R
-import womenproject.com.mybury.databinding.MemoImgAddDialogBinding
-import womenproject.com.mybury.databinding.WriteDialogItemBinding
+import womenproject.com.mybury.databinding.DialogMemoImgAddBinding
+import womenproject.com.mybury.databinding.WidgetWriteFragmentAddItemBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.PermissionDialogFragment
@@ -44,7 +43,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
                                     private var checkAddTypeAble: () -> Boolean,
                                     private var addTypeClickListener: () -> Unit,
                                     private var checkAddImageListener: () -> Boolean,
-                                    private var imgAddListener: (File, Uri) -> Unit) : BaseDialogFragment<MemoImgAddDialogBinding>() {
+                                    private var imgAddListener: (File, Uri) -> Unit) : BaseDialogFragment<DialogMemoImgAddBinding>() {
 
 
     private var photoUri: Uri? = null
@@ -53,7 +52,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
 
     override val layoutResourceId: Int
-        get() = R.layout.memo_img_add_dialog
+        get() = R.layout.dialog_memo_img_add
 
     private fun initStartView() {
         if (!checkAddImageListener.invoke()) {
@@ -183,7 +182,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("HHmmss").format(Date())
         val imageFileName = "mybury_" + timeStamp + "_"
-        val storageDir = File("${Environment.getExternalStorageDirectory()}/mybury/")
+        val storageDir = File("${requireContext().getExternalFilesDir(null)}/mybury/")
         if (!storageDir.exists()) {
             storageDir.mkdirs()
         }
@@ -317,7 +316,8 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
                 e.printStackTrace()
             }
 
-            val folder = File("${Environment.getExternalStorageDirectory()}/mybury/")
+
+            val folder = File("${requireContext().getExternalFilesDir(null)}/mybury/")
             val tempFile = File(folder.toString(), croppedFileName!!.name)
             currentImgFile = tempFile
             photoUri = FileProvider.getUriForFile(requireContext(),
@@ -347,7 +347,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
 
-    private fun WriteDialogItemBinding.disableAdd() {
+    private fun WidgetWriteFragmentAddItemBinding.disableAdd() {
         this.writeItemText.setTextColor(requireContext().getColor(R.color._b4b4b4))
         this.isAddable = false
     }

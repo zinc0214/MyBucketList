@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="profileEditClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="loginInfoClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="alarmClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="appInfoClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="contactClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="isAlarmVisible"
+            type="boolean" />
+
+    </data>
+
+
+    <RelativeLayout
+        android:id="@+id/more_menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_width="224dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/mypage_more_back" />
+
+        <LinearLayout
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+            <TextView
+                android:id="@+id/profile_edit"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@drawable/write_dialog_item_background"
+                android:gravity="center_vertical"
+                android:onClick="@{profileEditClickListener}"
+                android:paddingStart="8dp"
+                android:text="@string/my_page_more_menu_profile_edit"
+                android:textColor="@color/_434343"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/profile_info"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/write_dialog_item_background"
+                android:gravity="center_vertical"
+                android:onClick="@{loginInfoClickListener}"
+                android:paddingStart="8dp"
+                android:text="@string/my_page_more_menu_login_info"
+                android:textColor="@color/_434343"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/app_info"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/write_dialog_item_background"
+                android:gravity="center_vertical"
+                android:onClick="@{alarmClickListener}"
+                android:paddingStart="8dp"
+                android:text="@string/my_page_more_menu_alarm"
+                android:textColor="@color/_434343"
+                android:textSize="14sp"
+                android:visibility="@{isAlarmVisible ? View.VISIBLE : View.GONE}" />
+
+
+            <TextView
+                android:id="@+id/appInfo"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/write_dialog_item_background"
+                android:gravity="center_vertical"
+                android:onClick="@{appInfoClickListener}"
+                android:paddingStart="8dp"
+                android:text="@string/my_page_more_menu_app_info"
+                android:textColor="@color/_434343"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/contactToMyBury"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/write_dialog_item_background"
+                android:gravity="center_vertical"
+                android:onClick="@{contactClickListener}"
+                android:paddingStart="8dp"
+                android:text="@string/my_page_more_menu_contact"
+                android:textColor="@color/_434343"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>
