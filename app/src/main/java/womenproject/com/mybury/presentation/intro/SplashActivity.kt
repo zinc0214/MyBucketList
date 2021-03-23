@@ -81,7 +81,5 @@ class SplashActivity : AppCompatActivity() {
                     }.show(supportFragmentManager, "tag")
                     Log.e("myBury", "getLoginToken Fail : $it")
                 }
-
-
     }
 }
