@@ -109,7 +109,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     private fun setCategoryAdapter() {
 
         val editCategoryName: (Category) -> Unit = {
-            imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+            imm.hideSoftInputFromWindow(requireView().windowToken, 0)
 
             if (it.name == "없음") {
                 Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
