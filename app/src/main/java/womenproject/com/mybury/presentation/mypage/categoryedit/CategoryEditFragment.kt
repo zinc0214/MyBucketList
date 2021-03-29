@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
-import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel

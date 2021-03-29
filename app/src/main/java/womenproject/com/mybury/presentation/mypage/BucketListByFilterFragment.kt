@@ -8,9 +8,9 @@ import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
-import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 

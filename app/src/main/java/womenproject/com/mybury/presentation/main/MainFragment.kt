@@ -12,9 +12,9 @@ import womenproject.com.mybury.data.Preference.Companion.getEnableShowAlarm
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.databinding.FragmentMainBinding
-import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget

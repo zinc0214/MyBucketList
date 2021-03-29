@@ -26,13 +26,13 @@ import womenproject.com.mybury.data.SignUpCheckRequest
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
-import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
-import womenproject.com.mybury.presentation.NetworkFailDialog
-import womenproject.com.mybury.presentation.UserAlreadyExist
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
+import womenproject.com.mybury.presentation.dialog.UserAlreadyExist
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment

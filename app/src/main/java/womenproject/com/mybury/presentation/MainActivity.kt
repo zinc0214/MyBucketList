@@ -14,10 +14,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.android.billingclient.api.*
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
@@ -26,8 +25,8 @@ import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
-import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.*
 import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
@@ -167,7 +166,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         interstitialAd.loadAd(AdRequest.Builder().build())
     }
-
 
     fun startLoading() {
         binding.loadingLayout.layout.visibility = View.VISIBLE
@@ -482,83 +480,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
     companion object {
         private const val SUPPORT_PRICE = 10000
-    }
-}
-
-class NetworkFailDialog : BaseNormalDialogFragment() {
-
-    init {
-        TITLE_MSG = "네트워크 통신 실패"
-        CONTENT_MSG = "네트워크가 불완전합니다. 다시 시도해주세요."
-        CANCEL_BUTTON_VISIBLE = false
-        GRADIENT_BUTTON_VISIBLE = true
-        CONFIRM_TEXT = "확인"
-        CANCEL_ABLE = false
-    }
-
-    override fun createOnClickConfirmListener(): View.OnClickListener {
-        return View.OnClickListener {
-            dismiss()
-            requireActivity().finish()
-        }
-    }
-
-}
-
-class CanNotGoMainDialog : BaseNormalDialogFragment() {
-
-    init {
-        TITLE_MSG = "로그인 불가"
-        CONTENT_MSG = "로그인에 실패했습니다. 다시 시도해주세요."
-        CANCEL_BUTTON_VISIBLE = false
-        GRADIENT_BUTTON_VISIBLE = true
-        CONFIRM_TEXT = "확인"
-        CANCEL_ABLE = false
-    }
-
-    override fun createOnClickConfirmListener(): View.OnClickListener {
-        return View.OnClickListener {
-            dismiss()
-            requireActivity().finish()
-        }
-    }
-}
-
-
-class UserAlreadyExist : BaseNormalDialogFragment() {
-
-    init {
-        TITLE_MSG = "로그인 불가"
-        CONTENT_MSG = "이미 생성되어있는 계정입니다."
-        CANCEL_BUTTON_VISIBLE = false
-        GRADIENT_BUTTON_VISIBLE = true
-        CONFIRM_TEXT = "확인"
-        CANCEL_ABLE = false
-    }
-
-    override fun createOnClickConfirmListener(): View.OnClickListener {
-        return View.OnClickListener {
-            dismiss()
-            requireActivity().finish()
-        }
-    }
-}
-
-class PurchasedItemUpdateSuccess : BaseNormalDialogFragment() {
-
-    init {
-        TITLE_MSG = "후원금액 갱신"
-        CONTENT_MSG = "이전에 실패한 후원에 대해 확인하여 금액이 변경되었습니다."
-        CANCEL_BUTTON_VISIBLE = false
-        GRADIENT_BUTTON_VISIBLE = true
-        CONFIRM_TEXT = "확인"
-        CANCEL_ABLE = true
-    }
-
-    override fun createOnClickConfirmListener(): View.OnClickListener {
-        return View.OnClickListener {
-            dismiss()
-        }
     }
 }
 

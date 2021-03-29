@@ -2,7 +2,6 @@ package womenproject.com.mybury.presentation.mypage.support
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -105,10 +104,6 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
             })
         }
-    }
-
-    private fun String.showToast() {
-        Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
     }
 }
 
