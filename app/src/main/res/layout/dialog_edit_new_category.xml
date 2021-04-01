@@ -37,13 +37,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:minHeight="24dp"
                 android:text="@{isAddForm ? `카테고리추가` : `카테고리명 변경`}"
-                tools:text="카테고리 추가"
                 android:textColor="@color/_222222"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="카테고리 추가" />
 
             <TextView
                 android:id="@+id/desc"
@@ -51,12 +53,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="@{isAddForm ? `추가할 카테고리명을 입력해주세요.` : `변경할 카테고리명을 입력해주세요.`}"
-                tools:text="변경할 카테고리명을 입력해주세요."
                 android:textColor="@color/_797979"
                 android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="변경할 카테고리명을 입력해주세요." />
 
             <EditText
                 android:id="@+id/category_edit_text"
@@ -66,8 +68,9 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="28dp"
+                android:autofillHints=""
                 android:background="@drawable/profile_edit_text_background"
-                android:hint="@{isAddForm ? `카테고리 이름을 입력하세요` : categoryName}"
+                android:hint="@{isAddForm ? `` : categoryName}"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLength="15"
@@ -79,8 +82,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/desc"
-                tools:text="카테고리 이름을 입력하세요" />
+                app:layout_constraintTop_toBottomOf="@id/desc" />
 
             <Button
                 android:id="@+id/confirmBtn"
@@ -88,10 +90,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/shape_5a95ff_bottom_r4"
+                android:onClick="@{confirmButton}"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:text="확인"
                 android:textColor="@color/_ffffff"
                 android:textSize="14sp"
-                android:onClick="@{confirmButton}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

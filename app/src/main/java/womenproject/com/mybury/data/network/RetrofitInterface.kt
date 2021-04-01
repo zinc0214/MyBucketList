@@ -37,6 +37,7 @@ interface RetrofitInterface {
     @POST("/refresh_token")
     fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
+    // 프로필 이미지가 있는 경우
     @POST("/profile")
     @Multipart
     fun postCreateProfile(@Header("X-Auth-Token") token: String,
@@ -45,6 +46,7 @@ interface RetrofitInterface {
                           @Part file: MultipartBody.Part,
                           @Part defaultImg: MultipartBody.Part): Observable<SimpleResponse>
 
+    // 프로필 이미지가 없는 경우
     @POST("/profile")
     @Multipart
     fun postCreateProfile(@Header("X-Auth-Token") token: String,

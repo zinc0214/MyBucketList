@@ -130,7 +130,8 @@ class BucketDetailFragment : Fragment() {
             val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
             isDone = isCompleted
             isCount = isShowCountLayout
-            isShowComment = bucketItem.imgUrl1 == null && bucketItem.imgUrl2 == null && bucketItem.imgUrl3 == null && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
+            isShowComment = bucketItem.imgUrl1.isNullOrBlank() && bucketItem.imgUrl2.isNullOrBlank() && bucketItem.imgUrl3.isNullOrBlank()
+                    !isShowCountLayout && !isCompleted && bucketItem.memo.isNullOrBlank()
 
             val desc: String = requireContext().getString(R.string.bucket_least_count)
             currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))

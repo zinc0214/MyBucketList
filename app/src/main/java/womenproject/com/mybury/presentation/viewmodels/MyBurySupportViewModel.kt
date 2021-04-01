@@ -18,9 +18,8 @@ class MyBurySupportViewModel : BaseViewModel() {
     private val _supportInfo = MutableLiveData<SupportInfo>()
     val supportInfo: LiveData<SupportInfo> = _supportInfo
 
-    fun getPurchasableItem(fail: () -> Unit) {
+    fun getPurchasableItem() {
         if (accessToken == null || userId == null) {
-            fail.invoke()
             return
         }
 
@@ -38,17 +37,19 @@ class MyBurySupportViewModel : BaseViewModel() {
                                 }
 
                                 override fun fail() {
-                                    fail.invoke()
+
                                 }
                             })
-                            else -> fail.invoke()
+                            else -> {
+                                // Do Nothing
+                            }
                         }
                     }
                 }
             } catch (e: Throwable) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    fail.invoke()
+                    // do nothing
                 }
             }
         }
