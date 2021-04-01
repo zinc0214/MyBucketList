@@ -110,8 +110,8 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 class ShowClosePopup(private val back: () -> Unit) : BaseNormalDialogFragment() {
 
     init {
-        TITLE_MSG = "아무튼 안됨"
-        CONTENT_MSG = "후원가능한 아이템로드에 실패했습니다."
+        TITLE_MSG = "아이템 로드 실패"
+        CONTENT_MSG = "후원가능한 아이템을 \n가져오지 못했습니다."
         CANCEL_BUTTON_VISIBLE = false
         GRADIENT_BUTTON_VISIBLE = true
         CONFIRM_TEXT = "확인"
