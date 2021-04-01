@@ -122,11 +122,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                     mInterstitialAd = null
                     val error = "domain: ${adError.domain}, code: ${adError.code}, " +
                             "message: ${adError.message}"
-                    Toast.makeText(
-                        this@MainActivity,
-                        "onAdFailedToLoad() with error $error",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        this@MainActivity,
+//                        "onAdFailedToLoad() with error $error",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                 }
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d("myBury", "Ad was loaded.")
@@ -165,7 +165,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             }
             mInterstitialAd?.show(this)
         } else {
-            Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
         }
     }
 
