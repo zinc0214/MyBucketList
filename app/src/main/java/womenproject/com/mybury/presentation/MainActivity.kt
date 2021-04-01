@@ -47,7 +47,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
 
-    private lateinit var interstitialAd: InterstitialAd
+    private var mInterstitialAd: InterstitialAd? = null
     private var isAdShow = true
 
     private lateinit var billingClient: BillingClient
@@ -56,13 +56,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private val purchasedItemIds = ArrayList<String>()
     private var purchasedItem: PurchasableItem? = null
 
-
     var supportInfo: SupportInfo? = null
     private lateinit var purchaseSuccess: () -> Unit
     private lateinit var purchaseFail: () -> Unit
 
     private var acknowledgePurchaseItemIsFail = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +78,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             NetworkFailDialog().show(supportFragmentManager, "tag")
         }
 
-        supportViewModel.getPurchasableItem {
-            // Do Something
-        }
+        supportViewModel.getPurchasableItem()
 
         supportViewModel.supportInfo.observe(this, Observer { info ->
             setSupportPrice(info.totalPrice.toInt())
@@ -107,64 +103,70 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         val animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         binding.loadingLayout.loadingImg.animation = animation
 
-        initAdMob()
+        MobileAds.initialize(this) {}
+        loadAd()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun initAdMob() {
+    private fun loadAd() {
+        val adRequest = AdRequest.Builder().build()
 
-        MobileAds.initialize(this) { }
-        interstitialAd = InterstitialAd(this)
-
-        //"ca-app-pub-3940256099942544/1033173712" 는 구글에서 테스트용으로 공개한 Test Ad Id - 배포시 실제 Id 로 변경 해야 함
-        /*
-            @안드로이드용 테스트광고 ID -- (https://developers.google.com/admob/unity/test-ads?hl=ko)
-            - 배너 광고: ca-app-pub-3940256099942544/6300978111
-            - 전면 광고: ca-app-pub-3940256099942544/1033173712
-            - 보상형 동영상 광고: ca-app-pub-3940256099942544/5224354917
-            - 네이티브 광고 고급형: ca-app-pub-3940256099942544/2247696110
-        */
-
-        interstitialAd.adUnitId = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712"
-        else "ca-app-pub-6302671173915322/8119781606"
-
-        //광고 이벤트리스너 등록
-        interstitialAd.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                Log.d("myBury", "onAdLoaded")
+        InterstitialAd.load(
+            this, AD_UNIT_ID, adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("myBury", adError.message)
+                    mInterstitialAd = null
+                    val error = "domain: ${adError.domain}, code: ${adError.code}, " +
+                            "message: ${adError.message}"
+                    Toast.makeText(
+                        this@MainActivity,
+                        "onAdFailedToLoad() with error $error",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d("myBury", "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+                }
             }
+        )
+    }
 
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.d("myBury", "onAdFailedToLoad")
-            }
-
-            override fun onAdOpened() {
-                Log.d("myBury", "onAdOpened")
-            }
-
-            override fun onAdClicked() {
-                Log.d("myBury", "onAdClicked")
-            }
-
-            override fun onAdLeftApplication() {
-                Log.d("myBury", "onAdLeftApplication")
-            }
-
-            override fun onAdClosed() {
-                Log.d("myBury", "onAdClosed")
-                // Code to be executed when the interstitial ad is closed.
-                interstitialAd.loadAd(AdRequest.Builder().build())
-                if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
-                    showSupportDialogFragment()
+    // Show the ad if it's ready. Otherwise toast and restart the game.
+    private fun showInterstitial() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d("myBury", "Ad was dismissed.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                    if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
+                        showSupportDialogFragment()
+                    }
+                    loadAd()
                 }
 
-            }
-        }
+                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                    Log.d("myBury", "Ad failed to show.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                }
 
-        interstitialAd.loadAd(AdRequest.Builder().build())
+                override fun onAdShowedFullScreenContent() {
+                    Log.d("mybury", "Ad showed fullscreen content.")
+                    // Called when ad is dismissed.
+                }
+            }
+            mInterstitialAd?.show(this)
+        } else {
+            Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun startLoading() {
@@ -177,10 +179,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
     fun showAds() {
         Log.e("myBury", "isAdShow : $isAdShow")
-        if (interstitialAd.isLoaded && isAdShow) {
-            interstitialAd.show()
-        } else {
-            Log.d("myBury", "The interstitial wasn't loaded yet.")
+        if(isAdShow) {
+            showInterstitial()
         }
     }
 
@@ -381,12 +381,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             return
         } else {
             startLoading()
-            Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
+            //Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
                 //결제된 내역에 대한 처리
                 //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
-                Log.d("ayhan", "Bought is Fail??? : ${it.orderId} \n ${it.sku} \n ${it.purchaseToken} \n ${it.purchaseState} \n ${it.originalJson}")
-                // purchasedItemIds.add(it.sku)
             }
 
             // 만약 purchasesList 의 토큰값과 일치하는 값이 있다면 "실패한 아이템" 이 존재하는 것으로 확인
@@ -396,11 +394,19 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             if (purchasedFailItem == null) {
                 // 없는 것으로 간주. 아무것도 하지 않는다.
                 acknowledgePurchaseItemIsFail = false
+                stopLoading()
             } else {
                 // 실패한 것오로 간주
                 if (purchasedFailItem.purchaseState == 2) {
                     acknowledgePurchaseItemIsFail = true
                     supportViewModel.editSuccessItem(recentSupport.token, "N", {
+                        stopLoading()
+                    }, {
+                        stopLoading()
+                    })
+                } else {
+                    acknowledgePurchaseItemIsFail = false
+                    supportViewModel.editSuccessItem(recentSupport.token, "Y", {
                         stopLoading()
                     }, {
                         stopLoading()
@@ -423,13 +429,13 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 BillingClient.BillingResponseCode.OK -> {
                     purchasedItem?.let {
                         supportViewModel.purchasedItem(it.id, purchaseToken, "Y", {
+                            // if success
                             showSupportPurchaseSuccessDialog()
                             stopLoading()
                             purchaseSuccess.invoke()
-                            supportViewModel.getPurchasableItem {
-                                // do nothing...
-                            }
+                            supportViewModel.getPurchasableItem()
                         }, {
+                            // if fail
                             stopLoading()
                             showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
                             purchaseFail.invoke()
@@ -483,3 +489,4 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
+const val AD_UNIT_ID = "ca-app-pub-6302671173915322/9547430142"
