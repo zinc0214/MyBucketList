@@ -18,6 +18,9 @@ class MyBurySupportViewModel : BaseViewModel() {
     private val _supportInfo = MutableLiveData<SupportInfo>()
     val supportInfo: LiveData<SupportInfo> = _supportInfo
 
+    private val _supportPrice = MutableLiveData<String>()
+    val supportPrice : LiveData<String> = _supportPrice
+
     fun getPurchasableItem() {
         if (accessToken == null || userId == null) {
             return
@@ -54,6 +57,44 @@ class MyBurySupportViewModel : BaseViewModel() {
             }
         }
     }
+
+    fun updateSupportPrice() {
+        if (accessToken == null || userId == null) {
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val userIdRequest = UseUserIdRequest(userId)
+            try {
+                apiInterface.getSupportItem(accessToken, userIdRequest).apply {
+                    withContext(Dispatchers.Main) {
+                        when (this@apply.retcode) {
+                            "200" -> _supportPrice.value = this@apply.totalPrice
+                            "301" -> getRefreshToken(object : SimpleCallBack {
+                                override fun success() {
+                                    _supportPrice.value = this@apply.totalPrice
+                                }
+
+                                override fun fail() {
+
+                                }
+                            })
+                            else -> {
+                                // Do Nothing
+                            }
+                        }
+                    }
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    // do nothing
+                }
+            }
+        }
+    }
+
 
     fun purchasedItem(itemId: String, token: String, susYn: String, successCallBack: () -> Unit, fail: () -> Unit) {
         if (accessToken == null || userId == null) {

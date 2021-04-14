@@ -7,7 +7,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.SupportInfo
-import womenproject.com.mybury.data.isYes
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -58,7 +57,7 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
             val itemDecoration = SupportItemDecoration()
             purchaseItemListView.addItemDecoration(itemDecoration)
-            purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems.filter { it.dpYn.isYes() })
+            purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems.filter { it.dpYn == "Y" })
             purchaseItemListView.adapter = purchaseItemListAdapter
 
             supportPrice = supportInfo.totalPrice

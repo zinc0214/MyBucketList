@@ -17,12 +17,12 @@ import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_mybury_support.*
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.*
 import womenproject.com.mybury.data.Preference.Companion.isAlreadySupportShow
-import womenproject.com.mybury.data.PurchasableItem
-import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -55,12 +55,13 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private val purchasableItemIds = ArrayList<String>()
     private val purchasedItemIds = ArrayList<String>()
     private var purchasedItem: PurchasableItem? = null
+    private var previousToken = ""
 
     var supportInfo: SupportInfo? = null
     private lateinit var purchaseSuccess: () -> Unit
     private lateinit var purchaseFail: () -> Unit
 
-    private var acknowledgePurchaseItemIsFail = false
+    private var acknowledgePurchaseItemIsNullList = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +88,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             supportInfo?.supportItems?.forEach {
                 it.isPurchasable = true
             }
+        })
+
+        supportViewModel.supportPrice.observe(this, { price ->
+            supportInfo?.totalPrice = price
         })
 
         purchaseFail = {
@@ -120,14 +125,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.d("myBury", adError.message)
                     mInterstitialAd = null
-                    val error = "domain: ${adError.domain}, code: ${adError.code}, " +
-                            "message: ${adError.message}"
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        "onAdFailedToLoad() with error $error",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
+                    val error =
+                        "domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}"
                 }
+
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d("myBury", "Ad was loaded.")
                     mInterstitialAd = interstitialAd
@@ -165,7 +166,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             }
             mInterstitialAd?.show(this)
         } else {
-           // Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -179,7 +180,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
     fun showAds() {
         Log.e("myBury", "isAdShow : $isAdShow")
-        if(isAdShow) {
+        if (isAdShow) {
             showInterstitial()
         }
     }
@@ -221,8 +222,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      *  BillingClient 초기화
      */
     private fun initBillingClient(items: List<PurchasableItem>) {
-        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this)
-                .build()
+        billingClient =
+            BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -279,16 +280,16 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
             if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
-                purchasedItem = supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
+                purchasedItem =
+                    supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
                 if (purchasedItem == null) {
                     Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     return@querySkuDetailsAsync
                 }
                 val purchaseItem = skuDetails.first { it.sku == purchaseId }
                 val flowParams =
-                        BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()
+                    BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()
                 billingClient.launchBillingFlow(this, flowParams)
-                Log.e("mybury", " skuDetails[listNumber] : ${purchaseItem.title}")
             } else {
                 Log.e("mybury", "No sku found from query")
             }
@@ -301,10 +302,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      * (바텀에 결제 화면이 뜬 시점)
      */
     override fun onPurchasesUpdated(
-            billingResult: BillingResult,
-            purchaseList: MutableList<Purchase>?
+        billingResult: BillingResult,
+        purchaseList: MutableList<Purchase>?
     ) {
-        Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}")
+        Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}, $purchaseList")
 
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
@@ -318,44 +319,33 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 "결제가 취소되었습니다".showToast(this)
                 purchaseFail.invoke()
             }
-            else -> {
-                "결제가 실패했습니다".showToast(this)
-                purchaseFail.invoke()
-            }
         }
     }
 
     // 최근 구매한 아이템을 알고자 할 때 사용
     override fun onPurchaseHistoryResponse(
-            billingResult: BillingResult,
-            purchaseHistoryList: MutableList<PurchaseHistoryRecord>?
+        billingResult: BillingResult,
+        purchaseHistoryList: MutableList<PurchaseHistoryRecord>?
     ) {
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 
             val recentSupport = supportInfo?.recentSupport ?: return
 
-            if (!purchaseHistoryList.isNullOrEmpty()) {
-                // 가장 최근에 구매된 아이템을 확인할 수 있다.
-                purchaseHistoryList.forEach { history ->
-
-                    //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있지만, getAcknowledgePurchasedItem 목록에는 없다면 성공한 것으로 간주한다.
-                    Log.d("mybury", "Previous Purchase Item : ${history.sku}, ${history.signature}, ${history.purchaseToken}. ${history}")
-
+            // 가장 최근에 구매된 아이템을 확인할 수 있다.
+            purchaseHistoryList?.forEach { history ->
+                //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있지만, getAcknowledgePurchasedItem 목록에는 없다면 성공한 것으로 간주한다.
+                recentSupport.forEach { item ->
+                    acknowledgePurchaseItemIsNullList.firstOrNull { it == item.token }?.let {
+                        if (history.purchaseToken == item.token && item.susYn == "N") {
+                            supportViewModel.editSuccessItem(item.token, "Y", {
+                                "누락된 후원 정보가 갱신되었습니다.".showToast(this)
+                                supportViewModel.updateSupportPrice()
+                            }, {
+                                // error
+                            })
+                        }
+                    }
                 }
-
-                // purchaseHistoryList 에 토큰이 존재하면서 acknowledgePurchaseItemIsFail == true 이면 실패한 것으로 간주.
-                // 아니라면 성공한 것으로 간주한다.
-                val purchasedFailItem = purchaseHistoryList.firstOrNull { it.purchaseToken == recentSupport.token }
-//
-//                if (purchasedFailItem == null) {
-//                    // 아무것도 하지 않는다.
-//                } else if (!acknowledgePurchaseItemIsFail && !recentSupport.susYn.isYes()) {
-//                    supportViewModel.editSuccessItem(recentSupport.token, "Y", {
-//                        PurchasedItemUpdateSuccess().show(supportFragmentManager, "PurchasedItemUpdateSuccess")
-//                    }, {
-//                        stopLoading()
-//                    })
-//                }
             }
         }
     }
@@ -383,34 +373,44 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             startLoading()
             //Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
+                Log.e("ayhan", "purchasesList : ${it}")
                 //결제된 내역에 대한 처리
                 //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
             }
 
             // 만약 purchasesList 의 토큰값과 일치하는 값이 있다면 "실패한 아이템" 이 존재하는 것으로 확인
             // 이 아이템의 purchaseState 가 2이면 실패로 표기 그 외의 경우에는 넘어간다.
-            val purchasedFailItem = result.purchasesList?.firstOrNull { it.purchaseToken == recentSupport.token }
+            recentSupport.forEach { supportedItem ->
+                val purchasedFailItem =
+                    result.purchasesList?.firstOrNull { it.purchaseToken == supportedItem.token }
+                Log.e(
+                    "ayhan",
+                    "purchasedFailItem : ${purchasedFailItem}, ${purchasedFailItem?.purchaseState}"
+                )
 
-            if (purchasedFailItem == null) {
-                // 없는 것으로 간주. 아무것도 하지 않는다.
-                acknowledgePurchaseItemIsFail = false
-                stopLoading()
-            } else {
-                // 실패한 것오로 간주
-                if (purchasedFailItem.purchaseState == 2) {
-                    acknowledgePurchaseItemIsFail = true
-                    supportViewModel.editSuccessItem(recentSupport.token, "N", {
-                        stopLoading()
-                    }, {
-                        stopLoading()
-                    })
+                if (purchasedFailItem == null) {
+                    if (supportedItem.susYn == "N") {
+                        // 없는 것으로 간주. 아무것도 하지 않는다.
+                        acknowledgePurchaseItemIsNullList.add(supportedItem.token)
+                    }
+                    stopLoading()
                 } else {
-                    acknowledgePurchaseItemIsFail = false
-                    supportViewModel.editSuccessItem(recentSupport.token, "Y", {
-                        stopLoading()
-                    }, {
-                        stopLoading()
-                    })
+                    // 실패한 것오로 간주
+                    if (purchasedFailItem.purchaseState == 2) {
+                        supportViewModel.editSuccessItem(supportedItem.token, "N", {
+                            stopLoading()
+                        }, {
+                            stopLoading()
+                        })
+                    } else {
+                        supportViewModel.editSuccessItem(supportedItem.token, "Y", {
+                            stopLoading()
+                            "누락된 후원 정보가 갱신되었습니다.".showToast(this)
+                            supportViewModel.updateSupportPrice()
+                        }, {
+                            stopLoading()
+                        })
+                    }
                 }
             }
         }
@@ -422,49 +422,74 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
 
             Log.d("ayhan", "TOKEN : $purchaseToken, ${billingResult.responseCode}")
+            Log.d(
+                "ayhan",
+                " previoutToken and Pusr : \n $previousToken \n $purchaseToken \n ${previousToken == purchaseToken}"
+            )
 
             startLoading()
 
-            when (billingResult.responseCode) {
-                BillingClient.BillingResponseCode.OK -> {
-                    purchasedItem?.let {
-                        supportViewModel.purchasedItem(it.id, purchaseToken, "Y", {
-                            // if success
-                            showSupportPurchaseSuccessDialog()
-                            stopLoading()
-                            purchaseSuccess.invoke()
-                            supportViewModel.getPurchasableItem()
-                        }, {
-                            // if fail
-                            stopLoading()
-                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                            purchaseFail.invoke()
-                        })
+            if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                stopLoading()
+            } else {
+                previousToken = purchaseToken
+                when (billingResult.responseCode) {
+                    BillingClient.BillingResponseCode.OK -> {
+                        if (purchasedItem != null) {
+                            supportViewModel.purchasedItem(purchasedItem?.id!!, purchaseToken, "Y",
+                                {
+                                    // if success
+                                    stopLoading()
+                                    showSupportPurchaseSuccessDialog()
+                                    purchaseSuccess.invoke()
+                                    supportViewModel.getPurchasableItem()
+                                },
+                                {
+                                    // if fail
+                                    stopLoading()
+                                    showSupportPurchaseFailDialog(
+                                        purchaseToken,
+                                        billingResult.responseCode.toString()
+                                    )
+                                    purchaseFail.invoke()
+                                })
+                        }
                     }
-                }
-                else -> {
-                    Log.e("mybury", "FAIL : ${billingResult.responseCode}")
-                    purchasedItem?.let {
-                        supportViewModel.purchasedItem(it.id, purchaseToken, "N", {
-                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                            stopLoading()
-                            purchaseFail.invoke()
-                        }, {
-                            showSupportPurchaseFailDialog(purchaseToken, billingResult.responseCode.toString())
-                            stopLoading()
-                            purchaseFail.invoke()
-                        })
+                    else -> {
+                        Log.e("mybury", "FAIL : ${billingResult.responseCode}")
+                        previousToken = purchaseToken
+
+                        purchasedItem?.let {
+                            supportViewModel.purchasedItem(it.id, purchaseToken, "N", {
+                                showSupportPurchaseFailDialog(
+                                    purchaseToken,
+                                    billingResult.responseCode.toString()
+                                )
+                                stopLoading()
+                                purchaseFail.invoke()
+                            }, {
+                                showSupportPurchaseFailDialog(
+                                    purchaseToken,
+                                    billingResult.responseCode.toString()
+                                )
+                                stopLoading()
+                                purchaseFail.invoke()
+                            })
+                        }
                     }
                 }
             }
+
+            stopLoading()
+
         }
     }
 
     // 일회성 제품 구매시
     private fun purchaseOnce(purchaseToken: String) {
         val params = AcknowledgePurchaseParams.newBuilder()
-                .setPurchaseToken(purchaseToken)
-                .build()
+            .setPurchaseToken(purchaseToken)
+            .build()
         billingClient.acknowledgePurchase(params) { billingResult ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 // do something
