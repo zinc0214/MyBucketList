@@ -413,6 +413,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                     }
                 }
             }
+            stopLoading()
         }
     }
 
