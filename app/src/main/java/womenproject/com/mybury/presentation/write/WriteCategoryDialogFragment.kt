@@ -56,7 +56,7 @@ class WriteCategoryDialogFragment(private var userCategory: List<Category>,
     }
 
 
-    class AddCategoryDialog(val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
+    class AddCategoryDialog(private val moveToAddCategory: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "카테고리 추가"

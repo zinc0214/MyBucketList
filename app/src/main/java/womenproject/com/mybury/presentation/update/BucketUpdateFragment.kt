@@ -116,7 +116,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
             override fun fail() {
                 stopLoading()
-                Toast.makeText(context, "버킷이 수정되지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "버킷이 수정되지 못했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
         })
 

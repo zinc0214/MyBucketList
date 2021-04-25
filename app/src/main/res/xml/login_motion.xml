@@ -5,7 +5,7 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="300"
-        motion:motionInterpolator="linear"></Transition>
+        motion:motionInterpolator="linear" />
 
     <ConstraintSet android:id="@+id/start">
 
