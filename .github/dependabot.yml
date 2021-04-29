@@ -1,0 +1,23 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.android.tools.build:gradle
+    versions:
+    - 4.1.2
+  - dependency-name: androidx.constraintlayout:constraintlayout
+    versions:
+    - 2.1.0-alpha2
+  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-android
+    versions:
+    - 1.4.2-native-mt
+  - dependency-name: junit:junit
+    versions:
+    - 4.13.1
+  - dependency-name: com.squareup.okhttp3:logging-interceptor
+    versions:
+    - 4.9.0
