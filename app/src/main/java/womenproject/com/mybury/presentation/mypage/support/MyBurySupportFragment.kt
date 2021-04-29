@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
-import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import womenproject.com.mybury.R
@@ -60,8 +60,8 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     private fun setUpViews(supportInfo: SupportInfo) {
         viewDataBinding.apply {
             val layoutManager = FlexboxLayoutManager(context)
-            layoutManager.flexDirection = FlexDirection.ROW
             layoutManager.justifyContent = JustifyContent.SPACE_EVENLY
+            layoutManager.flexWrap = FlexWrap.WRAP
             purchaseItemListView.layoutManager = layoutManager
 
             purchaseItemListAdapter =
