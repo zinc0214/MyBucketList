@@ -7,9 +7,9 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
-import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 

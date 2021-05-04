@@ -165,8 +165,8 @@ data class MyPageCategory(
 @Parcelize
 data class SupportInfo(
         val supportItems: List<PurchasableItem>,
-        val totalPrice: String = "0",
-        val recentSupport: RecentSupport,
+        var totalPrice: String = "0",
+        val recentSupport: List<RecentSupport>,
         val retcode: String
 ) : Parcelable
 
@@ -227,7 +227,3 @@ val BASE_ITEM = 2
 
 val DDAY = true
 val NORMAL = false
-
-fun String.isYes(): Boolean {
-    return this == "Y"
-}

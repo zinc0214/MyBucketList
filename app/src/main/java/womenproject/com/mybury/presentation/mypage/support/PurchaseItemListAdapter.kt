@@ -11,7 +11,7 @@ import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.databinding.ItemSupportPurchaseBinding
 
 class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem>) :
-        RecyclerView.Adapter<PurchaseItemListAdapter.PurchaseViewHolder>() {
+    RecyclerView.Adapter<PurchaseItemListAdapter.PurchaseViewHolder>() {
 
     val selectedItemNum: PurchasableItem?
         get() = if (checkedPosition != -1) {
@@ -23,8 +23,11 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
     private var checkedPosition = purchasableItems.indexOfFirst { it.isPurchasable }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            PurchaseViewHolder(ItemSupportPurchaseBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false))
+        PurchaseViewHolder(
+            ItemSupportPurchaseBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
 
 
     override fun onBindViewHolder(@NonNull purchaseViewHolder: PurchaseViewHolder, position: Int) {
@@ -35,7 +38,8 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
         return purchasableItems.size
     }
 
-    inner class PurchaseViewHolder(private val binding: ItemSupportPurchaseBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PurchaseViewHolder(private val binding: ItemSupportPurchaseBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PurchasableItem) {
             binding.info = item
@@ -43,9 +47,9 @@ class PurchaseItemListAdapter(private val purchasableItems: List<PurchasableItem
 
             try {
                 Glide.with(binding.imageView).load(item.itemImg)
-                        .override(300, 300)
-                        .placeholder(R.drawable.place_holder)
-                        .into(binding.imageView)
+                    .override(300, 300)
+                    .placeholder(R.drawable.place_holder)
+                    .into(binding.imageView)
             } catch (ex: IllegalArgumentException) {
                 Log.e("Glide-tag", "....")
             }

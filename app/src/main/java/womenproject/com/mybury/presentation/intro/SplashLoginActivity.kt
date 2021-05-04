@@ -31,9 +31,9 @@ import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
 import womenproject.com.mybury.databinding.LayoutSplashWithLoginBinding
-import womenproject.com.mybury.presentation.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.MainActivity
-import womenproject.com.mybury.presentation.NetworkFailDialog
+import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 

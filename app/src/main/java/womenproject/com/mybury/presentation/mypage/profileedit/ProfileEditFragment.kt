@@ -44,7 +44,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private var lastImg = ""
     private var useDetailImg = false
 
-    val cancelConfirm: (Boolean) -> Unit = {
+    private val cancelConfirm: (Boolean) -> Unit = {
         if (it) {
             isCancelConfirm = it
             requireActivity().onBackPressed()
@@ -128,8 +128,8 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 startLoading()
             }
 
-            override fun success(myPageInfo: Any) {
-                val info = myPageInfo as MyPageInfo
+            override fun success(value: Any) {
+                val info = value as MyPageInfo
                 stopLoading()
 
                 viewDataBinding.nicknameEditText.setText(info.name)
@@ -240,7 +240,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
         } else {
             if (isKeyboardUp) {
-                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                imm.hideSoftInputFromWindow(requireView().windowToken, 0)
             }
             cancelConfirm.invoke(true)
         }
@@ -259,7 +259,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             try {
                 if (heightDiff < 500) {
                     viewDataBinding.nicknameEditText.clearFocus()
-                    viewDataBinding.nicknameEditText.setTextColor(getColor(context!!, R.color._888888))
+                    viewDataBinding.nicknameEditText.setTextColor(getColor(requireContext(), R.color._888888))
                     viewDataBinding.badgeLayout.visibility = View.VISIBLE
                     isKeyboardUp = false
                 } else {

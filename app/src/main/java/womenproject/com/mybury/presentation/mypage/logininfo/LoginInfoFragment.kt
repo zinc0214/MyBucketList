@@ -75,7 +75,7 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         val userIdRequest = UseUserIdRequest(Preference.getUserId(requireContext()))
         val accessToken = getAccessToken(requireContext())
         if (accessToken == null) {
-            LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
+            LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
             return
         }
 
@@ -94,14 +94,14 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
                             }
 
                             override fun fail() {
-                                LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
+                                LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
                             }
                         })
-                        else -> LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
+                        else -> LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
                     }
 
                 }) {
-                    LogoutOrSignOutFailed("계정삭제 실패. 다시 시도해주세요.").show(requireActivity().supportFragmentManager, "tag")
+                    LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
                 }
 
     }

@@ -25,10 +25,10 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
-import womenproject.com.mybury.presentation.NetworkFailDialog
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
@@ -231,7 +231,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     }
 
-    class CancelDialog(val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
+    class CancelDialog(private val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "등록을 취소하시겠습니까?"
