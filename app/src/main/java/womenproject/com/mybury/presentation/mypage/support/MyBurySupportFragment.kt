@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.SupportInfo
-import womenproject.com.mybury.data.isYes
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
-import womenproject.com.mybury.ui.SupportItemDecoration
+
 
 class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>() {
 
@@ -46,7 +47,10 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
         getSupportInfo().apply {
             if (this == null) {
-                ShowClosePopup { onBackPressedFragment() }.show(requireActivity().supportFragmentManager, "TAG")
+                ShowClosePopup { onBackPressedFragment() }.show(
+                    requireActivity().supportFragmentManager,
+                    "TAG"
+                )
             } else {
                 setUpViews(this)
             }
@@ -55,10 +59,13 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
 
     private fun setUpViews(supportInfo: SupportInfo) {
         viewDataBinding.apply {
-            purchaseItemListView.layoutManager = GridLayoutManager(context, 2)
-            val itemDecoration = SupportItemDecoration()
-            purchaseItemListView.addItemDecoration(itemDecoration)
-            purchaseItemListAdapter = PurchaseItemListAdapter(supportInfo.supportItems.filter { it.dpYn.isYes() })
+            val layoutManager = FlexboxLayoutManager(context)
+            layoutManager.justifyContent = JustifyContent.SPACE_EVENLY
+            layoutManager.flexWrap = FlexWrap.WRAP
+            purchaseItemListView.layoutManager = layoutManager
+
+            purchaseItemListAdapter =
+                PurchaseItemListAdapter(supportInfo.supportItems.filter { it.dpYn == "Y" })
             purchaseItemListView.adapter = purchaseItemListAdapter
 
             supportPrice = supportInfo.totalPrice
@@ -82,7 +89,12 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
             }
 
             collapsibleToolbar.setTransitionListener(object : MotionLayout.TransitionListener {
-                override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                override fun onTransitionTrigger(
+                    p0: MotionLayout?,
+                    p1: Int,
+                    p2: Boolean,
+                    p3: Float
+                ) {
                 }
 
                 override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {

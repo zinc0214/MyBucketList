@@ -17,8 +17,8 @@ class SupportItemDecoration : ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val position = parent.getChildAdapterPosition(view) // item phases_position
         val column = position % 2 // item column
-        outRect.left = spacingLeft - column * spacingLeft / spanCount // spacing - column * ((1f / spanCount) * spacing)
-        outRect.right = (column + 1) * spacingLeft / spanCount // (column + 1) * ((1f / spanCount) * spacing)
+       // outRect.left = spacingLeft - column * spacingLeft / spanCount // spacing - column * ((1f / spanCount) * spacing)
+       // outRect.right = (column + 1) * spacingLeft / spanCount // (column + 1) * ((1f / spanCount) * spacing)
         if (position < spanCount) { // top edge
             outRect.top = spacingTop
         }

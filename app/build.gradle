@@ -118,6 +118,9 @@ dependencies {
 
     //lottie
     implementation 'com.airbnb.android:lottie:3.0.7'
+
+    // flexbox
+    implementation 'com.google.android:flexbox:2.0.1'
 }
 
 repositories {

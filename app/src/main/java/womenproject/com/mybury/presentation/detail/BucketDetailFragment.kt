@@ -269,11 +269,7 @@ class BucketDetailFragment : Fragment() {
 
     private fun bucketComplete() {
 
-        if (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount) {
-            isLoadForSucceed = true
-        } else {
-            isLoadForSucceed = false
-        }
+        (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount).also { isLoadForSucceed = it }
 
         if (isLoadForSucceed) {
             succeddBucketListAction()
