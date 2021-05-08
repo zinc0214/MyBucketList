@@ -103,6 +103,8 @@ class BucketUpdateFragment : BucketWriteFragment() {
             }
 
             override fun start() {
+                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
+                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
                 startLoading()
 
             }
