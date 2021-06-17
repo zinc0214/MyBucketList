@@ -514,7 +514,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     companion object {
-        private const val SUPPORT_PRICE = 10000
+        private const val SUPPORT_PRICE = 3300
     }
 }
 
