@@ -66,6 +66,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initAdmob()
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         drawerLayout = binding.drawerLayout
@@ -107,9 +109,12 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         val animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         binding.loadingLayout.loadingImg.animation = animation
+    }
 
+    private fun initAdmob() {
         MobileAds.initialize(this) {}
         loadAd()
+        showInterstitial()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -119,56 +124,41 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun loadAd() {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(
-            this, AD_UNIT_ID, adRequest,
+        InterstitialAd.load(this, AD_UNIT_ID, adRequest,
             object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("myBury", adError.message)
-                    mInterstitialAd = null
-                    val error =
-                        "domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}"
-                }
-
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d("myBury", "Ad was loaded.")
                     mInterstitialAd = interstitialAd
                 }
-            }
-        )
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("myBury", adError.message)
+                    mInterstitialAd = null
+                }
+            })
     }
 
     // Show the ad if it's ready. Otherwise toast and restart the game.
     private fun showInterstitial() {
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d("myBury", "Ad was dismissed.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                    if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
-                        showSupportDialogFragment()
-                    }
-                    loadAd()
-                }
+        mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                Log.d("myBury", "Ad was dismissed.")
+            }
 
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-                    Log.d("myBury", "Ad failed to show.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                }
+            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                Log.d("myBury", "Ad failed to show.")
+            }
 
-                override fun onAdShowedFullScreenContent() {
-                    Log.d("mybury", "Ad showed fullscreen content.")
-                    // Called when ad is dismissed.
+            override fun onAdShowedFullScreenContent() {
+                Log.d("mybury", "Ad showed fullscreen content.")
+                mInterstitialAd = null;
+                if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
+                    showSupportDialogFragment()
                 }
             }
-            mInterstitialAd?.show(this)
-        } else {
-            // Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     fun startLoading() {
         binding.loadingLayout.layout.visibility = View.VISIBLE
@@ -181,7 +171,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     fun showAds() {
         Log.e("myBury", "isAdShow : $isAdShow")
         if (isAdShow) {
-            showInterstitial()
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(this)
+            } else {
+                Log.d("TAG", "The interstitial ad wasn't ready yet.")
+            }
         }
     }
 
@@ -515,4 +509,4 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
-const val AD_UNIT_ID = "ca-app-pub-6302671173915322/9547430142"
+const val AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712" // "ca-app-pub-6302671173915322/9547430142"
