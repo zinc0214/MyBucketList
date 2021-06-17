@@ -6,6 +6,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.setAlreadySupportShow
 import womenproject.com.mybury.databinding.DialogSupportOnceBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
+import java.util.*
 
 class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
     override val layoutResourceId: Int
@@ -32,11 +33,16 @@ class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
         viewDataBinding.apply {
             button.setOnClickListener { goToPurchase() }
             detailButton.setOnClickListener { goToDetail() }
+            supportNotShowButton.setOnClickListener {
+                val time = Date().time
+                setAlreadySupportShow(requireContext(), time)
+                dismiss()
+            }
 
             val desc: String = requireContext().getString(R.string.mybury_dialog_desc)
             viewDataBinding.subDesc.text = Html.fromHtml(String.format(desc))
 
-            setAlreadySupportShow(requireContext(), true)
+
         }
     }
 }

@@ -59,6 +59,7 @@
     <string name="support_error_go_to_email">문의하러 가기 > </string>
     <string name="support_error_list">- 네트워크 문제로 인한 결제 지연\n- 서버 접속 실패</string>
     <string name="support_fail_title">결제 오류</string>
+    <string name="support_dialog_close"><u>한 달간 보지 않기</u></string>
 
     <string name="warning_desc"><![CDATA[<font color=#5a95ff>서비스 안정화를 위해 잠시 서버 점검중</font>입니다.<br>조금만 기다려주세요.]]></string>
     <string name="profile_image_desc">프로필 이미지</string>

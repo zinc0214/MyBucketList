@@ -3,113 +3,132 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_ffffff_r4">
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="28dp"
-            android:minHeight="20dp"
-            android:text="마이버리 후원하기"
-            android:textColor="@color/_434343"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/subDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="28dp"
-            android:gravity="center"
-            android:lineSpacingExtra="7sp"
-            android:text="@string/mybury_dialog_desc"
-            android:textColor="@color/_888888"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="한번의 후원으로\n마이버리를 광고없이 평생 무료로\n사용하실 수 있어요!" />
-
-
-        <LinearLayout
-            android:id="@+id/button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="44dp"
-            android:background="@drawable/shape_gradient_r2"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subDesc">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="광고없이 평생무료"
-                android:textColor="@color/_ffffff"
-                android:textSize="11sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="11,000원"
-                android:textColor="@color/_ffffff"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/myburyImage"
-            android:layout_width="52dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/bury_profile"
-            app:layout_constraintEnd_toEndOf="@id/button"
-            app:layout_constraintStart_toStartOf="@id/button"
-            app:layout_constraintTop_toBottomOf="@id/subDesc" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/bury_speech_02"
-            app:layout_constraintBottom_toBottomOf="@id/myburyImage"
-            app:layout_constraintStart_toEndOf="@id/myburyImage" />
-
-        <TextView
-            android:id="@+id/detailButton"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_ffffff_r4">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="28dp"
+                android:minHeight="20dp"
+                android:text="마이버리 후원하기"
+                android:textColor="@color/_434343"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="28dp"
+                android:gravity="center"
+                android:lineSpacingExtra="7sp"
+                android:text="@string/mybury_dialog_desc"
+                android:textColor="@color/_888888"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="한번의 후원으로\n마이버리를 광고없이 평생 무료로\n사용하실 수 있어요!" />
+
+
+            <LinearLayout
+                android:id="@+id/button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="52dp"
+                android:layout_marginEnd="44dp"
+                android:background="@drawable/shape_gradient_r2"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subDesc">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="광고없이 평생무료"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="3,300원"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/myburyImage"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bury_profile"
+                app:layout_constraintEnd_toEndOf="@id/button"
+                app:layout_constraintStart_toStartOf="@id/button"
+                app:layout_constraintTop_toBottomOf="@id/subDesc" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/bury_speech_02"
+                app:layout_constraintBottom_toBottomOf="@id/myburyImage"
+                app:layout_constraintStart_toEndOf="@id/myburyImage" />
+
+            <TextView
+                android:id="@+id/detailButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center"
+                android:text="자세히보기"
+                android:textColor="@color/_b4b4b4"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/supportNotShowButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
             android:gravity="center"
-            android:text="자세히보기"
-            android:textColor="@color/_b4b4b4"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="@string/support_dialog_close"
+            android:textColor="@color/_c4c4c4"
+            android:textSize="13sp" />
+    </LinearLayout>
 
 </layout>
 
