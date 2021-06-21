@@ -201,7 +201,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun showSupportDialogFragment() {
         val fragment = SupportDialogFragment()
         fragment.setButtonAction({
-            purchaseItem("cheer.11000")
+            purchaseItem("cheer.3300")
             fragment.dismiss()
         }, {
             val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)
@@ -518,5 +518,4 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
-const val AD_UNIT_ID =
-    "ca-app-pub-3940256099942544/1033173712" // "ca-app-pub-6302671173915322/9547430142"
+const val AD_UNIT_ID = "ca-app-pub-6302671173915322/9547430142"
