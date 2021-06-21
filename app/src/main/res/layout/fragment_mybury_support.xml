@@ -70,7 +70,7 @@
                         android:gravity="center"
                         android:lineSpacingExtra="7sp"
                         android:paddingBottom="36dp"
-                        android:text="10000원 이상 후원해주신 분에게는\n광고 제거 기능이 제공됩니다"
+                        android:text="3300원 이상 후원해주신 분에게는\n광고 제거 기능이 제공됩니다"
                         android:textColor="@color/_797979"
                         android:textSize="11sp"
                         app:layout_constraintTop_toBottomOf="@id/food_img" />

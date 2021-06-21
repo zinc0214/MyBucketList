@@ -1,3 +1,5 @@
+@file:Suppress("INTEGER_OVERFLOW")
+
 package womenproject.com.mybury.presentation
 
 import android.os.Bundle
@@ -32,6 +34,8 @@ import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.showToast
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -65,6 +69,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initAdmob()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -107,7 +113,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         val animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         binding.loadingLayout.loadingImg.animation = animation
+    }
 
+    private fun initAdmob() {
         MobileAds.initialize(this) {}
         loadAd()
     }
@@ -119,56 +127,57 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun loadAd() {
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(
-            this, AD_UNIT_ID, adRequest,
+        InterstitialAd.load(this, AD_UNIT_ID, adRequest,
             object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("myBury", adError.message)
-                    mInterstitialAd = null
-                    val error =
-                        "domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}"
-                }
-
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.d("myBury", "Ad was loaded.")
                     mInterstitialAd = interstitialAd
                 }
-            }
-        )
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("myBury", adError.message)
+                    mInterstitialAd = null
+                }
+            })
     }
 
     // Show the ad if it's ready. Otherwise toast and restart the game.
     private fun showInterstitial() {
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d("myBury", "Ad was dismissed.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                    if (!isAlreadySupportShow(this@MainActivity) || BuildConfig.DEBUG) {
-                        showSupportDialogFragment()
-                    }
-                    loadAd()
-                }
-
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-                    Log.d("myBury", "Ad failed to show.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    Log.d("mybury", "Ad showed fullscreen content.")
-                    // Called when ad is dismissed.
+        mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                Log.d("myBury", "Ad was dismissed.")
+                val currentTime = Date().time
+                val daysOverTime: Long = 1000 * 60 * 60 * 24 * 30 // 1달로 설정
+                val shownTime = isAlreadySupportShow(this@MainActivity)
+                val isOverTime = currentTime - shownTime > daysOverTime || shownTime.equals(0f)
+                if (isOverTime || BuildConfig.DEBUG) {
+                    showSupportDialogFragment()
                 }
             }
-            mInterstitialAd?.show(this)
-        } else {
-            // Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                Log.d("myBury", "Ad failed to show.")
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                Log.d("mybury", "Ad showed fullscreen content.")
+                mInterstitialAd = null
+            }
         }
     }
+
+    fun showAds() {
+        Log.e("myBury", "isAdShow : $isAdShow")
+        showInterstitial()
+        if (isAdShow) {
+            if (mInterstitialAd != null) {
+                mInterstitialAd?.show(this)
+            } else {
+                Log.d("TAG", "The interstitial ad wasn't ready yet.")
+            }
+        }
+    }
+
 
     fun startLoading() {
         binding.loadingLayout.layout.visibility = View.VISIBLE
@@ -178,12 +187,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         binding.loadingLayout.layout.visibility = View.GONE
     }
 
-    fun showAds() {
-        Log.e("myBury", "isAdShow : $isAdShow")
-        if (isAdShow) {
-            showInterstitial()
-        }
-    }
 
     fun setSupportPrice(price: Int) {
         isAdShow = price < SUPPORT_PRICE || BuildConfig.DEBUG
@@ -198,7 +201,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun showSupportDialogFragment() {
         val fragment = SupportDialogFragment()
         fragment.setButtonAction({
-            purchaseItem("cheer.11000")
+            purchaseItem("cheer.3300")
             fragment.dismiss()
         }, {
             val parentFragment = supportFragmentManager.findFragmentById(R.id.nav_fragment)
@@ -511,7 +514,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     companion object {
-        private const val SUPPORT_PRICE = 10000
+        private const val SUPPORT_PRICE = 3300
     }
 }
 

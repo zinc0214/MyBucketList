@@ -187,7 +187,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
             storageDir.mkdirs()
         }
         val image = File.createTempFile(imageFileName, ".jpg", storageDir)
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath()
+        mCurrentPhotoPath = "file:" + image.absolutePath
         return image
     }
 
