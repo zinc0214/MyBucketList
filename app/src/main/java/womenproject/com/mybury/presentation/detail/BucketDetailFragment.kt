@@ -37,8 +37,13 @@ class BucketDetailFragment : Fragment() {
     private var isLoadForSucceed = false
     private var memoArrowIsClicked = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewDataBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
         viewModel = BucketDetailViewModel()
         initDataBinding()
         return viewDataBinding.root
@@ -123,15 +128,19 @@ class BucketDetailFragment : Fragment() {
             val viewPager = viewDataBinding.viewPager
             val imgList = setImgList(bucketItem)
             val showWideListener: (String) -> Unit = { showImgWide(it) }
-            val viewPagerAdapter = BucketDetailImageViewPageAdapter(requireContext(), imgList, showWideListener)
+            val viewPagerAdapter =
+                BucketDetailImageViewPageAdapter(requireContext(), imgList, showWideListener)
             viewPager.adapter = viewPagerAdapter
             viewDataBinding.tabLayout.setupWithViewPager(viewPager)
 
-            val isShowCountLayout = bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
+            val isShowCountLayout =
+                bucketItem.goalCount > 1 && bucketItem.goalCount > bucketItem.userCount
             isDone = isCompleted
             isCount = isShowCountLayout
-            isShowComment = bucketItem.imgUrl1.isNullOrBlank() && bucketItem.imgUrl2.isNullOrBlank() && bucketItem.imgUrl3.isNullOrBlank()
-                    !isShowCountLayout && !isCompleted && bucketItem.memo.isNullOrBlank()
+
+
+            val hasNoImg = bucketItem.imgUrl1.isNullOrBlank() && bucketItem.imgUrl2.isNullOrBlank() && bucketItem.imgUrl3.isNullOrBlank()
+            isShowComment = hasNoImg && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
             val desc: String = requireContext().getString(R.string.bucket_least_count)
             currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
@@ -158,7 +167,8 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            viewDataBinding.memoArrow.visibility = if (bucketItem.memo.lines().size >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
+            viewDataBinding.memoArrow.visibility =
+                if (bucketItem.memo.lines().size >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
         }
 
     }
@@ -269,7 +279,9 @@ class BucketDetailFragment : Fragment() {
 
     private fun bucketComplete() {
 
-        (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount).also { isLoadForSucceed = it }
+        (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount).also {
+            isLoadForSucceed = it
+        }
 
         if (isLoadForSucceed) {
             succeddBucketListAction()
@@ -312,7 +324,10 @@ class BucketDetailFragment : Fragment() {
             override fun onAnimationEnd(animation: Animator?) {
                 viewDataBinding.successLottieView.visibility = View.GONE
                 if (isAlreadyBucketRetryGuideShow(requireContext()) || BuildConfig.DEBUG) {
-                    BucketRetryGuideDialogFragment().show(requireActivity().supportFragmentManager, "tag")
+                    BucketRetryGuideDialogFragment().show(
+                        requireActivity().supportFragmentManager,
+                        "tag"
+                    )
                     setAlreadyBucketRetryGuideShow(requireContext(), true)
                 }
             }
@@ -354,17 +369,19 @@ class BucketDetailFragment : Fragment() {
 
     private fun getRandomComment(): String {
 
-        val commentList = listOf("하나씩 목표를 달성해볼까요?",
-                "시작이 반이라는 말이 있죠. 아자아자!",
-                "새로운 일을 시작하는 용기가 깃들기를",
-                "천 리 길도 한걸음부터",
-                "우리만의 페이스로 달성해봐요",
-                "당신은 해낼 수 있을 거에요",
-                "이제 도전을 시작해보는 건 어떨까요?",
-                "인생은 게으름과 자기자신의 싸움이래요",
-                "당신의 버킷리스트는 이제 이루어졌나요?",
-                "포기하고 싶을 순간에도 응원하고 있어요",
-                "잘못되는 것을 두려워말고 도전해봐요!")
+        val commentList = listOf(
+            "하나씩 목표를 달성해볼까요?",
+            "시작이 반이라는 말이 있죠. 아자아자!",
+            "새로운 일을 시작하는 용기가 깃들기를",
+            "천 리 길도 한걸음부터",
+            "우리만의 페이스로 달성해봐요",
+            "당신은 해낼 수 있을 거에요",
+            "이제 도전을 시작해보는 건 어떨까요?",
+            "인생은 게으름과 자기자신의 싸움이래요",
+            "당신의 버킷리스트는 이제 이루어졌나요?",
+            "포기하고 싶을 순간에도 응원하고 있어요",
+            "잘못되는 것을 두려워말고 도전해봐요!"
+        )
 
         val random = Random()
         val randomNum = random.nextInt(commentList.size)

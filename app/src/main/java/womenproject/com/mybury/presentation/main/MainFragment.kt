@@ -138,7 +138,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     private fun createOnClickWriteListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MainFragmentDirections.actionMainBucketToBucketWrite()
-            directions.isAdsShow = currentBucketSize > 4
+            directions.isAdsShow = currentBucketSize > 2
             it.findNavController().navigate(directions)
         }
     }
@@ -157,7 +157,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     private fun createOnClickMyPageListener(): View.OnClickListener {
         return View.OnClickListener {
             val directions = MainFragmentDirections.actionMainBucketToMyPage()
-            directions.isAdsShow = currentBucketSize > 4
+            directions.isAdsShow = currentBucketSize > 2
             it.findNavController().navigate(directions)
         }
     }
