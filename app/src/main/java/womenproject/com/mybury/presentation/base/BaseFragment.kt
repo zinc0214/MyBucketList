@@ -109,7 +109,7 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     fun setCurrentSupportPrice(price: Int) {
         if (activity is MainActivity) {
             val a = activity as MainActivity
-            a.setSupportPrice(price)
+            a.setAdShowable(price)
         }
     }
 

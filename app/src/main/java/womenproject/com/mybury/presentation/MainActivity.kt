@@ -88,7 +88,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         supportViewModel.getPurchasableItem()
 
         supportViewModel.supportInfo.observe(this, Observer { info ->
-            setSupportPrice(info.totalPrice.toInt())
+            setAdShowable(info.totalPrice.toInt())
             initBillingClient(info.supportItems)
             supportInfo = info
             supportInfo?.supportItems?.forEach {
@@ -174,6 +174,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 mInterstitialAd?.show(this)
             } else {
                 Log.d("TAG", "The interstitial ad wasn't ready yet.")
+                if (BuildConfig.DEBUG) {
+                    showSupportDialogFragment()
+                }
             }
         }
     }
@@ -188,7 +191,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
 
-    fun setSupportPrice(price: Int) {
+    fun setAdShowable(price: Int) {
         isAdShow = price < SUPPORT_PRICE || BuildConfig.DEBUG
     }
 
@@ -518,4 +521,4 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
-const val AD_UNIT_ID = "ca-app-pub-6302671173915322/9547430142"
+val AD_UNIT_ID = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-6302671173915322/9547430142"

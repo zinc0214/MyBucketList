@@ -12,7 +12,6 @@ class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_support_once
 
-
     private lateinit var goToPurchase: () -> Unit
     private lateinit var goToDetail: () -> Unit
 
@@ -41,8 +40,6 @@ class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
 
             val desc: String = requireContext().getString(R.string.mybury_dialog_desc)
             viewDataBinding.subDesc.text = Html.fromHtml(String.format(desc))
-
-
         }
     }
 }
