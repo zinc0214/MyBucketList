@@ -13,10 +13,9 @@ class EditBucketListViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     @SuppressLint("ClickableViewAccessibility")
-    fun bind(bucketItem: BucketItem, isLastItem: Boolean) {
+    fun bind(bucketItem: BucketItem) {
         binding.apply {
             bucketTitleText = bucketItem.title
-            this.isLastItem = isLastItem
 
             editImageView.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
@@ -24,6 +23,7 @@ class EditBucketListViewHolder(
                 }
                 false
             }
+
             executePendingBindings()
         }
     }

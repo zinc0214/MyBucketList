@@ -32,7 +32,7 @@ class EditBucketListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        editBucketListViewHolder.bind(bucketList[position], position == bucketList.lastIndex)
+        editBucketListViewHolder.bind(bucketList[position])
     }
 
     override fun onItemMoved(from: Int, to: Int) {
