@@ -12,7 +12,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.EditBucketListAdapter
-import womenproject.com.mybury.presentation.mypage.categoryedit.CategoryItemTouchHelperCallback
+import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
 import womenproject.com.mybury.presentation.viewmodels.BucketEditViewModel
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
@@ -63,7 +63,7 @@ class BucketListEditFragment : BaseFragment<FragmentBucketEditBinding, BucketEdi
 
     private fun setBucketListAdapter() {
         Log.e("ayhan", "changeBucketList : ${changeBucketList.size}")
-        val editCategoryListAdapter = EditBucketListAdapter(
+        val editBucketListAdapter = EditBucketListAdapter(
             changeBucketList,
             this,
             this
@@ -71,11 +71,12 @@ class BucketListEditFragment : BaseFragment<FragmentBucketEditBinding, BucketEdi
 
         viewDataBinding.bucketEditListView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = editCategoryListAdapter
+            adapter = editBucketListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editBucketListAdapter))
         itemTouchHelper.attachToRecyclerView(viewDataBinding.bucketEditListView)
+
     }
 
 

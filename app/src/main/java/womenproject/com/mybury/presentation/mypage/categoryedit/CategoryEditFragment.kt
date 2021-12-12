@@ -137,7 +137,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             adapter = editCategoryListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editCategoryListAdapter))
         itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
     }
 

@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.ui.ItemActionListener
 
-class CategoryItemTouchHelperCallback(val listener: ItemActionListener) : ItemTouchHelper.Callback() {
+class ItemTouchHelperCallback(val listener: ItemActionListener) : ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val dragFlags = ItemTouchHelper.DOWN or ItemTouchHelper.UP
