@@ -30,6 +30,7 @@ open class BaseViewModel : ViewModel() {
     val userId = getUserId(getAppContext())
 
 
+
     fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
     }
@@ -109,8 +110,5 @@ open class BaseViewModel : ViewModel() {
             }
     }
 
-    enum class LoadState {
-        START, RESTART, SUCCESS, FAIL
-    }
 
 }

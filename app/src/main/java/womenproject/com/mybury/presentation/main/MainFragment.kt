@@ -37,10 +37,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     override fun initDataBinding() {
         viewDataBinding.mainToolbar.sortClickListener = bucketSortClickListener()
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
-        viewDataBinding.mainToolbar.searchClickListener = bucketSearchClickListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
-
 
         initBucketListUI()
     }
@@ -153,12 +151,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
 
     private fun bucketSortClickListener() = View.OnClickListener {
-        val directions = MainFragmentDirections.actionMainBucketToBucketSort()
-        it.findNavController().navigate(directions)
-    }
-
-    private fun bucketSearchClickListener() = View.OnClickListener {
-        val directions = MainFragmentDirections.actionMainBucketToBucketSearch()
+        val directions = MainFragmentDirections.actionMainBucketToBucketEdit()
         it.findNavController().navigate(directions)
     }
 

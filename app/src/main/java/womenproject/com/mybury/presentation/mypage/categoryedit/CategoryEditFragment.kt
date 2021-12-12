@@ -1,7 +1,10 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -13,7 +16,7 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.dialog.LoadFailDialog
+import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
@@ -68,43 +71,36 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
-
-        setUpViewModelObservers()
-        bucketInfoViewModel.getCategoryList()
+        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(
+            setOnSoftKeyboardChangedListener()
+        )
+        setCategoryList()
     }
 
-    private fun setUpViewModelObservers() {
-        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
-            when (it) {
-                BaseViewModel.LoadState.START -> {
-                    startLoading()
-                }
-                BaseViewModel.LoadState.RESTART -> {
-                    bucketInfoViewModel.getCategoryList()
-                }
-                BaseViewModel.LoadState.SUCCESS -> {
-                    stopLoading()
-                }
-                BaseViewModel.LoadState.FAIL -> {
-                    stopLoading()
-                    LoadFailDialog {
-                        backBtnOnClickListener()
-                    }.show(requireActivity().supportFragmentManager, "tag")
-                }
-                else -> {
-                    // Do Nothing
-                }
+    private fun setCategoryList() {
+
+        bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
+            override fun restart() {
+                setCategoryList()
             }
-        }
 
-        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
-            initOriginCategory(it as List<Category>)
-            changeCategoryList = it as ArrayList<Category>
-            setCategoryAdapter()
-            isKeyBoardShown = false
-        }
+            override fun success(value: List<Any>) {
+                initOriginCategory(value as List<Category>)
+                changeCategoryList = value as ArrayList<Category>
+                setCategoryAdapter()
+                isKeyBoardShown = false
+            }
+
+            override fun start() {
+                startLoading()
+            }
+
+            override fun fail() {
+                stopLoading()
+                NetworkFailDialog().show(requireActivity().supportFragmentManager)
+            }
+        })
     }
-
 
     private fun initOriginCategory(categoryList: List<Category>) {
         categoryList.forEach {
@@ -141,7 +137,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             adapter = editCategoryListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
         itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
     }
 
@@ -288,4 +284,25 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun moved(list: List<Any>) {
         changeCategoryList = list as ArrayList<Category>
     }
+
+    private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
+        return ViewTreeObserver.OnGlobalLayoutListener {
+            val r = Rect()
+            viewDataBinding.root.getWindowVisibleDisplayFrame(r)
+
+            val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
+            try {
+                if (heightDiff < 300) {
+                    viewDataBinding.space.visibility = View.VISIBLE
+                } else {
+                    isKeyBoardShown = true
+                    viewDataBinding.space.visibility = View.GONE
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
 }
