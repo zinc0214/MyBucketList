@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.main
 
-import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +61,6 @@ class BucketListEditFragment : BaseFragment<FragmentBucketEditBinding, BucketEdi
     }
 
     private fun setBucketListAdapter() {
-        Log.e("ayhan", "changeBucketList : ${changeBucketList.size}")
         val editBucketListAdapter = EditBucketListAdapter(
             changeBucketList,
             this,
