@@ -11,8 +11,8 @@ import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.MyBuryApplication.Companion.getAppContext
 import womenproject.com.mybury.data.NewTokenRequest
-import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
+import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
@@ -29,6 +29,8 @@ open class BaseViewModel : ViewModel() {
     val refreshToken = getRefreshToken(getAppContext())
     val userId = getUserId(getAppContext())
 
+
+
     fun addDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
     }
@@ -39,7 +41,8 @@ open class BaseViewModel : ViewModel() {
     }
 
     fun isNetworkDisconnect(): Boolean {
-        val cm = MyBuryApplication.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val cm =
+            MyBuryApplication.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         val activeNetwork = cm.activeNetworkInfo
         val isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting
@@ -69,33 +72,42 @@ open class BaseViewModel : ViewModel() {
 
     interface MoreCallBackAny {
         fun start()
-        fun success(value : Any)
+        fun success(value: Any)
         fun fail()
         fun restart()
     }
 
     interface MoreCallBackAnyList {
         fun start()
-        fun success(value : List<Any>)
+        fun success(value: List<Any>)
         fun fail()
         fun restart()
     }
 
+    sealed class ApiState() {
+        object Start : ApiState()
+        object Fail : ApiState()
+        object Restart : ApiState()
+        data class Success(
+            val response: Any
+        ) : ApiState()
+
+    }
 
     @SuppressLint("CheckResult")
-    fun getRefreshToken(a2CallBack : SimpleCallBack) {
+    fun getRefreshToken(a2CallBack: SimpleCallBack) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
         apiInterface.getRefershToken(newTokenRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    if (response.retcode == "200") {
-                        setAccessToken(getAppContext(), response.accessToken)
-                        setRefreshToken(getAppContext(), response.refreshToken)
-                    }
-                }) {
-                    a2CallBack.fail()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.retcode == "200") {
+                    setAccessToken(getAppContext(), response.accessToken)
+                    setRefreshToken(getAppContext(), response.refreshToken)
                 }
+            }) {
+                a2CallBack.fail()
+            }
     }
 
 

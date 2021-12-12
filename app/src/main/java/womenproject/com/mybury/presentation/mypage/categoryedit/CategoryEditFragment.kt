@@ -26,9 +26,9 @@ import womenproject.com.mybury.ui.ItemMovedListener
 
 
 class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(),
-        ItemDragListener,
-        ItemCheckedListener,
-        ItemMovedListener {
+    ItemDragListener,
+    ItemCheckedListener,
+    ItemMovedListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
 
@@ -71,7 +71,9 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
-        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
+        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(
+            setOnSoftKeyboardChangedListener()
+        )
         setCategoryList()
     }
 
@@ -118,15 +120,17 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     editCategoryItem(it, name)
                 }
                 AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
-                        .show(requireActivity().supportFragmentManager)
+                    .show(requireActivity().supportFragmentManager)
             }
         }
 
-        val editCategoryListAdapter = EditCategoryListAdapter(changeCategoryList,
-                this@CategoryEditFragment,
-                this@CategoryEditFragment,
-                this@CategoryEditFragment,
-                editCategoryName)
+        val editCategoryListAdapter = EditCategoryListAdapter(
+            changeCategoryList,
+            this@CategoryEditFragment,
+            this@CategoryEditFragment,
+            this@CategoryEditFragment,
+            editCategoryName
+        )
 
         viewDataBinding.categoryListRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -141,29 +145,36 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         val categoryAdd: (String) -> Unit = {
             addNewCategory(it)
         }
-        AddCategoryDialogFragment(originCategoryList, null, categoryAdd).show(requireActivity().supportFragmentManager)
+        AddCategoryDialogFragment(
+            originCategoryList,
+            null,
+            categoryAdd
+        ).show(requireActivity().supportFragmentManager)
     }
 
     private fun editCategoryItem(category: Category, newName: String) {
-        categoryEditViewModel.editCategoryItem(category, newName, object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                editCategoryItem(category, newName)
-            }
+        categoryEditViewModel.editCategoryItem(
+            category,
+            newName,
+            object : BaseViewModel.Simple3CallBack {
+                override fun restart() {
+                    editCategoryItem(category, newName)
+                }
 
-            override fun start() {
-                startLoading()
-            }
+                override fun start() {
+                    startLoading()
+                }
 
-            override fun success() {
-                stopLoading()
-                initDataBinding()
-            }
+                override fun success() {
+                    stopLoading()
+                    initDataBinding()
+                }
 
-            override fun fail() {
-                stopLoading()
-            }
+                override fun fail() {
+                    stopLoading()
+                }
 
-        })
+            })
     }
 
     private fun addNewCategory(name: String) {
@@ -190,58 +201,64 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     }
 
     fun setCategoryDeleteListener() {
-        categoryEditViewModel.removeCategoryItem(removedList, object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                setCategoryDeleteListener()
-            }
+        categoryEditViewModel.removeCategoryItem(
+            removedList,
+            object : BaseViewModel.Simple3CallBack {
+                override fun restart() {
+                    setCategoryDeleteListener()
+                }
 
-            override fun start() {
-                startLoading()
-            }
+                override fun start() {
+                    startLoading()
+                }
 
-            override fun success() {
-                Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                stopLoading()
-                initDataBinding()
-                removedList.clear()
-                viewDataBinding.cancelText.isEnabled = false
-            }
+                override fun success() {
+                    Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    stopLoading()
+                    initDataBinding()
+                    removedList.clear()
+                    viewDataBinding.cancelText.isEnabled = false
+                }
 
-            override fun fail() {
-                Toast.makeText(context, "카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                stopLoading()
-            }
+                override fun fail() {
+                    Toast.makeText(context, "카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                        .show()
+                    stopLoading()
+                }
 
-        })
+            })
     }
 
     fun setCategoryStatusChange() {
-        categoryEditViewModel.changeCategoryStatus(changeCategoryList, object : BaseViewModel.Simple3CallBack {
-            override fun start() {
-                startLoading()
-            }
+        categoryEditViewModel.changeCategoryStatus(
+            changeCategoryList,
+            object : BaseViewModel.Simple3CallBack {
+                override fun start() {
+                    startLoading()
+                }
 
-            override fun success() {
-                Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
-                stopLoading()
-                onBackPressedFragment()
-            }
+                override fun success() {
+                    Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    stopLoading()
+                    onBackPressedFragment()
+                }
 
-            override fun fail() {
-                Toast.makeText(context, "카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                stopLoading()
-            }
+                override fun fail() {
+                    Toast.makeText(context, "카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                        .show()
+                    stopLoading()
+                }
 
-            override fun restart() {
-                setCategoryStatusChange()
-                stopLoading()
-            }
+                override fun restart() {
+                    setCategoryStatusChange()
+                    stopLoading()
+                }
 
-        })
+            })
     }
 
     override fun actionByBackButton() {
-        imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
         if (originCategoryList == changeCategoryList) {
             onBackPressedFragment()
         } else {
@@ -253,17 +270,18 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         itemTouchHelper.startDrag(viewHolder)
     }
 
-    override fun checked(isChecked: Boolean, item: Category) {
+    override fun checked(isChecked: Boolean, item: Any) {
+        val category = item as Category
         if (isChecked) {
-            removedList.add(item.id)
+            removedList.add(category.id)
         } else {
-            removedList.remove(item.id)
+            removedList.remove(category.id)
         }
 
         viewDataBinding.cancelText.isEnabled = removedList.size > 0
     }
 
-    override fun moved(list: List<Category>) {
+    override fun moved(list: List<Any>) {
         changeCategoryList = list as ArrayList<Category>
     }
 

@@ -46,6 +46,14 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
+        <action
+            android:id="@+id/action_main_bucket_to_bucket_edit"
+            app:destination="@id/bucket_edit_fragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"  />
+
 
     </fragment>
 
@@ -350,6 +358,14 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/bucket_edit_fragment"
+        android:name="womenproject.com.mybury.presentation.main.BucketListEditFragment"
+        android:label="BucketListEditFragment"
+        tools:layout="@layout/fragment_bucket_edit">
 
     </fragment>
 
