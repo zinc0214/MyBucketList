@@ -54,12 +54,12 @@ data class SimpleResponse(
     val retcode: String
 )
 
-@Parcelize
+
 data class BucketList(
     var bucketlists: List<BucketItem>,
     val popupYn: Boolean,
     val retcode: String
-) : Parcelable
+)
 
 data class DdayBucketListRespone(
     val dDayBucketlists: List<DdayBucketList>,
@@ -77,33 +77,14 @@ data class DdayBucketList(
 data class BucketItem(
     val id: String,
     var title: String,
-    val memo: String = "",
+    val memo: String,
     val open: Boolean = false,
     val pin: Boolean = false,
     val category: Category,
     var userCount: Int = 0,
     val goalCount: Int = 1,
     val dDay: Int?
-) : Parcelable, SearchResultType() {
-    fun getDdayText(): String {
-        dDay?.let {
-            return if (dDay < 0) "D${dDay.toString().replace("-", "+")}" else "D-${dDay}"
-        }
-        return ""
-    }
-
-    fun isOverDday(): Boolean {
-        return if (dDay != null) dDay < 0 else false
-    }
-
-    fun bucketType(): BucketType {
-        return when {
-            userCount >= goalCount -> BucketType.SUCCEED_ITEM
-            goalCount > 1 -> BucketType.COUNT_ITEM
-            else -> BucketType.BASE_ITEM
-        }
-    }
-}
+) : Parcelable
 
 @Parcelize
 data class DetailBucketItem(
@@ -131,18 +112,16 @@ data class AddBucketItem(
     val categoryId: String
 )
 
-@Parcelize
 data class BucketCategory(
     val categoryList: List<Category>,
     val retcode: String
-) : Parcelable
+)
 
 @Parcelize
 data class Category(
     val name: String,
     val id: String,
-    val priority: Int = 0,
-    val isDefault: Boolean = false
+    val priority: Int = 0
 ) : Parcelable
 
 data class AddCategoryRequest(
@@ -172,16 +151,16 @@ data class MyPageInfo(
     val startedCount: Int = 0,
     val completedCount: Int = 0,
     val dDayCount: Int = 0,
-    val categoryInfoList: List<CategoryInfo>,
+    val categoryList: List<MyPageCategory>,
     val retcode: String
 )
 
 @Parcelize
-data class CategoryInfo(
+data class MyPageCategory(
     val name: String,
     val id: String,
     val count: Int
-) : Parcelable, SearchResultType()
+) : Parcelable
 
 @Parcelize
 data class SupportInfo(
@@ -225,24 +204,6 @@ data class PurchasedResult(
     val susYn: String
 )
 
-@Parcelize
-data class BucketListOrder(
-    val userId: String,
-    val orders: List<String>
-) : Parcelable
-
-@Parcelize
-data class SearchRequest(
-    val userId: String,
-    val filter: String,
-    val searchText: String
-) : Parcelable
-
-data class SearchResult(
-    val bucketlists: List<BucketItem>,
-    val categoryInfos: List<CategoryInfo>
-)
-
 enum class ShowFilter {
     all, completed, started
 }
@@ -251,25 +212,30 @@ enum class DdayShowFilter {
     all, minus, plus
 }
 
-enum class SortFilter {
-    updatedDt, createdDt, custom
+
+enum class ListUpFilter {
+    updatedDt, createdDt
 }
 
 enum class DataTextType {
     eula, privacy, openSource
 }
 
-enum class BucketType {
-    SUCCEED_ITEM, COUNT_ITEM, BASE_ITEM;
+enum class SearchType {
+    All, Category, DDay;
 
-    fun int(): Int =
-        when (this) {
-            SUCCEED_ITEM -> 0
-            COUNT_ITEM -> 1
-            BASE_ITEM -> 2
+    fun getText(): String {
+        return when (this) {
+            All -> "전체"
+            Category -> "카테고리"
+            DDay -> "디데이"
         }
+    }
 }
 
+val SUCCEED_ITEM = 0
+val COUNT_ITEM = 1
+val BASE_ITEM = 2
 
 val DDAY = true
 val NORMAL = false
