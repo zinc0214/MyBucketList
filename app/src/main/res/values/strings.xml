@@ -67,4 +67,7 @@
     <string name="developer_list">김가은, 김하늘, 서태원\n안예지, 이명선, 한아연</string>
     <string name="bucket_retry_guide_desc">더보기에서 다시 도전해보세요!</string>
 
+    <!-- 검색 -->
+    <string name="close_desc">닫기</string>
+    <string name="search_list">리스트를 검색하세요</string>
 </resources>

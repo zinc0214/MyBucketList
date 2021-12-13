@@ -52,7 +52,15 @@
             app:enterAnim="@anim/slide_in_bottom"
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom"  />
+            app:popExitAnim="@anim/slide_out_bottom" />
+
+        <action
+            android:id="@+id/action_main_bucket_to_bucket_search"
+            app:destination="@id/bucket_search_fragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom" />
 
 
     </fragment>
@@ -366,6 +374,14 @@
         android:name="womenproject.com.mybury.presentation.main.BucketListEditFragment"
         android:label="BucketListEditFragment"
         tools:layout="@layout/fragment_bucket_edit">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/bucket_search_fragment"
+        android:name="womenproject.com.mybury.presentation.main.search.SearchFragment"
+        android:label="BucketListSearchFragment"
+        tools:layout="@layout/fragment_search">
 
     </fragment>
 
