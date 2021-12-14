@@ -1,10 +1,7 @@
 package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -71,9 +68,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
-        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(
-            setOnSoftKeyboardChangedListener()
-        )
         setCategoryList()
     }
 
@@ -284,25 +278,4 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
     override fun moved(list: List<Any>) {
         changeCategoryList = list as ArrayList<Category>
     }
-
-    private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
-        return ViewTreeObserver.OnGlobalLayoutListener {
-            val r = Rect()
-            viewDataBinding.root.getWindowVisibleDisplayFrame(r)
-
-            val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
-            try {
-                if (heightDiff < 300) {
-                    viewDataBinding.space.visibility = View.VISIBLE
-                } else {
-                    isKeyBoardShown = true
-                    viewDataBinding.space.visibility = View.GONE
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-
 }
