@@ -15,7 +15,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/_ffffff">
 
         <ImageView
             android:id="@+id/closeButton"
@@ -87,6 +88,7 @@
             <RadioButton
                 android:id="@+id/allType"
                 style="@style/SearchChipStyle"
+                android:checked="true"
                 android:text="@{SearchType.All.text}"
                 tools:text="전체" />
 
@@ -103,6 +105,20 @@
                 tools:text="전체" />
 
         </RadioGroup>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_result_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/_fafafa"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchRadioGroup"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_bucket_doing_simple" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
