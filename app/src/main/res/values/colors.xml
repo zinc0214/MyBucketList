@@ -72,4 +72,6 @@
     <color name="_cc000000">#cc000000</color>
     <color name="_e6000000">#E6000000</color>
     <color name="_80000000">#80000000</color>
+
+    <color name="transparent">#00ffffff</color>
 </resources>
