@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.databinding.FragmentBucketEditBinding
+import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
@@ -16,7 +16,7 @@ import womenproject.com.mybury.presentation.viewmodels.BucketEditViewModel
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
-class BucketListEditFragment : BaseFragment<FragmentBucketEditBinding, BucketEditViewModel>(),
+class BucketListSortFragment : BaseFragment<FragmentBucketSortBinding, BucketEditViewModel>(),
     ItemDragListener,
     ItemMovedListener {
 
@@ -25,7 +25,7 @@ class BucketListEditFragment : BaseFragment<FragmentBucketEditBinding, BucketEdi
     private var originBucketList = listOf<BucketItem>()
 
     override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_edit
+        get() = R.layout.fragment_bucket_sort
 
     override val viewModel: BucketEditViewModel
         get() = BucketEditViewModel()
