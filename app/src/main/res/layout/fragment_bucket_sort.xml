@@ -15,7 +15,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/item_sort_base_bucket" />
+            tools:listitem="@layout/item_edit_bucket" />
 
         <include
             android:id="@+id/toolBarLayout"

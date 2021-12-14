@@ -153,7 +153,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
 
     private fun bucketSortClickListener() = View.OnClickListener {
-        val directions = MainFragmentDirections.actionMainBucketToBucketEdit()
+        val directions = MainFragmentDirections.actionMainBucketToBucketSort()
         it.findNavController().navigate(directions)
     }
 
