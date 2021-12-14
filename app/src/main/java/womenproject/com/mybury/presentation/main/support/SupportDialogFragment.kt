@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.main
+package womenproject.com.mybury.presentation.main.support
 
 import android.app.ActionBar
 import android.text.Html
