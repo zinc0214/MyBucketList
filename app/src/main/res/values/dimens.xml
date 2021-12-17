@@ -5,32 +5,14 @@
     <dimen name="toolBarLayout">140dp</dimen>
     <dimen name="toolBarTitle">64dp</dimen>
     <dimen name="minimumBucketItemHeight">64dp</dimen>
-    <dimen name="baseBucketItemHeight">64dp</dimen>
-    <dimen name="countBucketItemHeight">81dp</dimen>
-    <dimen name="baseBucketMaxHeight">86dp</dimen>
-
-    <dimen name="lineSpacingExtra">6sp</dimen>
 
     <dimen name="titleMargin">22dp</dimen>
-    <dimen name="initDp">0dp</dimen>
 
     <dimen name="writeFragmentWidth">320dp</dimen>
-    <dimen name="calendarTextSize">12sp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
 
     <dimen name="image_width">70dp</dimen>
-    <dimen name="image_final_width">40dp</dimen>
-    <dimen name="spacing_normal">16dp</dimen>
 
-    <dimen name="scroll_top">128dp</dimen>
-
-    <dimen name="_200">200dp</dimen>
-    <dimen name="_24">24dp</dimen>
     <dimen name="_26">26dp</dimen>
     <dimen name="_14">14dp</dimen>
-    <dimen name="_20">20dp</dimen>
-    <dimen name="_0">0dp</dimen>
 
 </resources>

@@ -4,13 +4,7 @@
     <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#5a95ff</color>
 
-    <color name="testColor">#ffa2a2</color>
-    <color name="trans">#00ffa2a2</color>
-    <color name="textOriColor">#3bff9393</color>
-
-    <color name="_000000">#000000</color>
     <color name="_ffffff">#ffffff</color>
-    <color name="_fd0505">#fd0505</color>
     <color name="_578afb">#578afb</color>
     <color name="_e8e8e8">#e8e8e8</color>
     <color name="_434343">#434343</color>
@@ -34,7 +28,6 @@
     <color name="_dddddd">#dddddd</color>
     <color name="_dfdfdf">#dfdfdf</color>
     <color name="_cccccc">#cccccc</color>
-    <color name="_cca248">#cca248</color>
     <color name="_859ecc">#859ecc</color>
     <color name="_f6fcff">#f6fcff</color>
     <color name="_4656e8">#4656e8</color>
@@ -47,7 +40,6 @@
     <color name="_182e53">#182e53</color>
     <color name="_febc30">#febc30</color>
     <color name="_cbd9ea">#cbd9ea</color>
-    <color name="_4a63ed">#4a63ed</color>
     <color name="_fff0b0">#fff0b0</color>
     <color name="_c4c4c4">#c4c4c4</color>
     <color name="_e6e6e6">#e6e6e6</color>
@@ -60,19 +52,14 @@
     <color name="_d8d7d7">#D8D7D7</color>
 
 
-    <color name="_66859ECC">#66859ECC</color>
-    <color name="_33cca248">#33cca248</color>
     <color name="_99434343">#99434343</color>
     <color name="_33ffffff">#33ffffff</color>
-    <color name="_66859ecc">#66859ecc</color>
     <color name="_b33341c0">#b33341c0</color>
     <color name="_00ffffff">#00ffffff</color>
     <color name="_4D000000">#4D000000</color>
     <color name="_b3ffffff">#b3ffffff</color>
     <color name="_4cc8cdda">#4cc8cdda</color>
     <color name="_ccffffff">#ccffffff</color>
-    <color name="_cc000000">#cc000000</color>
-    <color name="_e6000000">#E6000000</color>
     <color name="_80000000">#80000000</color>
 
     <color name="transparent">#00ffffff</color>

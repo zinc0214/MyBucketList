@@ -17,18 +17,6 @@
 
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-
-    <style name="CustomProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
-
-        <item name="android:spacing">0dp</item>
-        <item name="android:padding">0dp</item>
-        <item name="android:lineSpacingExtra">0dp</item>
-    </style>
 
     <style name="FilterDialogCategoryTextStyle" parent="Base.Widget.AppCompat.TextView">
         <item name="android:textSize">14sp</item>
@@ -134,24 +122,6 @@
     </style>
 
 
-    <style name="CalenderViewCustom" parent="Theme.AppCompat">
-        <item name="colorAccent">@color/_fd0505</item>
-        <item name="colorPrimary">@color/_a6c6ff</item>
-    </style>
-
-    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/_000000</item>
-        <item name="android:weekNumberColor">@color/_fd0505</item>
-    </style>
-
-    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/_000000</item>
-    </style>
-
-    <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
-        <item name="android:textColor">@color/mcv_text_date_dark</item>
-    </style>
-
     <style name="CalendarWeek" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/_888888</item>
@@ -178,19 +148,8 @@
         <item name="android:layout_marginEnd">16dp</item>
     </style>
 
-    <style name="applicationTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:dropDownListViewStyle">@style/mySpinnerStyle</item>
-    </style>
-
-    <style name="mySpinnerStyle" parent="android:Widget.ListView.DropDown">
-        <item name="android:divider">@color/_a6c6ff</item>
-        <item name="android:dividerHeight">0.6dp</item>
-    </style>
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
 
