@@ -73,7 +73,7 @@ class CountBucketItemViewHolder(
             binding.bucketItemLayout.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
             binding.horizontalProgressBar.progressDrawable = MyBuryApplication.context.getDrawable(R.drawable.dday_horizontal_progressbar)
             binding.successButtonView.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
-            binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_33cca248_r4)
+            binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_efefef_r4_strk_e8e8e8)
             binding.userCount.text = formattingCountText
             binding.ddayTextView.visibility = View.GONE
         }
@@ -147,13 +147,12 @@ class CountBucketItemViewHolder(
 
     private fun setFinalSuccessUIBackground() {
         successImageView.setBackgroundResource(R.drawable.check_complete)
-        successImageView.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._ffffff)
         circularProgressBar.visibility = View.GONE
 
         if (isDdayUI) {
             binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffca5a_r4)
         } else {
-            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_a6c6ff_r4)
+            binding.bucketItemImage.setBackgroundResource(R.drawable.shape_efefef_r4)
         }
     }
 

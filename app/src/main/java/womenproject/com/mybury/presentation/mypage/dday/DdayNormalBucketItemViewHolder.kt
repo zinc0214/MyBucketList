@@ -33,7 +33,7 @@ class DdayNormalBucketItemViewHolder(private val binding: ItemBucketDoingSimpleB
 
     override fun setFinalSuccessUIBackground() {
         super.setFinalSuccessUIBackground()
-        bucketItemImage.setBackgroundResource(R.drawable.shape_ffca5a_r4)
+        bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_e8e8e8)
     }
 
     override fun setDoneSuccessUIButton() {
@@ -45,7 +45,7 @@ class DdayNormalBucketItemViewHolder(private val binding: ItemBucketDoingSimpleB
     override fun setDdayColor() {
         binding.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.bucket_dday_click_background)
         binding.successButtonLayout.circularProgressBar.spinningBarColor = MyBuryApplication.context.getColor(R.color._ffca5a)
-        binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_33cca248_r4)
+        binding.bucketSucceedImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_efefef_r4_strk_e8e8e8)
 
         binding.ddayTextView.visibility = View.GONE
     }
