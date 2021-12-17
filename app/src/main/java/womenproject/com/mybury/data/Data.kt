@@ -84,7 +84,15 @@ data class BucketItem(
     var userCount: Int = 0,
     val goalCount: Int = 1,
     val dDay: Int?
-) : Parcelable
+) : Parcelable {
+    fun getUserCountString() :String {
+        return userCount.toString()
+    }
+
+    fun getGoalCountString() : String {
+        return goalCount.toString()
+    }
+}
 
 @Parcelize
 data class DetailBucketItem(

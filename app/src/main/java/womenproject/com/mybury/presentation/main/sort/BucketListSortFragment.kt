@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.main
+package womenproject.com.mybury.presentation.main.sort
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +10,6 @@ import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
-import womenproject.com.mybury.presentation.main.bucketlist.EditBucketListAdapter
 import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
 import womenproject.com.mybury.presentation.viewmodels.BucketEditViewModel
 import womenproject.com.mybury.ui.ItemDragListener
@@ -61,7 +60,7 @@ class BucketListSortFragment : BaseFragment<FragmentBucketSortBinding, BucketEdi
     }
 
     private fun setBucketListAdapter() {
-        val editBucketListAdapter = EditBucketListAdapter(
+        val editBucketListAdapter = SortBucketListAdapter(
             changeBucketList,
             this,
             this

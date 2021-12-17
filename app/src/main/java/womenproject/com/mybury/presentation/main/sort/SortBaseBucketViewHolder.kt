@@ -1,14 +1,14 @@
-package womenproject.com.mybury.presentation.main.bucketlist
+package womenproject.com.mybury.presentation.main.sort
 
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.databinding.ItemEditBucketBinding
+import womenproject.com.mybury.databinding.ItemSortBaseBucketBinding
 import womenproject.com.mybury.ui.ItemDragListener
 
-class EditBucketListViewHolder(
-    private val binding: ItemEditBucketBinding,
+class SortBaseBucketViewHolder(
+    private val binding: ItemSortBaseBucketBinding,
     private val dragListener: ItemDragListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -19,7 +19,7 @@ class EditBucketListViewHolder(
 
             editImageView.setOnTouchListener { v, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
-                    dragListener.onStartDrag(this@EditBucketListViewHolder)
+                    dragListener.onStartDrag(this@SortBaseBucketViewHolder)
                 }
                 false
             }

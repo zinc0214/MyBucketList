@@ -1,4 +1,4 @@
-package womenproject.com.mybury.presentation.main.bucketlist
+package womenproject.com.mybury.presentation.main.sort
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
