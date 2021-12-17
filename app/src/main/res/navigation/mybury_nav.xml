@@ -371,7 +371,7 @@
 
     <fragment
         android:id="@+id/bucket_sort_fragment"
-        android:name="womenproject.com.mybury.presentation.main.BucketListSortFragment"
+        android:name="womenproject.com.mybury.presentation.main.sort.BucketListSortFragment"
         android:label="BucketSortFragment"
         tools:layout="@layout/fragment_bucket_sort">
 
