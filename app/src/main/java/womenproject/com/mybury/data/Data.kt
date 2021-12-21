@@ -85,12 +85,23 @@ data class BucketItem(
     val goalCount: Int = 1,
     val dDay: Int?
 ) : Parcelable {
-    fun getUserCountString() :String {
-        return userCount.toString()
+    fun getDdayText(): String {
+        dDay?.let {
+            return if (dDay < 0) "D${dDay.toString().replace("-", "+")}" else "D-${dDay}"
+        }
+        return ""
     }
 
-    fun getGoalCountString() : String {
-        return goalCount.toString()
+    fun isOverDday(): Boolean {
+        return if (dDay != null) dDay < 0 else false
+    }
+
+    fun bucketType(): BucketType {
+        return when {
+            userCount >= goalCount -> BucketType.SUCCEED_ITEM
+            goalCount > 1 -> BucketType.COUNT_ITEM
+            else -> BucketType.BASE_ITEM
+        }
     }
 }
 
@@ -241,9 +252,17 @@ enum class SearchType {
     }
 }
 
-val SUCCEED_ITEM = 0
-val COUNT_ITEM = 1
-val BASE_ITEM = 2
+enum class BucketType {
+    SUCCEED_ITEM, COUNT_ITEM, BASE_ITEM;
+
+    fun int(): Int =
+        when (this) {
+            SUCCEED_ITEM -> 0
+            COUNT_ITEM -> 1
+            BASE_ITEM -> 2
+        }
+}
+
 
 val DDAY = true
 val NORMAL = false

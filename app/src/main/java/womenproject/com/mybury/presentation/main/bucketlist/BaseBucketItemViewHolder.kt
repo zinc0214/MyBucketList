@@ -23,8 +23,10 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 10..
  */
 
-abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
-                                        private val showSnackBar: ((BucketItem) -> Unit)? = null) : RecyclerView.ViewHolder(binding.root) {
+abstract class BaseBucketItemViewHolder(
+    private val binding: ViewDataBinding,
+    private val showSnackBar: ((BucketItem) -> Unit)? = null
+) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem)
 
@@ -36,8 +38,8 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
     lateinit var bucketTitle: TextView
     lateinit var circularProgressBar: CircularProgressButton
     lateinit var userCountText: TextView
-    lateinit var ddayText : TextView
-    lateinit var ddayCountView : TextView
+    lateinit var ddayText: TextView
+    lateinit var ddayCountView: TextView
 
     val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
@@ -51,13 +53,12 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
                     bucketItemLayout.isClickable = false
                     postDelayed({
                         setFinalSuccessUIButton()
-                        addBucketSuccessCount()
+                        addBucketSuccessCount(info)
                     }, 500)
                     postDelayed({
                         revertAnimation()
                         if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             setFinalSuccessUIBackground()
-                            setFinalSuccessWithCountBucket()
                         } else {
                             setDoneSuccessUIButton()
                         }
@@ -71,10 +72,9 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
                     postDelayed({
                         if (info.goalCount == 1 || info.userCount >= info.goalCount) {
                             bucketItemImage.visibility = View.GONE
-                            bucketItemLayout.isClickable = true
                             ddayCountView.visibility = View.INVISIBLE
                         }
-
+                        bucketItemLayout.isClickable = true
                     }, 900)
                 }
             }
@@ -82,14 +82,15 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
         }
     }
 
-    open fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
-        duration = 700
-        startDelay = 0
-        addUpdateListener { animation ->
-            progressButton.setProgress(animation.animatedValue as Float)
+    open fun progressAnimator(progressButton: ProgressButton): ValueAnimator =
+        ValueAnimator.ofFloat(0F, 100F).apply {
+            duration = 700
+            startDelay = 0
+            addUpdateListener { animation ->
+                progressButton.setProgress(animation.animatedValue as Float)
+            }
+            bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_a6c6ff)
         }
-        bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_13_a6c6ff)
-    }
 
     open fun setFinalSuccessUIButton() {
         successImageView.backgroundTintList = context.getColorStateList(R.color._efefef)
@@ -114,8 +115,7 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
     open fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
     }
 
-    open fun createOnClickBucketSuccessListener(
-            tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
+    open fun createOnClickBucketSuccessListener(bucketItemInfo: BucketItem): View.OnClickListener {
         return View.OnClickListener {
             bucketSuccess(bucketItemInfo)
         }
@@ -148,13 +148,15 @@ abstract class BaseBucketItemViewHolder(private val binding: ViewDataBinding,
 
     }
 
-    open fun createOnClickBucketSuccessLayoutListener(tokenId: String?, bucketItemInfo: BucketItem): View.OnClickListener {
+    open fun createOnClickBucketSuccessLayoutListener(
+        bucketItemInfo: BucketItem
+    ): View.OnClickListener {
         return View.OnClickListener {
-            createOnClickBucketSuccessListener(tokenId, bucketItemInfo)
+            createOnClickBucketSuccessListener(bucketItemInfo)
         }
     }
 
     open fun setFinalSuccessWithCountBucket() {}
-    open fun addBucketSuccessCount() {}
+    open fun addBucketSuccessCount(info: BucketItem) {}
     open fun setDdayColor() {}
 }
