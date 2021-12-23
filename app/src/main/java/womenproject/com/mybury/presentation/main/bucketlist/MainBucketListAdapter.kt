@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketType
-import womenproject.com.mybury.databinding.ItemBucketDoingCountBinding
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
@@ -34,13 +33,7 @@ open class MainBucketListAdapter(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
-            BucketType.COUNT_ITEM.int() -> CountBucketItemViewHolder(
-                false,
-                ItemBucketDoingCountBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-                ), showSnackBar
-            )
-            else -> BaseNormalBucketItemViewHolder(
+            else -> BaseBucketItemViewHolder(
                 ItemBucketDoingSimpleBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 ), showSnackBar
@@ -54,11 +47,12 @@ open class MainBucketListAdapter(
             is SucceedBucketItemViewHolder -> {
                 holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
             }
-            is CountBucketItemViewHolder -> {
-                holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
-            }
             is BaseBucketItemViewHolder -> {
-                holder.bind(createOnClickBucketListener(bucketList[position]), bucketList[position])
+                holder.bind(
+                    createOnClickBucketListener(bucketList[position]),
+                    bucketList[position],
+                    false
+                )
             }
         }
     }
