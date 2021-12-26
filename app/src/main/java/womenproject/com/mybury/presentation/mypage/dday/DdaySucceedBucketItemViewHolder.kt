@@ -1,14 +1,13 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.databinding.ItemDdayBucketSucceedBinding
+import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder
 
-class DdaySucceedBucketItemViewHolder(private val binding: ItemDdayBucketSucceedBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class DdaySucceedBucketItemViewHolder(private val binding: ItemDdayBucketSucceedBinding) : BaseBucketItemViewHolder(binding) {
 
-    fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
+    override fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
         binding.apply {
 
             setUI(bucketItemInfo, bucketListener)
@@ -16,7 +15,9 @@ class DdaySucceedBucketItemViewHolder(private val binding: ItemDdayBucketSucceed
         }
     }
 
-    private fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+    override fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+        super.setUI(bucketItemInfo, bucketListener)
+
         binding.bucketTitleText = bucketItemInfo.title
         binding.bucketClickListener = bucketListener
     }

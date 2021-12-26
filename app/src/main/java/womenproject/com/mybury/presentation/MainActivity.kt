@@ -19,26 +19,23 @@ import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_mybury_support.*
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.*
 import womenproject.com.mybury.data.Preference.Companion.isAlreadySupportShow
-import womenproject.com.mybury.data.PurchasableItem
-import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
-import womenproject.com.mybury.presentation.main.MainFragment
-import womenproject.com.mybury.presentation.main.MainFragmentDirections
-import womenproject.com.mybury.presentation.main.support.SupportDialogFragment
-import womenproject.com.mybury.presentation.main.support.SupportFailDialogFragment
-import womenproject.com.mybury.presentation.main.support.SupportSuccessDialogFragment
+import womenproject.com.mybury.presentation.main.*
 import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.showToast
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**

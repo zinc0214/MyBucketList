@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -24,9 +23,9 @@
     </data>
 
     <LinearLayout
+        android:onClick="@{bucketClickListener}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{bucketClickListener}"
         android:orientation="vertical">
 
         <LinearLayout
@@ -40,9 +39,9 @@
 
                 <ImageView
                     android:id="@+id/bucket_succeed_image"
+                    android:background="@drawable/shape_66859ecc_r4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/shape_efefef_r4_strk_e8e8e8" />
+                    android:layout_height="match_parent" />
 
                 <ImageView
                     android:id="@+id/bucket_item_image"
@@ -56,36 +55,34 @@
                     android:layout_marginStart="16dp">
 
                     <TextView
-                        android:id="@+id/bucket_title"
-                        style="@style/BucketItemTitleTextStyle"
                         android:layout_marginTop="21dp"
                         android:layout_marginBottom="21dp"
-                        android:alpha="0.6"
-                        android:ellipsize="end"
+                        android:id="@+id/bucket_title"
                         android:maxLines="2"
-                        android:text="@{bucketTitleText}"
-                        android:textColor="@color/_434343"
-                        tools:text="버킷" />
+                        android:ellipsize="end"
+                        style="@style/BucketItemTitleTextStyle"
+                        android:text="@{bucketTitleText}" />
 
                     <RelativeLayout
                         android:id="@+id/progress_layout"
-                        android:layout_width="64dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
+                        android:onClick="@{bucketSuccessClickListener}"
                         android:layout_centerInParent="true"
-                        android:onClick="@{bucketSuccessClickListener}">
+                        android:layout_alignParentRight="true"
+                        android:layout_width="64dp"
+                        android:layout_height="match_parent">
 
                         <include
+                            android:layout_marginEnd="16dp"
                             android:id="@+id/success_button_layout"
                             layout="@layout/widget_bucket_done_button"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="16dp" />
+                            android:layout_centerVertical="true" />
 
 
                     </RelativeLayout>
+
 
                 </RelativeLayout>
 
@@ -95,6 +92,7 @@
 
 
     </LinearLayout>
+
 
 
 </layout>

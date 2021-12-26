@@ -10,36 +10,30 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp">
+    <RelativeLayout
+        android:layout_width="32dp"
+        android:layout_height="32dp">
 
         <womenproject.com.mybury.ui.loadingbutton.customView.CircularProgressButton
             android:id="@+id/circular_progress_bar"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@drawable/shape_00ffffff_r4"
             android:onClick="@{bucketSuccessListener}"
             app:finalCornerAngle="50dp"
             app:initialCornerAngle="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:spinning_bar_color="@color/_a6c6ff"
             app:spinning_bar_width="1.6dp" />
 
         <ImageView
             android:id="@+id/success_img"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/bucket_item_check"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bucket_item_check" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 
 </layout>
