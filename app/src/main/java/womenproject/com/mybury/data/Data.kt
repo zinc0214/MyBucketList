@@ -54,12 +54,12 @@ data class SimpleResponse(
     val retcode: String
 )
 
-
+@Parcelize
 data class BucketList(
     var bucketlists: List<BucketItem>,
     val popupYn: Boolean,
     val retcode: String
-)
+) : Parcelable
 
 data class DdayBucketListRespone(
     val dDayBucketlists: List<DdayBucketList>,
