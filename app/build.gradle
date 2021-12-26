@@ -38,10 +38,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0-beta01'
 
     // 얘는 그지같은 문제가 있으므로 일단 업데이트 보류
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-alpha2'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 

@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
-        <variable
-            name="sortClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="searchClickListener"
-            type="android.view.View.OnClickListener" />
 
         <variable
             name="filterClickListener"
@@ -24,52 +15,26 @@
         android:background="@drawable/toolbar_background"
         android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="64dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
-                android:background="@drawable/mybury_logo_icon_2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/sortImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:onClick="@{sortClickListener}"
-                android:src="@drawable/bucket_sort"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/searchImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:onClick="@{searchClickListener}"
-                android:src="@drawable/bucket_search"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/sortImageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_centerInParent="true"
+                android:background="@drawable/mybury_logo_icon" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:onClick="@{filterClickListener}"
-                android:src="@drawable/main_filter_background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/searchImageView"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/main_filter_background"
+                android:onClick="@{filterClickListener}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
 
     </RelativeLayout>
