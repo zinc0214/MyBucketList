@@ -223,6 +223,19 @@ data class PurchasedResult(
     val susYn: String
 )
 
+@Parcelize
+data class BucketListOrder(
+    val userId: String,
+    val orders: List<String>
+) : Parcelable
+
+@Parcelize
+data class AllBucketListRequest(
+    val userId: String,
+    val filter: String,
+    val sort: String
+) : Parcelable
+
 enum class ShowFilter {
     all, completed, started
 }
@@ -232,8 +245,8 @@ enum class DdayShowFilter {
 }
 
 
-enum class ListUpFilter {
-    updatedDt, createdDt
+enum class SortFilter {
+    updatedDt, createdDt, custom
 }
 
 enum class DataTextType {
