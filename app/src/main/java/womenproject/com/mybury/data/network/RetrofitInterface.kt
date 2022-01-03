@@ -224,7 +224,11 @@ interface RetrofitInterface {
         @Query("sort") sort: String
     ): BucketList
 
-
+    @POST("/change_order")
+    suspend fun updateBucketListOrder(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketListOrder : BucketListOrder
+    ): SimpleResponse
 }
 
 internal object APIClient {

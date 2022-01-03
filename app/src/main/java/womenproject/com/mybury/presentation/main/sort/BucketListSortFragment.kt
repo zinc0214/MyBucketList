@@ -12,19 +12,21 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
+import womenproject.com.mybury.data.SortFilter
 import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
-import womenproject.com.mybury.presentation.viewmodels.BucketEditViewModel
+import womenproject.com.mybury.presentation.viewmodels.BucketSortViewModel
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
+import womenproject.com.mybury.util.showToast
 
 class BucketListSortFragment : Fragment(),
     ItemDragListener,
     ItemMovedListener {
 
-    private lateinit var viewModel: BucketEditViewModel
+    private lateinit var viewModel: BucketSortViewModel
     private lateinit var binding: FragmentBucketSortBinding
 
     private lateinit var itemTouchHelper: ItemTouchHelper
@@ -41,7 +43,7 @@ class BucketListSortFragment : Fragment(),
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_sort, container, false)
-        viewModel = BucketEditViewModel()
+        viewModel = BucketSortViewModel()
         return binding.root
     }
 
@@ -62,23 +64,48 @@ class BucketListSortFragment : Fragment(),
     }
 
     private fun setUpObservers() {
-        viewModel.loadState.observe(viewLifecycleOwner) {
+        viewModel.bucketLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.START -> {
                     startLoading()
                 }
                 BaseViewModel.LoadState.FAIL -> {
                     stopLoading()
+                    "다시 시도해주세요.".showToast(requireContext())
                 }
                 BaseViewModel.LoadState.RESTART -> {
                     getMainBucketList()
                 }
-                else -> {
+                BaseViewModel.LoadState.SUCCESS -> {
                     stopLoading()
+                }
+                else -> {
+                    // Do Nothing
                 }
             }
         }
 
+        viewModel.bucketUpdateState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    "다시 시도해주세요.".showToast(requireContext())
+                }
+                BaseViewModel.LoadState.RESTART -> {
+                    updateBucketOrder()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                    successUpdateBucketOrder()
+                }
+                else -> {
+                    // Do Nothing
+                }
+            }
+        }
         viewModel.allBucketResult.observe(viewLifecycleOwner) {
             changeBucketList = it
             originBucketList = it
@@ -88,7 +115,7 @@ class BucketListSortFragment : Fragment(),
 
     private fun setUpViews() {
         setBucketListAdapter()
-        binding.toolBarLayout.setConfirmClickListener { updateBucketSort() }
+        binding.toolBarLayout.setConfirmClickListener { updateBucketOrder() }
     }
 
     private fun setBucketListAdapter() {
@@ -107,8 +134,14 @@ class BucketListSortFragment : Fragment(),
         itemTouchHelper.attachToRecyclerView(binding.bucketEditListView)
     }
 
-    private fun updateBucketSort() {
+    private fun updateBucketOrder() {
+        viewModel.updateBucketListOrder(changeBucketList)
+    }
 
+    private fun successUpdateBucketOrder() {
+        "버킷리스트가 새롭게 정렬되었습니다.".showToast(requireContext())
+        Preference.setFilterListUp(requireContext(), SortFilter.custom)
+        requireActivity().onBackPressed()
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {

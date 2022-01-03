@@ -9,7 +9,8 @@
     <string name="filter_standard">정렬 기준</string>
     <string name="show_list">표시 항목</string>
     <string name="sort_by_update">업데이트 순</string>
-    <string name="sort_by_written">등록 순</string>
+    <string name="sort_by_create">등록 순</string>
+    <string name="sort_by_customer">사용자 정렬 순</string>
     <string name="show_dday_state">D-day</string>
     <string name="filter_set">적용</string>
 
