@@ -108,10 +108,10 @@ interface RetrofitInterface {
     ): Observable<DdayBucketListRespone>
 
     @GET("/beforeWrite")
-    fun requestBeforeWrite(
+    suspend fun requestBeforeWrite(
         @Header("X-Auth-Token") token: String,
         @Query("userId") userId: String
-    ): Observable<BucketCategory>
+    ): BucketCategory
 
     @POST("/write")
     @Multipart
@@ -242,7 +242,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("https://www.my-bury.com")
+                .baseUrl("http://13.124.49.86")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

@@ -131,16 +131,18 @@ data class AddBucketItem(
     val categoryId: String
 )
 
+@Parcelize
 data class BucketCategory(
     val categoryList: List<Category>,
     val retcode: String
-)
+) : Parcelable
 
 @Parcelize
 data class Category(
     val name: String,
     val id: String,
-    val priority: Int = 0
+    val priority: Int = 0,
+    val isDefault: Boolean = false
 ) : Parcelable
 
 data class AddCategoryRequest(
