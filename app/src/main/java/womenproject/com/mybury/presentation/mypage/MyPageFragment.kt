@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.MyPageCategory
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
@@ -65,9 +64,11 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                 val layoutManager = LinearLayoutManager(context)
 
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager = layoutManager
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager =
+                    layoutManager
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter = MyPageCategoryListAdapter(context, info.categoryList as MutableList<MyPageCategory>)
+                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
+                    MyPageCategoryListAdapter(info.categoryList.filter { it.count > 0 })
 
                 setUpView(info)
             }
@@ -97,7 +98,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 mypageScrollLayout.dDayCountText.text = _myPageInfo.dDayCount.toString()
 
                 constraintLayout.setTransitionListener(object : MotionLayout.TransitionListener {
-                    override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                    override fun onTransitionTrigger(
+                        p0: MotionLayout?,
+                        p1: Int,
+                        p2: Boolean,
+                        p3: Float
+                    ) {
 
                     }
 
@@ -105,7 +111,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                     }
 
-                    override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+                    override fun onTransitionChange(
+                        p0: MotionLayout?,
+                        p1: Int,
+                        p2: Int,
+                        p3: Float
+                    ) {
 
                     }
 
@@ -133,7 +144,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
             mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
             mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
-             mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
+            mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
             mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
             mypageMoreMenuLarge.contactClickListener = contactToMyBuryClickListener
 
@@ -150,9 +161,19 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
             if (num == 1) {
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my, null))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(
+                    resources.getDrawable(
+                        R.drawable.default_profile_my,
+                        null
+                    )
+                )
             } else {
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury, null))
+                viewDataBinding.headerLayout.profileImg.setImageDrawable(
+                    resources.getDrawable(
+                        R.drawable.default_profile_bury,
+                        null
+                    )
+                )
             }
         } else {
             Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImg)

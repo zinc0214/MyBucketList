@@ -46,7 +46,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
             viewDataBinding.openImg.background = requireContext().getDrawable(R.drawable.open_disable)
         }
 
-        if (!bucketItem.category.equals("없음")) {
+        if (bucketItem.category != "없음") {
             viewDataBinding.categoryText.text = bucketItem.category
             viewDataBinding.categoryText.setEnableTextColor()
             viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
