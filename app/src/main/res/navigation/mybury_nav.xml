@@ -49,19 +49,10 @@
         <action
             android:id="@+id/action_main_bucket_to_bucket_sort"
             app:destination="@id/bucket_sort_fragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
-
-        <action
-            android:id="@+id/action_main_bucket_to_bucket_search"
-            app:destination="@id/bucket_search_fragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
-
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
@@ -374,14 +365,6 @@
         android:name="womenproject.com.mybury.presentation.main.sort.BucketListSortFragment"
         android:label="BucketSortFragment"
         tools:layout="@layout/fragment_bucket_sort">
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/bucket_search_fragment"
-        android:name="womenproject.com.mybury.presentation.main.search.SearchFragment"
-        android:label="BucketListSearchFragment"
-        tools:layout="@layout/fragment_search">
 
     </fragment>
 

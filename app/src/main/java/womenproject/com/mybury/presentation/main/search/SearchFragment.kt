@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
@@ -16,7 +16,7 @@ import womenproject.com.mybury.databinding.FragmentSearchBinding
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.SearchViewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : DialogFragment() {
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var binding: FragmentSearchBinding
@@ -31,6 +31,11 @@ class SearchFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         viewModel = SearchViewModel()
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogTheme)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,7 +82,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun search(word: String) {
-        viewModel.loadAllListSearch()
+        viewModel.loadAllListSearch(selectedSearchType.getLowerText(), word)
     }
 
     private fun setUpObserve() {
