@@ -227,7 +227,7 @@ interface RetrofitInterface {
     @POST("/change_order")
     suspend fun updateBucketListOrder(
         @Header("X-Auth-Token") token: String,
-        @Body bucketListOrder : BucketListOrder
+        @Body bucketListOrder: BucketListOrder
     ): SimpleResponse
 }
 
@@ -242,7 +242,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("http://13.124.49.86")
+                .baseUrl("https://www.my-bury.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
