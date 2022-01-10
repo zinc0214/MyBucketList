@@ -16,7 +16,7 @@ class SearchViewModel : BaseViewModel() {
     private val _allBucketSearchResult = MutableLiveData<List<BucketItem>>()
     val allBucketSearchResult: LiveData<List<BucketItem>> = _allBucketSearchResult
 
-    fun loadAllListSearch() {
+    fun loadAllListSearch(searchType: String, searchWord: String) {
         if (accessToken == null || userId == null) {
             return
         }
