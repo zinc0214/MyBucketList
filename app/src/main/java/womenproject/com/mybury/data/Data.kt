@@ -265,6 +265,14 @@ enum class SearchType {
             DDay -> "디데이"
         }
     }
+
+    fun getLowerText() : String {
+        return when (this) {
+            All -> "all"
+            Category -> "category"
+            DDay -> "dday"
+        }
+    }
 }
 
 enum class BucketType {
