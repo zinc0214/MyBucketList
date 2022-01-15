@@ -1,26 +1,31 @@
 package womenproject.com.mybury.presentation.main.search
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.SearchType
 import womenproject.com.mybury.databinding.FragmentSearchBinding
-import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
+import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.SearchViewModel
 
-class SearchFragment : DialogFragment() {
+class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var binding: FragmentSearchBinding
     private var selectedSearchType = SearchType.All
+    private var resultList = listOf<SearchResultType>()
+    private lateinit var imm: InputMethodManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,18 +35,21 @@ class SearchFragment : DialogFragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         viewModel = SearchViewModel()
+        imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.FullScreenDialogTheme)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObserve()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (resultList.isNotEmpty()) {
+            setUpResultList()
+        }
     }
 
     private fun setUpViews() {
@@ -66,12 +74,7 @@ class SearchFragment : DialogFragment() {
 
             searchEditTextView.setOnEditorActionListener { textView, id, keyEvent ->
                 if (id == EditorInfo.IME_ACTION_SEARCH) {
-                    Toast.makeText(
-                        context,
-                        "Type : ${selectedSearchType.getText()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                    imm.hideSoftInputFromWindow(requireView().windowToken, 0)
                     search("${textView.text}")
                 }
                 false
@@ -86,11 +89,56 @@ class SearchFragment : DialogFragment() {
     }
 
     private fun setUpObserve() {
-        viewModel.allBucketSearchResult.observe(viewLifecycleOwner, allResultObserve)
+        viewModel.allBucketSearchResult.observe(viewLifecycleOwner) {
+            Log.e("ayhan", "result : $it")
+            resultList = it
+            setUpResultList()
+        }
+
+        viewModel.searchSate.observe(viewLifecycleOwner) {
+            when (it!!) {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    binding.searchResultIsBlankTextView.visibility = View.VISIBLE
+
+                }
+                BaseViewModel.LoadState.RESTART -> {
+                    search(binding.searchEditTextView.text.toString())
+                }
+            }
+        }
     }
 
-    private val allResultObserve = Observer<List<BucketItem>> {
+    private fun setUpResultList() {
         binding.searchResultList.adapter =
-            MainBucketListAdapter(it, {})
+            SearchResultListAdapter(selectedSearchType, resultList) { bucketItem ->
+                showCancelSnackBar(requireView(), bucketItem)
+            }
+        binding.searchResultIsBlankTextView.visibility = View.GONE
+    }
+
+    private fun showCancelSnackBar(view: View, info: BucketItem) {
+        val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
+        //MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
+    }
+
+    private fun startLoading() {
+        if (activity is MainActivity) {
+            val activity = activity as MainActivity
+            activity.startLoading()
+        }
+    }
+
+    private fun stopLoading() {
+        if (activity is MainActivity) {
+            val activity = activity as MainActivity
+            activity.stopLoading()
+        }
     }
 }

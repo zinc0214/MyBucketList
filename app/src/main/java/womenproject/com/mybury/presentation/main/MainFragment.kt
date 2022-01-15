@@ -16,7 +16,6 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
-import womenproject.com.mybury.presentation.main.search.SearchFragment
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import java.util.*
@@ -159,7 +158,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
     }
 
     private fun bucketSearchClickListener() = View.OnClickListener {
-        SearchFragment().show(parentFragmentManager, "SearchFragment")
+        val directions = MainFragmentDirections.actionMainBucketToBucketSearch()
+        it.findNavController().navigate(directions)
     }
 
     private fun createOnClickFilterListener(): View.OnClickListener {
