@@ -84,7 +84,7 @@ data class BucketItem(
     var userCount: Int = 0,
     val goalCount: Int = 1,
     val dDay: Int?
-) : Parcelable {
+) : Parcelable, SearchResultType() {
     fun getDdayText(): String {
         dDay?.let {
             return if (dDay < 0) "D${dDay.toString().replace("-", "+")}" else "D-${dDay}"
@@ -172,16 +172,16 @@ data class MyPageInfo(
     val startedCount: Int = 0,
     val completedCount: Int = 0,
     val dDayCount: Int = 0,
-    val categoryList: List<MyPageCategory>,
+    val categoryInfoList: List<CategoryInfo>,
     val retcode: String
 )
 
 @Parcelize
-data class MyPageCategory(
+data class CategoryInfo(
     val name: String,
     val id: String,
     val count: Int
-) : Parcelable
+) : Parcelable, SearchResultType()
 
 @Parcelize
 data class SupportInfo(
@@ -232,11 +232,16 @@ data class BucketListOrder(
 ) : Parcelable
 
 @Parcelize
-data class AllBucketListRequest(
+data class SearchRequest(
     val userId: String,
     val filter: String,
-    val sort: String
+    val searchText: String
 ) : Parcelable
+
+data class SearchResult(
+    val bucketlists: List<BucketItem>,
+    val categoryInfos: List<CategoryInfo>
+)
 
 enum class ShowFilter {
     all, completed, started
@@ -246,33 +251,12 @@ enum class DdayShowFilter {
     all, minus, plus
 }
 
-
 enum class SortFilter {
     updatedDt, createdDt, custom
 }
 
 enum class DataTextType {
     eula, privacy, openSource
-}
-
-enum class SearchType {
-    All, Category, DDay;
-
-    fun getText(): String {
-        return when (this) {
-            All -> "전체"
-            Category -> "카테고리"
-            DDay -> "디데이"
-        }
-    }
-
-    fun getLowerText() : String {
-        return when (this) {
-            All -> "all"
-            Category -> "category"
-            DDay -> "dday"
-        }
-    }
 }
 
 enum class BucketType {

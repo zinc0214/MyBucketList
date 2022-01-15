@@ -35,14 +35,15 @@ open class BaseBucketItemViewHolder(
     fun bind(
         bucketListener: View.OnClickListener,
         bucketItemInfo: BucketItem,
-        isForDday: Boolean = false
+        isForDday: Boolean = false,
+        isShowDday: Boolean = false
     ) {
         this.isForDday = isForDday
 
         if (isForDday) {
             setDdayColor()
         }
-        setUI(bucketItemInfo, bucketListener)
+        setUI(bucketItemInfo, bucketListener, isShowDday)
         binding.executePendingBindings()
     }
 
@@ -132,7 +133,7 @@ open class BaseBucketItemViewHolder(
         binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 
-    private fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+    private fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener, isShowDday : Boolean) {
         binding.bucketInfo = bucketItemInfo
         binding.bucketClickListener = bucketListener
         binding.successCircleView.setBucketSuccessListener {
@@ -140,7 +141,7 @@ open class BaseBucketItemViewHolder(
                 bucketItemInfo
             )
         }
-        if (Preference.getShowDdayFilter(binding.root.context)) {
+        if (Preference.getShowDdayFilter(binding.root.context) || isShowDday) {
             binding.ddayTextView.visibility =
                 if (bucketItemInfo.dDay != null) View.VISIBLE else View.INVISIBLE
         } else {

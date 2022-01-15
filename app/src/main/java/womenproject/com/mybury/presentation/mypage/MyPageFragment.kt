@@ -68,7 +68,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                     layoutManager
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
                 viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
-                    MyPageCategoryListAdapter(info.categoryList.filter { it.count > 0 })
+                    MyPageCategoryListAdapter(info.categoryInfoList.filter { it.count > 0 })
 
                 setUpView(info)
             }

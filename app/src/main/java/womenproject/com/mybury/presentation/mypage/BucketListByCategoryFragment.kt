@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.MyPageCategory
+import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -14,7 +14,7 @@ import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
 class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBinding, BucketInfoViewModel>() {
 
-    private lateinit var selectCategory: MyPageCategory
+    private lateinit var selectCategory: CategoryInfo
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_list_by_category

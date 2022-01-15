@@ -229,6 +229,12 @@ interface RetrofitInterface {
         @Header("X-Auth-Token") token: String,
         @Body bucketListOrder: BucketListOrder
     ): SimpleResponse
+
+    @POST("/search")
+    suspend fun searchList(
+        @Header("X-Auth-Token") token: String,
+        @Body searchRequest: SearchRequest
+    ): SearchResult
 }
 
 internal object APIClient {
@@ -242,7 +248,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("https://www.my-bury.com")
+                .baseUrl("http://52.79.253.242")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

@@ -3,17 +3,17 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.MyPageCategory
+import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.databinding.ItemMypageCategoryBinding
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
-class MyPageCategoryListAdapter(bucketCategoryList: List<MyPageCategory>) :
+class MyPageCategoryListAdapter(bucketCategoryInfoList: List<CategoryInfo>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var myPageCategoryListViewHolder: MyPageCategoryListViewHolder
-    private val bucketCategory = bucketCategoryList
+    private val bucketCategory = bucketCategoryInfoList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
