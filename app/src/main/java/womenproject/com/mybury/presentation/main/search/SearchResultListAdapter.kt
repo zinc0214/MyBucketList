@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.main.search
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,11 @@ import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryLi
  */
 
 class SearchResultListAdapter(
-    private val searchType: SearchType,
-    private val list: List<SearchResultType>,
     private val showSnackBar: (BucketItem) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
+
+    private val resultList = arrayListOf<SearchResultType>()
+    private var searchType = SearchType.All
 
     override fun getItemViewType(position: Int): Int {
         return searchType.toInt()
@@ -47,11 +49,10 @@ class SearchResultListAdapter(
         }
     }
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is BaseBucketItemViewHolder -> {
-                val bucketItem = list[position] as BucketItem
+                val bucketItem = resultList[position] as BucketItem
                 if (searchType == SearchType.All) {
                     holder.bind(
                         createOnClickBucketListener(bucketItem),
@@ -62,14 +63,14 @@ class SearchResultListAdapter(
                     holder.bind(
                         createOnClickBucketListener(bucketItem),
                         bucketItem,
-                       isForDday =  true,
-                       isShowDday =  true
+                        isForDday = true,
+                        isShowDday = true
                     )
                 }
 
             }
             is MyPageCategoryListViewHolder -> {
-                val category = list[position] as CategoryInfo
+                val category = resultList[position] as CategoryInfo
                 holder.bind(category)
             }
         }
@@ -81,7 +82,21 @@ class SearchResultListAdapter(
         it.findNavController().navigate(directions)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun addList(searchType: SearchType, list: List<SearchResultType>) {
+        resultList.clear()
+        resultList.addAll(list)
+        this.searchType = searchType
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteList() {
+        resultList.clear()
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
-        return list.size
+        return resultList.size
     }
 }

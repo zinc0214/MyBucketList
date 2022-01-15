@@ -25,6 +25,7 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private var selectedSearchType = SearchType.All
     private var resultList = listOf<SearchResultType>()
+    private lateinit var searchResultListAdapter: SearchResultListAdapter
     private lateinit var imm: InputMethodManager
 
     override fun onCreateView(
@@ -53,8 +54,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUpViews() {
+        searchResultListAdapter = SearchResultListAdapter() { bucketItem ->
+            showCancelSnackBar(requireView(), bucketItem)
+        }
+
         binding.lifecycleOwner = this
+
         binding.apply {
+            searchResultList.adapter = searchResultListAdapter
+
             searchType = selectedSearchType
 
             searchRadioGroup.setOnCheckedChangeListener { _, id ->
@@ -70,6 +78,8 @@ class SearchFragment : Fragment() {
                     }
                 }
                 searchType = selectedSearchType
+                searchResultListAdapter.deleteList()
+                binding.searchResultIsBlankTextView.visibility = View.VISIBLE
             }
 
             searchEditTextView.setOnEditorActionListener { textView, id, keyEvent ->
@@ -116,10 +126,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUpResultList() {
-        binding.searchResultList.adapter =
-            SearchResultListAdapter(selectedSearchType, resultList) { bucketItem ->
-                showCancelSnackBar(requireView(), bucketItem)
-            }
+        searchResultListAdapter.addList(selectedSearchType, resultList)
         binding.searchResultIsBlankTextView.visibility = View.GONE
     }
 
