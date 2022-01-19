@@ -229,6 +229,12 @@ interface RetrofitInterface {
         @Header("X-Auth-Token") token: String,
         @Body bucketListOrder: BucketListOrder
     ): SimpleResponse
+
+    @POST("/search")
+    suspend fun searchList(
+        @Header("X-Auth-Token") token: String,
+        @Body searchRequest: SearchRequest
+    ): SearchResult
 }
 
 internal object APIClient {
