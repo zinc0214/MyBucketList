@@ -11,11 +11,12 @@ import womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 
-class EditCategoryListViewHolder(private val binding: ItemCategoryBinding,
-                                 private val dragListener: ItemDragListener,
-                                 private val checkedListener: ItemCheckedListener,
-                                 private val editCategoryName: (Category) -> Unit)
-    : RecyclerView.ViewHolder(binding.root) {
+class EditCategoryListViewHolder(
+    private val binding: ItemCategoryBinding,
+    private val dragListener: ItemDragListener,
+    private val checkedListener: ItemCheckedListener,
+    private val editCategoryName: (Category) -> Unit
+) : RecyclerView.ViewHolder(binding.root) {
 
     private var isKeyBoardShown = false
 
@@ -23,14 +24,12 @@ class EditCategoryListViewHolder(private val binding: ItemCategoryBinding,
     fun bind(category: Category) {
         binding.apply {
 
-            if(category.name != null) {
-                viewModel = CategoryListItemViewModel(category.name)
-            }
+            viewModel = CategoryListItemViewModel(category.name)
             if (category.name == "없음") {
                 removeBox.isEnabled = false
                 removeBox.isChecked = false
             }
-            dragLayout.setOnTouchListener { v, event ->
+            dragLayout.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(this@EditCategoryListViewHolder)
                 }
@@ -48,7 +47,7 @@ class EditCategoryListViewHolder(private val binding: ItemCategoryBinding,
         }
     }
 
-    private fun setOnSoftKeyboardChangedListener(name : String): ViewTreeObserver.OnGlobalLayoutListener {
+    private fun setOnSoftKeyboardChangedListener(name: String): ViewTreeObserver.OnGlobalLayoutListener {
         return ViewTreeObserver.OnGlobalLayoutListener {
             val r = Rect()
             binding.root.getWindowVisibleDisplayFrame(r)

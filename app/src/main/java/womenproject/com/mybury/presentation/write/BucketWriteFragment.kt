@@ -28,14 +28,13 @@ import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
@@ -63,8 +62,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     lateinit var imm: InputMethodManager
 
     override fun initDataBinding() {
-        getCategory()
         loadArgument()
+        setUpViewModelObservers()
+        bucketInfoViewModel.getCategoryList()
     }
 
     open fun loadArgument() {
@@ -110,31 +110,34 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
 
-    private fun getCategory() {
-        bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
-            override fun restart() {
-                getCategory()
+    private fun setUpViewModelObservers() {
+        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.RESTART -> {
+                    bucketInfoViewModel.getCategoryList()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog {
+                        backBtnOnClickListener()
+                    }.show(requireActivity().supportFragmentManager, "tag")
+                }
             }
+        }
 
-            override fun success(value: List<Any>) {
-                stopLoading()
-                categoryList = value as ArrayList<Category>
-                initForUpdate()
-                alreadyAdd()
-                setUpView()
-                setUpCategory(categoryList)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun fail() {
-                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
-                stopLoading()
-            }
-        })
-
+        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+            categoryList = it as ArrayList<Category>
+            initForUpdate()
+            alreadyAdd()
+            setUpView()
+            setUpCategory(categoryList)
+        }
     }
 
     open fun setUpCategory(categoryList: ArrayList<Category>) {
@@ -164,7 +167,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
             if (addImgViewList.isNotEmpty()) {
                 val currentCount = imgLayout.childCount
-                addImgViewList.forEach { (t, u) ->
+                addImgViewList.forEach { (_, u) ->
                     if (currentCount == 0) {
                         if (u.parent != null) {
                             val view = u.parent as ViewGroup
@@ -216,7 +219,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     }
                 }
 
-                override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+                override fun onTransitionTrigger(
+                    p0: MotionLayout?,
+                    p1: Int,
+                    p2: Boolean,
+                    p3: Float
+                ) {
                 }
 
                 override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
@@ -264,33 +272,37 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     private fun addBucket() {
-        viewModel.uploadBucketList(getBucketItemInfo(), getRealSendImgList(), object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                addBucket()
-            }
-
-            override fun start() {
-                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
-                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
-                startLoading()
-            }
-
-            override fun success() {
-                stopLoading()
-                Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
-                isCancelConfirm = true
-                if (isAdsShow || BuildConfig.DEBUG) {
-                    startAdMob()
+        viewModel.uploadBucketList(
+            getBucketItemInfo(),
+            getRealSendImgList(),
+            object : BaseViewModel.Simple3CallBack {
+                override fun restart() {
+                    addBucket()
                 }
-                requireActivity().onBackPressed()
-            }
 
-            override fun fail() {
-                stopLoading()
-                Toast.makeText(context, "버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
+                override fun start() {
+                    imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
+                    imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
+                    startLoading()
+                }
 
-        })
+                override fun success() {
+                    stopLoading()
+                    Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
+                    isCancelConfirm = true
+                    if (isAdsShow || BuildConfig.DEBUG) {
+                        startAdMob()
+                    }
+                    requireActivity().onBackPressed()
+                }
+
+                override fun fail() {
+                    stopLoading()
+                    Toast.makeText(context, "버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            })
     }
 
     fun getRealSendImgList(): ArrayList<Any?> {
@@ -348,10 +360,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
+                    viewDataBinding.memoLayout.background =
+                        requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoLayout.background = requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
+                    viewDataBinding.memoLayout.background =
+                        requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
                 }
             }
             false
@@ -376,7 +390,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteMemoImgAddDialogFragment(AddContentType.MEMO, checkMemoAddListener, memoAddListener, checkAddImgAbleListener, imgAddListener).show(requireActivity().supportFragmentManager, "tag")
+            WriteMemoImgAddDialogFragment(
+                AddContentType.MEMO,
+                checkMemoAddListener,
+                memoAddListener,
+                checkAddImgAbleListener,
+                imgAddListener
+            ).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -396,7 +416,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
         imgList[file.name] = file
         val id = file.name
-        val writeImgLayout = WriteImgLayout(this.requireContext(), id, removeImgListener, imgFieldClickListener).setUI(uri)
+        val writeImgLayout = WriteImgLayout(
+            this.requireContext(),
+            id,
+            removeImgListener,
+            imgFieldClickListener
+        ).setUI(uri)
         viewDataBinding.imgLayout.addView(writeImgLayout)
 
         addImgList[viewDataBinding.imgLayout.childCount - 1] = id
@@ -419,7 +444,12 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             val id = it.value
             if (!id.isNullOrEmpty()) {
                 id.run {
-                    val writeImgLayout = WriteImgLayout(requireContext(), this, removeImgListener, imgFieldClickListener).setAleadyUI(this)
+                    val writeImgLayout = WriteImgLayout(
+                        requireContext(),
+                        this,
+                        removeImgListener,
+                        imgFieldClickListener
+                    ).setAleadyUI(this)
                     if (!addImgList.values.contains(this)) {
                         addImgList[viewDataBinding.imgLayout.childCount] = this
                         addImgViewList[this] = writeImgLayout
@@ -506,7 +536,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             if (currentCalendarDay == null) {
                 currentCalendarDay = Calendar.getInstance().time
             }
-            val calendarDialogFragment = WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay!!)
+            val calendarDialogFragment =
+                WriteCalendarDialogFragment(ddayAddListener, currentCalendarDay!!)
             calendarDialogFragment.show(requireActivity().supportFragmentManager, "tag")
         }
     }
@@ -525,7 +556,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteGoalCountDialogFragment(goalCount, goalCountSetListener).show(requireActivity().supportFragmentManager, "tag")
+            WriteGoalCountDialogFragment(
+                goalCount,
+                goalCountSetListener
+            ).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -550,7 +584,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         return View.OnClickListener {
-            WriteCategoryDialogFragment(categoryList, categorySetListener, moveToAddCategory(it)).show(requireActivity().supportFragmentManager, "tag")
+            WriteCategoryDialogFragment(
+                categoryList,
+                categorySetListener,
+                moveToAddCategory(it)
+            ).show(requireActivity().supportFragmentManager, "tag")
         }
     }
 
@@ -567,9 +605,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
         }
 
-        return AddBucketItem(viewDataBinding.titleText.text.toString(), open,
-                formDate, goalCount,
-                viewDataBinding.memoText.text.toString(), selectCategory?.id!!)
+        return AddBucketItem(
+            viewDataBinding.titleText.text.toString(), open,
+            formDate, goalCount,
+            viewDataBinding.memoText.text.toString(), selectCategory?.id!!
+        )
     }
 
 

@@ -108,10 +108,10 @@ interface RetrofitInterface {
     ): Observable<DdayBucketListRespone>
 
     @GET("/beforeWrite")
-    fun requestBeforeWrite(
+    suspend fun requestBeforeWrite(
         @Header("X-Auth-Token") token: String,
         @Query("userId") userId: String
-    ): Observable<BucketCategory>
+    ): BucketCategory
 
     @POST("/write")
     @Multipart
@@ -224,7 +224,17 @@ interface RetrofitInterface {
         @Query("sort") sort: String
     ): BucketList
 
+    @POST("/change_order")
+    suspend fun updateBucketListOrder(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketListOrder: BucketListOrder
+    ): SimpleResponse
 
+    @POST("/search")
+    suspend fun searchList(
+        @Header("X-Auth-Token") token: String,
+        @Body searchRequest: SearchRequest
+    ): SearchResult
 }
 
 internal object APIClient {
@@ -238,7 +248,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("https://www.my-bury.com")
+                .baseUrl("http://52.79.253.242")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

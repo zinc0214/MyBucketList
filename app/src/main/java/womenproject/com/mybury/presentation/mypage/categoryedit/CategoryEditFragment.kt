@@ -13,7 +13,7 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
@@ -68,33 +68,43 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         viewDataBinding.backLayout.title = "카테고리 편집"
         viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
         viewDataBinding.fragment = this
-        setCategoryList()
+
+        setUpViewModelObservers()
+        bucketInfoViewModel.getCategoryList()
     }
 
-    private fun setCategoryList() {
-
-        bucketInfoViewModel.getCategoryList(object : BaseViewModel.MoreCallBackAnyList {
-            override fun restart() {
-                setCategoryList()
+    private fun setUpViewModelObservers() {
+        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.RESTART -> {
+                    bucketInfoViewModel.getCategoryList()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog {
+                        backBtnOnClickListener()
+                    }.show(requireActivity().supportFragmentManager, "tag")
+                }
+                else -> {
+                    // Do Nothing
+                }
             }
+        }
 
-            override fun success(value: List<Any>) {
-                initOriginCategory(value as List<Category>)
-                changeCategoryList = value as ArrayList<Category>
-                setCategoryAdapter()
-                isKeyBoardShown = false
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager)
-            }
-        })
+        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+            initOriginCategory(it as List<Category>)
+            changeCategoryList = it as ArrayList<Category>
+            setCategoryAdapter()
+            isKeyBoardShown = false
+        }
     }
+
 
     private fun initOriginCategory(categoryList: List<Category>) {
         categoryList.forEach {
