@@ -49,20 +49,26 @@
         <action
             android:id="@+id/action_main_bucket_to_bucket_sort"
             app:destination="@id/bucket_sort_fragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/action_main_bucket_to_bucket_search"
             app:destination="@id/bucket_search_fragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/slide_out_top"
-            app:popEnterAnim="@anim/slide_in_top"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
-
+        <action
+            android:id="@+id/action_main_bucket_to_category_bucket"
+            app:destination="@id/bucket_list_by_category_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
 
@@ -247,7 +253,7 @@
         <argument
             android:name="category"
             android:defaultValue="@null"
-            app:argType="womenproject.com.mybury.data.MyPageCategory"
+            app:argType="womenproject.com.mybury.data.CategoryInfo"
             app:nullable="true" />
 
 
@@ -373,15 +379,29 @@
         android:id="@+id/bucket_sort_fragment"
         android:name="womenproject.com.mybury.presentation.main.sort.BucketListSortFragment"
         android:label="BucketSortFragment"
-        tools:layout="@layout/fragment_bucket_sort">
-
-    </fragment>
+        tools:layout="@layout/fragment_bucket_sort"/>
 
     <fragment
         android:id="@+id/bucket_search_fragment"
         android:name="womenproject.com.mybury.presentation.main.search.SearchFragment"
-        android:label="BucketListSearchFragment"
+        android:label="BucketSearchFragment"
         tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/action_search_bucket_to_bucket_detail"
+            app:destination="@id/bucket_detail_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_search_bucket_to_category_bucket"
+            app:destination="@id/bucket_list_by_category_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 

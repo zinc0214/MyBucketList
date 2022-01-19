@@ -100,16 +100,16 @@ class Preference {
             return sp.getString(SHOW_FILTER, ShowFilter.all.toString())
         }
 
-        fun setFilterListUp(context: Context, listUpFilter: ListUpFilter) {
+        fun setFilterListUp(context: Context, sortFilter: SortFilter) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
-            editor.putString(LISTUP_FILTER, listUpFilter.toString())
+            editor.putString(LISTUP_FILTER, sortFilter.toString())
             editor.apply()
         }
 
         fun getFilterListUp(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(LISTUP_FILTER, ListUpFilter.updatedDt.toString())
+            return sp.getString(LISTUP_FILTER, SortFilter.updatedDt.toString())
         }
 
         fun setShowDdayFilter(context: Context, ddayShow: Boolean) {

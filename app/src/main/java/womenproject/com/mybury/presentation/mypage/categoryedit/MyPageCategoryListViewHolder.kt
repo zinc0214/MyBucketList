@@ -3,9 +3,9 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.view.View
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.MyPageCategory
+import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.databinding.ItemMypageCategoryBinding
-import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
+import womenproject.com.mybury.presentation.main.search.SearchFragmentDirections
 
 /**
  * Created by HanAYeon on 2019. 4. 30..
@@ -13,19 +13,19 @@ import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 
 class MyPageCategoryListViewHolder(private val binding: ItemMypageCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(category: MyPageCategory) {
+    fun bind(categoryInfo: CategoryInfo) {
         binding.apply {
-            categoryName = category.name
-            categoryCount = category.count.toString()
-            itemOnClickListener = itemOnClickListener(category)
+            categoryName = categoryInfo.name
+            categoryCount = categoryInfo.count.toString()
+            itemOnClickListener = itemOnClickListener(categoryInfo)
             executePendingBindings()
         }
     }
 
-    private fun itemOnClickListener(category: MyPageCategory): View.OnClickListener {
+    private fun itemOnClickListener(categoryInfo: CategoryInfo): View.OnClickListener {
         return View.OnClickListener {
-            val directions = MyPageFragmentDirections.actionMyPageToBucketItemByCategory()
-            directions.category = category
+            val directions = SearchFragmentDirections.actionSearchBucketToCategoryBucket()
+            directions.category = categoryInfo
             it.findNavController().navigate(directions)
         }
     }

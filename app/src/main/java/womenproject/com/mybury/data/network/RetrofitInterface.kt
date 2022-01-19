@@ -108,10 +108,10 @@ interface RetrofitInterface {
     ): Observable<DdayBucketListRespone>
 
     @GET("/beforeWrite")
-    fun requestBeforeWrite(
+    suspend fun requestBeforeWrite(
         @Header("X-Auth-Token") token: String,
         @Query("userId") userId: String
-    ): Observable<BucketCategory>
+    ): BucketCategory
 
     @POST("/write")
     @Multipart
@@ -224,7 +224,17 @@ interface RetrofitInterface {
         @Query("sort") sort: String
     ): BucketList
 
+    @POST("/change_order")
+    suspend fun updateBucketListOrder(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketListOrder: BucketListOrder
+    ): SimpleResponse
 
+    @POST("/search")
+    suspend fun searchList(
+        @Header("X-Auth-Token") token: String,
+        @Body searchRequest: SearchRequest
+    ): SearchResult
 }
 
 internal object APIClient {

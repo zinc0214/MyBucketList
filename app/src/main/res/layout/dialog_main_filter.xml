@@ -82,7 +82,7 @@
         </LinearLayout>
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/sortRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -92,17 +92,23 @@
                 style="@style/FilterDialogSubTextStyle"
                 android:layout_width="wrap_content"
                 android:button="@drawable/filter_radio_btn"
-                android:onClick="@{filterBoxListener}"
                 android:text="@string/sort_by_update" />
 
             <RadioButton
-                android:id="@+id/radio_btn_written"
+                android:id="@+id/radio_btn_create"
                 style="@style/FilterDialogSubTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="14dp"
                 android:button="@drawable/filter_radio_btn"
-                android:onClick="@{filterBoxListener}"
-                android:text="@string/sort_by_written" />
+                android:text="@string/sort_by_create" />
+
+            <RadioButton
+                android:id="@+id/radio_btn_custom"
+                style="@style/FilterDialogSubTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="14dp"
+                android:button="@drawable/filter_radio_btn"
+                android:text="@string/sort_by_customer" />
 
         </RadioGroup>
 

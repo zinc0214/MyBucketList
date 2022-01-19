@@ -4,7 +4,6 @@ import android.app.ActionBar
 import android.view.View
 import android.widget.Toast
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.ListUpFilter
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.Preference.Companion.getShowDdayFilter
@@ -12,6 +11,7 @@ import womenproject.com.mybury.data.Preference.Companion.setFilerForShow
 import womenproject.com.mybury.data.Preference.Companion.setFilterListUp
 import womenproject.com.mybury.data.Preference.Companion.setShowDdayFilter
 import womenproject.com.mybury.data.ShowFilter
+import womenproject.com.mybury.data.SortFilter
 import womenproject.com.mybury.databinding.DialogMainFilterBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
@@ -20,16 +20,15 @@ import womenproject.com.mybury.presentation.base.BaseDialogFragment
  */
 
 
-open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : BaseDialogFragment<DialogMainFilterBinding>() {
+open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
+    BaseDialogFragment<DialogMainFilterBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_main_filter
 
     private var started = false
     private var complete = false
-    private var update = false
-    private var written = false
+    private var sortType: SortFilter = SortFilter.createdDt
     private var dday = false
-
 
     override fun initDataBinding() {
         viewDataBinding.fragment = this
@@ -37,8 +36,8 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
         viewDataBinding.filterBoxListener = setOnCheckBoxChangedListener()
         initShowFilter()
         initListUpFilter()
+        initSortListener()
         initShowDdayState()
-
     }
 
     private fun initShowFilter() {
@@ -68,19 +67,31 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
 
 
     private fun initListUpFilter() {
-        val filter = getFilterListUp(requireContext())
-        when (filter) {
+        when (getFilterListUp(requireContext())) {
             "updatedDt" -> {
                 viewDataBinding.radioBtnUpdate.isChecked = true
-                viewDataBinding.radioBtnWritten.isChecked = false
-                update = true
-                written = false
             }
-            else -> {
-                viewDataBinding.radioBtnUpdate.isChecked = false
-                viewDataBinding.radioBtnWritten.isChecked = true
-                update = false
-                written = true
+            "createdDt" -> {
+                viewDataBinding.radioBtnCreate.isChecked = true
+            }
+            "custom" -> {
+                viewDataBinding.radioBtnCustom.isChecked = true
+            }
+        }
+    }
+
+    private fun initSortListener() {
+        viewDataBinding.sortRadioGroup.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.radio_btn_update -> {
+                    sortType = SortFilter.updatedDt
+                }
+                R.id.radio_btn_create -> {
+                    sortType = SortFilter.createdDt
+                }
+                R.id.radio_btn_custom -> {
+                    sortType = SortFilter.custom
+                }
             }
         }
     }
@@ -123,10 +134,6 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
             when (it) {
                 startedCheckBox -> started = startedCheckBox.isChecked
                 completeCheckBox -> complete = completeCheckBox.isChecked
-                radioBtnUpdate, radioBtnWritten -> {
-                    update = radioBtnUpdate.isChecked
-                    written = radioBtnWritten.isChecked
-                }
                 showDdayState -> dday = showDdayState.isChecked
             }
         }
@@ -143,11 +150,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) : B
     }
 
     private fun setListUpFilter() {
-        if (update) {
-            setFilterListUp(requireContext(), ListUpFilter.updatedDt)
-        } else {
-            setFilterListUp(requireContext(), ListUpFilter.createdDt)
-        }
+        setFilterListUp(requireContext(), sortType)
     }
 
     private fun setShowDdayState() {

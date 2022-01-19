@@ -8,61 +8,70 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.CategoryInfo
+import womenproject.com.mybury.data.SearchRequest
+import womenproject.com.mybury.data.SearchResultType
+import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 
 class SearchViewModel : BaseViewModel() {
 
-    private val _allBucketSearchResult = MutableLiveData<List<BucketItem>>()
-    val allBucketSearchResult: LiveData<List<BucketItem>> = _allBucketSearchResult
+    private val _allBucketSearchResult = MutableLiveData<List<SearchResultType>>()
+    val allBucketSearchResult: LiveData<List<SearchResultType>> = _allBucketSearchResult
 
-    fun loadAllListSearch() {
+    private val _searchSate = MutableLiveData<LoadState>()
+    val searchSate: LiveData<LoadState> = _searchSate
+
+    fun loadAllListSearch(searchType: String, searchText: String) {
         if (accessToken == null || userId == null) {
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
+            val searchRequest = SearchRequest(
+                userId = userId,
+                filter = searchType,
+                searchText = searchText
+            )
             withContext(Dispatchers.Main) {
                 try {
-                    _allBucketSearchResult.value = items()
-                    Log.e("ayhan", "here : ${_allBucketSearchResult.value}")
-                } catch (e: Throwable) {
-                    e.printStackTrace()
-                    withContext(Dispatchers.Main) {
-                        // do nothing
+                    apiInterface.searchList(accessToken, searchRequest).apply {
+                        val bucketList = this@apply.bucketlists
+                        val categoryList = this@apply.categoryInfos
+
+                        if (bucketList.isNullOrEmpty() && categoryList.isNullOrEmpty()) {
+                            _searchSate.value = LoadState.FAIL
+                            _allBucketSearchResult.value = emptyList()
+                        } else {
+                            _searchSate.value = LoadState.SUCCESS
+                            _allBucketSearchResult.value =
+                                parseToSearchTypeItem(bucketList, categoryList)
+                        }
                     }
+                } catch (e: Exception) {
+                    _searchSate.value = LoadState.FAIL
+                    _allBucketSearchResult.value = emptyList()
                 }
             }
         }
     }
 
-    private fun items(): List<BucketItem> {
-        return listOf(
-            BucketItem(
-                id = "1",
-                category = Category(
-                    name = "H",
-                    id = "",
-                    priority = 0
-                ),
-                memo = "",
-                dDay = 10,
-                title = "12346"
-            ),
-            BucketItem(
-                id = "1",
-                category = Category(
-                    name = "H",
-                    id = "",
-                    priority = 0
-                ),
-                userCount = 10,
-                goalCount = 20,
-                memo = "",
-                dDay = 10,
-                title = "12346"
-            )
-        )
+    private fun parseToSearchTypeItem(
+        bucketList: List<BucketItem>,
+        categoryInfoList: List<CategoryInfo>
+    ): ArrayList<SearchResultType> {
+        val resultList = arrayListOf<SearchResultType>()
+
+        if (!bucketList.isNullOrEmpty()) {
+            resultList.addAll(bucketList)
+        }
+
+        if (!categoryInfoList.isNullOrEmpty()) {
+            resultList.addAll(categoryInfoList)
+        }
+
+        Log.e("ayhan", "resultList : $resultList")
+        return resultList
     }
 
 }
