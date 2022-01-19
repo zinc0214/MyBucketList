@@ -172,7 +172,7 @@ data class MyPageInfo(
     val startedCount: Int = 0,
     val completedCount: Int = 0,
     val dDayCount: Int = 0,
-    val categoryInfoList: List<CategoryInfo>,
+    val categoryList: List<CategoryInfo>,
     val retcode: String
 )
 
