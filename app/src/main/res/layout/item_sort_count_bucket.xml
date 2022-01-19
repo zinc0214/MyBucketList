@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bucketClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketInfo"
+            type="womenproject.com.mybury.data.BucketItem" />
+    </data>
+
+
+    <LinearLayout
+        android:id="@+id/bucket_item_layout"
+        style="@style/BucketItemLayoutStyle"
+        android:background="@drawable/shape_ffffff_r4_strk_06_e8e8e8">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="21dp"
+            android:paddingBottom="21dp">
+
+            <LinearLayout
+                android:id="@+id/leftContentLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editImageView"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginEnd="40dp">
+
+                <TextView
+                    android:id="@+id/bucket_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="8sp"
+                    android:maxLines="2"
+                    android:text="@{bucketInfo.title}"
+                    android:textColor="@color/_434343"
+                    tools:text="가나다라마바사아자차카타파하가나다라마사아자차카타파하" />
+
+                <LinearLayout
+                    android:id="@+id/prgress_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="-2dp">
+
+                    <ProgressBar
+                        android:id="@+id/horizontal_progress_bar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="150dp"
+                        android:layout_height="6dp"
+                        android:max="@{bucketInfo.goalCount}"
+                        android:progress="@{bucketInfo.userCount}"
+                        android:progressDrawable="@drawable/base_horizontal_progressbar" />
+
+                    <TextView
+                        android:id="@+id/user_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
+                        android:textSize="11sp"
+                        tools:text='10' />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/editImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="카테고리 편집 버튼"
+                android:padding="20dp"
+                android:src="@drawable/category_list_change_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+
+</layout>

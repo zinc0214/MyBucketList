@@ -37,7 +37,7 @@
                     android:id="@+id/bucket_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_66859ecc_r4" />
+                    android:background="@drawable/shape_efefef_r4_strk_e8e8e8" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -53,11 +53,12 @@
                         android:layout_marginTop="21dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="21dp"
-                        android:text="@{bucketTitleText}"
-                        android:textColor="@color/_ffffff"
-                        android:textSize="14sp"
-                        android:maxLines="2"
+                        android:alpha="0.6"
                         android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@{bucketTitleText}"
+                        android:textColor="@color/_434343"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
                         app:layout_constraintHorizontal_bias="0"
@@ -90,7 +91,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@drawable/check_complete"
+                        android:src="@drawable/check_complete"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ddayTextView"

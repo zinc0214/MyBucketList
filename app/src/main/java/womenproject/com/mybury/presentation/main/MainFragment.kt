@@ -35,9 +35,12 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
     private var currentBucketSize = 0
     override fun initDataBinding() {
+        viewDataBinding.mainToolbar.sortClickListener = bucketSortClickListener()
         viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
+        viewDataBinding.mainToolbar.searchClickListener = bucketSearchClickListener()
         viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
+
 
         initBucketListUI()
     }
@@ -85,7 +88,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
                     viewDataBinding.blankImg.visibility = View.GONE
                     viewDataBinding.bucketList.visibility = View.VISIBLE
                     viewDataBinding.endImage.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.adapter = MainBucketListAdapter(response.bucketlists, showSnackBar)
+                    viewDataBinding.bucketList.adapter =
+                        MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()
                 if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
@@ -145,6 +149,17 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
 
     private val goToDday: () -> Unit = {
         createOnClickDdayListener.onClick(requireView())
+    }
+
+
+    private fun bucketSortClickListener() = View.OnClickListener {
+        val directions = MainFragmentDirections.actionMainBucketToBucketSort()
+        it.findNavController().navigate(directions)
+    }
+
+    private fun bucketSearchClickListener() = View.OnClickListener {
+        val directions = MainFragmentDirections.actionMainBucketToBucketSearch()
+        it.findNavController().navigate(directions)
     }
 
     private fun createOnClickFilterListener(): View.OnClickListener {

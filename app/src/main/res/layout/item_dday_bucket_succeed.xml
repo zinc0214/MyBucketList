@@ -34,22 +34,23 @@
                     android:id="@+id/bucket_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_33cca248_r4" />
+                    android:background="@drawable/shape_efefef_r4_strk_e8e8e8" />
 
                 <RelativeLayout
-                    android:layout_centerVertical="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_marginBottom="21dp"
-                        android:layout_marginTop="21dp"
                         android:id="@+id/bucket_title"
                         style="@style/BucketItemTitleTextStyle"
+                        android:layout_marginTop="21dp"
+                        android:layout_marginBottom="21dp"
                         android:text="@{bucketTitleText}"
-                        android:textColor="@color/_ffffff" />
+                        android:textColor="@color/_434343"
+                        android:alpha="0.6"/>
 
                     <ImageView
                         android:id="@+id/success_img"

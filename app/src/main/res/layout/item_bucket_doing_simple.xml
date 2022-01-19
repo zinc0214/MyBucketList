@@ -11,20 +11,15 @@
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="bucketTitleText"
-            type="String" />
-
-        <variable
             name="bucketSuccessClickListener"
             type="android.view.View.OnClickListener" />
 
         <variable
-            name="ddayText"
-            type="String" />
+            name="bucketInfo"
+            type="womenproject.com.mybury.data.BucketItem" />
 
-        <variable
-            name="isOverDday"
-            type="Boolean" />
+        <import type="android.view.View" />
+
 
     </data>
 
@@ -46,7 +41,7 @@
                     android:id="@+id/bucket_succeed_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_66859ecc_r4" />
+                    android:background="@drawable/shape_efefef_r4_strk_e8e8e8" />
 
                 <ImageView
                     android:id="@+id/bucket_item_image"
@@ -65,36 +60,73 @@
                         android:layout_width="0dp"
                         android:layout_marginTop="21dp"
                         android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="21dp"
-                        android:maxLines="2"
                         android:ellipsize="end"
-                        android:text="@{bucketTitleText}"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:maxLines="2"
+                        android:text="@{bucketInfo.title}"
+                        app:layout_constraintBottom_toTopOf="@id/progressLayout"
                         app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0"
+                        app:layout_goneMarginBottom="21dp"
                         tools:text="가나다라마바사아자차카타파하가나다라마사아자차카타파하" />
 
-                    <RelativeLayout
-                        android:id="@+id/success_layout"
-                        android:layout_width="64dp"
+                    <LinearLayout
+                        android:id="@+id/progressLayout"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{bucketSuccessClickListener}"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="19dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="-2dp"
+                        android:visibility="@{bucketInfo.goalCount > 1 ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bucket_title">
+
+                        <ProgressBar
+                            android:id="@+id/horizontal_progress_bar"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:layout_width="150dp"
+                            android:layout_height="6dp"
+                            android:max="@{bucketInfo.goalCount}"
+                            android:progress="@{bucketInfo.userCount}"
+                            android:progressDrawable="@drawable/base_horizontal_progressbar" />
+
+                        <TextView
+                            android:id="@+id/userCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center"
+                            android:textColor="@color/_a6c6ff"
+                            android:textSize="11sp"
+                            tools:text='10' />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/successCircleLayout"
+                        android:layout_width="44dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <include
-                            android:id="@+id/success_button_layout"
+                            android:id="@+id/successCircleView"
                             layout="@layout/widget_bucket_done_button"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="16dp" />
-
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
+
 
                     <TextView
                         android:id="@+id/ddayTextView"
@@ -103,12 +135,12 @@
                         android:minWidth="38dp"
                         android:paddingStart="7dp"
                         android:paddingEnd="7dp"
-                        android:text="@{ddayText}"
-                        android:textColor="@{isOverDday ? @color/_ffa690 : @color/_ffca5a}"
+                        android:text="@{bucketInfo.ddayText}"
+                        android:textColor="@{bucketInfo.overDday ? @color/_ffa690 : @color/_ffca5a}"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/success_layout"
+                        app:layout_constraintEnd_toStartOf="@+id/successCircleLayout"
                         app:layout_constraintHorizontal_bias="1"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="D+10"
