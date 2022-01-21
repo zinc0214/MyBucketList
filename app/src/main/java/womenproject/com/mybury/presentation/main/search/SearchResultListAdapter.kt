@@ -12,9 +12,8 @@ import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.SearchType
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
-import womenproject.com.mybury.databinding.ItemMypageCategoryBinding
+import womenproject.com.mybury.databinding.ItemSearchCategoryBinding
 import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder
-import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListViewHolder
 
 
 /**
@@ -29,7 +28,19 @@ class SearchResultListAdapter(
     private var searchType = SearchType.All
 
     override fun getItemViewType(position: Int): Int {
-        return searchType.toInt()
+        val type = when {
+            resultList[position] is BucketItem -> {
+                if (searchType == SearchType.All) {
+                    SearchType.All
+                } else {
+                    SearchType.DDay
+                }
+            }
+            else -> {
+                SearchType.Category
+            }
+        }
+        return type.toInt()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,8 +52,8 @@ class SearchResultListAdapter(
                 ), showSnackBar
             )
             // category
-            else -> MyPageCategoryListViewHolder(
-                ItemMypageCategoryBinding.inflate(
+            else -> SearchCategoryListViewHolder(
+                ItemSearchCategoryBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
@@ -67,9 +78,8 @@ class SearchResultListAdapter(
                         isShowDday = true
                     )
                 }
-
             }
-            is MyPageCategoryListViewHolder -> {
+            is SearchCategoryListViewHolder -> {
                 val category = resultList[position] as CategoryInfo
                 holder.bind(category)
             }
