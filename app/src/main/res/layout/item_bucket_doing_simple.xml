@@ -24,6 +24,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -137,7 +138,7 @@
                         android:paddingEnd="7dp"
                         android:text="@{bucketInfo.ddayText}"
                         android:textColor="@{bucketInfo.overDday ? @color/_ffa690 : @color/_ffca5a}"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/successCircleLayout"
