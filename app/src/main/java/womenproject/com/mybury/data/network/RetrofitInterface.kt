@@ -17,10 +17,6 @@ import womenproject.com.mybury.data.*
 
 interface RetrofitInterface {
 
-    @Headers("X-Naver-Client-Id: 3HRMQaekNO_olG_nNCHt", "X-Naver-Client-Secret: trOdm5SdqS")
-    @GET("/v1/search/adult.json")
-    fun requestAdultResult(@Query("query") query: String): Observable<AdultCheck>
-
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/signup_check")
     fun postSignUpCheck(@Body email: SignUpCheckRequest): Observable<SignUpCheckResponse>
@@ -258,4 +254,4 @@ internal object APIClient {
         }
 }
 
-val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
+val apiInterface: RetrofitInterface = APIClient.client.create(RetrofitInterface::class.java)
