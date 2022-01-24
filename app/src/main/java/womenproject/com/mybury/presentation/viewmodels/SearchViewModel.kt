@@ -37,7 +37,7 @@ class SearchViewModel : BaseViewModel() {
                 try {
                     apiInterface.searchList(accessToken, searchRequest).apply {
                         val bucketList = this@apply.bucketlists
-                        val categoryList = this@apply.categoryInfos
+                        val categoryList = this@apply.categories
 
                         if (bucketList.isNullOrEmpty() && categoryList.isNullOrEmpty()) {
                             _searchSate.value = LoadState.FAIL

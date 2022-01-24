@@ -181,7 +181,11 @@ data class CategoryInfo(
     val name: String,
     val id: String,
     val count: Int
-) : Parcelable, SearchResultType()
+) : Parcelable, SearchResultType() {
+    fun getCountString(): String {
+        return count.toString()
+    }
+}
 
 @Parcelize
 data class SupportInfo(
@@ -240,7 +244,7 @@ data class SearchRequest(
 
 data class SearchResult(
     val bucketlists: List<BucketItem>,
-    val categoryInfos: List<CategoryInfo>
+    val categories: List<CategoryInfo>
 )
 
 enum class ShowFilter {
@@ -269,7 +273,3 @@ enum class BucketType {
             BASE_ITEM -> 2
         }
 }
-
-
-val DDAY = true
-val NORMAL = false
