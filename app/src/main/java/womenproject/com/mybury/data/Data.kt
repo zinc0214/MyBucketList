@@ -77,10 +77,6 @@ data class DdayBucketList(
 data class BucketItem(
     val id: String,
     var title: String,
-    val memo: String = "",
-    val open: Boolean = false,
-    val pin: Boolean = false,
-    val category: Category,
     var userCount: Int = 0,
     val goalCount: Int = 1,
     val dDay: Int?
