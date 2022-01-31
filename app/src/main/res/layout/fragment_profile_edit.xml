@@ -37,7 +37,6 @@
                     android:layout_gravity="center"
                     android:shadowColor="@color/_ffffff"
                     app:altSrc="@drawable/shape_e8e8e8_r14_strk_06_e8e8e8"
-                    app:border_width="2dp"
                     app:cardCornerRadius="26dp"
                     app:cardElevation="0dp">
 
