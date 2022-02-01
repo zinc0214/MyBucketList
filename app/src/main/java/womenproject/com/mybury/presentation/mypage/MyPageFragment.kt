@@ -6,9 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.MyPageInfo
@@ -25,13 +27,13 @@ import kotlin.random.Random
  * Created by HanAYeon on 2019. 4. 23..
  */
 
-class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
+@AndroidEntryPoint
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_my_page
 
-    override val viewModel: MyPageViewModel
-        get() = MyPageViewModel()
+    private val viewModel by viewModels<MyPageViewModel>()
 
     private var isAdsShow = false
 
@@ -64,10 +66,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
                 val layoutManager = LinearLayoutManager(context)
 
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager =
+                binding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager =
                     layoutManager
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                viewDataBinding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
+                binding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+                binding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
                     MyPageCategoryListAdapter(info.categoryList.filter { it.count > 0 })
 
                 setUpView(info)
@@ -84,7 +86,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private fun setUpView(_myPageInfo: MyPageInfo) {
 
-        viewDataBinding.apply {
+        binding.apply {
 
             headerLayout.apply {
                 myPageInfo = _myPageInfo
@@ -161,14 +163,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
         if (imgUrl.isNullOrBlank()) {
             val num = Random.nextInt(2)
             if (num == 1) {
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(
+                binding.headerLayout.profileImg.setImageDrawable(
                     resources.getDrawable(
                         R.drawable.default_profile_my,
                         null
                     )
                 )
             } else {
-                viewDataBinding.headerLayout.profileImg.setImageDrawable(
+                binding.headerLayout.profileImg.setImageDrawable(
                     resources.getDrawable(
                         R.drawable.default_profile_bury,
                         null
@@ -176,13 +178,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
                 )
             }
         } else {
-            Glide.with(this).load(imgUrl).into(viewDataBinding.headerLayout.profileImg)
+            Glide.with(this).load(imgUrl).into(binding.headerLayout.profileImg)
         }
     }
 
     private fun popupClickListener() {
-        if (viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.VISIBLE) {
-            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
+        if (binding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.VISIBLE) {
+            binding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
         }
     }
 
@@ -267,10 +269,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding, MyPageViewModel>() {
 
     private val moreButtonOnClickListener = View.OnClickListener {
 
-        if (viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {
-            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.VISIBLE
+        if (binding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {
+            binding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.VISIBLE
         } else {
-            viewDataBinding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
+            binding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.GONE
         }
     }
 

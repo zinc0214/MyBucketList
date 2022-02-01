@@ -10,6 +10,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.SearchResultType
@@ -19,9 +21,10 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.SearchViewModel
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModels<SearchViewModel>()
     private lateinit var binding: FragmentSearchBinding
     private var selectedSearchType = SearchType.All
     private var resultList = listOf<SearchResultType>()
@@ -35,7 +38,6 @@ class SearchFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        viewModel = SearchViewModel()
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         return binding.root
     }

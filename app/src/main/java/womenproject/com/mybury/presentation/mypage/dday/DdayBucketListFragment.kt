@@ -1,7 +1,9 @@
 package womenproject.com.mybury.presentation.mypage.dday
 
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
@@ -17,19 +19,19 @@ import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
  * Created by HanAYeon on 2019. 1. 16..
  */
 
-class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketTotalListViewModel>() {
+@AndroidEntryPoint
+class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_dday_list
 
-    override val viewModel: DdayBucketTotalListViewModel
-        get() = DdayBucketTotalListViewModel()
+    private val viewModel by viewModels<DdayBucketTotalListViewModel>()
 
     override fun initDataBinding() {
-        viewDataBinding.ddayEachBucketList.layoutManager = LinearLayoutManager(context)
-        viewDataBinding.ddayEachBucketList.hasFixedSize()
-        viewDataBinding.backBtnOnClickListener = backBtnOnClickListener()
-        viewDataBinding.filterClickListener = filterOnClickListener()
+        binding.ddayEachBucketList.layoutManager = LinearLayoutManager(context)
+        binding.ddayEachBucketList.hasFixedSize()
+        binding.backBtnOnClickListener = backBtnOnClickListener()
+        binding.filterClickListener = filterOnClickListener()
         getDdayList()
     }
 
@@ -46,7 +48,7 @@ class DdayBucketListFragment : BaseFragment<FragmentDdayListBinding, DdayBucketT
 
                 override fun success(bucketList: List<Any>) {
                     stopLoading()
-                    viewDataBinding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>, showSnackBar)
+                    binding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(context, bucketList as List<DdayBucketList>, showSnackBar)
                 }
 
                 override fun fail() {

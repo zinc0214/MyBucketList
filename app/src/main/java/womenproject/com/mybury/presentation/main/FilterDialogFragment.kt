@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.main
 import android.app.ActionBar
 import android.view.View
 import android.widget.Toast
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
@@ -19,7 +20,7 @@ import womenproject.com.mybury.presentation.base.BaseDialogFragment
  * Created by HanAYeon on 2019. 1. 15..
  */
 
-
+@AndroidEntryPoint
 open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     BaseDialogFragment<DialogMainFilterBinding>() {
     override val layoutResourceId: Int

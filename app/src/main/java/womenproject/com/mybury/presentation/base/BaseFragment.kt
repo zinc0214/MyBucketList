@@ -16,13 +16,11 @@ import womenproject.com.mybury.presentation.MainActivity
  * Created by HanAYeon on 2019. 3. 7..
  */
 
-abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
+abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
 
-    lateinit var viewDataBinding: T
+    lateinit var binding: T
 
     abstract val layoutResourceId: Int
-
-    abstract val viewModel: R
 
     abstract fun initDataBinding()
 
@@ -44,11 +42,9 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
-        return viewDataBinding.root
+        binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
+        return binding.root
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -128,6 +124,4 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             a.purchaseSelectItem(id, purchaseSuccess, purchaseFail)
         }
     }
-
-
 }

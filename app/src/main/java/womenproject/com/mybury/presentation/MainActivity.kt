@@ -75,10 +75,9 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initAdmob()
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        initAdmob()
         drawerLayout = binding.drawerLayout
         navController = Navigation.findNavController(this, R.id.nav_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)

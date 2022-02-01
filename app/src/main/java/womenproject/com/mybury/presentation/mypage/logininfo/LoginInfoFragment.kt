@@ -3,10 +3,12 @@ package womenproject.com.mybury.presentation.mypage.logininfo
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
@@ -28,14 +30,13 @@ import womenproject.com.mybury.presentation.intro.SplashLoginActivity
  * Created by HanAYeon on 2019-09-16.
  */
 
-class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>() {
-
-
+@AndroidEntryPoint
+class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding>() {
+    
     override val layoutResourceId: Int
         get() = R.layout.fragment_login_info
 
-    override val viewModel: BaseViewModel
-        get() = BaseViewModel()
+    private val viewModel by viewModels<BaseViewModel>()
 
 
     private var isSucessDelete = false
@@ -43,9 +44,9 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
     private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun initDataBinding() {
-        viewDataBinding.backLayout.title = "로그인 정보"
-        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
-        viewDataBinding.activity = this
+        binding.backLayout.title = "로그인 정보"
+        binding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.activity = this
     }
 
     fun getLoginText() = run { "${getAccountEmail(requireContext())} 계정으로\n로그인하였습니다." }

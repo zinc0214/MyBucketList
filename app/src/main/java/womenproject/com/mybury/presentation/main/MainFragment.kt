@@ -1,8 +1,10 @@
 package womenproject.com.mybury.presentation.main
 
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
@@ -25,31 +27,31 @@ import java.util.*
  * Created by HanAYeon on 2018. 11. 26..
  */
 
-class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
+@AndroidEntryPoint
+class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_main
 
-    override val viewModel: BucketInfoViewModel
-        get() = BucketInfoViewModel()
+    private val viewModel by viewModels<BucketInfoViewModel>()
 
     private var currentBucketSize = 0
+
     override fun initDataBinding() {
-        viewDataBinding.mainToolbar.sortClickListener = bucketSortClickListener()
-        viewDataBinding.mainToolbar.filterClickListener = createOnClickFilterListener()
-        viewDataBinding.mainToolbar.searchClickListener = bucketSearchClickListener()
-        viewDataBinding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
-        viewDataBinding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
-
-
         initBucketListUI()
     }
 
     private fun initBucketListUI() {
         val layoutManager = LinearLayoutManager(context)
 
-        viewDataBinding.bucketList.layoutManager = layoutManager
-        viewDataBinding.bucketList.hasFixedSize()
+        binding.mainToolbar.sortClickListener = bucketSortClickListener()
+        binding.mainToolbar.filterClickListener = createOnClickFilterListener()
+        binding.mainToolbar.searchClickListener = bucketSearchClickListener()
+        binding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
+        binding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
+
+        binding.bucketList.layoutManager = layoutManager
+        binding.bucketList.hasFixedSize()
 
         getMainBucketList()
 
@@ -81,14 +83,14 @@ class MainFragment : BaseFragment<FragmentMainBinding, BucketInfoViewModel>() {
             override fun success(value: Any) {
                 val response = value as BucketList
                 if (response.bucketlists.isEmpty()) {
-                    viewDataBinding.blankImg.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.visibility = View.GONE
-                    viewDataBinding.endImage.visibility = View.GONE
+                    binding.blankImg.visibility = View.VISIBLE
+                    binding.bucketList.visibility = View.GONE
+                    binding.endImage.visibility = View.GONE
                 } else {
-                    viewDataBinding.blankImg.visibility = View.GONE
-                    viewDataBinding.bucketList.visibility = View.VISIBLE
-                    viewDataBinding.endImage.visibility = View.VISIBLE
-                    viewDataBinding.bucketList.adapter =
+                    binding.blankImg.visibility = View.GONE
+                    binding.bucketList.visibility = View.VISIBLE
+                    binding.endImage.visibility = View.VISIBLE
+                    binding.bucketList.adapter =
                         MainBucketListAdapter(response.bucketlists, showSnackBar)
                 }
                 stopLoading()

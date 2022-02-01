@@ -1,7 +1,9 @@
 package womenproject.com.mybury.presentation.mypage
 
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
@@ -14,15 +16,14 @@ import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
-class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBinding, BucketInfoViewModel>() {
-
-    private lateinit var filterType: String
-
+@AndroidEntryPoint
+class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_list_by_category
 
-    override val viewModel: BucketInfoViewModel
-        get() = BucketInfoViewModel()
+    private lateinit var filterType: String
+
+    private val viewModel by viewModels<BucketInfoViewModel>()
 
     override fun initDataBinding() {
 
@@ -32,12 +33,12 @@ class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBind
             this.filterType = filter!!
         }
 
-        viewDataBinding.headerLayout.title =
+        binding.headerLayout.title =
                 when (filterType) {
                     ShowFilter.started.toString() -> "진행중"
                     else -> "완료"
                 }
-        viewDataBinding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         initBucketListUI()
     }
@@ -45,8 +46,8 @@ class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBind
     private fun initBucketListUI() {
         val layoutManager = LinearLayoutManager(context)
 
-        viewDataBinding.bucketList.layoutManager = layoutManager
-        viewDataBinding.bucketList.hasFixedSize()
+        binding.bucketList.layoutManager = layoutManager
+        binding.bucketList.hasFixedSize()
 
         getFilterListUp(requireContext())?.let {
             viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
@@ -64,7 +65,7 @@ class BucketListByFilterFragment : BaseFragment<FragmentBucketListByCategoryBind
 
                 override fun success(value: Any) {
                     val response = value as BucketList
-                    viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(response.bucketlists, showSnackBar)
+                    binding.bucketList.adapter = CategoryBucketListAdapter(response.bucketlists, showSnackBar)
                     stopLoading()
                 }
             }, filterType, it)

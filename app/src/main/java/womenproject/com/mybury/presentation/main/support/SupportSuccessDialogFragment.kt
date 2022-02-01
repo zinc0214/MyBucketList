@@ -1,10 +1,12 @@
 package womenproject.com.mybury.presentation.main.support
 
 import android.app.ActionBar
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogSupportSuccessBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
+@AndroidEntryPoint
 class SupportSuccessDialogFragment() : BaseDialogFragment<DialogSupportSuccessBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_support_success

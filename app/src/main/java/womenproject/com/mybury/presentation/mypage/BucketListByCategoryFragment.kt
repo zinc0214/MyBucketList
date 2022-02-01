@@ -1,7 +1,9 @@
 package womenproject.com.mybury.presentation.mypage
 
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.CategoryInfo
@@ -12,15 +14,15 @@ import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
-class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBinding, BucketInfoViewModel>() {
+@AndroidEntryPoint
+class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBinding>() {
 
     private lateinit var selectCategory: CategoryInfo
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_bucket_list_by_category
 
-    override val viewModel: BucketInfoViewModel
-        get() = BucketInfoViewModel()
+    private val viewModel by viewModels<BucketInfoViewModel>()
 
     override fun initDataBinding() {
 
@@ -30,8 +32,8 @@ class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBi
             this.selectCategory = category!!
         }
 
-        viewDataBinding.headerLayout.title = selectCategory.name
-        viewDataBinding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.headerLayout.title = selectCategory.name
+        binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         initBucketListUI()
     }
@@ -40,8 +42,8 @@ class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBi
     private fun initBucketListUI() {
         val layoutManager = LinearLayoutManager(context)
 
-        viewDataBinding.bucketList.layoutManager = layoutManager
-        viewDataBinding.bucketList.hasFixedSize()
+        binding.bucketList.layoutManager = layoutManager
+        binding.bucketList.hasFixedSize()
 
         viewModel.getBucketListByCategory(object : BaseViewModel.MoreCallBackAnyList {
             override fun restart() {
@@ -57,7 +59,7 @@ class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBi
             }
 
             override fun success(value: List<Any>) {
-                viewDataBinding.bucketList.adapter = CategoryBucketListAdapter(value as List<BucketItem>, showSnackBar)
+                binding.bucketList.adapter = CategoryBucketListAdapter(value as List<BucketItem>, showSnackBar)
                 stopLoading()
             }
         }, selectCategory.id)

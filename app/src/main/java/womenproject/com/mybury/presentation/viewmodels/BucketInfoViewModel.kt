@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +15,14 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
 /**
  * Created by HanAYeon on 2019-06-25.
  */
 
-class BucketInfoViewModel : BaseViewModel() {
+@HiltViewModel
+class BucketInfoViewModel @Inject constructor(): BaseViewModel() {
 
     private val _categoryLoadState = MutableLiveData<LoadState>()
     val categoryLoadState: LiveData<LoadState> = _categoryLoadState

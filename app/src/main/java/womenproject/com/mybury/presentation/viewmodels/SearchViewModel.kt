@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -13,8 +14,10 @@ import womenproject.com.mybury.data.SearchRequest
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
-class SearchViewModel : BaseViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(): BaseViewModel() {
 
     private val _allBucketSearchResult = MutableLiveData<List<SearchResultType>>()
     val allBucketSearchResult: LiveData<List<SearchResultType>> = _allBucketSearchResult

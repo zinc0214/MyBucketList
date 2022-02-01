@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
@@ -21,8 +23,8 @@ import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
-
-class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(),
+@AndroidEntryPoint
+class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding>(),
     ItemDragListener,
     ItemCheckedListener,
     ItemMovedListener {
@@ -40,10 +42,9 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
     override val layoutResourceId: Int
         get() = R.layout.fragment_category_edit
-
-    override val viewModel: MyPageViewModel
-        get() = MyPageViewModel()
-
+    
+    private val viewModel by viewModels<MyPageViewModel>()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,9 +66,9 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         isCancelConfirm = false
 
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        viewDataBinding.backLayout.title = "카테고리 편집"
-        viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
-        viewDataBinding.fragment = this
+        binding.backLayout.title = "카테고리 편집"
+        binding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
+        binding.fragment = this
 
         setUpViewModelObservers()
         bucketInfoViewModel.getCategoryList()
@@ -136,13 +137,13 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             editCategoryName
         )
 
-        viewDataBinding.categoryListRecyclerView.apply {
+        binding.categoryListRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = editCategoryListAdapter
         }
 
         itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editCategoryListAdapter))
-        itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+        itemTouchHelper.attachToRecyclerView(binding.categoryListRecyclerView)
     }
 
     fun addNewCategoryListener() {
@@ -221,7 +222,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     stopLoading()
                     initDataBinding()
                     removedList.clear()
-                    viewDataBinding.cancelText.isEnabled = false
+                    binding.cancelText.isEnabled = false
                 }
 
                 override fun fail() {
@@ -282,7 +283,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             removedList.remove(category.id)
         }
 
-        viewDataBinding.cancelText.isEnabled = removedList.size > 0
+        binding.cancelText.isEnabled = removedList.size > 0
     }
 
     override fun moved(list: List<Any>) {

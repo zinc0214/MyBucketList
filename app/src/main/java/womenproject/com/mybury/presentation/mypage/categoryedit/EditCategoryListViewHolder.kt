@@ -7,7 +7,6 @@ import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.ItemCategoryBinding
-import womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 
@@ -24,7 +23,7 @@ class EditCategoryListViewHolder(
     fun bind(category: Category) {
         binding.apply {
 
-            viewModel = CategoryListItemViewModel(category.name)
+            bucketName = category.name
             if (category.name == "없음") {
                 removeBox.isEnabled = false
                 removeBox.isChecked = false

@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel" />
+            name="bucketName"
+            type="String" />
 
 
     </data>
@@ -58,7 +58,7 @@
                     android:background="@color/_00ffffff"
                     android:maxLength="12"
                     android:maxLines="1"
-                    android:text="@{viewModel.bucketName}"
+                    android:text="@{bucketName}"
                     android:textColor="@color/_434343"
                     android:textColorHint="@color/_aaaaaa"
                     android:textSize="14sp"
