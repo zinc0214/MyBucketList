@@ -2,7 +2,6 @@ package womenproject.com.mybury.presentation.main.search
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,7 +101,6 @@ class SearchFragment : Fragment() {
 
     private fun setUpObserve() {
         viewModel.allBucketSearchResult.observe(viewLifecycleOwner) {
-            Log.e("ayhan", "result : $it")
             resultList = it
             setUpResultList()
         }

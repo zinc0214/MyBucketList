@@ -314,8 +314,6 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
         billingResult: BillingResult,
         purchaseList: MutableList<Purchase>?
     ) {
-        Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}, $purchaseList")
-
         if(purchaseList == null ) {
             purchaseFail.invoke()
         }
@@ -383,9 +381,7 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
             return
         } else {
             startLoading()
-            //Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
-                Log.e("ayhan", "purchasesList : ${it}")
                 //결제된 내역에 대한 처리
                 //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
             }
@@ -395,11 +391,6 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
             recentSupport.forEach { supportedItem ->
                 val purchasedFailItem =
                     result.purchasesList?.firstOrNull { it.purchaseToken == supportedItem.token }
-                Log.e(
-                    "ayhan",
-                    "purchasedFailItem : ${purchasedFailItem}, ${purchasedFailItem?.purchaseState}"
-                )
-
                 if (purchasedFailItem == null) {
                     if (supportedItem.susYn == "N") {
                         // 없는 것으로 간주. 아무것도 하지 않는다.
@@ -433,13 +424,6 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
     private fun purchaseAlways(purchaseToken: String) {
         val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
-
-            Log.d("ayhan", "TOKEN : $purchaseToken, ${billingResult.responseCode}")
-            Log.d(
-                "ayhan",
-                " previoutToken and Pusr : \n $previousToken \n $purchaseToken \n ${previousToken == purchaseToken}"
-            )
-
             startLoading()
 
             if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
