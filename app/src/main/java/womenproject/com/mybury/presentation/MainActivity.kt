@@ -316,6 +316,9 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
     ) {
         Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}, $purchaseList")
 
+        if(purchaseList == null ) {
+            purchaseFail.invoke()
+        }
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
