@@ -7,10 +7,10 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -20,6 +20,7 @@ import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
@@ -45,10 +46,11 @@ import java.util.*
  * Created by HanAYeon on 2018. 11. 26..
  */
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var supportViewModel: MyBurySupportViewModel
+    private val supportViewModel by viewModels<MyBurySupportViewModel>()
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -82,7 +84,6 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
         val baseViewModel = BaseViewModel()
-        supportViewModel = MyBurySupportViewModel()
 
         if (baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
@@ -90,18 +91,18 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHist
 
         supportViewModel.getPurchasableItem()
 
-        supportViewModel.supportInfo.observe(this, Observer { info ->
+        supportViewModel.supportInfo.observe(this) { info ->
             setAdShowable(info.totalPrice.toInt())
             initBillingClient(info.supportItems)
             supportInfo = info
             supportInfo?.supportItems?.forEach {
                 it.isPurchasable = true
             }
-        })
+        }
 
-        supportViewModel.supportPrice.observe(this, { price ->
+        supportViewModel.supportPrice.observe(this) { price ->
             supportInfo?.totalPrice = price
-        })
+        }
 
         purchaseFail = {
             // DO NoTHING

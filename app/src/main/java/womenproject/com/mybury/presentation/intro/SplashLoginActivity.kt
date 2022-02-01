@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
@@ -37,7 +38,7 @@ import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 
-
+@AndroidEntryPoint
 class SplashLoginActivity : AppCompatActivity() {
 
     lateinit var binding: LayoutSplashWithLoginBinding

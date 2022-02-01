@@ -14,6 +14,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
@@ -39,7 +40,7 @@ import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class CreateAccountActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCreateAccountBinding

@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,8 +13,10 @@ import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
-class MyBurySupportViewModel : BaseViewModel() {
+@HiltViewModel
+class MyBurySupportViewModel @Inject constructor() : BaseViewModel() {
 
     private val _supportInfo = MutableLiveData<SupportInfo>()
     val supportInfo: LiveData<SupportInfo> = _supportInfo
