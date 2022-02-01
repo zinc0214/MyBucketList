@@ -28,7 +28,7 @@ object Dep {
         }
 
         const val appcompat = "androidx.appcompat:appcompat:1.4.1"
-        const val coreKtx = "androidx.core:core-ktx:1.6.0"
+        const val coreKtx = "androidx.core:core-ktx:1.7.0"
         const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 
         object Lifecycle {
