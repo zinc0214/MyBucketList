@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +28,6 @@ import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
-import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
@@ -40,7 +40,7 @@ import java.io.File
 import kotlin.random.Random
 
 
-class CreateAccountActivity : BaseActiviy() {
+class CreateAccountActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCreateAccountBinding
     private var file: File? = null

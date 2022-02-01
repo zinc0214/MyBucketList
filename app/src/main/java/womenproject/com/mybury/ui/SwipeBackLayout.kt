@@ -12,7 +12,7 @@ import android.widget.ScrollView
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.viewpager.widget.ViewPager
-import womenproject.com.mybury.presentation.base.BaseActiviy
+import womenproject.com.mybury.presentation.MainActivity
 
 /**
  * Created by HanAYeon on 2019-05-14.
@@ -317,7 +317,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     private fun finish() {
-        val act = BaseActiviy()
+        val act = MainActivity()
         act.overridePendingTransition(0, android.R.anim.fade_out)
 
     }
