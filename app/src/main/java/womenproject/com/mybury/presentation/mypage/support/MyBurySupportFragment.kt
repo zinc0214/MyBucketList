@@ -1,9 +1,12 @@
 package womenproject.com.mybury.presentation.mypage.support
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.databinding.DataBindingUtil
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -15,11 +18,9 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 
 @AndroidEntryPoint
-class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding>() {
+class MyBurySupportFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_mybury_support
-
+    private lateinit var binding: FragmentMyburySupportBinding
     private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
     private var isCurrentSupporting = false
 
@@ -39,7 +40,22 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding>() {
         requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
-    override fun initDataBinding() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_mybury_support, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         binding.supportPrice = ""
 
         getSupportInfo().apply {

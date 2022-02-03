@@ -94,8 +94,7 @@ object Dep {
     object Retrofit {
         private const val version = "2.9.0"
         const val core = "com.squareup.retrofit2:retrofit:$version"
-        const val serialization =
-            "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+        const val serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
         const val converter = "com.squareup.retrofit2:converter-gson:$version"
         const val rxJava = "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     }

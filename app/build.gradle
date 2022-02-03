@@ -48,6 +48,9 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':domain')
+    implementation project(path: ':data')
+
     // AndroidX
     implementation Dep.AndroidX.appcompat
     implementation Dep.AndroidX.constraintlayout

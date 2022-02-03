@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.zinc.domain.usecase.home.LoadHomeBucketListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,13 +23,35 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class BucketInfoViewModel @Inject constructor(): BaseViewModel() {
+class BucketInfoViewModel @Inject constructor(
+    private val loadHomeBucketListUseCase: LoadHomeBucketListUseCase
+) : BaseViewModel() {
 
     private val _categoryLoadState = MutableLiveData<LoadState>()
     val categoryLoadState: LiveData<LoadState> = _categoryLoadState
 
     private val _categoryList = MutableLiveData<List<Category>>()
     val categoryList: LiveData<List<Category>> = _categoryList
+
+    private val _homeBucketList = MutableLiveData<com.zinc.data.model.BucketList>()
+    val homeBucketList: LiveData<com.zinc.data.model.BucketList> = _homeBucketList
+
+    //test
+    fun getHomeBucketList(filter: String, sort: String) {
+        if (accessToken == null || userId == null) {
+            // fail
+            return
+        }
+
+        viewModelScope.launch {
+            loadHomeBucketListUseCase.invoke(accessToken, userId, filter, sort).apply {
+                withContext(Dispatchers.Main) {
+                    _homeBucketList.value = this@apply
+                    Log.e("ayhan", "_homeBucketList : ${_homeBucketList.value}")
+                }
+            }
+        }
+    }
 
     @SuppressLint("CheckResult")
     fun getMainBucketList(callback: MoreCallBackAny, filter: String, sort: String) {

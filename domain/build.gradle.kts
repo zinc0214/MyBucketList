@@ -35,6 +35,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":data"))
+
     implementation(Dep.AndroidX.coreKtx)
     implementation(Dep.AndroidX.appcompat)
+
+    implementation(Dep.Dagger.dagger)
+    implementation(Dep.Kotlin.stdlibJvm)
+    implementation(Dep.Kotlin.coroutines.core)
 }

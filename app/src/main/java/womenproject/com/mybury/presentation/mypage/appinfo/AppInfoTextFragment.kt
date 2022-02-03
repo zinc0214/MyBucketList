@@ -1,10 +1,14 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
+import android.os.Bundle
 import android.text.Html
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
@@ -21,16 +25,24 @@ import java.io.InputStreamReader
  */
 
 @AndroidEntryPoint
-class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding>() {
+class AppInfoTextFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.layout_title_view
-
+    private lateinit var binding : LayoutTitleViewBinding
     private lateinit var type: String
     private lateinit var webSettings: WebSettings
     private lateinit var webView: WebView
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.layout_title_view, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         arguments?.let {
             val args = AppInfoTextFragmentArgs.fromBundle(it)
             val textType = args.type

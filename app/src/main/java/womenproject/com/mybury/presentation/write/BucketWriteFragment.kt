@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding>() {
+open class BucketWriteFragment : BaseFragment() {
 
     var alreadyImgList = mutableMapOf<Int, String?>()
     var addImgList = mutableMapOf<Int, String?>()
@@ -54,15 +56,28 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding>() {
     private var categoryList = arrayListOf<Category>()
     var isAdsShow = false
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_write
-
+    lateinit var binding: FragmentBucketWriteBinding
     val viewModel by viewModels<BucketWriteViewModel>()
+    private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
 
-    private val bucketInfoViewModel = BucketInfoViewModel()
     lateinit var imm: InputMethodManager
 
-    override fun initDataBinding() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_write, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         loadArgument()
         setUpViewModelObservers()
         bucketInfoViewModel.getCategoryList()

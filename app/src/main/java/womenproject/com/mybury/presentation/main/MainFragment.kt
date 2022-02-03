@@ -1,6 +1,10 @@
 package womenproject.com.mybury.presentation.main
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,16 +32,21 @@ import java.util.*
  */
 
 @AndroidEntryPoint
-class MainFragment : BaseFragment<FragmentMainBinding>() {
+class MainFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_main
+    private lateinit var binding :FragmentMainBinding
 
     private val viewModel by viewModels<BucketInfoViewModel>()
 
     private var currentBucketSize = 0
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initBucketListUI()
     }
 
@@ -65,7 +74,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         if (filterForShow == null || filterListUp == null) {
             return
         }
-
         viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 getMainBucketList()

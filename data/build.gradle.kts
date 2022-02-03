@@ -1,13 +1,18 @@
+import dependencies.Dep
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    kotlin("kapt")
 }
 
 android {
     compileSdk = 31
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         targetSdk = 31
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -34,10 +39,23 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    implementation(Dep.Kotlin.stdlibJvm)
+    implementation(Dep.Kotlin.coroutines.core)
+    implementation(Dep.Kotlin.serialization)
+
+    // Dagger Hilt
+    implementation(Dep.Dagger.Hilt.android)
+    kapt(Dep.Dagger.Hilt.compiler)
+
+    api(Dep.Retrofit.core)
+    implementation(Dep.Retrofit.core)
+    implementation(Dep.Retrofit.serialization)
+
+    implementation(Dep.OkHttp.core)
+    implementation(Dep.OkHttp.loggingInterceptor)
+
+}
+
+kapt {
+    correctErrorTypes = true
 }

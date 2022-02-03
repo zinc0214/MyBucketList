@@ -6,12 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getColor
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
@@ -30,10 +33,9 @@ import java.io.File
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding>() {
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_profile_edit
+class ProfileEditFragment : BaseFragment() {
 
+    private lateinit var binding :FragmentProfileEditBinding
     private val viewModel by viewModels<MyPageViewModel>()
 
     private lateinit var imm: InputMethodManager
@@ -52,7 +54,17 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding>() {
         }
     }
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_profile_edit, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         getMyProfileInfo()
         binding.title = "프로필 수정"

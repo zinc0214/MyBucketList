@@ -3,7 +3,11 @@ package womenproject.com.mybury.presentation.mypage.appinfo
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,15 +23,23 @@ import womenproject.com.mybury.util.Converter.Companion.stringFormat
  */
 
 @AndroidEntryPoint
-class AppInfoFragment : BaseFragment<FragmentAppInfoBinding>() {
+class AppInfoFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_app_info
+    private lateinit var binding : FragmentAppInfoBinding
     
     private val viewModel by viewModels<AppInfoViewModel>()
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_app_info, container, false)
+        return binding.root
+    }
 
-    override fun initDataBinding() {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         startLoading()
 
         viewModel.latelyVersion.observe(this) {

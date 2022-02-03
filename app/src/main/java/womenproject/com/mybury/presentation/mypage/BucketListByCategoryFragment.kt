@@ -1,6 +1,10 @@
 package womenproject.com.mybury.presentation.mypage
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,16 +19,25 @@ import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
 @AndroidEntryPoint
-class BucketListByCategoryFragment : BaseFragment<FragmentBucketListByCategoryBinding>() {
+class BucketListByCategoryFragment : BaseFragment() {
 
     private lateinit var selectCategory: CategoryInfo
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_list_by_category
+    private lateinit var binding: FragmentBucketListByCategoryBinding
 
     private val viewModel by viewModels<BucketInfoViewModel>()
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_list_by_category, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setUpViews()
+    }
+
+    private fun setUpViews() {
 
         arguments?.let {
             val args = BucketListByCategoryFragmentArgs.fromBundle(it)

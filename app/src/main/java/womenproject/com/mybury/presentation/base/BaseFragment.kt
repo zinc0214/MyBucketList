@@ -1,28 +1,21 @@
 package womenproject.com.mybury.presentation.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.presentation.MainActivity
+import javax.inject.Inject
 
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
  */
 
-abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
-
-    lateinit var binding: T
-
-    abstract val layoutResourceId: Int
-
-    abstract fun initDataBinding()
+@AndroidEntryPoint
+open class BaseFragment @Inject constructor(): Fragment() {
 
     var isCancelConfirm = true
 
@@ -39,16 +32,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, goToBackCallback)
 
         checkNetworkConnect()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initDataBinding()
     }
 
     private fun checkNetworkConnect() {
@@ -81,7 +64,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     }
 
     fun startLoading() {
-
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.startLoading()
@@ -108,7 +90,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
             a.setAdShowable(price)
         }
     }
-
 
     fun getSupportInfo(): SupportInfo? {
         return if (activity is MainActivity) {

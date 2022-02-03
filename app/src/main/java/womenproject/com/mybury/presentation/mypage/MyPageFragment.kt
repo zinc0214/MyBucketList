@@ -4,8 +4,12 @@ package womenproject.com.mybury.presentation.mypage
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,23 +32,34 @@ import kotlin.random.Random
  */
 
 @AndroidEntryPoint
-class MyPageFragment : BaseFragment<FragmentMyPageBinding>() {
+class MyPageFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_my_page
+    private lateinit var binding: FragmentMyPageBinding
 
     private val viewModel by viewModels<MyPageViewModel>()
 
     private var isAdsShow = false
 
-    override fun initDataBinding() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
+        return binding.root
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setUpViews()
+    }
+
+    private fun setUpViews() {
         arguments?.let {
             val args = MyPageFragmentArgs.fromBundle(it)
             val argIsAdsShow = args.isAdsShow
             this.isAdsShow = argIsAdsShow
         }
-
         setCategoryList()
     }
 

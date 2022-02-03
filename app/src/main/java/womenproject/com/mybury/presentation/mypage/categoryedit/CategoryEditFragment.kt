@@ -2,9 +2,13 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,21 +22,21 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
 @AndroidEntryPoint
-class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding>(),
+class CategoryEditFragment : BaseFragment(),
     ItemDragListener,
     ItemCheckedListener,
     ItemMovedListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var binding:FragmentCategoryEditBinding
 
-    private val bucketInfoViewModel = BucketInfoViewModel()
-    private val categoryEditViewModel = CategoryInfoViewModel()
+    private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
+    private val categoryEditViewModel by viewModels<CategoryInfoViewModel>()
     private val removedList = hashSetOf<String>()
     private var changeCategoryList = arrayListOf<Category>()
     private var originCategoryList = arrayListOf<Category>()
@@ -40,11 +44,6 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding>(),
     private lateinit var imm: InputMethodManager
     private var isKeyBoardShown = false
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_category_edit
-    
-    private val viewModel by viewModels<MyPageViewModel>()
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,7 +61,17 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding>(),
         requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_category_edit, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         isCancelConfirm = false
 
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
