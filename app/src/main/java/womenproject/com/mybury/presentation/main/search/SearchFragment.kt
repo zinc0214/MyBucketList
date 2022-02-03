@@ -126,8 +126,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUpResultList() {
-        searchResultListAdapter.addList(selectedSearchType, resultList)
-        binding.searchResultIsBlankTextView.visibility = View.GONE
+        if (resultList.isNullOrEmpty()) {
+            binding.searchResultIsBlankTextView.visibility = View.VISIBLE
+            searchResultListAdapter.deleteList()
+        } else {
+            binding.searchResultIsBlankTextView.visibility = View.GONE
+            searchResultListAdapter.addList(selectedSearchType, resultList)
+        }
     }
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {

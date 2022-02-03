@@ -8,8 +8,10 @@ import android.text.Spanned
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
@@ -20,6 +22,7 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
 
 /**
  * Created by HanAYeon on 2019. 1. 10..
@@ -36,14 +39,15 @@ open class BaseBucketItemViewHolder(
         bucketListener: View.OnClickListener,
         bucketItemInfo: BucketItem,
         isForDday: Boolean = false,
-        isShowDday: Boolean = false
+        isShowDday: Boolean = false,
+        isLastItem: Boolean = false
     ) {
         this.isForDday = isForDday
 
         if (isForDday) {
             setDdayColor()
         }
-        setUI(bucketItemInfo, bucketListener, isShowDday)
+        setUI(bucketItemInfo, bucketListener, isShowDday, isLastItem)
         binding.executePendingBindings()
     }
 
@@ -133,7 +137,12 @@ open class BaseBucketItemViewHolder(
         binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 
-    private fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener, isShowDday : Boolean) {
+    private fun setUI(
+        bucketItemInfo: BucketItem,
+        bucketListener: View.OnClickListener,
+        isShowDday: Boolean,
+        isLastItem: Boolean
+    ) {
         binding.bucketInfo = bucketItemInfo
         binding.bucketClickListener = bucketListener
         binding.successCircleView.setBucketSuccessListener {
@@ -149,6 +158,12 @@ open class BaseBucketItemViewHolder(
         }
 
         binding.userCount.text = setCountText(bucketItemInfo.userCount, bucketItemInfo.goalCount)
+
+        if(isLastItem){
+            val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            lp.setMargins(dpToPx(8))
+            binding.bucketItemLayout.layoutParams = lp
+        }
     }
 
     private fun setOnClickBucketSuccessLayoutListener(bucketItemInfo: BucketItem) {

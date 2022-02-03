@@ -68,20 +68,22 @@ class SearchResultListAdapter(
                     holder.bind(
                         createOnClickBucketListener(bucketItem),
                         bucketItem,
-                        false
+                        isForDday = false,
+                        isLastItem = position == resultList.lastIndex
                     )
                 } else {
                     holder.bind(
                         createOnClickBucketListener(bucketItem),
                         bucketItem,
                         isForDday = true,
-                        isShowDday = true
+                        isShowDday = true,
+                        isLastItem = position == resultList.lastIndex
                     )
                 }
             }
             is SearchCategoryListViewHolder -> {
                 val category = resultList[position] as CategoryInfo
-                holder.bind(category)
+                holder.bind(category, position == resultList.lastIndex)
             }
         }
     }
