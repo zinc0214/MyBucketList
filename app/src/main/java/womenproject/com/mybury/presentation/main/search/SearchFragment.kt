@@ -55,10 +55,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        searchResultListAdapter = SearchResultListAdapter() { bucketItem ->
-            showCancelSnackBar(requireView(), bucketItem)
-        }
-
+        searchResultListAdapter = SearchResultListAdapter()
         binding.lifecycleOwner = this
 
         binding.apply {

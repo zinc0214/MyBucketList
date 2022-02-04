@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bucketClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="bucketInfo"
+            type="womenproject.com.mybury.data.BucketItem" />
+
+        <import type="android.view.View" />
+
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/bucket_item_layout"
+            style="@style/BucketItemLayoutStyle"
+            android:onClick="@{bucketClickListener}">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/bucket_succeed_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_efefef_r4_strk_e8e8e8" />
+
+                <ImageView
+                    android:id="@+id/bucket_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bucket_click_background" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp">
+
+                    <TextView
+                        android:id="@+id/bucket_title"
+                        style="@style/BucketItemTitleTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="21dp"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@{bucketInfo.title}"
+                        app:layout_constraintBottom_toTopOf="@id/progressLayout"
+                        app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0"
+                        app:layout_goneMarginBottom="21dp"
+                        tools:text="가나다라마바사아자차카타파하가나다라마사아자차카타파하" />
+
+                    <LinearLayout
+                        android:id="@+id/progressLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="19dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="-2dp"
+                        android:visibility="@{bucketInfo.goalCount > 1 ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bucket_title">
+
+                        <ProgressBar
+                            android:id="@+id/horizontal_progress_bar"
+                            style="@android:style/Widget.ProgressBar.Horizontal"
+                            android:layout_width="150dp"
+                            android:layout_height="6dp"
+                            android:max="@{bucketInfo.goalCount}"
+                            android:progress="@{bucketInfo.userCount}"
+                            android:progressDrawable="@drawable/base_horizontal_progressbar" />
+
+                        <TextView
+                            android:id="@+id/userCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center"
+                            android:textColor="@color/_a6c6ff"
+                            android:textSize="11sp"
+                            tools:text='10' />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/ddayTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="28dp"
+                        android:minWidth="38dp"
+                        android:paddingStart="7dp"
+                        android:text="@{bucketInfo.ddayText}"
+                        android:textColor="@{bucketInfo.overDday ? @color/_ffa690 : @color/_ffca5a}"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="D+10"
+                        tools:textColor="@color/_ffa690" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

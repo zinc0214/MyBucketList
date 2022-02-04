@@ -11,18 +11,15 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.SearchType
-import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
+import womenproject.com.mybury.databinding.ItemSearchBucketBinding
 import womenproject.com.mybury.databinding.ItemSearchCategoryBinding
-import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder
 
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-class SearchResultListAdapter(
-    private val showSnackBar: (BucketItem) -> Unit
-) : RecyclerView.Adapter<ViewHolder>() {
+class SearchResultListAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     private val resultList = arrayListOf<SearchResultType>()
     private var searchType = SearchType.All
@@ -46,10 +43,10 @@ class SearchResultListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
             // all, dday
-            0, 1 -> BaseBucketItemViewHolder(
-                ItemBucketDoingSimpleBinding.inflate(
+            0, 1 -> SearchBucketListViewHolder(
+                ItemSearchBucketBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), showSnackBar
+                )
             )
             // category
             else -> SearchCategoryListViewHolder(
@@ -62,7 +59,7 @@ class SearchResultListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is BaseBucketItemViewHolder -> {
+            is SearchBucketListViewHolder -> {
                 val bucketItem = resultList[position] as BucketItem
                 if (searchType == SearchType.All) {
                     holder.bind(
