@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.Category
@@ -28,6 +29,7 @@ class EditCategoryListViewHolder(
             if (category.name == "없음") {
                 removeBox.isEnabled = false
                 removeBox.isChecked = false
+                editLayout.visibility = View.GONE
             }
             dragLayout.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {

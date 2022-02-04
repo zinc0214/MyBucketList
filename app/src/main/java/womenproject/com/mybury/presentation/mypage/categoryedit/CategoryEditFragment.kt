@@ -33,7 +33,7 @@ class CategoryEditFragment : BaseFragment(),
     ItemMovedListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
-    private lateinit var binding:FragmentCategoryEditBinding
+    private lateinit var binding: FragmentCategoryEditBinding
 
     private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
     private val categoryEditViewModel by viewModels<CategoryInfoViewModel>()
@@ -61,8 +61,13 @@ class CategoryEditFragment : BaseFragment(),
         requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_category_edit, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_category_edit, container, false)
         return binding.root
     }
 
@@ -126,16 +131,11 @@ class CategoryEditFragment : BaseFragment(),
 
         val editCategoryName: (Category) -> Unit = {
             imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-
-            if (it.name == "없음") {
-                Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                val categoryAdd: (String) -> Unit = { name ->
-                    editCategoryItem(it, name)
-                }
-                AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
-                    .show(requireActivity().supportFragmentManager)
+            val categoryAdd: (String) -> Unit = { name ->
+                editCategoryItem(it, name)
             }
+            AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
+                .show(requireActivity().supportFragmentManager)
         }
 
         val editCategoryListAdapter = EditCategoryListAdapter(
