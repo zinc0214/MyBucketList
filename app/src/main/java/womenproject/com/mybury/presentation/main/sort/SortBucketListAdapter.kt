@@ -20,9 +20,8 @@ class SortBucketListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemType = viewType.toType()
 
-        return when (itemType) {
+        return when (viewType.toType()) {
             ItemType.BASE -> {
                 SortBaseBucketViewHolder(
                     ItemSortBaseBucketBinding.inflate(
