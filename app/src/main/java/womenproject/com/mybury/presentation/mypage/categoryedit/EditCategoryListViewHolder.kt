@@ -9,6 +9,7 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.ItemCategoryBinding
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
 
 class EditCategoryListViewHolder(
     private val binding: ItemCategoryBinding,
@@ -31,8 +32,11 @@ class EditCategoryListViewHolder(
             dragLayout.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(this@EditCategoryListViewHolder)
+                    categoryItemLayout.elevation = dpToPx(0).toFloat()
+                } else if (event.action == MotionEvent.ACTION_CANCEL) {
+                    categoryItemLayout.elevation = dpToPx(5).toFloat()
                 }
-                false
+                true
             }
             editLayout.setOnClickListener { v ->
                 editCategoryName.invoke(category)
@@ -41,7 +45,11 @@ class EditCategoryListViewHolder(
                 checkedListener.checked(isChecked, category)
             }
 
-            binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener(category.name))
+            binding.root.viewTreeObserver.addOnGlobalLayoutListener(
+                setOnSoftKeyboardChangedListener(
+                    category.name
+                )
+            )
             executePendingBindings()
         }
     }

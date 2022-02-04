@@ -8,118 +8,110 @@
             name="bucketName"
             type="String" />
 
-
     </data>
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:id="@+id/category_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/_ffffff"
-        android:orientation="vertical"
-        app:cardElevation="10dp">
+        android:minHeight="50dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0.3dp"
+            android:background="@color/_dddddd" />
 
-            <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <CheckBox
+                android:id="@+id/removeBox"
+                style="@style/CategoryDialogSubTextStyle"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/category_check_background"
+                android:button="@drawable/category_checkbox"
+                android:checked="false"
+                android:enabled="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/categoryText"
                 android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:background="@color/_dddddd" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="43dp"
+                android:layout_marginEnd="40dp"
+                android:background="@color/_00ffffff"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:text="@{bucketName}"
+                android:textColor="@color/_434343"
+                android:textColorHint="@color/_aaaaaa"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/edit_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
 
-                <CheckBox
-                    android:id="@+id/removeBox"
-                    style="@style/CategoryDialogSubTextStyle"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="17dp"
-                    android:background="@drawable/category_check_background"
-                    android:button="@drawable/category_checkbox"
-                    android:checked="false"
-                    android:enabled="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <RelativeLayout
+                android:id="@+id/edit_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="45dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/categoryText"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="43dp"
-                    android:layout_marginEnd="40dp"
-                    android:background="@color/_00ffffff"
-                    android:maxLength="12"
-                    android:maxLines="1"
-                    android:text="@{bucketName}"
-                    android:textColor="@color/_434343"
-                    android:textColorHint="@color/_aaaaaa"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/edit_layout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:src="@drawable/btn_list_name_edit" />
+
+            </RelativeLayout>
 
 
-                <RelativeLayout
-                    android:id="@+id/edit_layout"
+            <RelativeLayout
+                android:id="@+id/drag_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="45dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/btn_list_name_edit" />
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/drag_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="18dp"
-                        android:src="@drawable/category_list_change_img" />
+                    android:layout_marginEnd="18dp"
+                    android:src="@drawable/category_list_change_img" />
 
 
-                </RelativeLayout>
+            </RelativeLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:background="@color/_dddddd" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/_dddddd" />
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
+    </LinearLayout>
 
 </layout>
