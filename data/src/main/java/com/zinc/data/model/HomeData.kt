@@ -3,14 +3,14 @@ package com.zinc.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BucketList(
-    var bucketlists: List<BucketItem>,
+data class DomainBucketList(
+    var bucketlists: List<DomainBucketItem>,
     val popupYn: Boolean,
     val retcode: String
 )
 
 @Serializable
-data class BucketItem(
+data class DomainBucketItem(
     val id: String,
     var title: String,
     var userCount: Int = 0,

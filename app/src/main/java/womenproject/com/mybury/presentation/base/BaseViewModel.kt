@@ -86,16 +86,6 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         fun restart()
     }
 
-    sealed class ApiState() {
-        object Start : ApiState()
-        object Fail : ApiState()
-        object Restart : ApiState()
-        data class Success(
-            val response: Any
-        ) : ApiState()
-
-    }
-
     @SuppressLint("CheckResult")
     fun getRefreshToken(a2CallBack: SimpleCallBack) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
@@ -115,5 +105,4 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     enum class LoadState {
         START, RESTART, SUCCESS, FAIL
     }
-
 }

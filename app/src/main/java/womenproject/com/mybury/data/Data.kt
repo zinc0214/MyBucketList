@@ -1,6 +1,7 @@
 package womenproject.com.mybury.data
 
 import android.os.Parcelable
+import com.zinc.data.model.DomainBucketItem
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -60,6 +61,22 @@ data class BucketList(
     val popupYn: Boolean,
     val retcode: String
 ) : Parcelable
+
+fun List<DomainBucketItem>.toData(): List<BucketItem> {
+    val list = arrayListOf<BucketItem>()
+    this.forEach {
+        list.add(
+            BucketItem(
+                id = it.id,
+                title = it.title,
+                userCount = it.userCount,
+                goalCount = it.goalCount,
+                dDay = it.dDay
+            )
+        )
+    }
+    return list
+}
 
 data class DdayBucketListRespone(
     val dDayBucketlists: List<DdayBucketList>,

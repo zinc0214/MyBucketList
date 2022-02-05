@@ -1,6 +1,6 @@
 package com.zinc.data.repository
 
-import com.zinc.data.model.BucketList
+import com.zinc.data.model.DomainBucketList
 
 interface MyBuryRepository {
     suspend fun loadHomeBucketList(
@@ -8,5 +8,5 @@ interface MyBuryRepository {
         userId: String,
         filter: String,
         sort: String
-    ) : BucketList
+    ) : DomainBucketList
 }

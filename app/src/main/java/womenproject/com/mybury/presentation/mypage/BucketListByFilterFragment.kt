@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
@@ -27,8 +26,17 @@ class BucketListByFilterFragment : BaseFragment() {
     private lateinit var filterType: String
     private val viewModel by viewModels<BucketInfoViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_list_by_category, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_bucket_list_by_category,
+            container,
+            false
+        )
         return binding.root
     }
 
@@ -51,7 +59,34 @@ class BucketListByFilterFragment : BaseFragment() {
             }
         binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
 
+        setUpObservers()
         initBucketListUI()
+    }
+
+    private fun setUpObservers() {
+        viewModel.loadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.FAIL,
+                BaseViewModel.LoadState.RESTART -> {
+                    stopLoading()
+                    LoadFailDialog { }
+                }
+                BaseViewModel.LoadState.START,
+                BaseViewModel.LoadState.SUCCESS -> {
+                    startLoading()
+                }
+                else -> {
+                    // do Nothing
+                }
+            }
+        }
+
+        viewModel.homeBucketList.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.bucketList.adapter =
+                    CategoryBucketListAdapter(it.bucketlists, showSnackBar)
+            }
+        }
     }
 
     private fun initBucketListUI() {
@@ -59,31 +94,6 @@ class BucketListByFilterFragment : BaseFragment() {
 
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
-
-        getFilterListUp(requireContext())?.let {
-            viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
-                override fun restart() {
-                    initBucketListUI()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                }
-
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success(value: Any) {
-                    val response = value as BucketList
-                    binding.bucketList.adapter =
-                        CategoryBucketListAdapter(response.bucketlists, showSnackBar)
-                    stopLoading()
-                }
-            }, filterType, it)
-        }
-
-
     }
 
     private fun setBucketCancel(bucketId: String) {

@@ -1,7 +1,7 @@
 package com.zinc.data.repository
 
 import com.zinc.data.api.MyBuryApi
-import com.zinc.data.model.BucketList
+import com.zinc.data.model.DomainBucketList
 import javax.inject.Inject
 
 class MyBuryRepositoryImpl @Inject constructor(
@@ -12,7 +12,7 @@ class MyBuryRepositoryImpl @Inject constructor(
         userId: String,
         filter: String,
         sort: String
-    ): BucketList {
+    ): DomainBucketList {
         return myBuryApi.loadHomeBucketList(token, userId, filter, sort)
     }
 }

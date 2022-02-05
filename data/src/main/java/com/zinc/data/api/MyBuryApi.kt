@@ -1,6 +1,6 @@
 package com.zinc.data.api
 
-import com.zinc.data.model.BucketList
+import com.zinc.data.model.DomainBucketList
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -13,6 +13,6 @@ interface MyBuryApi {
         @Query("userId") userId: String,
         @Query("filter") filter: String,
         @Query("sort") sort: String
-    ): BucketList
+    ): DomainBucketList
 
 }

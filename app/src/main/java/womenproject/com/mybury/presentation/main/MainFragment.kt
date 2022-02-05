@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
 import womenproject.com.mybury.data.Preference.Companion.getEnableShowAlarm
@@ -20,6 +19,7 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
@@ -34,13 +34,17 @@ import java.util.*
 @AndroidEntryPoint
 class MainFragment : BaseFragment() {
 
-    private lateinit var binding :FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
 
     private val viewModel by viewModels<BucketInfoViewModel>()
 
     private var currentBucketSize = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         return binding.root
     }
@@ -62,56 +66,58 @@ class MainFragment : BaseFragment() {
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
 
+        setUpObservers()
         getMainBucketList()
+    }
 
+    private fun setUpObservers() {
+        viewModel.loadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.FAIL,
+                BaseViewModel.LoadState.RESTART -> {
+                    stopLoading()
+                    LoadFailDialog { }
+                }
+                BaseViewModel.LoadState.START,
+                BaseViewModel.LoadState.SUCCESS -> {
+                    startLoading()
+                }
+                else -> {
+                    // do Nothing
+                }
+            }
+        }
+
+        viewModel.homeBucketList.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it.bucketlists.isEmpty()) {
+                    binding.apply {
+                        blankImg.visibility = View.VISIBLE
+                        bucketList.visibility = View.GONE
+                        endImage.visibility = View.GONE
+                    }
+                } else {
+                    binding.apply {
+                        blankImg.visibility = View.GONE
+                        bucketList.visibility = View.VISIBLE
+                        endImage.visibility = View.VISIBLE
+                        bucketList.adapter =
+                            MainBucketListAdapter(it.bucketlists, showSnackBar)
+                    }
+                }
+                if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
+                    showDdayPopup()
+                }
+                currentBucketSize = it.bucketlists.size
+            }
+        }
     }
 
     private fun getMainBucketList() {
-
         val filterForShow = getFilterForShow(requireContext())
         val filterListUp = getFilterListUp(requireContext())
-
-        if (filterForShow == null || filterListUp == null) {
-            return
-        }
-
+        if (filterForShow == null || filterListUp == null) return
         viewModel.getHomeBucketList(filterForShow, filterListUp)
-
-        viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
-            override fun restart() {
-                getMainBucketList()
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success(value: Any) {
-                val response = value as BucketList
-                if (response.bucketlists.isEmpty()) {
-                    binding.blankImg.visibility = View.VISIBLE
-                    binding.bucketList.visibility = View.GONE
-                    binding.endImage.visibility = View.GONE
-                } else {
-                    binding.blankImg.visibility = View.GONE
-                    binding.bucketList.visibility = View.VISIBLE
-                    binding.endImage.visibility = View.VISIBLE
-                    binding.bucketList.adapter =
-                        MainBucketListAdapter(response.bucketlists, showSnackBar)
-                }
-                stopLoading()
-                if (response.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
-                    showDdayPopup()
-                }
-                currentBucketSize = response.bucketlists.size
-            }
-        }, filterForShow, filterListUp)
-
     }
 
     private fun setBucketCancel(bucketId: String) {

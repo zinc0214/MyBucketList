@@ -12,9 +12,11 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import womenproject.com.mybury.data.BucketList
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.data.toData
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -33,60 +35,53 @@ class BucketInfoViewModel @Inject constructor(
     private val _categoryList = MutableLiveData<List<Category>>()
     val categoryList: LiveData<List<Category>> = _categoryList
 
-    private val _homeBucketList = MutableLiveData<com.zinc.data.model.BucketList>()
-    val homeBucketList: LiveData<com.zinc.data.model.BucketList> = _homeBucketList
+    private val _loadState = MutableLiveData<LoadState>()
+    val loadState: LiveData<LoadState> = _loadState
+
+    private val _homeBucketList = MutableLiveData<BucketList>()
+    val homeBucketList: LiveData<BucketList> = _homeBucketList
 
     //test
     fun getHomeBucketList(filter: String, sort: String) {
         if (accessToken == null || userId == null) {
-            // fail
+            _loadState.value = LoadState.FAIL
             return
         }
 
         viewModelScope.launch {
-            loadHomeBucketListUseCase.invoke(accessToken, userId, filter, sort).apply {
-                withContext(Dispatchers.Main) {
-                    _homeBucketList.value = this@apply
-                    Log.e("ayhan", "_homeBucketList : ${_homeBucketList.value}")
-                }
-            }
-        }
-    }
+            kotlin.runCatching {
+                loadHomeBucketListUseCase.invoke(accessToken, userId, filter, sort).apply {
+                    withContext(Dispatchers.Main) {
+                        val response = this@apply
+                        when (response.retcode) {
+                            "200" -> {
+                                _loadState.value = LoadState.SUCCESS
+                                _homeBucketList.value = BucketList(
+                                    bucketlists = response.bucketlists.toData(),
+                                    popupYn = response.popupYn,
+                                    retcode = response.retcode
+                                )
+                            }
+                            "301" -> {
+                                getRefreshToken(object : SimpleCallBack {
+                                    override fun success() {
+                                        _loadState.value = LoadState.RESTART
+                                    }
 
-    @SuppressLint("CheckResult")
-    fun getMainBucketList(callback: MoreCallBackAny, filter: String, sort: String) {
-        if (accessToken == null || userId == null) {
-            callback.fail()
-            return
-        }
-        callback.start()
-        apiInterface.requestHomeBucketList(accessToken, userId, filter, sort)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                when (response.retcode) {
-                    "200" -> {
-                        callback.success(response)
+                                    override fun fail() {
+                                        _loadState.value = LoadState.FAIL
+                                    }
+                                })
+                            }
+                        }
+                        Log.e("ayhan", "_homeBucketList : ${_homeBucketList.value}")
                     }
-                    "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callback.restart()
-                        }
-
-                        override fun fail() {
-                            callback.fail()
-                        }
-
-                    })
-                    else -> callback.fail()
                 }
-            }) {
-                Log.e("myBury", "getMainBucketListFail : $it")
-                callback.fail()
+            }.getOrElse {
+                _loadState.value = LoadState.FAIL
             }
-
+        }
     }
-
 
     @SuppressLint("CheckResult")
     fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
