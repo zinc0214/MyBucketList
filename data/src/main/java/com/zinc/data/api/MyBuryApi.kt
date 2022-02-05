@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface MyBuryApi {
 
     @GET("/home")
-    fun loadHomeBucketList(
+    suspend fun loadHomeBucketList(
         @Header("X-Auth-Token") token: String,
         @Query("userId") userId: String,
         @Query("filter") filter: String,

@@ -74,6 +74,9 @@ class MainFragment : BaseFragment() {
         if (filterForShow == null || filterListUp == null) {
             return
         }
+
+        viewModel.getHomeBucketList(filterForShow, filterListUp)
+
         viewModel.getMainBucketList(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 getMainBucketList()

@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-
     implementation(Dep.Kotlin.stdlibJvm)
     implementation(Dep.Kotlin.coroutines.core)
     implementation(Dep.Kotlin.serialization)

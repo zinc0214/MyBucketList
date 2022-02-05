@@ -30,7 +30,7 @@ object NetworkModule {
         okHttpClient: OkHttpClient,
         converterFactory: Converter.Factory
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://www.my-bury.com")
+        .baseUrl("http://52.79.253.242")
         .addConverterFactory(converterFactory)
         .client(okHttpClient)
         .build()
