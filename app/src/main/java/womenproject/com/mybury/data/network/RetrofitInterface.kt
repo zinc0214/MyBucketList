@@ -96,12 +96,6 @@ interface RetrofitInterface {
         @Query("filter") filter: String
     ): Observable<DdayBucketListRespone>
 
-    @GET("/beforeWrite")
-    suspend fun requestBeforeWrite(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String
-    ): BucketCategory
-
     @POST("/write")
     @Multipart
     fun postAddBucketList(

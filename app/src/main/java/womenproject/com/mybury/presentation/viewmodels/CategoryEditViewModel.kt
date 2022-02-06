@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class CategoryInfoViewModel @Inject constructor(): BaseViewModel() {
+class CategoryEditViewModel @Inject constructor(): BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
@@ -137,8 +137,6 @@ class CategoryInfoViewModel @Inject constructor(): BaseViewModel() {
                 }) {
                     callBack.fail()
                 }
-
-
     }
 
 }

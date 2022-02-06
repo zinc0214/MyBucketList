@@ -13,9 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import womenproject.com.mybury.data.BucketList
-import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.network.apiInterface
-import womenproject.com.mybury.data.toData
+import womenproject.com.mybury.data.toBucketData
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -27,12 +26,6 @@ import javax.inject.Inject
 class BucketInfoViewModel @Inject constructor(
     private val loadHomeBucketListUseCase: LoadHomeBucketListUseCase
 ) : BaseViewModel() {
-
-    private val _categoryLoadState = MutableLiveData<LoadState>()
-    val categoryLoadState: LiveData<LoadState> = _categoryLoadState
-
-    private val _categoryList = MutableLiveData<List<Category>>()
-    val categoryList: LiveData<List<Category>> = _categoryList
 
     private val _bucketListLoadState = MutableLiveData<LoadState>()
     val bucketListLoadState: LiveData<LoadState> = _bucketListLoadState
@@ -55,7 +48,7 @@ class BucketInfoViewModel @Inject constructor(
                             "200" -> {
                                 _bucketListLoadState.value = LoadState.SUCCESS
                                 _homeBucketList.value = BucketList(
-                                    bucketlists = response.bucketlists.toData(),
+                                    bucketlists = response.bucketlists.toBucketData(),
                                     popupYn = response.popupYn,
                                     retcode = response.retcode
                                 )
@@ -108,44 +101,5 @@ class BucketInfoViewModel @Inject constructor(
                 Log.e("myBury", "requestCategoryBucketList Fail :$it")
                 callback.fail()
             }
-
-
-    }
-
-    @SuppressLint("CheckResult")
-    fun getCategoryList() {
-        if (accessToken == null || userId == null) {
-            _categoryLoadState.value = LoadState.START
-            return
-        }
-
-        viewModelScope.launch {
-            try {
-                apiInterface.requestBeforeWrite(accessToken, userId).apply {
-                    withContext(Dispatchers.Main) {
-                        when (this@apply.retcode) {
-                            "200" -> {
-                                _categoryList.value = this@apply.categoryList
-                            }
-                            "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    _categoryLoadState.value = LoadState.RESTART
-                                }
-
-                                override fun fail() {
-                                    _categoryLoadState.value = LoadState.FAIL
-                                }
-                            })
-                            else -> {
-                                _categoryLoadState.value = LoadState.FAIL
-                            }
-                        }
-                    }
-                }
-            } catch (e: Throwable) {
-                _categoryLoadState.value = LoadState.FAIL
-                Log.e("myBury", "getCategoryListFail : $e")
-            }
-        }
     }
 }

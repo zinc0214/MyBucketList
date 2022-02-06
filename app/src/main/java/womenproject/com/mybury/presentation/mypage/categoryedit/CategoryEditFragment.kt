@@ -21,7 +21,8 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryEditViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
@@ -36,7 +37,9 @@ class CategoryEditFragment : BaseFragment(),
     private lateinit var binding: FragmentCategoryEditBinding
 
     private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
-    private val categoryEditViewModel by viewModels<CategoryInfoViewModel>()
+    private val categoryEditViewModel by viewModels<CategoryEditViewModel>()
+    private val categoryViewModel by viewModels<CategoryViewModel>()
+
     private val removedList = hashSetOf<String>()
     private var changeCategoryList = arrayListOf<Category>()
     private var originCategoryList = arrayListOf<Category>()
@@ -85,17 +88,17 @@ class CategoryEditFragment : BaseFragment(),
         binding.fragment = this
 
         setUpViewModelObservers()
-        bucketInfoViewModel.getCategoryList()
+        categoryViewModel.getCategoryList()
     }
 
     private fun setUpViewModelObservers() {
-        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.START -> {
                     startLoading()
                 }
                 BaseViewModel.LoadState.RESTART -> {
-                    bucketInfoViewModel.getCategoryList()
+                    categoryViewModel.getCategoryList()
                 }
                 BaseViewModel.LoadState.SUCCESS -> {
                     stopLoading()
@@ -112,7 +115,7 @@ class CategoryEditFragment : BaseFragment(),
             }
         }
 
-        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryList.observe(viewLifecycleOwner) {
             initOriginCategory(it as List<Category>)
             changeCategoryList = it as ArrayList<Category>
             setCategoryAdapter()

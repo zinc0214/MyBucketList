@@ -1,6 +1,7 @@
 package com.zinc.data.repository
 
 import com.zinc.data.api.MyBuryApi
+import com.zinc.data.model.BucketCategory
 import com.zinc.data.model.DomainBucketList
 import com.zinc.data.model.SimpleResponse
 import com.zinc.data.model.StatusChangeBucketRequest
@@ -23,5 +24,9 @@ class MyBuryRepositoryImpl @Inject constructor(
         bucketRequest: StatusChangeBucketRequest
     ): SimpleResponse {
         return myBuryApi.cancelBucketItem(token, bucketRequest)
+    }
+
+    override suspend fun loadCategoryList(token: String, userId: String): BucketCategory {
+        return myBuryApi.loadCategoryList(token, userId)
     }
 }

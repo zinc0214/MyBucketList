@@ -33,7 +33,7 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
 import java.io.File
@@ -58,7 +58,7 @@ open class BucketWriteFragment : BaseFragment() {
 
     lateinit var binding: FragmentBucketWriteBinding
     val viewModel by viewModels<BucketWriteViewModel>()
-    private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
+    private val categoryViewModel by viewModels<CategoryViewModel>()
 
     lateinit var imm: InputMethodManager
 
@@ -80,7 +80,7 @@ open class BucketWriteFragment : BaseFragment() {
     private fun initDataBinding() {
         loadArgument()
         setUpViewModelObservers()
-        bucketInfoViewModel.getCategoryList()
+        categoryViewModel.getCategoryList()
     }
 
     open fun loadArgument() {
@@ -127,13 +127,13 @@ open class BucketWriteFragment : BaseFragment() {
     private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
 
     private fun setUpViewModelObservers() {
-        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.START -> {
                     startLoading()
                 }
                 BaseViewModel.LoadState.RESTART -> {
-                    bucketInfoViewModel.getCategoryList()
+                    categoryViewModel.getCategoryList()
                 }
                 BaseViewModel.LoadState.SUCCESS -> {
                     stopLoading()
@@ -147,7 +147,7 @@ open class BucketWriteFragment : BaseFragment() {
             }
         }
 
-        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryList.observe(viewLifecycleOwner) {
             categoryList = it as ArrayList<Category>
             initForUpdate()
             alreadyAdd()

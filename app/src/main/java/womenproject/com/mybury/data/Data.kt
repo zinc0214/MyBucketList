@@ -2,6 +2,7 @@ package womenproject.com.mybury.data
 
 import android.os.Parcelable
 import com.zinc.data.model.DomainBucketItem
+import com.zinc.data.model.DomainCategory
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -62,7 +63,8 @@ data class BucketList(
     val retcode: String
 ) : Parcelable
 
-fun List<DomainBucketItem>.toData(): List<BucketItem> {
+@JvmName("toDataDomainBucketItem")
+fun List<DomainBucketItem>.toBucketData(): List<BucketItem> {
     val list = arrayListOf<BucketItem>()
     this.forEach {
         list.add(
@@ -145,18 +147,27 @@ data class AddBucketItem(
 )
 
 @Parcelize
-data class BucketCategory(
-    val categoryList: List<Category>,
-    val retcode: String
-) : Parcelable
-
-@Parcelize
 data class Category(
     val name: String,
     val id: String,
     val priority: Int = 0,
-    val isDefault: Boolean = false
+    val isDefault: String = "N"
 ) : Parcelable
+
+fun List<DomainCategory>.toCategoryData(): List<Category> {
+    val list = arrayListOf<Category>()
+    this.forEach {
+        list.add(
+            Category(
+                name = it.name,
+                id = it.id,
+                priority = it.priority,
+                isDefault = it.isDefault
+            )
+        )
+    }
+    return list
+}
 
 data class AddCategoryRequest(
     val userId: String,
