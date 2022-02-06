@@ -105,43 +105,6 @@ class BucketDetailViewModel @Inject constructor(): BaseViewModel() {
                 }
     }
 
-    @SuppressLint("CheckResult")
-    fun setBucketCancel(callback: Simple3CallBack, bucketId: String) {
-        if(accessToken==null) {
-            callback.fail()
-            return
-        }
-
-        val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
-        callback.start()
-        apiInterface.postCancelBucket(accessToken, bucketRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when (detailBucketItem.retcode) {
-                        "200" -> {
-                            callback.success()
-                        }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
-                    }
-
-                }) {
-                    Log.e("myBury", "postCompleteBucket Fail : $it")
-                    callback.fail()
-                }
-
-    }
-
     fun deleteBucketListener(userId: UseUserIdRequest, bucketId: String) {
         if(accessToken==null) {
             _showLoading.value = false

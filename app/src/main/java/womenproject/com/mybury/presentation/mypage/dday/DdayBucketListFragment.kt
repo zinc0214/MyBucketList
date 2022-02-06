@@ -16,6 +16,7 @@ import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
+import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
@@ -28,6 +29,7 @@ class DdayBucketListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDdayListBinding
     private val viewModel by viewModels<DdayBucketTotalListViewModel>()
+    private val bucketListViewModel by viewModels<BucketListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,16 +42,39 @@ class DdayBucketListFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initDataBinding()
+        setUpViews()
+        setUpObservers()
     }
 
-    private fun initDataBinding() {
+    private fun setUpViews() {
         binding.ddayEachBucketList.layoutManager = LinearLayoutManager(context)
         binding.ddayEachBucketList.hasFixedSize()
         binding.backBtnOnClickListener = backBtnOnClickListener()
         binding.filterClickListener = filterOnClickListener()
         getDdayList()
     }
+
+    private fun setUpObservers() {
+        bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                    getDdayList()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    NetworkFailDialog().show(requireActivity().supportFragmentManager)
+                }
+                else -> {
+                    // do Nothing
+                }
+            }
+        }
+    }
+
 
     private fun getDdayList() {
         getDdayFilterForShow(requireContext())?.let {
@@ -90,31 +115,8 @@ class DdayBucketListFragment : BaseFragment() {
         getDdayList()
     }
 
-    private fun setBucketCancel(bucketId: String) {
-        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                setBucketCancel(bucketId)
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                getDdayList()
-            }
-
-        }, bucketId)
-
-    }
-
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        setBucketCancel(info.id)
+        bucketListViewModel.setBucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->

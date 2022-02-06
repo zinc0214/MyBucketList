@@ -20,9 +20,9 @@ import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import java.util.*
 
@@ -37,6 +37,7 @@ class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
 
     private val viewModel by viewModels<BucketInfoViewModel>()
+    private val bucketListViewModel by viewModels<BucketListViewModel>()
 
     private var currentBucketSize = 0
 
@@ -71,16 +72,39 @@ class MainFragment : BaseFragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.loadState.observe(viewLifecycleOwner) {
+        viewModel.bucketListLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.FAIL,
-                BaseViewModel.LoadState.RESTART -> {
+                BaseViewModel.LoadState.START -> {
+                    startLoading()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                }
+                BaseViewModel.LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
-                BaseViewModel.LoadState.START,
-                BaseViewModel.LoadState.SUCCESS -> {
+                BaseViewModel.LoadState.RESTART -> {
+                    getMainBucketList()
+                }
+                else -> {
+                    // do Nothing
+                }
+            }
+        }
+
+        bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
+            when (it) {
+                BaseViewModel.LoadState.START -> {
                     startLoading()
+                }
+                BaseViewModel.LoadState.SUCCESS -> {
+                    stopLoading()
+                    getMainBucketList()
+                }
+                BaseViewModel.LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog { }
                 }
                 else -> {
                     // do Nothing
@@ -118,29 +142,6 @@ class MainFragment : BaseFragment() {
         val filterListUp = getFilterListUp(requireContext())
         if (filterForShow == null || filterListUp == null) return
         viewModel.getHomeBucketList(filterForShow, filterListUp)
-    }
-
-    private fun setBucketCancel(bucketId: String) {
-        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                setBucketCancel(bucketId)
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                getMainBucketList()
-            }
-
-        }, bucketId)
-
     }
 
     private val filterChangedListener: () -> Unit = {
@@ -202,7 +203,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        setBucketCancel(info.id)
+        bucketListViewModel.setBucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->

@@ -102,6 +102,23 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
             }
     }
 
+    @SuppressLint("CheckResult")
+    fun getRefreshToken(result: (LoadState) -> Unit) {
+        val newTokenRequest = NewTokenRequest(userId, refreshToken)
+        apiInterface.getRefershToken(newTokenRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.retcode == "200") {
+                    setAccessToken(getAppContext(), response.accessToken)
+                    setRefreshToken(getAppContext(), response.refreshToken)
+                    result(LoadState.RESTART)
+                }
+            }) {
+                result(LoadState.FAIL)
+            }
+    }
+
     enum class LoadState {
         START, RESTART, SUCCESS, FAIL
     }

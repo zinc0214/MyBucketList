@@ -15,8 +15,8 @@ import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 
 @AndroidEntryPoint
@@ -25,6 +25,7 @@ class BucketListByFilterFragment : BaseFragment() {
     private lateinit var binding: FragmentBucketListByCategoryBinding
     private lateinit var filterType: String
     private val viewModel by viewModels<BucketInfoViewModel>()
+    private val bucketListViewModel by viewModels<BucketListViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +65,7 @@ class BucketListByFilterFragment : BaseFragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.loadState.observe(viewLifecycleOwner) {
+        bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.FAIL,
                 BaseViewModel.LoadState.RESTART -> {
@@ -96,31 +97,8 @@ class BucketListByFilterFragment : BaseFragment() {
         binding.bucketList.hasFixedSize()
     }
 
-    private fun setBucketCancel(bucketId: String) {
-        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                setBucketCancel(bucketId)
-            }
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                initBucketListUI()
-            }
-
-        }, bucketId)
-
-    }
-
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        setBucketCancel(info.id)
+        bucketListViewModel.setBucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->

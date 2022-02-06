@@ -1,6 +1,8 @@
 package com.zinc.data.repository
 
 import com.zinc.data.model.DomainBucketList
+import com.zinc.data.model.SimpleResponse
+import com.zinc.data.model.StatusChangeBucketRequest
 
 interface MyBuryRepository {
     suspend fun loadHomeBucketList(
@@ -8,5 +10,10 @@ interface MyBuryRepository {
         userId: String,
         filter: String,
         sort: String
-    ) : DomainBucketList
+    ): DomainBucketList
+
+    suspend fun cancelBucketItem(
+        token: String,
+        bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse
 }

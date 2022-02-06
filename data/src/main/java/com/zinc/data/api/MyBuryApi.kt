@@ -1,9 +1,9 @@
 package com.zinc.data.api
 
 import com.zinc.data.model.DomainBucketList
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import com.zinc.data.model.SimpleResponse
+import com.zinc.data.model.StatusChangeBucketRequest
+import retrofit2.http.*
 
 interface MyBuryApi {
 
@@ -14,5 +14,11 @@ interface MyBuryApi {
         @Query("filter") filter: String,
         @Query("sort") sort: String
     ): DomainBucketList
+
+    @POST("/cancel")
+    suspend fun cancelBucketItem(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse
 
 }

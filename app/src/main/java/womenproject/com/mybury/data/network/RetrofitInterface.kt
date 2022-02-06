@@ -82,13 +82,6 @@ interface RetrofitInterface {
         @Body bucketRequest: BucketRequest
     ): Observable<SimpleResponse>
 
-    @POST("/cancel")
-    fun postCancelBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: StatusChangeBucketRequest
-    ): Observable<SimpleResponse>
-
-
     @POST("/redo")
     suspend fun postRedoBucket(
         @Header("X-Auth-Token") token: String,
