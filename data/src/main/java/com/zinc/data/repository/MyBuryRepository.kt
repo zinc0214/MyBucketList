@@ -1,11 +1,12 @@
 package com.zinc.data.repository
 
-import com.zinc.data.model.BucketCategory
-import com.zinc.data.model.DomainBucketList
-import com.zinc.data.model.SimpleResponse
-import com.zinc.data.model.StatusChangeBucketRequest
+import com.zinc.data.model.*
 
 interface MyBuryRepository {
+    suspend fun signUpCheck(mail: SignUpCheckRequest): SignUpCheckResponse
+
+    suspend fun signUp(email: SignUpCheckRequest): SignUpResponse
+
     suspend fun loadHomeBucketList(
         token: String,
         userId: String,

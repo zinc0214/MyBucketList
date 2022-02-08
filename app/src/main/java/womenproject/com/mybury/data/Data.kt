@@ -9,20 +9,6 @@ import kotlinx.android.parcel.Parcelize
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-data class SignUpCheckRequest(
-    var email: String
-)
-
-data class SignUpCheckResponse(
-    val signUp: Boolean,
-    val userId: String
-)
-
-data class SignUpResponse(
-    val retcode: String,
-    val userId: String
-)
-
 data class UseUserIdRequest(
     val userId: String?
 )

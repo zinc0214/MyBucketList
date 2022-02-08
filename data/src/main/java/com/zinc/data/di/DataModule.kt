@@ -14,6 +14,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -43,7 +44,7 @@ abstract class DataModule {
         ): MyBuryApi {
             return Retrofit.Builder()
                 .baseUrl("http://52.79.253.242")
-                .addConverterFactory(converterFactory)
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()
                 .create(MyBuryApi::class.java)

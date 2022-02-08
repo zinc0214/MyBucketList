@@ -8,7 +8,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -28,6 +27,7 @@ import womenproject.com.mybury.data.Preference.Companion.isAlreadySupportShow
 import womenproject.com.mybury.data.PurchasableItem
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.ActivityMainBinding
+import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.MainFragment
@@ -47,7 +47,7 @@ import java.util.*
  */
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
+class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
 
     private lateinit var binding: ActivityMainBinding
     private val supportViewModel by viewModels<MyBurySupportViewModel>()

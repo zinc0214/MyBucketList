@@ -18,14 +18,6 @@ import womenproject.com.mybury.data.*
 interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signup_check")
-    fun postSignUpCheck(@Body email: SignUpCheckRequest): Observable<SignUpCheckResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signup")
-    fun postSignUp(@Body email: SignUpCheckRequest): Observable<SignUpResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/signin")
     fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
 
@@ -231,7 +223,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("https://www.my-bury.com")
+                .baseUrl("http://52.79.253.242") //.baseUrl("https://www.my-bury.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

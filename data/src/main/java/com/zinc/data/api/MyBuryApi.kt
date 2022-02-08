@@ -1,12 +1,17 @@
 package com.zinc.data.api
 
-import com.zinc.data.model.BucketCategory
-import com.zinc.data.model.DomainBucketList
-import com.zinc.data.model.SimpleResponse
-import com.zinc.data.model.StatusChangeBucketRequest
+import com.zinc.data.model.*
 import retrofit2.http.*
 
 interface MyBuryApi {
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/signup_check")
+    suspend fun signUpCheck(@Body email: SignUpCheckRequest): SignUpCheckResponse
+
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/signup")
+    suspend fun signUp(@Body email: SignUpCheckRequest): SignUpResponse
 
     @GET("/home")
     suspend fun loadHomeBucketList(

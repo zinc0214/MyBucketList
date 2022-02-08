@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,10 +25,6 @@ import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.getUserId
-import womenproject.com.mybury.data.Preference.Companion.setAccountEmail
-import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.setUserId
-import womenproject.com.mybury.data.SignUpCheckRequest
 import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
@@ -36,42 +33,38 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.WarningDialogFragment
+import womenproject.com.mybury.presentation.viewmodels.CheckForLoginResult
+import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SplashLoginActivity : AppCompatActivity() {
+class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
 
     lateinit var binding: LayoutSplashWithLoginBinding
     private val RC_SIGN_IN = 100
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private val viewModel by viewModels<LoginViewModel>()
 
-    val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
+    val apiInterface: RetrofitInterface = APIClient.client.create(RetrofitInterface::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
+        setUpGoogleAuth()
+        setUpViews()
+        setUpObservers()
+    }
+
+    private fun setUpGoogleAuth() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
-
-        binding = DataBindingUtil.setContentView(this, R.layout.layout_splash_with_login)
-        binding.loginLayout.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
-            if (getAccountEmail(this)?.isNotEmpty()!! || !getMyBuryLoginComplete(this)) {
-                signOut()
-            } else {
-                signIn()
-            }
-        }
-
-        val hd = Handler()
-        hd.postDelayed(splashhandler(), 1000)
-        setStatusBar(this, R.color._4656e8)
     }
 
     override fun onResume() {
@@ -84,34 +77,45 @@ class SplashLoginActivity : AppCompatActivity() {
         }
     }
 
-    private inner class splashhandler : Runnable {
-        override fun run() {
-            binding.motionLayout.transitionToEnd()
+    private fun setUpViews() {
+        binding = DataBindingUtil.setContentView(this, R.layout.layout_splash_with_login)
+        binding.loginLayout.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
+            if (getAccountEmail(this)?.isNotEmpty()!! || !getMyBuryLoginComplete(this)) {
+                signOut()
+            } else {
+                signIn()
+            }
+        }
+
+        val hd = Handler()
+        hd.postDelayed(splashHandler(), 1000)
+        setStatusBar(this, R.color._4656e8)
+    }
+
+    private fun setUpObservers() {
+        viewModel.checkForLoginResult.observe(this) {
+            when (it) {
+                CheckForLoginResult.CreateAccount -> {
+                    goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
+                }
+                CheckForLoginResult.CheckFail -> {
+                    NetworkFailDialog().show(this.supportFragmentManager)
+                }
+                is CheckForLoginResult.HasAccount -> {
+                    Preference.setUserId(this, it.userId)
+                    Preference.setMyBuryLoginComplete(this, it.isLoginComplete)
+                    Preference.setAccountEmail(this, it.userEmail)
+                    initToken()
+                }
+            }
         }
     }
 
-    @SuppressLint("CheckResult")
-    private fun checkForIsFirstLogin(account: GoogleSignInAccount) {
-
-        val emailDataClass = SignUpCheckRequest(account.email.toString())
-        apiInterface.postSignUpCheck(emailDataClass)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    setAccountEmail(this, emailDataClass.email)
-                    if (response.signUp) {
-                        setUserId(this, response.userId)
-                        setMyBuryLoginComplete(this, true)
-                        initToken()
-                    } else {
-                        goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
-                    }
-                }) {
-                    val networkFailDialog = NetworkFailDialog()
-                    networkFailDialog.show(this.supportFragmentManager)
-                    Log.e("myBury", "getCheckForIsFirstLogin Fail $it")
-                }
-
+    private inner class splashHandler : Runnable {
+        override fun run() {
+            binding.motionLayout.transitionToEnd()
+        }
     }
 
     private fun goToCreateAccountActivity() {
@@ -135,24 +139,22 @@ class SplashLoginActivity : AppCompatActivity() {
         val getTokenRequest = UseUserIdRequest(getUserId(this))
 
         apiInterface.getLoginToken(getTokenRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    if (response.retcode == "200") {
-                        Preference.setAccessToken(this, response.accessToken)
-                        Preference.setRefreshToken(this, response.refreshToken)
-                        goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
-                    } else {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                    }
-                }) {
-                    WarningDialogFragment {
-                        finish()
-                    }.show(supportFragmentManager, "tag")
-                    Log.e("myBury", "getLoginToken Fail : $it")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.retcode == "200") {
+                    Preference.setAccessToken(this, response.accessToken)
+                    Preference.setRefreshToken(this, response.refreshToken)
+                    goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                } else {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
-
-
+            }) {
+                WarningDialogFragment {
+                    finish()
+                }.show(supportFragmentManager, "tag")
+                Log.e("myBury", "getLoginToken Fail : $it")
+            }
     }
 
     private fun signIn() {
@@ -178,7 +180,7 @@ class SplashLoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
-                    checkForIsFirstLogin(account)
+                    viewModel.checkForIsFirstLogin(account)
                 }
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
@@ -192,13 +194,13 @@ class SplashLoginActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        binding.progressBar.visibility = View.VISIBLE
-                    } else {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                        Log.e("myBury", "signInWithCredential Fail", task.exception)
-                    }
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                    Log.e("myBury", "signInWithCredential Fail", task.exception)
                 }
+            }
     }
 }

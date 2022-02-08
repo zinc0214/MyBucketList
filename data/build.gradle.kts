@@ -49,6 +49,7 @@ dependencies {
     api(Dep.Retrofit.core)
     implementation(Dep.Retrofit.core)
     implementation(Dep.Retrofit.serialization)
+    implementation(Dep.Retrofit.converter)
 
     implementation(Dep.OkHttp.core)
     implementation(Dep.OkHttp.loggingInterceptor)

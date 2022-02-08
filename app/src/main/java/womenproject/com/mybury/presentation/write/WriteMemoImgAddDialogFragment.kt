@@ -12,7 +12,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -22,7 +21,7 @@ import androidx.core.content.FileProvider
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogMemoImgAddBinding
 import womenproject.com.mybury.databinding.WidgetWriteFragmentAddItemBinding
-import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.PermissionDialogFragment
 import java.io.File
@@ -133,7 +132,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.requireContext(), activity as MainActivity)) {
+        if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
             if (viewDataBinding.addAlbumImgLayout.isAddable!!) {
                 if (checkAddImageListener.invoke()) {
                     goToAlbum()
@@ -146,7 +145,7 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.requireContext(), activity as MainActivity)) {
+        if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
             if (viewDataBinding.addCamImgLayout.isAddable!!) {
                 if (checkAddImageListener.invoke()) {
                     takePhoto()
@@ -198,10 +197,10 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
     }
 
 
-    private fun checkPermissions(context: Context, activity: MainActivity): Boolean {
+    private fun checkPermissions(context: Context, activity: BaseActiviy): Boolean {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if ((ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) ||
-                    (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA))) {
+                (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA))) {
                 val permissionDialogFragment = PermissionDialogFragment()
                 permissionDialogFragment.show(activity.supportFragmentManager, "tag")
             } else {
@@ -248,11 +247,10 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
                 cropImage()
                 // 갤러리에 나타나게
                 MediaScannerConnection.scanFile(context,
-                        arrayOf(photoUri!!.path), null
+                    arrayOf(photoUri!!.path), null
                 ) { _, _ -> }
             }
             CROP_FROM_CAMERA -> {
-
                 val options = BitmapFactory.Options()
                 //   options.inSampleSize = 2
                 val src = BitmapFactory.decodeFile(currentImgFile.path)
@@ -282,18 +280,14 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
     //Android N crop image
     fun cropImage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            requireActivity().grantUriPermission("com.android.camera", photoUri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
+        requireActivity().grantUriPermission("com.android.camera", photoUri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         val intent = Intent("com.android.camera.action.CROP")
         intent.setDataAndType(photoUri, "image/*")
 
         val list = requireContext().packageManager.queryIntentActivities(intent, 0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            requireContext().grantUriPermission(list[0].activityInfo.packageName, photoUri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
+        requireContext().grantUriPermission(list[0].activityInfo.packageName, photoUri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
         val size = list.size
         if (size == 0) {
             Toast.makeText(context, "취소 되었습니다.", Toast.LENGTH_SHORT).show()
@@ -301,10 +295,8 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
         } else {
             Toast.makeText(context, "용량이 큰 사진의 경우 시간이 오래 걸릴 수 있습니다.", Toast.LENGTH_SHORT).show()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             intent.putExtra("crop", "true")
             intent.putExtra("aspectX", 1)
             intent.putExtra("aspectY", 1)
@@ -321,12 +313,10 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
             val tempFile = File(folder.toString(), croppedFileName!!.name)
             currentImgFile = tempFile
             photoUri = FileProvider.getUriForFile(requireContext(),
-                    "MyBuryApplication.provider", tempFile)
+                "MyBuryApplication.provider", tempFile)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
             intent.putExtra("return-data", false)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -334,13 +324,11 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
 
             val i = Intent(intent)
             val res = list[0]
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
-                requireActivity().grantUriPermission(res.activityInfo.packageName, photoUri,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
+            requireActivity().grantUriPermission(res.activityInfo.packageName, photoUri,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
             i.component = ComponentName(res.activityInfo.packageName, res.activityInfo.name)
             startActivityForResult(i, CROP_FROM_CAMERA)
         }
@@ -352,5 +340,3 @@ class WriteMemoImgAddDialogFragment(private var addType: AddContentType,
         this.isAddable = false
     }
 }
-
-

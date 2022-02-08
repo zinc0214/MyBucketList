@@ -1,15 +1,20 @@
 package com.zinc.data.repository
 
 import com.zinc.data.api.MyBuryApi
-import com.zinc.data.model.BucketCategory
-import com.zinc.data.model.DomainBucketList
-import com.zinc.data.model.SimpleResponse
-import com.zinc.data.model.StatusChangeBucketRequest
+import com.zinc.data.model.*
 import javax.inject.Inject
 
 class MyBuryRepositoryImpl @Inject constructor(
     private val myBuryApi: MyBuryApi
 ) : MyBuryRepository {
+    override suspend fun signUpCheck(mail: SignUpCheckRequest): SignUpCheckResponse {
+        return myBuryApi.signUpCheck(mail)
+    }
+
+    override suspend fun signUp(email: SignUpCheckRequest): SignUpResponse {
+        return myBuryApi.signUp(email)
+    }
+
     override suspend fun loadHomeBucketList(
         token: String,
         userId: String,
