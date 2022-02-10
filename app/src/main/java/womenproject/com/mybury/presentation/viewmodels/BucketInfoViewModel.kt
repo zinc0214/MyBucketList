@@ -39,6 +39,8 @@ class BucketInfoViewModel @Inject constructor(
             return
         }
 
+        _bucketListLoadState.value = LoadState.START
+
         viewModelScope.launch {
             runCatching {
                 loadHomeBucketListUseCase.invoke(accessToken, userId, filter, sort).apply {
@@ -46,12 +48,12 @@ class BucketInfoViewModel @Inject constructor(
                         val response = this@apply
                         when (response.retcode) {
                             "200" -> {
-                                _bucketListLoadState.value = LoadState.SUCCESS
                                 _homeBucketList.value = BucketList(
                                     bucketlists = response.bucketlists.toBucketData(),
                                     popupYn = response.popupYn,
                                     retcode = response.retcode
                                 )
+                                _bucketListLoadState.value = LoadState.SUCCESS
                             }
                             "301" -> {
                                 getRefreshToken {
