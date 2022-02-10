@@ -120,4 +120,6 @@ dependencies {
     testImplementation Dep.Test.junit
     androidTestImplementation Dep.Test.runner
     androidTestImplementation Dep.Test.espressoCore
+
+    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
 }
