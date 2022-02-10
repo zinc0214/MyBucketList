@@ -81,10 +81,10 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.layout_splash_with_login)
         binding.loginLayout.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
-            if (getAccountEmail(this)?.isNotEmpty()!! || !getMyBuryLoginComplete(this)) {
-                signOut()
-            } else {
+            if(!getAccountEmail(this).isNullOrEmpty() && getMyBuryLoginComplete(this)) {
                 signIn()
+            } else {
+                signOut()
             }
         }
 
@@ -96,11 +96,12 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
     private fun setUpObservers() {
         viewModel.checkForLoginResult.observe(this) {
             when (it) {
-                CheckForLoginResult.CreateAccount -> {
-                    goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
-                }
                 CheckForLoginResult.CheckFail -> {
                     NetworkFailDialog().show(this.supportFragmentManager)
+                }
+                is CheckForLoginResult.CreateAccount -> {
+                    Preference.setAccountEmail(this, it.userEmail)
+                    goToCreateAccountActivity() // 첫 시도이면 값을 받아서 로그인 화면으로 간다
                 }
                 is CheckForLoginResult.HasAccount -> {
                     Preference.setUserId(this, it.userId)

@@ -43,7 +43,7 @@ abstract class DataModule {
             converterFactory: Converter.Factory
         ): MyBuryApi {
             return Retrofit.Builder()
-                .baseUrl("http://52.79.253.242")
+                .baseUrl("https://www.my-bury.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()

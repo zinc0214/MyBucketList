@@ -33,7 +33,7 @@ class Preference {
 
         fun getAccountEmail(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(GOOGLE_ACCOUNT, "")
+            return sp.getString(GOOGLE_ACCOUNT, null)
         }
 
         fun setMyBuryLoginComplete(context: Context, isComplete: Boolean) {

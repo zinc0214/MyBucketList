@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
@@ -15,17 +14,12 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
-import womenproject.com.mybury.data.UseUserIdRequest
-import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
@@ -34,6 +28,7 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.dialog.UserAlreadyExist
+import womenproject.com.mybury.presentation.viewmodels.LoadLoginTokenResult
 import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.viewmodels.SignUpResult
@@ -44,7 +39,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class CreateAccountActivity @Inject constructor(): BaseActiviy() {
+class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
     private var file: File? = null
@@ -90,13 +85,25 @@ class CreateAccountActivity @Inject constructor(): BaseActiviy() {
         viewModel.signUpResult.observe(this) {
             when (it) {
                 is SignUpResult.Success -> {
-                    getLoginToken()
                     Preference.setUserId(this, it.userId)
+                    viewModel.getLoginToken(it.userId)
                 }
                 SignUpResult.EmailExisted -> {
                     UserAlreadyExist().show(supportFragmentManager, "tag")
                 }
                 SignUpResult.Fail -> {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                }
+            }
+        }
+        viewModel.loadLoginTokenResult.observe(this) {
+            when (it) {
+                is LoadLoginTokenResult.Success -> {
+                    Preference.setAccessToken(this, it.accessToken)
+                    Preference.setRefreshToken(this, it.refreshToken)
+                    signInAccount()
+                }
+                LoadLoginTokenResult.Fail -> {
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
             }
@@ -222,27 +229,6 @@ class CreateAccountActivity @Inject constructor(): BaseActiviy() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         finish()
-    }
-
-    @SuppressLint("CheckResult")
-    private fun getLoginToken() {
-        val getTokenRequest = UseUserIdRequest(getUserId(this))
-        apiInterface.getLoginToken(getTokenRequest)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                if (response.retcode != "200") {
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                } else {
-                    Preference.setAccessToken(this, response.accessToken)
-                    Preference.setRefreshToken(this, response.refreshToken)
-                    signInAccount()
-                }
-
-            }) {
-                Log.e("myBury", "getLoginToken Fail : $it")
-                CanNotGoMainDialog().show(supportFragmentManager, "tag")
-            }
     }
 }
 

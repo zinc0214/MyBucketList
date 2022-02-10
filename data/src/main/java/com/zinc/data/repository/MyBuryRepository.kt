@@ -7,6 +7,8 @@ interface MyBuryRepository {
 
     suspend fun signUp(email: SignUpCheckRequest): SignUpResponse
 
+    suspend fun getLoginToken(email: DomainUseUserIdRequest): DomainTokenResponse
+
     suspend fun loadHomeBucketList(
         token: String,
         userId: String,

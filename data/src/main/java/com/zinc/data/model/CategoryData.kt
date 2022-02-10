@@ -13,5 +13,5 @@ data class DomainCategory(
     val name: String,
     val id: String,
     val priority: Int = 0,
-    val isDefault: String = "N"
+    val isDefault: String? = "N"
 )

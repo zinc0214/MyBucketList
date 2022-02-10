@@ -15,6 +15,10 @@ class MyBuryRepositoryImpl @Inject constructor(
         return myBuryApi.signUp(email)
     }
 
+    override suspend fun getLoginToken(usrdId: DomainUseUserIdRequest): DomainTokenResponse {
+        return myBuryApi.getLoginToken(usrdId)
+    }
+
     override suspend fun loadHomeBucketList(
         token: String,
         userId: String,

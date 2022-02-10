@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.zinc.data.model.DomainUseUserIdRequest
 import com.zinc.data.model.SignUpCheckRequest
+import com.zinc.domain.usecase.login.LoadLoginTokenUseCase
 import com.zinc.domain.usecase.login.SignUpCheckUseCase
 import com.zinc.domain.usecase.login.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val signUpCheckUseCase: SignUpCheckUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val loadLoginTokenUseCase: LoadLoginTokenUseCase
 ) : BaseViewModel() {
 
     private val _checkForLoginResult = MutableLiveData<CheckForLoginResult>()
@@ -24,6 +27,9 @@ class LoginViewModel @Inject constructor(
 
     private val _signUpResult = MutableLiveData<SignUpResult>()
     val signUpResult: LiveData<SignUpResult> get() = _signUpResult
+
+    private val _loadLoginTokenResult = MutableLiveData<LoadLoginTokenResult>()
+    val loadLoginTokenResult: LiveData<LoadLoginTokenResult> get() = _loadLoginTokenResult
 
     fun checkForIsFirstLogin(account: GoogleSignInAccount) {
         viewModelScope.launch {
@@ -39,7 +45,8 @@ class LoginViewModel @Inject constructor(
                                 true
                             )
                     } else {
-                        _checkForLoginResult.value = CheckForLoginResult.CreateAccount
+                        _checkForLoginResult.value =
+                            CheckForLoginResult.CreateAccount(account.email.toString())
                     }
                 }
             }.getOrElse {
@@ -73,11 +80,32 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun getLoginToken(userId: String) {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                Log.e("ayhan", "userId : $userId")
+                val getTokenRequest = DomainUseUserIdRequest(userId)
+                loadLoginTokenUseCase.invoke(getTokenRequest).apply {
+                    if (this.retcode == "200") {
+                        _loadLoginTokenResult.value = LoadLoginTokenResult.Success(
+                            this.accessToken, this.refreshToken
+                        )
+                    } else {
+                        _loadLoginTokenResult.value = LoadLoginTokenResult.Fail
+                    }
+                }
+            }.getOrElse {
+                Log.e("myBury", "getLoginToken Fail : ${it.message}")
+                _loadLoginTokenResult.value = LoadLoginTokenResult.Fail
+            }
+        }
+    }
 }
 
 sealed class CheckForLoginResult {
-    object CreateAccount : CheckForLoginResult()
     object CheckFail : CheckForLoginResult()
+    data class CreateAccount(val userEmail: String) : CheckForLoginResult()
     data class HasAccount(
         val userId: String,
         val userEmail: String,
@@ -92,4 +120,13 @@ sealed class SignUpResult {
 
     object EmailExisted : SignUpResult()
     object Fail : SignUpResult()
+}
+
+sealed class LoadLoginTokenResult {
+    object Fail : LoadLoginTokenResult()
+    data class Success(
+        val accessToken: String,
+        val refreshToken: String
+    ) : LoadLoginTokenResult()
+
 }

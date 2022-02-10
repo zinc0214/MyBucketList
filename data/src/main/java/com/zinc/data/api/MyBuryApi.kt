@@ -13,6 +13,10 @@ interface MyBuryApi {
     @POST("/signup")
     suspend fun signUp(@Body email: SignUpCheckRequest): SignUpResponse
 
+    @Headers("Accept: application/json", "Content-Type: application/json")
+    @POST("/signin")
+    suspend fun getLoginToken(@Body email: DomainUseUserIdRequest): DomainTokenResponse
+
     @GET("/home")
     suspend fun loadHomeBucketList(
         @Header("X-Auth-Token") token: String,

@@ -32,7 +32,6 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 loadCategoryListUseCase.invoke(accessToken, userId).apply {
-                    Log.e("ayhan", "response : ${this}")
                     when (this@apply.retcode) {
                         "200" -> {
                             _categoryLoadState.value = LoadState.SUCCESS
