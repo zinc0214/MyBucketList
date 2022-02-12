@@ -59,8 +59,8 @@ class SearchViewModel @Inject constructor(): BaseViewModel() {
     }
 
     private fun parseToSearchTypeItem(
-        bucketList: List<BucketItem>,
-        categoryInfoList: List<CategoryInfo>
+        bucketList: List<BucketItem>?,
+        categoryInfoList: List<CategoryInfo>?
     ): ArrayList<SearchResultType> {
         val resultList = arrayListOf<SearchResultType>()
 
