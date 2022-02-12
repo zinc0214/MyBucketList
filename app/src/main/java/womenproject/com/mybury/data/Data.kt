@@ -184,7 +184,11 @@ data class MyPageInfo(
     val dDayCount: Int = 0,
     val categoryList: List<CategoryInfo>,
     val retcode: String
-)
+) {
+    fun showableCategoryList() : List<CategoryInfo> {
+        return categoryList - categoryList.filter { it.count == 0 && it.name == "없음" }.toSet()
+    }
+}
 
 @Parcelize
 data class CategoryInfo(
@@ -253,8 +257,8 @@ data class SearchRequest(
 ) : Parcelable
 
 data class SearchResult(
-    val bucketlists: List<BucketItem>,
-    val categories: List<CategoryInfo>
+    val bucketlists: List<BucketItem>?,
+    val categories: List<CategoryInfo>?
 )
 
 enum class ShowFilter {
