@@ -54,5 +54,5 @@
     <!-- 검색 -->
     <string name="close_desc">닫기</string>
     <string name="search_list">리스트를 검색하세요</string>
-    <string name="search_no_result_desc">검색된 리스트가 없습니다.\n다시 검색해주세요.</string>
+    <string name="search_no_result_desc">일치하는 리스트가 없습니다.</string>
 </resources>

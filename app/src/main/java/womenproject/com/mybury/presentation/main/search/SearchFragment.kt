@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.SearchType
 import womenproject.com.mybury.databinding.FragmentSearchBinding
@@ -77,7 +76,8 @@ class SearchFragment : Fragment() {
                 }
                 searchType = selectedSearchType
                 searchResultListAdapter.deleteList()
-                binding.searchResultIsBlankTextView.visibility = View.VISIBLE
+                binding.searchResultList.visibility = View.GONE
+                binding.searchResultIsBlankView.visibility = View.GONE
             }
 
             searchEditTextView.setOnEditorActionListener { textView, id, keyEvent ->
@@ -112,7 +112,7 @@ class SearchFragment : Fragment() {
                 }
                 BaseViewModel.LoadState.FAIL -> {
                     stopLoading()
-                    binding.searchResultIsBlankTextView.visibility = View.VISIBLE
+                    binding.searchResultIsBlankView.visibility = View.VISIBLE
 
                 }
                 BaseViewModel.LoadState.RESTART -> {
@@ -123,18 +123,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun setUpResultList() {
-        if (resultList.isNullOrEmpty()) {
-            binding.searchResultIsBlankTextView.visibility = View.VISIBLE
+        if (resultList.isEmpty()) {
+            binding.searchResultIsBlankView.visibility = View.VISIBLE
+            binding.searchResultList.visibility = View.GONE
             searchResultListAdapter.deleteList()
         } else {
-            binding.searchResultIsBlankTextView.visibility = View.GONE
+            binding.searchResultIsBlankView.visibility = View.GONE
+            binding.searchResultList.visibility = View.VISIBLE
             searchResultListAdapter.addList(selectedSearchType, resultList)
         }
-    }
-
-    private fun showCancelSnackBar(view: View, info: BucketItem) {
-        val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
-        //MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
     }
 
     private fun startLoading() {
