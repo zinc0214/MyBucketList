@@ -109,8 +109,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="28dp"
-                        android:minWidth="38dp"
-                        android:paddingStart="7dp"
                         android:text="@{bucketInfo.ddayText}"
                         android:textColor="@{bucketInfo.overDday ? @color/_ffa690 : @color/_ffca5a}"
                         android:textSize="14sp"

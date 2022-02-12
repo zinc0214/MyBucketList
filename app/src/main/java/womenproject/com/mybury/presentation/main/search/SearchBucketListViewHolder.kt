@@ -8,7 +8,6 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.databinding.ItemSearchBucketBinding
 import womenproject.com.mybury.util.Converter
 
@@ -38,7 +37,7 @@ class SearchBucketListViewHolder(private val binding: ItemSearchBucketBinding) :
     ) {
         binding.bucketInfo = bucketItemInfo
         binding.bucketClickListener = bucketListener
-        if (Preference.getShowDdayFilter(binding.root.context) || isShowDday) {
+        if (isShowDday) {
             binding.ddayTextView.visibility =
                 if (bucketItemInfo.dDay != null) View.VISIBLE else View.INVISIBLE
         } else {

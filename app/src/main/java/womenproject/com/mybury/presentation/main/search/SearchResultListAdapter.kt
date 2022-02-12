@@ -66,6 +66,7 @@ class SearchResultListAdapter : RecyclerView.Adapter<ViewHolder>() {
                         createOnClickBucketListener(bucketItem),
                         bucketItem,
                         isForDday = false,
+                        isShowDday = false,
                         isLastItem = position == resultList.lastIndex
                     )
                 } else {
