@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
@@ -22,7 +23,7 @@ import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.isConnectionOn
 import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     lateinit var binding: LayoutSplashWithLoginBinding

@@ -17,18 +17,6 @@ import womenproject.com.mybury.data.*
 
 interface RetrofitInterface {
 
-    @Headers("X-Naver-Client-Id: 3HRMQaekNO_olG_nNCHt", "X-Naver-Client-Secret: trOdm5SdqS")
-    @GET("/v1/search/adult.json")
-    fun requestAdultResult(@Query("query") query: String): Observable<AdultCheck>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signup_check")
-    fun postSignUpCheck(@Body email: SignUpCheckRequest): Observable<SignUpCheckResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signup")
-    fun postSignUp(@Body email: SignUpCheckRequest): Observable<SignUpResponse>
-
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/signin")
     fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
@@ -86,13 +74,6 @@ interface RetrofitInterface {
         @Body bucketRequest: BucketRequest
     ): Observable<SimpleResponse>
 
-    @POST("/cancel")
-    fun postCancelBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: StatusChangeBucketRequest
-    ): Observable<SimpleResponse>
-
-
     @POST("/redo")
     suspend fun postRedoBucket(
         @Header("X-Auth-Token") token: String,
@@ -106,12 +87,6 @@ interface RetrofitInterface {
         @Query("userId") userId: String,
         @Query("filter") filter: String
     ): Observable<DdayBucketListRespone>
-
-    @GET("/beforeWrite")
-    suspend fun requestBeforeWrite(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String
-    ): BucketCategory
 
     @POST("/write")
     @Multipart
@@ -258,4 +233,4 @@ internal object APIClient {
         }
 }
 
-val apiInterface = APIClient.client.create(RetrofitInterface::class.java)
+val apiInterface: RetrofitInterface = APIClient.client.create(RetrofitInterface::class.java)

@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation.write
 
 import android.annotation.SuppressLint
 import android.util.Log
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
@@ -13,8 +14,10 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
 import womenproject.com.mybury.util.stringToMultipartFile
 import java.io.File
+import javax.inject.Inject
 
-class BucketWriteViewModel : BaseViewModel() {
+@HiltViewModel
+class BucketWriteViewModel @Inject constructor(): BaseViewModel() {
 
     var bucketItem: DetailBucketItem? = null
     val isOpenVisible = BuildConfig.DEBUG

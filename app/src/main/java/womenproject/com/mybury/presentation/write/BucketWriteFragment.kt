@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
@@ -29,15 +33,15 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, BucketWriteViewModel>() {
+@AndroidEntryPoint
+open class BucketWriteFragment : BaseFragment() {
 
     var alreadyImgList = mutableMapOf<Int, String?>()
     var addImgList = mutableMapOf<Int, String?>()
@@ -52,19 +56,31 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private var categoryList = arrayListOf<Category>()
     var isAdsShow = false
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_bucket_write
+    lateinit var binding: FragmentBucketWriteBinding
+    val viewModel by viewModels<BucketWriteViewModel>()
+    private val categoryViewModel by viewModels<CategoryViewModel>()
 
-    override val viewModel: BucketWriteViewModel
-        get() = BucketWriteViewModel()
-
-    private val bucketInfoViewModel = BucketInfoViewModel()
     lateinit var imm: InputMethodManager
 
-    override fun initDataBinding() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_write, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         loadArgument()
         setUpViewModelObservers()
-        bucketInfoViewModel.getCategoryList()
+        categoryViewModel.getCategoryList()
     }
 
     open fun loadArgument() {
@@ -111,13 +127,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
 
     private fun setUpViewModelObservers() {
-        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.START -> {
                     startLoading()
                 }
                 BaseViewModel.LoadState.RESTART -> {
-                    bucketInfoViewModel.getCategoryList()
+                    categoryViewModel.getCategoryList()
                 }
                 BaseViewModel.LoadState.SUCCESS -> {
                     stopLoading()
@@ -131,7 +147,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             }
         }
 
-        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryList.observe(viewLifecycleOwner) {
             categoryList = it as ArrayList<Category>
             initForUpdate()
             alreadyAdd()
@@ -145,7 +161,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     }
 
     private fun updateView() {
-        viewDataBinding.apply {
+        binding.apply {
             if (memoText.text.isNotBlank()) {
                 memoLayout.visibility = View.VISIBLE
             }
@@ -184,7 +200,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun setUpView() {
 
-        viewDataBinding.apply {
+        binding.apply {
             writeViewModel = viewModel
             cancelBtnClickListener = setBackClickListener()
             registerBtnClickListener = bucketAddOnClickListener()
@@ -196,7 +212,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
             writeRegist.isEnabled = titleText.text.isNotBlank()
 
-            titleText.addTextChangedListener(titleTextChangedListener(viewDataBinding.titleText))
+            titleText.addTextChangedListener(titleTextChangedListener(binding.titleText))
             memoRemoveImg.setOnTouchListener(memoRemoveOnTouchListener())
             memoImgLayout.setOnTouchListener(memoImgAddOnTouchListener())
 
@@ -281,8 +297,8 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                 }
 
                 override fun start() {
-                    imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
-                    imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
                     startLoading()
                 }
 
@@ -334,7 +350,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                     editText.setText(previousString)
                     editText.setSelection(editText.length())
                 }
-                viewDataBinding.writeRegist.isEnabled = editText.text.isNotBlank()
+                binding.writeRegist.isEnabled = editText.text.isNotBlank()
             }
         }
     }
@@ -344,10 +360,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT_BOLD
+                    binding.memoImgText.typeface = Typeface.DEFAULT_BOLD
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoImgText.typeface = Typeface.DEFAULT
+                    binding.memoImgText.typeface = Typeface.DEFAULT
                 }
             }
             false
@@ -360,11 +376,11 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         return View.OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    viewDataBinding.memoLayout.background =
+                    binding.memoLayout.background =
                         requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    viewDataBinding.memoLayout.background =
+                    binding.memoLayout.background =
                         requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
                 }
             }
@@ -375,14 +391,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
     private fun memoImgAddOnClickListener(): View.OnClickListener {
 
         val checkMemoAddListener: () -> Boolean = {
-            viewDataBinding.memoLayout.visibility != View.VISIBLE
+            binding.memoLayout.visibility != View.VISIBLE
         }
         val memoAddListener: () -> Unit = {
-            viewDataBinding.memoLayout.visibility = View.VISIBLE
+            binding.memoLayout.visibility = View.VISIBLE
         }
 
         val checkAddImgAbleListener: () -> Boolean = {
-            viewDataBinding.imgLayout.childCount <= 2
+            binding.imgLayout.childCount <= 2
         }
 
         val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
@@ -422,9 +438,9 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
             removeImgListener,
             imgFieldClickListener
         ).setUI(uri)
-        viewDataBinding.imgLayout.addView(writeImgLayout)
+        binding.imgLayout.addView(writeImgLayout)
 
-        addImgList[viewDataBinding.imgLayout.childCount - 1] = id
+        addImgList[binding.imgLayout.childCount - 1] = id
         addImgViewList[id] = writeImgLayout
     }
 
@@ -451,10 +467,10 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
                         imgFieldClickListener
                     ).setAleadyUI(this)
                     if (!addImgList.values.contains(this)) {
-                        addImgList[viewDataBinding.imgLayout.childCount] = this
+                        addImgList[binding.imgLayout.childCount] = this
                         addImgViewList[this] = writeImgLayout
                         imgList[id] = this
-                        viewDataBinding.imgLayout.addView(writeImgLayout)
+                        binding.imgLayout.addView(writeImgLayout)
                     }
                 }
             }
@@ -473,7 +489,7 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         deleteImgValue?.run {
-            viewDataBinding.imgLayout.removeView(viewDataBinding.imgLayout.getChildAt(this))
+            binding.imgLayout.removeView(binding.imgLayout.getChildAt(this))
             val id = addImgList[this]
             addImgViewList.remove(id)
             addImgList.replace(this, null)
@@ -509,25 +525,25 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
 
     private fun memoRemoveListener() = View.OnClickListener {
-        viewDataBinding.memoText.text.clear()
-        viewDataBinding.memoLayout.visibility = View.GONE
+        binding.memoText.text.clear()
+        binding.memoLayout.visibility = View.GONE
     }
 
 
     private fun ddayAddListener(): View.OnClickListener {
         val ddayAddListener: (String, Date) -> Unit = { dday, date ->
             if (dday.isBlank()) {
-                viewDataBinding.ddayText.text = "추가"
+                binding.ddayText.text = "추가"
                 currentCalendarDay = null
                 currentCalendarText = ""
-                viewDataBinding.ddayText.setDisableTextColor()
-                viewDataBinding.ddayImg.setImage(R.drawable.calendar_disable)
+                binding.ddayText.setDisableTextColor()
+                binding.ddayImg.setImage(R.drawable.calendar_disable)
             } else {
-                viewDataBinding.ddayText.text = dday
+                binding.ddayText.text = dday
                 currentCalendarDay = date
                 currentCalendarText = dday
-                viewDataBinding.ddayText.setEnableTextColor()
-                viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
+                binding.ddayText.setEnableTextColor()
+                binding.ddayImg.setImage(R.drawable.calendar_enable)
             }
 
         }
@@ -544,14 +560,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
 
     private fun goalCountSetListener(): View.OnClickListener {
         val goalCountSetListener: (String) -> Unit = { count ->
-            viewDataBinding.goalCountText.text = count
+            binding.goalCountText.text = count
             goalCount = count.toInt()
             if (count.toInt() != 1) {
-                viewDataBinding.goalCountText.setEnableTextColor()
-                viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
+                binding.goalCountText.setEnableTextColor()
+                binding.countImg.setImage(R.drawable.target_count_enable)
             } else {
-                viewDataBinding.goalCountText.setDisableTextColor()
-                viewDataBinding.countImg.setImage(R.drawable.target_count_disable)
+                binding.goalCountText.setDisableTextColor()
+                binding.countImg.setImage(R.drawable.target_count_disable)
             }
         }
 
@@ -572,13 +588,13 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         val categorySetListener: (Category) -> Unit = { category ->
             selectCategory = category
             if (category.name == "없음") {
-                viewDataBinding.categoryText.text = category.name
-                viewDataBinding.categoryText.setDisableTextColor()
-                viewDataBinding.categoryImg.setImage(R.drawable.category_disable)
+                binding.categoryText.text = category.name
+                binding.categoryText.setDisableTextColor()
+                binding.categoryImg.setImage(R.drawable.category_disable)
             } else {
-                viewDataBinding.categoryText.text = category.name
-                viewDataBinding.categoryText.setEnableTextColor()
-                viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
+                binding.categoryText.text = category.name
+                binding.categoryText.setEnableTextColor()
+                binding.categoryImg.setImage(R.drawable.category_enable)
             }
 
         }
@@ -601,14 +617,14 @@ open class BucketWriteFragment : BaseFragment<FragmentBucketWriteBinding, Bucket
         }
 
         var formDate = ""
-        if (currentCalendarDay != null) {
-            formDate = SimpleDateFormat("yyyy-MM-dd").format(currentCalendarDay).toString()
+        currentCalendarDay?.let {
+            formDate = SimpleDateFormat("yyyy-MM-dd").format(it).toString()
         }
 
         return AddBucketItem(
-            viewDataBinding.titleText.text.toString(), open,
+            binding.titleText.text.toString(), open,
             formDate, goalCount,
-            viewDataBinding.memoText.text.toString(), selectCategory?.id!!
+            binding.memoText.text.toString(), selectCategory?.id!!
         )
     }
 

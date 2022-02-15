@@ -41,9 +41,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
                 android:background="@drawable/mypage_support_mybury_background"
+                android:gravity="center"
                 android:lineSpacingExtra="8sp"
+                android:minHeight="50dp"
                 android:onClick="@{goToMyBurySupportClickListener}"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
@@ -88,36 +89,39 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
                     android:text="카테고리"
-                    android:textColor="@color/_5a95ff"
-                    android:textSize="12sp" />
+                    android:textColor="@color/_222222"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shape_00ffffff_r13_strk_06_5a95ff"
                     android:gravity="center"
                     android:onClick="@{categoryEditClickListener}"
-                    android:paddingStart="6dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="2dp"
+                    android:paddingStart="18dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="8dp"
                     android:text="편집"
                     android:textColor="@color/_5a95ff"
-                    android:textSize="11sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mypage_category_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="12dp"
                 android:overScrollMode="never"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/item_mypage_category" />

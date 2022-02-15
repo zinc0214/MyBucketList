@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
@@ -22,11 +24,12 @@ import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 import womenproject.com.mybury.util.showToast
 
+@AndroidEntryPoint
 class BucketListSortFragment : Fragment(),
     ItemDragListener,
     ItemMovedListener {
 
-    private lateinit var viewModel: BucketSortViewModel
+    private val viewModel by viewModels<BucketSortViewModel>()
     private lateinit var binding: FragmentBucketSortBinding
 
     private lateinit var itemTouchHelper: ItemTouchHelper
@@ -43,7 +46,6 @@ class BucketListSortFragment : Fragment(),
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_sort, container, false)
-        viewModel = BucketSortViewModel()
         return binding.root
     }
 

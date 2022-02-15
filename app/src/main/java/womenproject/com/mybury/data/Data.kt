@@ -1,25 +1,13 @@
 package womenproject.com.mybury.data
 
 import android.os.Parcelable
+import com.zinc.data.model.DomainBucketItem
+import com.zinc.data.model.DomainCategory
 import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
  */
-
-data class SignUpCheckRequest(
-    var email: String
-)
-
-data class SignUpCheckResponse(
-    val signUp: Boolean,
-    val userId: String
-)
-
-data class SignUpResponse(
-    val retcode: String,
-    val userId: String
-)
 
 data class UseUserIdRequest(
     val userId: String?
@@ -61,6 +49,23 @@ data class BucketList(
     val retcode: String
 ) : Parcelable
 
+@JvmName("toDataDomainBucketItem")
+fun List<DomainBucketItem>.toBucketData(): List<BucketItem> {
+    val list = arrayListOf<BucketItem>()
+    this.forEach {
+        list.add(
+            BucketItem(
+                id = it.id,
+                title = it.title,
+                userCount = it.userCount,
+                goalCount = it.goalCount,
+                dDay = it.dDay
+            )
+        )
+    }
+    return list
+}
+
 data class DdayBucketListRespone(
     val dDayBucketlists: List<DdayBucketList>,
     val retcode: String
@@ -77,10 +82,6 @@ data class DdayBucketList(
 data class BucketItem(
     val id: String,
     var title: String,
-    val memo: String = "",
-    val open: Boolean = false,
-    val pin: Boolean = false,
-    val category: Category,
     var userCount: Int = 0,
     val goalCount: Int = 1,
     val dDay: Int?
@@ -132,18 +133,27 @@ data class AddBucketItem(
 )
 
 @Parcelize
-data class BucketCategory(
-    val categoryList: List<Category>,
-    val retcode: String
-) : Parcelable
-
-@Parcelize
 data class Category(
     val name: String,
     val id: String,
     val priority: Int = 0,
-    val isDefault: Boolean = false
+    val isDefault: String? = "N"
 ) : Parcelable
+
+fun List<DomainCategory>.toCategoryData(): List<Category> {
+    val list = arrayListOf<Category>()
+    this.forEach {
+        list.add(
+            Category(
+                name = it.name,
+                id = it.id,
+                priority = it.priority,
+                isDefault = it.isDefault
+            )
+        )
+    }
+    return list
+}
 
 data class AddCategoryRequest(
     val userId: String,
@@ -174,14 +184,22 @@ data class MyPageInfo(
     val dDayCount: Int = 0,
     val categoryList: List<CategoryInfo>,
     val retcode: String
-)
+) {
+    fun showableCategoryList() : List<CategoryInfo> {
+        return categoryList - categoryList.filter { it.count == 0 && it.name == "없음" }.toSet()
+    }
+}
 
 @Parcelize
 data class CategoryInfo(
     val name: String,
     val id: String,
     val count: Int
-) : Parcelable, SearchResultType()
+) : Parcelable, SearchResultType() {
+    fun getCountString(): String {
+        return count.toString()
+    }
+}
 
 @Parcelize
 data class SupportInfo(
@@ -239,8 +257,8 @@ data class SearchRequest(
 ) : Parcelable
 
 data class SearchResult(
-    val bucketlists: List<BucketItem>,
-    val categoryInfos: List<CategoryInfo>
+    val bucketlists: List<BucketItem>?,
+    val categories: List<CategoryInfo>?
 )
 
 enum class ShowFilter {
@@ -269,7 +287,3 @@ enum class BucketType {
             BASE_ITEM -> 2
         }
 }
-
-
-val DDAY = true
-val NORMAL = false

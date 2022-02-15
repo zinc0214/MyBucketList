@@ -6,15 +6,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getColor
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageInfo
@@ -28,12 +32,11 @@ import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
 import kotlin.random.Random
 
-class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewModel>() {
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_profile_edit
+@AndroidEntryPoint
+class ProfileEditFragment : BaseFragment() {
 
-    override val viewModel: MyPageViewModel
-        get() = MyPageViewModel()
+    private lateinit var binding :FragmentProfileEditBinding
+    private val viewModel by viewModels<MyPageViewModel>()
 
     private lateinit var imm: InputMethodManager
     private var isKeyboardUp = false
@@ -51,10 +54,20 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         }
     }
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_profile_edit, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         getMyProfileInfo()
-        viewDataBinding.title = "프로필 수정"
+        binding.title = "프로필 수정"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,11 +88,11 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
 
 
     private fun setUpView() {
-        viewDataBinding.profileImageEditClickListener = profileImageEditClickLister
-        viewDataBinding.backBtnOnClickListener = cancelClickListener()
-        viewDataBinding.saveBtnOnClickListener = saveBtnOnClickListener
-        viewDataBinding.nicknameEditText.addTextChangedListener(addTextChangedListener())
-        viewDataBinding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
+        binding.profileImageEditClickListener = profileImageEditClickLister
+        binding.backBtnOnClickListener = cancelClickListener()
+        binding.saveBtnOnClickListener = saveBtnOnClickListener
+        binding.nicknameEditText.addTextChangedListener(addTextChangedListener())
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
     }
 
@@ -93,7 +106,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewDataBinding.nicknameEditText.setTextColor(requireContext().getColor(R.color._434343))
+                binding.nicknameEditText.setTextColor(requireContext().getColor(R.color._434343))
                 setSaveBtnEnabled()
             }
 
@@ -110,7 +123,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
         } else {
             Glide.with(this).load(imgUrl)
                     .override(100, 100)
-                    .into(viewDataBinding.profileImg)
+                    .into(binding.profileImg)
         }
 
 
@@ -132,7 +145,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 val info = value as MyPageInfo
                 stopLoading()
 
-                viewDataBinding.nicknameEditText.setText(info.name)
+                binding.nicknameEditText.setText(info.name)
                 lastNickname = info.name
                 lastImg = info.imageUrl.toString()
                 defaultImg = info.imageUrl.toString()
@@ -165,7 +178,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 Toast.makeText(requireContext(), "프로필이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 stopLoading()
 
-                lastNickname = viewDataBinding.nicknameEditText.text.toString()
+                lastNickname = binding.nicknameEditText.text.toString()
                 defaultImg = lastImg
 
                 setSaveBtnEnabled()
@@ -176,18 +189,18 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
                 stopLoading()
             }
 
-        }, viewDataBinding.nicknameEditText.text.toString(), imgUrl, useDetailImg)
+        }, binding.nicknameEditText.text.toString(), imgUrl, useDetailImg)
     }
 
     private fun setSaveBtnEnabled() {
 
-        if (viewDataBinding.nicknameEditText.text.isNotBlank() && (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg)) {
-            viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
-            viewDataBinding.profileSave.isEnabled = true
+        if (binding.nicknameEditText.text.isNotBlank() && (lastNickname != binding.nicknameEditText.text.toString() || lastImg != defaultImg)) {
+            binding.nicknameEditText.setTextColor(resources.getColor(R.color._434343))
+            binding.profileSave.isEnabled = true
             isCancelConfirm = false
         } else {
-            viewDataBinding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
-            viewDataBinding.profileSave.isEnabled = false
+            binding.nicknameEditText.setTextColor(resources.getColor(R.color._888888))
+            binding.profileSave.isEnabled = false
             isCancelConfirm = true
         }
     }
@@ -203,14 +216,14 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private fun setDefaultImg() {
         val num = Random.nextInt(2)
         defaultImg = if (num == 1) {
-            viewDataBinding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+            binding.profileImg.setImageResource(R.drawable.default_profile_bury)
             DefaulProfileImg().bury
         } else {
-            viewDataBinding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+            binding.profileImg.setImageResource(R.drawable.default_profile_my)
             DefaulProfileImg().my
         }
         useDetailImg = true
-        viewDataBinding.executePendingBindings()
+        binding.executePendingBindings()
     }
 
 
@@ -219,7 +232,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     private val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
-        Glide.with(requireContext()).load(uri).centerCrop().into(viewDataBinding.profileImg)
+        Glide.with(requireContext()).load(uri).centerCrop().into(binding.profileImg)
         defaultImg = file.toString()
         imgUrl = file
         useDetailImg = false
@@ -236,7 +249,7 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     private fun cancelClickAction() {
-        if (lastNickname != viewDataBinding.nicknameEditText.text.toString() || lastImg != defaultImg) {
+        if (lastNickname != binding.nicknameEditText.text.toString() || lastImg != defaultImg) {
             CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
         } else {
             if (isKeyboardUp) {
@@ -253,17 +266,17 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
         return ViewTreeObserver.OnGlobalLayoutListener {
             val r = Rect()
-            viewDataBinding.root.getWindowVisibleDisplayFrame(r)
+            binding.root.getWindowVisibleDisplayFrame(r)
 
-            val heightDiff = viewDataBinding.root.rootView.height - (r.bottom - r.top)
+            val heightDiff = binding.root.rootView.height - (r.bottom - r.top)
             try {
                 if (heightDiff < 500) {
-                    viewDataBinding.nicknameEditText.clearFocus()
-                    viewDataBinding.nicknameEditText.setTextColor(getColor(requireContext(), R.color._888888))
-                    viewDataBinding.badgeLayout.visibility = View.VISIBLE
+                    binding.nicknameEditText.clearFocus()
+                    binding.nicknameEditText.setTextColor(getColor(requireContext(), R.color._888888))
+                    binding.badgeLayout.visibility = View.VISIBLE
                     isKeyboardUp = false
                 } else {
-                    viewDataBinding.badgeLayout.visibility = View.GONE
+                    binding.badgeLayout.visibility = View.GONE
                     isKeyboardUp = true
                 }
             } catch (e: Exception) {
@@ -299,6 +312,6 @@ class ProfileEditFragment : BaseFragment<FragmentProfileEditBinding, MyPageViewM
     }
 
     private fun <T> LiveData<T>.observe(block: (T) -> Unit) =
-            observe(this@ProfileEditFragment, Observer { block(it) })
+            observe(this@ProfileEditFragment, { block(it) })
 
 }

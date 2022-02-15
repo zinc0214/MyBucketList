@@ -3,12 +3,13 @@ package womenproject.com.mybury.presentation.main.support
 import android.app.ActionBar
 import android.content.Intent
 import android.net.Uri
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogSupportFailBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
-
+@AndroidEntryPoint
 class SupportFailDialogFragment(private val token: String, private val errorCode: String) : BaseDialogFragment<DialogSupportFailBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_support_fail

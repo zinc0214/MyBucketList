@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -17,12 +18,14 @@ import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
 import womenproject.com.mybury.data.network.apiInterface
+import javax.inject.Inject
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
  */
 
-open class BaseViewModel : ViewModel() {
+@HiltViewModel
+open class BaseViewModel @Inject constructor() : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val accessToken = getAccessToken(getAppContext())
@@ -83,16 +86,6 @@ open class BaseViewModel : ViewModel() {
         fun restart()
     }
 
-    sealed class ApiState() {
-        object Start : ApiState()
-        object Fail : ApiState()
-        object Restart : ApiState()
-        data class Success(
-            val response: Any
-        ) : ApiState()
-
-    }
-
     @SuppressLint("CheckResult")
     fun getRefreshToken(a2CallBack: SimpleCallBack) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
@@ -109,8 +102,24 @@ open class BaseViewModel : ViewModel() {
             }
     }
 
+    @SuppressLint("CheckResult")
+    fun getRefreshToken(result: (LoadState) -> Unit) {
+        val newTokenRequest = NewTokenRequest(userId, refreshToken)
+        apiInterface.getRefershToken(newTokenRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.retcode == "200") {
+                    setAccessToken(getAppContext(), response.accessToken)
+                    setRefreshToken(getAppContext(), response.refreshToken)
+                    result(LoadState.RESTART)
+                }
+            }) {
+                result(LoadState.FAIL)
+            }
+    }
+
     enum class LoadState {
         START, RESTART, SUCCESS, FAIL
     }
-
 }

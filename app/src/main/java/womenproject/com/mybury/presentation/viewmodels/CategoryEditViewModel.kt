@@ -1,17 +1,20 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.*
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
 /**
  * Created by HanAYeon on 2019-08-19.
  */
 
-class CategoryInfoViewModel : BaseViewModel() {
+@HiltViewModel
+class CategoryEditViewModel @Inject constructor(): BaseViewModel() {
 
     @SuppressLint("CheckResult")
     fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
@@ -134,8 +137,6 @@ class CategoryInfoViewModel : BaseViewModel() {
                 }) {
                     callBack.fail()
                 }
-
-
     }
 
 }

@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -10,8 +11,10 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketListOrder
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
-class BucketSortViewModel : BaseViewModel() {
+@HiltViewModel
+class BucketSortViewModel @Inject constructor() : BaseViewModel() {
 
     private val _bucketLoadState = MutableLiveData<LoadState>()
     val bucketLoadState: LiveData<LoadState> = _bucketLoadState

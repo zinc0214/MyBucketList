@@ -1,10 +1,15 @@
 package womenproject.com.mybury.presentation.mypage.appinfo
 
+import android.os.Bundle
 import android.text.Html
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.databinding.DataBindingUtil
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.databinding.LayoutTitleViewBinding
@@ -19,19 +24,25 @@ import java.io.InputStreamReader
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewModel>() {
+@AndroidEntryPoint
+class AppInfoTextFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.layout_title_view
-
-    override val viewModel: AppInfoViewModel
-        get() = AppInfoViewModel()
-
+    private lateinit var binding : LayoutTitleViewBinding
     private lateinit var type: String
     private lateinit var webSettings: WebSettings
     private lateinit var webView: WebView
 
-    override fun initDataBinding() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.layout_title_view, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         arguments?.let {
             val args = AppInfoTextFragmentArgs.fromBundle(it)
             val textType = args.type
@@ -39,7 +50,7 @@ class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewMode
         }
 
         initWebView()
-        viewDataBinding.titleLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.titleLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         when (type) {
             DataTextType.eula.toString() -> loadEula()
@@ -49,9 +60,9 @@ class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewMode
     }
 
     private fun initWebView() {
-        webView = viewDataBinding.webView
+        webView = binding.webView
         webView.webViewClient = WebViewClient()
-        webSettings = viewDataBinding.webView.settings
+        webSettings = binding.webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.setSupportMultipleWindows(true)
         webSettings.useWideViewPort = true
@@ -60,20 +71,20 @@ class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewMode
     }
 
     private fun loadEula() {
-        viewDataBinding.titleLayout.title = "이용약관"
-        viewDataBinding.textScrollView.visibility = View.GONE
-        viewDataBinding.webView.loadUrl("https://www.my-bury.com/terms_of_use")
+        binding.titleLayout.title = "이용약관"
+        binding.textScrollView.visibility = View.GONE
+        binding.webView.loadUrl("https://www.my-bury.com/terms_of_use")
     }
 
     private fun loadPrivacyPolicy() {
-        viewDataBinding.titleLayout.title = "개인정보 처리방침"
-        viewDataBinding.textScrollView.visibility = View.GONE
-        viewDataBinding.webView.loadUrl("https://www.my-bury.com/privacy_policy")
+        binding.titleLayout.title = "개인정보 처리방침"
+        binding.textScrollView.visibility = View.GONE
+        binding.webView.loadUrl("https://www.my-bury.com/privacy_policy")
     }
 
     private fun loadOpenSourceText() {
-        viewDataBinding.titleLayout.title = "오픈 소스 라이선스"
-        viewDataBinding.webView.visibility = View.GONE
+        binding.titleLayout.title = "오픈 소스 라이선스"
+        binding.webView.visibility = View.GONE
         readTextFile()
     }
 
@@ -90,7 +101,7 @@ class AppInfoTextFragment : BaseFragment<LayoutTitleViewBinding, AppInfoViewMode
                 e.printStackTrace()
             }
             stringBuilder.append(string).append("\n")
-            viewDataBinding.textView.text = Html.fromHtml(stringBuilder.toString())
+            binding.textView.text = Html.fromHtml(stringBuilder.toString())
         }
         `is`.close()
     }

@@ -16,6 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:background="@color/_ffffff">
 
         <ImageView
@@ -33,11 +34,11 @@
             android:id="@+id/typeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:text="@{searchType.getText()}"
             android:textColor="@color/_007bff"
-            android:textSize="20sp"
+            android:textSize="22dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/closeButton"
             tools:text="전체" />
@@ -47,14 +48,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="28dp"
+            android:layout_marginEnd="24dp"
             android:background="@null"
             android:hint="@string/search_list"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:textColor="@color/_222222"
             android:textColorHint="@color/_b4b4b4"
-            android:textSize="20sp"
+            android:textSize="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/typeTextView"
             app:layout_constraintTop_toTopOf="@id/typeTextView" />
@@ -66,7 +67,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
-            android:background="@color/_b4b4b4"
+            android:background="@color/_e0e0e0"
             android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,9 +77,9 @@
             android:id="@+id/searchRadioGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="21dp"
-            android:layout_marginEnd="28dp"
+            android:layout_marginEnd="24dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,31 +108,42 @@
         </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_result_list"
+            android:id="@+id/searchResultList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
             android:background="@color/_fafafa"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchRadioGroup"
             tools:itemCount="5"
-            tools:listitem="@layout/item_bucket_doing_simple"
-            tools:visibility="gone" />
+            tools:listitem="@layout/item_bucket_doing_simple" />
 
-        <TextView
-            android:id="@+id/searchResultIsBlankTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/search_no_result_desc"
+        <LinearLayout
+            android:id="@+id/searchResultIsBlankView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/_fafafa"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchRadioGroup"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toBottomOf="@id/searchRadioGroup">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="124dp"
+                android:gravity="center_horizontal"
+                android:text="@string/search_no_result_desc"
+                android:textColor="@color/_888888"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,30 +1,21 @@
 package womenproject.com.mybury.presentation.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.presentation.MainActivity
+import javax.inject.Inject
 
 
 /**
  * Created by HanAYeon on 2019. 3. 7..
  */
 
-abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
-
-    lateinit var viewDataBinding: T
-
-    abstract val layoutResourceId: Int
-
-    abstract val viewModel: R
-
-    abstract fun initDataBinding()
+@AndroidEntryPoint
+open class BaseFragment @Inject constructor(): Fragment() {
 
     var isCancelConfirm = true
 
@@ -41,18 +32,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         requireActivity().onBackPressedDispatcher.addCallback(this, goToBackCallback)
 
         checkNetworkConnect()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
-        return viewDataBinding.root
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initDataBinding()
     }
 
     private fun checkNetworkConnect() {
@@ -85,7 +64,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
     }
 
     fun startLoading() {
-
         if (activity is MainActivity) {
             val a = activity as MainActivity
             a.startLoading()
@@ -113,7 +91,6 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
         }
     }
 
-
     fun getSupportInfo(): SupportInfo? {
         return if (activity is MainActivity) {
             val a = activity as MainActivity
@@ -128,6 +105,4 @@ abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment()
             a.purchaseSelectItem(id, purchaseSuccess, purchaseFail)
         }
     }
-
-
 }
