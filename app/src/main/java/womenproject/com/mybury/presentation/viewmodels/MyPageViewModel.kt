@@ -3,6 +3,7 @@ package womenproject.com.mybury.presentation.viewmodels
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.data.MyPageInfo
@@ -11,13 +12,14 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
 import womenproject.com.mybury.util.stringToMultipartFile
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Created by HanAYeon on 2019. 4. 23..
  */
 
-class MyPageViewModel : BaseViewModel() {
-
+@HiltViewModel
+class MyPageViewModel @Inject constructor(): BaseViewModel() {
 
     private val _myPageInfo = MutableLiveData<MyPageInfo>()
 

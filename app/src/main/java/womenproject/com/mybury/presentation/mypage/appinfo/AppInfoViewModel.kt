@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation.mypage.appinfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -11,12 +12,14 @@ import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import java.io.IOException
 import java.util.regex.Pattern
+import javax.inject.Inject
 
 /**
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoViewModel : BaseViewModel() {
+@HiltViewModel
+class AppInfoViewModel @Inject constructor(): BaseViewModel() {
 
     private val _latelyVersion = MutableLiveData<String>()
 

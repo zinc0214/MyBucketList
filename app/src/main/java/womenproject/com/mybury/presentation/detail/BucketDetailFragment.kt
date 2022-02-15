@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DetailBucketItem
@@ -22,29 +24,32 @@ import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.util.Converter.Companion.dpToPx
 import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 import java.util.*
 
+@AndroidEntryPoint
 class BucketDetailFragment : Fragment() {
 
     lateinit var viewDataBinding: FragmentBucketDetailBinding
-    lateinit var viewModel: BucketDetailViewModel
     lateinit var bucketItem: DetailBucketItem
 
     private lateinit var bucketItemId: String
     private var isLoadForSucceed = false
     private var memoArrowIsClicked = false
 
+    private val bucketDetailViewModel by viewModels<BucketDetailViewModel>()
+    private val bucketListViewModel by viewModels<BucketListViewModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewDataBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_bucket_detail, container, false)
-        viewModel = BucketDetailViewModel()
         initDataBinding()
         return viewDataBinding.root
     }
@@ -59,11 +64,11 @@ class BucketDetailFragment : Fragment() {
         }
 
         loadBucketDetailInfo()
-        initObserve()
+        setUpObservers()
     }
 
     private fun loadBucketDetailInfo() {
-        viewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
+        bucketDetailViewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
             override fun restart() {
                 loadBucketDetailInfo()
             }
@@ -138,12 +143,18 @@ class BucketDetailFragment : Fragment() {
             isDone = isCompleted
             isCount = isShowCountLayout
 
-
-            val hasNoImg = bucketItem.imgUrl1.isNullOrBlank() && bucketItem.imgUrl2.isNullOrBlank() && bucketItem.imgUrl3.isNullOrBlank()
-            isShowComment = hasNoImg && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
+            val hasNoImg =
+                bucketItem.imgUrl1.isNullOrBlank() && bucketItem.imgUrl2.isNullOrBlank() && bucketItem.imgUrl3.isNullOrBlank()
+            isShowComment =
+                hasNoImg && !isShowCountLayout && !isCompleted && bucketItem.memo.isBlank()
 
             val desc: String = requireContext().getString(R.string.bucket_least_count)
-            currentStateTextView.text = Html.fromHtml(String.format(desc, (bucketItem.goalCount - bucketItem.userCount).toString()))
+            currentStateTextView.text = Html.fromHtml(
+                String.format(
+                    desc,
+                    (bucketItem.goalCount - bucketItem.userCount).toString()
+                )
+            )
 
             when (imgList.size) {
                 0 -> {
@@ -221,7 +232,7 @@ class BucketDetailFragment : Fragment() {
 
     private fun deleteBucket() {
         val userId = UseUserIdRequest(Preference.getUserId(requireContext()))
-        viewModel.deleteBucketListener(userId, bucketItemId)
+        bucketDetailViewModel.deleteBucketListener(userId, bucketItemId)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
@@ -231,7 +242,7 @@ class BucketDetailFragment : Fragment() {
 
     private val bucketRedoListener = View.OnClickListener {
         val confirmAction: () -> Unit = {
-            viewModel.redoBucketList(bucketItemId)
+            bucketDetailViewModel.redoBucketList(bucketItemId)
         }
         RedoBucketDialog(confirmAction).show(requireActivity().supportFragmentManager)
     }
@@ -242,10 +253,14 @@ class BucketDetailFragment : Fragment() {
         memoArrowIsClicked = true
     }
 
-    private fun initObserve() {
-        viewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
-        viewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
-        viewModel.isReDoSuccess.observe(viewLifecycleOwner, isRedoSuccessObserver)
+    private fun setUpObservers() {
+        bucketDetailViewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
+        bucketDetailViewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
+        bucketDetailViewModel.isReDoSuccess.observe(viewLifecycleOwner, isRedoSuccessObserver)
+        bucketListViewModel.bucketCancelLoadState.observe(
+            viewLifecycleOwner,
+            bucketListCancelObserver
+        )
     }
 
     private val isDeleteSuccessObserver = Observer<Boolean> {
@@ -277,6 +292,28 @@ class BucketDetailFragment : Fragment() {
         }
     }
 
+    private val bucketListCancelObserver = Observer<BaseViewModel.LoadState> {
+        when (it) {
+            BaseViewModel.LoadState.FAIL -> {
+                stopLoading()
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            BaseViewModel.LoadState.RESTART -> {
+                bucketListViewModel.setBucketCancel(bucketItemId)
+            }
+            BaseViewModel.LoadState.START -> {
+                startLoading()
+            }
+            BaseViewModel.LoadState.SUCCESS -> {
+                stopLoading()
+                loadBucketDetailInfo()
+            }
+            else -> {
+                // do Nothing
+            }
+        }
+    }
+
     private fun bucketComplete() {
 
         (bucketItem.goalCount == 1 || bucketItem.goalCount - 1 == bucketItem.userCount).also {
@@ -287,7 +324,7 @@ class BucketDetailFragment : Fragment() {
             succeddBucketListAction()
         }
 
-        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+        bucketDetailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 bucketComplete()
             }
@@ -309,7 +346,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val bucketCancelListener = View.OnClickListener {
-        bucketCancel()
+        bucketListViewModel.setBucketCancel(bucketItemId)
     }
 
     private fun succeddBucketListAction() {
@@ -344,28 +381,6 @@ class BucketDetailFragment : Fragment() {
 
     }
 
-    private fun bucketCancel() {
-        viewModel.setBucketCancel(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                bucketComplete()
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                loadBucketDetailInfo()
-            }
-
-            override fun fail() {
-                stopLoading()
-                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-        }, bucketItemId)
-
-    }
 
     private fun getRandomComment(): String {
 

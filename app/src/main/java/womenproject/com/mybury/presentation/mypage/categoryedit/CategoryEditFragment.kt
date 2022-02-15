@@ -2,12 +2,18 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
@@ -15,34 +21,31 @@ import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.CategoryInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryEditViewModel
+import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
-
-class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageViewModel>(),
+@AndroidEntryPoint
+class CategoryEditFragment : BaseFragment(),
     ItemDragListener,
     ItemCheckedListener,
     ItemMovedListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var binding: FragmentCategoryEditBinding
 
-    private val bucketInfoViewModel = BucketInfoViewModel()
-    private val categoryEditViewModel = CategoryInfoViewModel()
+    private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
+    private val categoryEditViewModel by viewModels<CategoryEditViewModel>()
+    private val categoryViewModel by viewModels<CategoryViewModel>()
+
     private val removedList = hashSetOf<String>()
     private var changeCategoryList = arrayListOf<Category>()
     private var originCategoryList = arrayListOf<Category>()
 
     private lateinit var imm: InputMethodManager
     private var isKeyBoardShown = false
-
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_category_edit
-
-    override val viewModel: MyPageViewModel
-        get() = MyPageViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,26 +64,41 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
         requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
-    override fun initDataBinding() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_category_edit, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
         isCancelConfirm = false
 
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        viewDataBinding.backLayout.title = "카테고리 편집"
-        viewDataBinding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
-        viewDataBinding.fragment = this
+        binding.backLayout.title = "카테고리 편집"
+        binding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
+        binding.fragment = this
 
         setUpViewModelObservers()
-        bucketInfoViewModel.getCategoryList()
+        categoryViewModel.getCategoryList()
     }
 
     private fun setUpViewModelObservers() {
-        bucketInfoViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 BaseViewModel.LoadState.START -> {
                     startLoading()
                 }
                 BaseViewModel.LoadState.RESTART -> {
-                    bucketInfoViewModel.getCategoryList()
+                    categoryViewModel.getCategoryList()
                 }
                 BaseViewModel.LoadState.SUCCESS -> {
                     stopLoading()
@@ -97,7 +115,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             }
         }
 
-        bucketInfoViewModel.categoryList.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryList.observe(viewLifecycleOwner) {
             initOriginCategory(it as List<Category>)
             changeCategoryList = it as ArrayList<Category>
             setCategoryAdapter()
@@ -116,16 +134,11 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
 
         val editCategoryName: (Category) -> Unit = {
             imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-
-            if (it.name == "없음") {
-                Toast.makeText(context, "기본 카테고리 이름은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                val categoryAdd: (String) -> Unit = { name ->
-                    editCategoryItem(it, name)
-                }
-                AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
-                    .show(requireActivity().supportFragmentManager)
+            val categoryAdd: (String) -> Unit = { name ->
+                editCategoryItem(it, name)
             }
+            AddCategoryDialogFragment(originCategoryList, it.name, categoryAdd)
+                .show(requireActivity().supportFragmentManager)
         }
 
         val editCategoryListAdapter = EditCategoryListAdapter(
@@ -136,13 +149,13 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             editCategoryName
         )
 
-        viewDataBinding.categoryListRecyclerView.apply {
+        binding.categoryListRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = editCategoryListAdapter
         }
 
         itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editCategoryListAdapter))
-        itemTouchHelper.attachToRecyclerView(viewDataBinding.categoryListRecyclerView)
+        itemTouchHelper.attachToRecyclerView(binding.categoryListRecyclerView)
     }
 
     fun addNewCategoryListener() {
@@ -221,7 +234,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
                     stopLoading()
                     initDataBinding()
                     removedList.clear()
-                    viewDataBinding.cancelText.isEnabled = false
+                    binding.cancelText.isEnabled = false
                 }
 
                 override fun fail() {
@@ -282,7 +295,7 @@ class CategoryEditFragment : BaseFragment<FragmentCategoryEditBinding, MyPageVie
             removedList.remove(category.id)
         }
 
-        viewDataBinding.cancelText.isEnabled = removedList.size > 0
+        binding.cancelText.isEnabled = removedList.size > 0
     }
 
     override fun moved(list: List<Any>) {

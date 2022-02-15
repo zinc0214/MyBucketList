@@ -7,9 +7,9 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -19,6 +19,7 @@ import com.android.billingclient.api.*
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
@@ -45,10 +46,11 @@ import java.util.*
  * Created by HanAYeon on 2018. 11. 26..
  */
 
+@AndroidEntryPoint
 class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var supportViewModel: MyBurySupportViewModel
+    private val supportViewModel by viewModels<MyBurySupportViewModel>()
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -73,16 +75,14 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initAdmob()
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        initAdmob()
         drawerLayout = binding.drawerLayout
         navController = Navigation.findNavController(this, R.id.nav_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
         val baseViewModel = BaseViewModel()
-        supportViewModel = MyBurySupportViewModel()
 
         if (baseViewModel.isNetworkDisconnect()) {
             NetworkFailDialog().show(supportFragmentManager, "tag")
@@ -90,18 +90,18 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         supportViewModel.getPurchasableItem()
 
-        supportViewModel.supportInfo.observe(this, Observer { info ->
+        supportViewModel.supportInfo.observe(this) { info ->
             setAdShowable(info.totalPrice.toInt())
             initBillingClient(info.supportItems)
             supportInfo = info
             supportInfo?.supportItems?.forEach {
                 it.isPurchasable = true
             }
-        })
+        }
 
-        supportViewModel.supportPrice.observe(this, { price ->
+        supportViewModel.supportPrice.observe(this) { price ->
             supportInfo?.totalPrice = price
-        })
+        }
 
         purchaseFail = {
             // DO NoTHING
@@ -314,8 +314,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingResult: BillingResult,
         purchaseList: MutableList<Purchase>?
     ) {
-        Log.d("ayhan", "result.responseCode : ${billingResult.responseCode}, $purchaseList")
-
+        if(purchaseList == null ) {
+            purchaseFail.invoke()
+        }
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
@@ -380,9 +381,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             return
         } else {
             startLoading()
-            //Log.d("mybury", "Existing Once Type Item Bought purchases: ${result.purchasesList}")
             result.purchasesList?.forEach {
-                Log.e("ayhan", "purchasesList : ${it}")
                 //결제된 내역에 대한 처리
                 //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
             }
@@ -392,11 +391,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             recentSupport.forEach { supportedItem ->
                 val purchasedFailItem =
                     result.purchasesList?.firstOrNull { it.purchaseToken == supportedItem.token }
-                Log.e(
-                    "ayhan",
-                    "purchasedFailItem : ${purchasedFailItem}, ${purchasedFailItem?.purchaseState}"
-                )
-
                 if (purchasedFailItem == null) {
                     if (supportedItem.susYn == "N") {
                         // 없는 것으로 간주. 아무것도 하지 않는다.
@@ -430,13 +424,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private fun purchaseAlways(purchaseToken: String) {
         val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
-
-            Log.d("ayhan", "TOKEN : $purchaseToken, ${billingResult.responseCode}")
-            Log.d(
-                "ayhan",
-                " previoutToken and Pusr : \n $previousToken \n $purchaseToken \n ${previousToken == purchaseToken}"
-            )
-
             startLoading()
 
             if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {

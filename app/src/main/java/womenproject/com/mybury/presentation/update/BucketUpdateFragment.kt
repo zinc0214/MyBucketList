@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.update
 
-import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.findNavController
@@ -17,11 +16,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
     lateinit var bucketItem: DetailBucketItem
     lateinit var bucketId: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun initForUpdate() {
 
         loadArgument()
@@ -31,30 +25,30 @@ class BucketUpdateFragment : BucketWriteFragment() {
             alreadyImgList = setImgList(bucketItem)
         }
 
-        viewDataBinding.titleText.setText(bucketItem.title)
+        binding.titleText.setText(bucketItem.title)
 
         if (bucketItem.memo.isNotBlank()) {
-            viewDataBinding.memoLayout.visibility = View.VISIBLE
-            viewDataBinding.memoText.setText(bucketItem.memo)
+            binding.memoLayout.visibility = View.VISIBLE
+            binding.memoText.setText(bucketItem.memo)
         }
 
         if (bucketItem.open) {
-            viewDataBinding.openSwitchBtn.transitionToStart()
+            binding.openSwitchBtn.transitionToStart()
         } else {
-            viewDataBinding.openSwitchBtn.transitionToEnd()
-            viewDataBinding.openText.text = requireContext().resources.getString(R.string.bucket_close)
-            viewDataBinding.openImg.background = requireContext().getDrawable(R.drawable.open_disable)
+            binding.openSwitchBtn.transitionToEnd()
+            binding.openText.text = requireContext().resources.getString(R.string.bucket_close)
+            binding.openImg.background = requireContext().getDrawable(R.drawable.open_disable)
         }
 
         if (bucketItem.category != "없음") {
-            viewDataBinding.categoryText.text = bucketItem.category
-            viewDataBinding.categoryText.setEnableTextColor()
-            viewDataBinding.categoryImg.setImage(R.drawable.category_enable)
+            binding.categoryText.text = bucketItem.category
+            binding.categoryText.setEnableTextColor()
+            binding.categoryImg.setImage(R.drawable.category_enable)
         }
 
 
         if (bucketItem.dDate != null && !bucketItem.dDate.equals("0")) {
-            viewDataBinding.ddayText.text = bucketItem.dDate
+            binding.ddayText.text = bucketItem.dDate
 
             val dday = bucketItem.dDate?.split("/")
 
@@ -65,18 +59,18 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
             currentCalendarDay = date
 
-            viewDataBinding.ddayText.setEnableTextColor()
-            viewDataBinding.ddayImg.setImage(R.drawable.calendar_enable)
+            binding.ddayText.setEnableTextColor()
+            binding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
         if (bucketItem.goalCount != null && bucketItem.goalCount.toString() != "1") {
-            viewDataBinding.goalCountText.text = bucketItem.goalCount.toString()
+            binding.goalCountText.text = bucketItem.goalCount.toString()
             goalCount = bucketItem.goalCount ?: 0
-            viewDataBinding.goalCountText.setEnableTextColor()
-            viewDataBinding.countImg.setImage(R.drawable.target_count_enable)
+            binding.goalCountText.setEnableTextColor()
+            binding.countImg.setImage(R.drawable.target_count_enable)
         }
 
-        viewDataBinding.writeRegist.isEnabled = true
+        binding.writeRegist.isEnabled = true
     }
 
     override fun loadArgument() {
@@ -103,8 +97,8 @@ class BucketUpdateFragment : BucketWriteFragment() {
             }
 
             override fun start() {
-                imm.hideSoftInputFromWindow(viewDataBinding.titleText.windowToken, 0)
-                imm.hideSoftInputFromWindow(viewDataBinding.memoText.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
+                imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
                 startLoading()
 
             }

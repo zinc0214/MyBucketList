@@ -1,28 +1,26 @@
 package womenproject.com.mybury.presentation.mypage.support
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.databinding.DataBindingUtil
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.SupportInfo
 import womenproject.com.mybury.databinding.FragmentMyburySupportBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 
+@AndroidEntryPoint
+class MyBurySupportFragment : BaseFragment() {
 
-class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBurySupportViewModel>() {
-
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_mybury_support
-
-    override val viewModel: MyBurySupportViewModel
-        get() = MyBurySupportViewModel()
-
+    private lateinit var binding: FragmentMyburySupportBinding
     private lateinit var purchaseItemListAdapter: PurchaseItemListAdapter
     private var isCurrentSupporting = false
 
@@ -42,8 +40,23 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
         requireActivity().onBackPressedDispatcher.addCallback(this, goToActionCallback)
     }
 
-    override fun initDataBinding() {
-        viewDataBinding.supportPrice = ""
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_mybury_support, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
+        binding.supportPrice = ""
 
         getSupportInfo().apply {
             if (this == null) {
@@ -58,7 +71,7 @@ class MyBurySupportFragment : BaseFragment<FragmentMyburySupportBinding, MyBuryS
     }
 
     private fun setUpViews(supportInfo: SupportInfo) {
-        viewDataBinding.apply {
+        binding.apply {
             val layoutManager = FlexboxLayoutManager(context)
             layoutManager.justifyContent = JustifyContent.SPACE_EVENLY
             layoutManager.flexWrap = FlexWrap.WRAP

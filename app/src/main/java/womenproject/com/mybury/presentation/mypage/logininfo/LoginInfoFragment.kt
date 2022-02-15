@@ -2,11 +2,17 @@ package womenproject.com.mybury.presentation.mypage.logininfo
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
@@ -28,24 +34,34 @@ import womenproject.com.mybury.presentation.intro.SplashLoginActivity
  * Created by HanAYeon on 2019-09-16.
  */
 
-class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>() {
+@AndroidEntryPoint
+class LoginInfoFragment : BaseFragment() {
 
+    private lateinit var binding: FragmentLoginInfoBinding
+    private val viewModel by viewModels<BaseViewModel>()
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_login_info
-
-    override val viewModel: BaseViewModel
-        get() = BaseViewModel()
-
-
-    private var isSucessDelete = false
+    private var isSuccessDelete = false
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
-    override fun initDataBinding() {
-        viewDataBinding.backLayout.title = "로그인 정보"
-        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
-        viewDataBinding.activity = this
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login_info, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
+
+    private fun initDataBinding() {
+        binding.backLayout.title = "로그인 정보"
+        binding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.activity = this
     }
 
     fun getLoginText() = run { "${getAccountEmail(requireContext())} 계정으로\n로그인하였습니다." }
@@ -62,7 +78,10 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
             this.activity?.finish()
         }
 
-        AccountDeleteDialogFragment(startDeleting, animEnd).show(requireActivity().supportFragmentManager, "tag")
+        AccountDeleteDialogFragment(
+            startDeleting,
+            animEnd
+        ).show(requireActivity().supportFragmentManager, "tag")
     }
 
     fun googleLogoutClickListener() {
@@ -80,37 +99,46 @@ class LoginInfoFragment : BaseFragment<FragmentLoginInfoBinding, BaseViewModel>(
         }
 
         apiInterface.postSignOut(accessToken, userIdRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    when (response.retcode) {
-                        "200" -> {
-                            allClear(requireContext())
-                            isSucessDelete = true
-                        }
-                        "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {
-                            override fun success() {
-                                signOutMyBury()
-                            }
-
-                            override fun fail() {
-                                LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
-                            }
-                        })
-                        else -> LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                when (response.retcode) {
+                    "200" -> {
+                        allClear(requireContext())
+                        isSuccessDelete = true
                     }
+                    "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {
+                        override fun success() {
+                            signOutMyBury()
+                        }
 
-                }) {
-                    LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
+                        override fun fail() {
+                            LogoutOrSignOutFailed("계정삭제 실패").show(
+                                requireActivity().supportFragmentManager,
+                                "tag"
+                            )
+                        }
+                    })
+                    else -> LogoutOrSignOutFailed("계정삭제 실패").show(
+                        requireActivity().supportFragmentManager,
+                        "tag"
+                    )
                 }
+
+            }) {
+                LogoutOrSignOutFailed("계정삭제 실패").show(
+                    requireActivity().supportFragmentManager,
+                    "tag"
+                )
+            }
 
     }
 
     private fun initGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         auth = FirebaseAuth.getInstance()
 

@@ -1,9 +1,9 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -13,8 +13,10 @@ import womenproject.com.mybury.data.SearchRequest
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import javax.inject.Inject
 
-class SearchViewModel : BaseViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(): BaseViewModel() {
 
     private val _allBucketSearchResult = MutableLiveData<List<SearchResultType>>()
     val allBucketSearchResult: LiveData<List<SearchResultType>> = _allBucketSearchResult
@@ -37,7 +39,7 @@ class SearchViewModel : BaseViewModel() {
                 try {
                     apiInterface.searchList(accessToken, searchRequest).apply {
                         val bucketList = this@apply.bucketlists
-                        val categoryList = this@apply.categoryInfos
+                        val categoryList = this@apply.categories
 
                         if (bucketList.isNullOrEmpty() && categoryList.isNullOrEmpty()) {
                             _searchSate.value = LoadState.FAIL
@@ -57,8 +59,8 @@ class SearchViewModel : BaseViewModel() {
     }
 
     private fun parseToSearchTypeItem(
-        bucketList: List<BucketItem>,
-        categoryInfoList: List<CategoryInfo>
+        bucketList: List<BucketItem>?,
+        categoryInfoList: List<CategoryInfo>?
     ): ArrayList<SearchResultType> {
         val resultList = arrayListOf<SearchResultType>()
 
@@ -70,7 +72,6 @@ class SearchViewModel : BaseViewModel() {
             resultList.addAll(categoryInfoList)
         }
 
-        Log.e("ayhan", "resultList : $resultList")
         return resultList
     }
 

@@ -3,10 +3,12 @@ package womenproject.com.mybury.presentation.main
 import android.app.ActionBar
 import android.text.Html
 import android.view.View
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogFragmentWarningBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 
+@AndroidEntryPoint
 class WarningDialogFragment(private val confirmClick: () -> Unit) : BaseDialogFragment<DialogFragmentWarningBinding>() {
     override val layoutResourceId: Int
         get() = R.layout.dialog_fragment_warning

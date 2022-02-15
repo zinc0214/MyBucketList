@@ -7,24 +7,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
-import womenproject.com.mybury.data.SignUpCheckRequest
-import womenproject.com.mybury.data.UseUserIdRequest
-import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
@@ -33,18 +28,24 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.dialog.UserAlreadyExist
+import womenproject.com.mybury.presentation.viewmodels.LoadLoginTokenResult
+import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import womenproject.com.mybury.presentation.viewmodels.SignUpResult
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
 import java.io.File
+import javax.inject.Inject
 import kotlin.random.Random
 
-
-class CreateAccountActivity : BaseActiviy() {
+@AndroidEntryPoint
+class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
     private var file: File? = null
     private var useDefaulProfileImg = false
+
+    private val viewModel by viewModels<LoginViewModel>()
 
     override fun onResume() {
         super.onResume()
@@ -60,9 +61,12 @@ class CreateAccountActivity : BaseActiviy() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        setUpViews()
+        setUpObservers()
+    }
 
+    private fun setUpViews() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
         binding.apply {
             topLayout.title = "프로필생성"
@@ -72,21 +76,50 @@ class CreateAccountActivity : BaseActiviy() {
             nicknameEditText.addTextChangedListener(addTextChangedListener())
             root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
-            profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+            profileImg.setImageResource(R.drawable.default_profile_my)
             useDefaulProfileImg = true
+        }
+    }
+
+    private fun setUpObservers() {
+        viewModel.signUpResult.observe(this) {
+            when (it) {
+                is SignUpResult.Success -> {
+                    Preference.setUserId(this, it.userId)
+                    viewModel.getLoginToken(it.userId)
+                }
+                SignUpResult.EmailExisted -> {
+                    UserAlreadyExist().show(supportFragmentManager, "tag")
+                }
+                SignUpResult.Fail -> {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                }
+            }
+        }
+        viewModel.loadLoginTokenResult.observe(this) {
+            when (it) {
+                is LoadLoginTokenResult.Success -> {
+                    Preference.setAccessToken(this, it.accessToken)
+                    Preference.setRefreshToken(this, it.refreshToken)
+                    signInAccount()
+                }
+                LoadLoginTokenResult.Fail -> {
+                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
+                }
+            }
         }
     }
 
     private val checkBaseProfileImgUsable: () -> Boolean = {
         true
     }
-    private val baseProfileUseListener: () -> Unit = {
 
+    private val baseProfileUseListener: () -> Unit = {
         val num = Random.nextInt(2)
         if (num == 1) {
-            binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_bury))
+            binding.profileImg.setImageResource(R.drawable.default_profile_bury)
         } else {
-            binding.profileImg.setImageDrawable(resources.getDrawable(R.drawable.default_profile_my))
+            binding.profileImg.setImageResource(R.drawable.default_profile_my)
         }
         useDefaulProfileImg = true
         binding.executePendingBindings()
@@ -103,10 +136,11 @@ class CreateAccountActivity : BaseActiviy() {
     }
 
     private val profileImageEditClickLister = View.OnClickListener {
-        WriteMemoImgAddDialogFragment(AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
-                checkAddImgAbleListener, imgAddListener).show(supportFragmentManager, "tag")
+        WriteMemoImgAddDialogFragment(
+            AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
+            checkAddImgAbleListener, imgAddListener
+        ).show(supportFragmentManager, "tag")
     }
-
 
     private fun addTextChangedListener(): TextWatcher {
         return object : TextWatcher {
@@ -128,10 +162,7 @@ class CreateAccountActivity : BaseActiviy() {
                     binding.commentImg.setBackgroundResource(R.drawable.bury_speech_02)
                 }
             }
-
         }
-
-
     }
 
     private fun setOnSoftKeyboardChangedListener(): ViewTreeObserver.OnGlobalLayoutListener {
@@ -150,16 +181,14 @@ class CreateAccountActivity : BaseActiviy() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
     }
 
 
     private val myBuryStartListener = View.OnClickListener {
         getAccountEmail(this)?.let {
-            loadUserId(it)
+            viewModel.loadUserId(it)
         }
-
     }
 
 
@@ -200,63 +229,6 @@ class CreateAccountActivity : BaseActiviy() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         finish()
-    }
-
-    @SuppressLint("CheckResult")
-    private fun getLoginToken() {
-        val getTokenRequest = UseUserIdRequest(getUserId(this))
-        apiInterface.getLoginToken(getTokenRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    if (response.retcode != "200") {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                    } else {
-                        Preference.setAccessToken(this, response.accessToken)
-                        Preference.setRefreshToken(this, response.refreshToken)
-                        signInAccount()
-                    }
-
-                }) {
-                    Log.e("myBury", "getLoginToken Fail : $it")
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                }
-    }
-
-    @SuppressLint("CheckResult")
-    private fun loadUserId(email: String) {
-        val emailDataClass = SignUpCheckRequest(email)
-
-        apiInterface.postSignUp(emailDataClass)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    when (response.retcode) {
-                        "200" -> {
-                            Preference.setUserId(this, response.userId)
-                            getLoginToken()
-                        }
-                        "401" -> {
-                            try{
-                                UserAlreadyExist().show(supportFragmentManager, "tag")
-                            }catch (e :Exception){
-                                Log.e("myBury","UserAlreadyExist dialog error: $e")
-                            }
-
-                        }
-                        else -> {
-                            CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                        }
-                    }
-                }) {
-                    Log.e("myBury", "PostSignUpResponse Fail: $it")
-                    try {
-                        CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                    } catch (e:Exception){
-                        Log.e("myBury","CanNotGoMainDialog error: $e")
-                    }
-
-                }
     }
 }
 

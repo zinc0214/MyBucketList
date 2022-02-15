@@ -3,10 +3,14 @@ package womenproject.com.mybury.presentation.mypage.appinfo
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DataTextType
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
@@ -18,49 +22,55 @@ import womenproject.com.mybury.util.Converter.Companion.stringFormat
  * Created by HanAYeon on 2019-08-20.
  */
 
-class AppInfoFragment : BaseFragment<FragmentAppInfoBinding, AppInfoViewModel>() {
+@AndroidEntryPoint
+class AppInfoFragment : BaseFragment() {
 
-    override val layoutResourceId: Int
-        get() = R.layout.fragment_app_info
+    private lateinit var binding : FragmentAppInfoBinding
+    
+    private val viewModel by viewModels<AppInfoViewModel>()
 
-    override val viewModel: AppInfoViewModel
-        get() = AppInfoViewModel()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_app_info, container, false)
+        return binding.root
+    }
 
-    private lateinit var viewModelL: AppInfoViewModel
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initDataBinding()
+    }
 
-    override fun initDataBinding() {
+    private fun initDataBinding() {
         startLoading()
-        viewModelL = ViewModelProvider(this).get(AppInfoViewModel::class.java)
 
-        viewModelL.latelyVersion.observe(this, Observer {
+        viewModel.latelyVersion.observe(this) {
             setUpViews()
             stopLoading()
-        })
-        viewModelL.getLatelyVersion()
+        }
+        viewModel.getLatelyVersion()
     }
 
     private fun setUpViews() {
-        viewDataBinding.backLayout.title = "앱 정보"
-        viewDataBinding.useEula.content = "이용약관"
-        viewDataBinding.privacyEula.content = "개인 정보 처리 방침"
-        viewDataBinding.openSource.content = "오픈 소스 라이선스"
+        binding.backLayout.title = "앱 정보"
+        binding.useEula.content = "이용약관"
+        binding.privacyEula.content = "개인 정보 처리 방침"
+        binding.openSource.content = "오픈 소스 라이선스"
 
-        viewDataBinding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModelL.currentVersion)
+        binding.currentVersionInfo.text = stringFormat(getString(R.string.app_current_version), viewModel.currentVersion)
 
-        if (viewModelL.currentVersion == viewModelL.latelyVersion.value) {
-            viewDataBinding.versionText = "최신 버전 사용 중"
-            viewDataBinding.updateBtn.isEnabled = false
+        if (viewModel.currentVersion == viewModel.latelyVersion.value) {
+            binding.versionText = "최신 버전 사용 중"
+            binding.updateBtn.isEnabled = false
 
         } else {
-            viewDataBinding.versionText = "최신 버전 업데이트"
-            viewDataBinding.updateBtn.isEnabled = true
+            binding.versionText = "최신 버전 업데이트"
+            binding.updateBtn.isEnabled = true
         }
 
-        viewDataBinding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
-        viewDataBinding.useEula.appInfoDetailClickListener = goToUseEula()
-        viewDataBinding.privacyEula.appInfoDetailClickListener = goToPrivacy()
-        viewDataBinding.openSource.appInfoDetailClickListener = goToOpenSource()
-        viewDataBinding.updateBtn.setOnClickListener(goToPlayStore())
+        binding.backLayout.backBtnOnClickListener = backBtnOnClickListener()
+        binding.useEula.appInfoDetailClickListener = goToUseEula()
+        binding.privacyEula.appInfoDetailClickListener = goToPrivacy()
+        binding.openSource.appInfoDetailClickListener = goToOpenSource()
+        binding.updateBtn.setOnClickListener(goToPlayStore())
     }
 
     private fun goToUseEula() = View.OnClickListener {

@@ -3,13 +3,14 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.databinding.ItemCategoryBinding
-import womenproject.com.mybury.presentation.viewmodels.CategoryListItemViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
+import womenproject.com.mybury.util.Converter.Companion.dpToPx
 
 class EditCategoryListViewHolder(
     private val binding: ItemCategoryBinding,
@@ -24,16 +25,20 @@ class EditCategoryListViewHolder(
     fun bind(category: Category) {
         binding.apply {
 
-            viewModel = CategoryListItemViewModel(category.name)
+            bucketName = category.name
             if (category.name == "없음") {
                 removeBox.isEnabled = false
                 removeBox.isChecked = false
+                editLayout.visibility = View.GONE
             }
             dragLayout.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(this@EditCategoryListViewHolder)
+                    categoryItemLayout.elevation = dpToPx(0).toFloat()
+                } else if (event.action == MotionEvent.ACTION_CANCEL) {
+                    categoryItemLayout.elevation = dpToPx(5).toFloat()
                 }
-                false
+                true
             }
             editLayout.setOnClickListener { v ->
                 editCategoryName.invoke(category)
@@ -42,7 +47,11 @@ class EditCategoryListViewHolder(
                 checkedListener.checked(isChecked, category)
             }
 
-            binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener(category.name))
+            binding.root.viewTreeObserver.addOnGlobalLayoutListener(
+                setOnSoftKeyboardChangedListener(
+                    category.name
+                )
+            )
             executePendingBindings()
         }
     }

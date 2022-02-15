@@ -1,15 +1,19 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.firebase.crashlytics'
+import dependencies.Dep
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.gms.google-services'
+    id 'dagger.hilt.android.plugin'
+}
 
 android {
     compileSdkVersion 31
-    dataBinding {
-        enabled = true
-    }
+
     defaultConfig {
         applicationId "womenproject.com.mybury"
         minSdkVersion 24
@@ -34,99 +38,88 @@ android {
     androidExtensions {
         experimental = true
     }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+    kapt {
+        correctErrorTypes true
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation project(path: ':domain')
+    implementation project(path: ':data')
 
-    // 얘는 그지같은 문제가 있으므로 일단 업데이트 보류
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    // AndroidX
+    implementation Dep.AndroidX.appcompat
+    implementation Dep.AndroidX.constraintlayout
+    implementation Dep.AndroidX.Lifecycle.extension
+    implementation Dep.AndroidX.UI.material
+    implementation Dep.AndroidX.UI.cardView
+    implementation Dep.AndroidX.RecyclerView.core
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-
-    // 얘는 그지같은 문제가 있으므로 일단 업데이트 보류
-    implementation 'com.google.android.material:material:1.3.0'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
-
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
-
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
-
-    implementation 'com.prolificinteractive:material-calendarview:1.4.3'
-    implementation 'de.hdodenhof:circleimageview:1.3.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
+    // calendarview
+    implementation Dep.calendarview
 
     //glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation Dep.glide
 
     //retrofit
-    implementation "com.squareup.retrofit2:retrofit:2.6.0"
-    implementation "com.squareup.retrofit2:converter-gson:2.5.0"
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation Dep.Retrofit.core
+    implementation Dep.Retrofit.converter
+    implementation Dep.Retrofit.rxJava
 
-    //rxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    // okHttp
+    implementation Dep.OkHttp.loggingInterceptor
 
-    //rxKotlin
-    implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
-
-    //rxJava + Retrofit2
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    // Reactivex
+    implementation Dep.Reactivex.rxkotlin
+    implementation Dep.Reactivex.rxandroid
 
     //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.2"
+    implementation Dep.AndroidX.Navigation.ui
+    implementation Dep.AndroidX.Navigation.fragment
 
     //google login
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+    implementation Dep.Firebase.auth
+    implementation Dep.Gms.auth
 
-    // firebase crashlytics
-    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    // firebase
+    implementation Dep.Firebase.analytics
+    implementation Dep.Firebase.crashlytics
 
     // Jsoup
-    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation Dep.jsoup
 
     // coroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation Dep.Kotlin.coroutines.android
+    implementation Dep.Kotlin.coroutines.core
 
     // kotlin - ktx
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-rc01'
-
-    // in app review
-    implementation 'com.google.android.play:core-ktx:1.8.1'
-    implementation 'com.google.android.play:core:1.9.0'
+    implementation Dep.AndroidX.Lifecycle.viewModel
 
     // google abMob
-    implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation Dep.Gms.ads
+    implementation Dep.Gms.base
 
     // in app billing
-    implementation 'com.android.billingclient:billing:3.0.2'
-    implementation 'com.android.billingclient:billing-ktx:3.0.2'
-
-    implementation 'com.google.android.gms:play-services-base:17.5.0'
+    implementation Dep.InAllBilling.core
+    implementation Dep.InAllBilling.coreKtx
 
     //lottie
-    implementation 'com.airbnb.android:lottie:3.0.7'
+    implementation Dep.lottie
 
     // flexbox
-    implementation 'com.google.android.flexbox:flexbox:3.0.0'
-}
+    implementation Dep.flexbox
 
-repositories {
-    google()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
+    implementation Dep.Dagger.Hilt.android
+    kapt Dep.Dagger.Hilt.compiler
 
-apply plugin: 'com.google.gms.google-services'
+    // test
+    testImplementation Dep.Test.junit
+    androidTestImplementation Dep.Test.runner
+    androidTestImplementation Dep.Test.espressoCore
+
+    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
+}
