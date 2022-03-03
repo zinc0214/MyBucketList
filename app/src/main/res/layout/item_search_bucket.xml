@@ -60,6 +60,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text="@{bucketInfo.title}"
+                        android:textColor="@color/_434343"
                         app:layout_constraintBottom_toTopOf="@id/progressLayout"
                         app:layout_constraintEnd_toStartOf="@+id/ddayTextView"
                         app:layout_constraintHorizontal_bias="0"
