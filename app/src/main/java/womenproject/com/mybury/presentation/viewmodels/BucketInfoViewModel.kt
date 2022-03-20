@@ -60,6 +60,9 @@ class BucketInfoViewModel @Inject constructor(
                                     _bucketListLoadState.value = it
                                 }
                             }
+                            else -> {
+                                _bucketListLoadState.value = LoadState.FAIL
+                            }
                         }
                         Log.e("ayhan", "_homeBucketList : ${_homeBucketList.value}")
                     }
