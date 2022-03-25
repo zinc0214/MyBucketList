@@ -1,4 +1,5 @@
 import dependencies.Dep
+import dependencies.Versions
 
 plugins {
     id 'com.android.application'
@@ -18,8 +19,8 @@ android {
         applicationId "womenproject.com.mybury"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode Integer.parseInt(VERSION_CODE)
-        versionName VERSION_NAME
+        versionCode Versions.versionCode
+        versionName Versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
