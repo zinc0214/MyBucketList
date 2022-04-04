@@ -5,10 +5,6 @@
     <data>
 
         <variable
-            name="myPageClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
             name="homeClickListener"
             type="android.view.View.OnClickListener" />
 
@@ -47,7 +43,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:onClick="@{myPageClickListener}"
             app:layout_constraintBottom_toBottomOf="@id/bottomLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/space"

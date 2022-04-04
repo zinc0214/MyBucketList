@@ -11,16 +11,9 @@
             type="womenproject.com.mybury.data.MyPageInfo" />
 
         <variable
-            name="moreClickListener"
-            type="android.view.View.OnClickListener" />
+            name="view"
+            type="womenproject.com.mybury.presentation.mypage.MyPageFragment" />
 
-        <variable
-            name="doingBucketListClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="doneBucketListClickListener"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <womenproject.com.mybury.ui.CollapsibleToolbar
@@ -28,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/_fafafa"
+        android:fitsSystemWindows="false"
         android:minHeight="128dp"
         app:layoutDescription="@xml/layout_my_page_header_xml_constraintlayout_scene"
-        android:fitsSystemWindows="false"
         app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
         <ImageView
@@ -62,7 +55,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:contentDescription="@string/mypage_more_button"
-            android:onClick="@{moreClickListener}"
+            android:onClick="@{v -> view.moreClickListener()}"
             android:src="@drawable/my_page_more"
             app:layout_constraintEnd_toEndOf="@id/whiteBackgroundImageView"
             app:layout_constraintTop_toTopOf="@id/whiteBackgroundImageView" />
@@ -124,7 +117,8 @@
                 android:gravity="center"
                 android:minWidth="42dp"
                 android:minHeight="24dp"
-                android:onClick="@{doingBucketListClickListener}"
+                android:onClick="@{v -> view.goToDoingBucketList(v)}"
+                android:text="@{myPageInfo.startedCountText()}"
                 android:textColor="@color/_a6c6ff"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@id/completedCountTextView"
@@ -140,7 +134,8 @@
                 android:gravity="center"
                 android:minWidth="42dp"
                 android:minHeight="24dp"
-                android:onClick="@{doneBucketListClickListener}"
+                android:onClick="@{v -> view.goToDoneBucketList(v)}"
+                android:text="@{myPageInfo.completedCountText()}"
                 android:textColor="@color/_a6c6ff"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -157,7 +152,7 @@
                 android:gravity="center"
                 android:minWidth="42dp"
                 android:minHeight="16dp"
-                android:onClick="@{doingBucketListClickListener}"
+                android:onClick="@{v -> view.goToDoingBucketList(v)}"
                 android:text="@string/mypage_started_count_desc"
                 android:textColor="@color/_a6c6ff"
                 android:textSize="12sp"
@@ -174,7 +169,7 @@
                 android:gravity="center"
                 android:minWidth="42dp"
                 android:minHeight="16dp"
-                android:onClick="@{doneBucketListClickListener}"
+                android:onClick="@{v -> view.goToDoneBucketList(v)}"
                 android:text="@string/mypage_completed_count_desc"
                 android:textColor="@color/_a6c6ff"
                 android:textSize="12sp"

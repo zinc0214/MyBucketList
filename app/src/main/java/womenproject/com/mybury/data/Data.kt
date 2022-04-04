@@ -188,6 +188,12 @@ data class MyPageInfo(
     fun showableCategoryList() : List<CategoryInfo> {
         return categoryList - categoryList.filter { it.count == 0 && it.name == "없음" }.toSet()
     }
+
+    fun startedCountText() = startedCount.toString()
+
+    fun completedCountText() = completedCount.toString()
+
+    fun dDayCountText() = dDayCount.toString()
 }
 
 @Parcelize
@@ -273,8 +279,8 @@ enum class SortFilter {
     updatedDt, createdDt, custom
 }
 
-enum class DataTextType {
-    eula, privacy, openSource
+enum class WebViewType {
+    eula, privacy, openSource, notice
 }
 
 enum class BucketType {

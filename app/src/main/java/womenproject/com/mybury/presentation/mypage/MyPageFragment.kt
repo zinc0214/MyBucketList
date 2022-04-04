@@ -19,6 +19,7 @@ import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.ShowFilter
+import womenproject.com.mybury.data.WebViewType
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -103,17 +104,10 @@ class MyPageFragment : BaseFragment() {
 
         binding.apply {
 
+            view = this@MyPageFragment
+            myPageInfo = _myPageInfo
+
             headerLayout.apply {
-                myPageInfo = _myPageInfo
-
-                moreClickListener = moreButtonOnClickListener
-                doingBucketListClickListener = doingBucketListClick
-                doneBucketListClickListener = doneBucketListClick
-                startedCountTextView.text = _myPageInfo.startedCount.toString()
-                completedCountTextView.text = _myPageInfo.completedCount.toString()
-
-                mypageScrollLayout.dDayCountText.text = _myPageInfo.dDayCount.toString()
-
                 constraintLayout.setTransitionListener(object : MotionLayout.TransitionListener {
                     override fun onTransitionTrigger(
                         p0: MotionLayout?,
@@ -148,23 +142,7 @@ class MyPageFragment : BaseFragment() {
                         }
                     }
                 })
-
             }
-
-
-            mypageBottomSheet.homeClickListener = createOnClickHomeListener
-            mypageBottomSheet.writeClickListener = createOnClickWriteListener
-
-            mypageScrollLayout.goToMyBurySupportClickListener = myBurySupportClickListener
-            mypageScrollLayout.ddayListClickListener = createOnClickDdayListListener
-            mypageScrollLayout.categoryEditClickListener = createOnClickCategoryEditListener
-
-            mypageMoreMenuLarge.appInfoClickListener = appInfoOnClickListener
-            mypageMoreMenuLarge.profileEditClickListener = profileEditOnClickListener
-            mypageMoreMenuLarge.loginInfoClickListener = loginInfoClickListener
-            mypageMoreMenuLarge.alarmClickListener = alarmSettingClickListener
-            mypageMoreMenuLarge.contactClickListener = contactToMyBuryClickListener
-
 
             mypageMoreMenuLarge.isAlarmVisible = BuildConfig.DEBUG
 
@@ -203,64 +181,61 @@ class MyPageFragment : BaseFragment() {
         }
     }
 
-    private val createOnClickWriteListener = View.OnClickListener {
+    fun writeClickListener(v : View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToWrite()
         directions.isAdsShow = isAdsShow
-        it.findNavController().navigate(directions)
-
+        v.findNavController().navigate(directions)
     }
 
-    private val createOnClickHomeListener = View.OnClickListener {
+    fun homeClickListener() {
         popupClickListener()
         requireActivity().onBackPressed()
     }
 
-    private val createOnClickDdayListListener = View.OnClickListener {
+    fun goToDdayList(v : View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToDday()
-        it.findNavController().navigate(directions)
-
+        v.findNavController().navigate(directions)
     }
 
-    private val createOnClickCategoryEditListener = View.OnClickListener {
+    fun goToCategoryEdit(v : View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
     }
 
-
-    private val profileEditOnClickListener = View.OnClickListener {
+    fun goToProfileEdit(v : View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToProfileEdit()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
     }
 
-    private val appInfoOnClickListener = View.OnClickListener {
+    fun goToAppInfoPage(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToAppInfo()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    private val loginInfoClickListener = View.OnClickListener {
+    fun goToLoginInfo(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToLoginInfo()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    private val alarmSettingClickListener = View.OnClickListener {
+    fun goToAlarmSetting(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToAlarmSetting()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    private val myBurySupportClickListener = View.OnClickListener {
+    fun goToMyBurySupport(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    private val contactToMyBuryClickListener = View.OnClickListener {
+    fun goToContactToMyBuryByEmail() {
         val send = Intent(Intent.ACTION_SENDTO)
         val uriText = "mailto:" + Uri.encode("mybury.info@gmail.com") +
                 "?subject=" + Uri.encode("< 마이버리 문의 >")
@@ -270,20 +245,25 @@ class MyPageFragment : BaseFragment() {
         startActivity(Intent.createChooser(send, "마이버리 문의하기"))
     }
 
-    private val doingBucketListClick = View.OnClickListener {
+    fun goToDoingBucketList(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
     }
 
-    private val doneBucketListClick = View.OnClickListener {
+    fun goToDoneBucketList(v : View) {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.completed.toString()
-        it.findNavController().navigate(directions)
+        v.findNavController().navigate(directions)
     }
 
-    private val moreButtonOnClickListener = View.OnClickListener {
+    fun goToNoticeWebView(v : View) {
+        val directions = MyPageFragmentDirections.actionMyPageToNotice()
+        directions.type = WebViewType.notice.toString()
+        v.findNavController().navigate(directions)
+    }
 
+    fun moreClickListener() {
         if (binding.mypageMoreMenuLarge.moreMenuLayout.visibility == View.GONE) {
             binding.mypageMoreMenuLarge.moreMenuLayout.visibility = View.VISIBLE
         } else {

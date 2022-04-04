@@ -11,7 +11,7 @@ import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DataTextType
+import womenproject.com.mybury.data.WebViewType
 import womenproject.com.mybury.databinding.LayoutTitleViewBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import java.io.BufferedReader
@@ -53,9 +53,10 @@ class AppInfoTextFragment : BaseFragment() {
         binding.titleLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         when (type) {
-            DataTextType.eula.toString() -> loadEula()
-            DataTextType.privacy.toString() -> loadPrivacyPolicy()
-            DataTextType.openSource.toString() -> loadOpenSourceText()
+            WebViewType.eula.toString() -> loadEula()
+            WebViewType.privacy.toString() -> loadPrivacyPolicy()
+            WebViewType.openSource.toString() -> loadOpenSourceText()
+            WebViewType.notice.toString() -> loadNotice()
         }
     }
 
@@ -86,6 +87,12 @@ class AppInfoTextFragment : BaseFragment() {
         binding.titleLayout.title = "오픈 소스 라이선스"
         binding.webView.visibility = View.GONE
         readTextFile()
+    }
+
+    private fun loadNotice() {
+        binding.titleLayout.title = "공지사항"
+        binding.textScrollView.visibility = View.GONE
+        binding.webView.loadUrl("https://www.my-bury.com/notice/main")
     }
 
     @Throws(IOException::class)
