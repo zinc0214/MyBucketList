@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
+import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
@@ -41,9 +42,11 @@ class BucketListByFilterFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        setUpObservers()
+        initBucketListUI()
     }
 
     private fun setUpViews() {
@@ -59,9 +62,6 @@ class BucketListByFilterFragment : BaseFragment() {
                 else -> "완료"
             }
         binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
-
-        setUpObservers()
-        initBucketListUI()
     }
 
     private fun setUpObservers() {
@@ -88,6 +88,11 @@ class BucketListByFilterFragment : BaseFragment() {
                     CategoryBucketListAdapter(it.bucketlists, showSnackBar)
             }
         }
+
+        getFilterListUp(requireContext())?.let { filterListUp ->
+            viewModel.getHomeBucketList(filterType, filterListUp)
+        }
+
     }
 
     private fun initBucketListUI() {
