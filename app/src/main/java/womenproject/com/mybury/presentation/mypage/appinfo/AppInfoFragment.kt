@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DataTextType
+import womenproject.com.mybury.data.WebViewType
 import womenproject.com.mybury.databinding.FragmentAppInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.util.Converter.Companion.stringFormat
@@ -75,19 +75,19 @@ class AppInfoFragment : BaseFragment() {
 
     private fun goToUseEula() = View.OnClickListener {
         val directions = AppInfoFragmentDirections.actionInfoToDetail()
-        directions.type = DataTextType.eula.toString()
+        directions.type = WebViewType.eula.toString()
         it.findNavController().navigate(directions)
     }
 
     private fun goToPrivacy() = View.OnClickListener {
         val directions = AppInfoFragmentDirections.actionInfoToDetail()
-        directions.type = DataTextType.privacy.toString()
+        directions.type = WebViewType.privacy.toString()
         it.findNavController().navigate(directions)
     }
 
     private fun goToOpenSource() = View.OnClickListener {
         val directions = AppInfoFragmentDirections.actionInfoToDetail()
-        directions.type = DataTextType.openSource.toString()
+        directions.type = WebViewType.openSource.toString()
         it.findNavController().navigate(directions)
     }
 

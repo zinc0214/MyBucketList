@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="view"
+            type="womenproject.com.mybury.presentation.mypage.MyPageFragment" />
+
+        <variable
+            name="myPageInfo"
+            type="womenproject.com.mybury.data.MyPageInfo" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,13 +35,17 @@
 
                 <include
                     android:id="@+id/header_layout"
-                    layout="@layout/layout_my_page_header" />
+                    layout="@layout/layout_my_page_header"
+                    app:myPageInfo="@{myPageInfo}"
+                    app:view="@{view}" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
             <include
                 android:id="@+id/mypage_scroll_layout"
-                layout="@layout/mypage_scroll_layout" />
+                layout="@layout/mypage_scroll_layout"
+                app:myPageInfo="@{myPageInfo}"
+                app:view="@{view}" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -41,7 +56,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:view="@{view}" />
 
         <include
             android:id="@+id/mypage_more_menu_large"
@@ -51,6 +67,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:view="@{view}"
             tools:visibliry="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

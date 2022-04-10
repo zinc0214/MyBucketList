@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DataTextType
+import womenproject.com.mybury.data.WebViewType
 import womenproject.com.mybury.databinding.LayoutTitleViewBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.ui.MyBuryWebView
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -53,15 +53,16 @@ class AppInfoTextFragment : BaseFragment() {
         binding.titleLayout.backBtnOnClickListener = backBtnOnClickListener()
 
         when (type) {
-            DataTextType.eula.toString() -> loadEula()
-            DataTextType.privacy.toString() -> loadPrivacyPolicy()
-            DataTextType.openSource.toString() -> loadOpenSourceText()
+            WebViewType.eula.toString() -> loadEula()
+            WebViewType.privacy.toString() -> loadPrivacyPolicy()
+            WebViewType.openSource.toString() -> loadOpenSourceText()
+            WebViewType.notice.toString() -> loadNotice()
         }
     }
 
     private fun initWebView() {
         webView = binding.webView
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = MyBuryWebView(requireActivity())
         webSettings = binding.webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.setSupportMultipleWindows(true)
@@ -86,6 +87,12 @@ class AppInfoTextFragment : BaseFragment() {
         binding.titleLayout.title = "오픈 소스 라이선스"
         binding.webView.visibility = View.GONE
         readTextFile()
+    }
+
+    private fun loadNotice() {
+        binding.titleLayout.title = "공지사항"
+        binding.textScrollView.visibility = View.GONE
+        binding.webView.loadUrl("https://www.my-bury.com/notice/main")
     }
 
     @Throws(IOException::class)
