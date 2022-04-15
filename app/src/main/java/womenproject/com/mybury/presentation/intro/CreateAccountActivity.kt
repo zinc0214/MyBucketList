@@ -20,6 +20,7 @@ import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
@@ -28,12 +29,12 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.dialog.UserAlreadyExist
-import womenproject.com.mybury.presentation.viewmodels.LoadLoginTokenResult
 import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.viewmodels.SignUpResult
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
+import womenproject.com.mybury.util.observeNonNull
 import java.io.File
 import javax.inject.Inject
 import kotlin.random.Random
@@ -86,7 +87,7 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
             when (it) {
                 is SignUpResult.Success -> {
                     Preference.setUserId(this, it.userId)
-                    viewModel.getLoginToken(it.userId)
+                    viewModel.getLoginToken()
                 }
                 SignUpResult.EmailExisted -> {
                     UserAlreadyExist().show(supportFragmentManager, "tag")
@@ -96,14 +97,12 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
                 }
             }
         }
-        viewModel.loadLoginTokenResult.observe(this) {
+        viewModel.loadLoginTokenResult.observeNonNull(this) {
             when (it) {
-                is LoadLoginTokenResult.Success -> {
-                    Preference.setAccessToken(this, it.accessToken)
-                    Preference.setRefreshToken(this, it.refreshToken)
+                LoadState.SUCCESS -> {
                     signInAccount()
                 }
-                LoadLoginTokenResult.Fail -> {
+                else -> {
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
             }

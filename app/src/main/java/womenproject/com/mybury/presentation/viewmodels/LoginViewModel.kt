@@ -11,6 +11,7 @@ import womanproject.com.mybury.domain.usecase.login.LoadLoginTokenUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpCheckUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpUseCase
 import womenproject.com.mybury.data.model.DomainUseUserIdRequest
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.model.SignUpCheckRequest
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
@@ -28,8 +29,8 @@ class LoginViewModel @Inject constructor(
     private val _signUpResult = MutableLiveData<SignUpResult>()
     val signUpResult: LiveData<SignUpResult> get() = _signUpResult
 
-    private val _loadLoginTokenResult = MutableLiveData<LoadLoginTokenResult>()
-    val loadLoginTokenResult: LiveData<LoadLoginTokenResult> get() = _loadLoginTokenResult
+    private val _loadLoginTokenResult = MutableLiveData<LoadState>()
+    val loadLoginTokenResult: LiveData<LoadState> get() = _loadLoginTokenResult
 
     fun checkForIsFirstLogin(account: GoogleSignInAccount) {
         viewModelScope.launch {
@@ -81,23 +82,26 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun getLoginToken(userId: String) {
+    fun getLoginToken() {
+        if(userId == null) {
+            _loadLoginTokenResult.value = LoadState.FAIL
+            return
+        }
+
         viewModelScope.launch {
-            kotlin.runCatching {
-                Log.e("ayhan", "userId : $userId")
+            runCatching {
                 val getTokenRequest = DomainUseUserIdRequest(userId)
                 loadLoginTokenUseCase.invoke(getTokenRequest).apply {
                     if (this.retcode == "200") {
-                        _loadLoginTokenResult.value = LoadLoginTokenResult.Success(
-                            this.accessToken, this.refreshToken
-                        )
+                        _loadLoginTokenResult.value = LoadState.SUCCESS
+                        setAccessToken(this.accessToken, this.refreshToken)
+
                     } else {
-                        _loadLoginTokenResult.value = LoadLoginTokenResult.Fail
+                        _loadLoginTokenResult.value = LoadState.RESTART
                     }
                 }
             }.getOrElse {
-                Log.e("myBury", "getLoginToken Fail : ${it.message}")
-                _loadLoginTokenResult.value = LoadLoginTokenResult.Fail
+                _loadLoginTokenResult.value = LoadState.FAIL
             }
         }
     }

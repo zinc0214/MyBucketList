@@ -3,6 +3,18 @@ package womenproject.com.mybury.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class UseUserIdRequest(
+    val userId: String
+)
+
+@Serializable
+data class TokenResponse(
+    val accessToken: String,
+    val refreshToken: String,
+    val retcode: String
+)
+
+@Serializable
 data class SignUpCheckRequest(
     var email: String
 )

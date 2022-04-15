@@ -18,10 +18,6 @@ import womenproject.com.mybury.data.*
 interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signin")
-    fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/refresh_token")
     fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 

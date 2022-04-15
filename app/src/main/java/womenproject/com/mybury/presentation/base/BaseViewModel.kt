@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.MyBuryApplication.Companion.getAppContext
@@ -33,11 +32,6 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     val refreshToken = getRefreshToken(getAppContext())
     val userId = getUserId(getAppContext())
 
-
-    fun addDisposable(disposable: Disposable) {
-        compositeDisposable.add(disposable)
-    }
-
     override fun onCleared() {
         compositeDisposable.clear()
         super.onCleared()
@@ -53,16 +47,14 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         return !isConnected
     }
 
+    fun setAccessToken(accessToken : String, refreshToken : String) {
+        setAccessToken(getAppContext(), accessToken)
+        setRefreshToken(getAppContext(), refreshToken)
+    }
 
     interface SimpleCallBack {
         fun success()
         fun fail()
-    }
-
-    interface Simple2CallBack {
-        fun start()
-        fun fail()
-        fun restart()
     }
 
     interface Simple3CallBack {
