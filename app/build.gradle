@@ -115,6 +115,7 @@ dependencies {
     implementation Dep.flexbox
 
     implementation Dep.Dagger.Hilt.android
+    implementation 'androidx.paging:paging-common-ktx:3.0.0'
     kapt Dep.Dagger.Hilt.compiler
 
     // test

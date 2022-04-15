@@ -14,9 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.SearchResultType
 import womenproject.com.mybury.data.SearchType
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentSearchBinding
 import womenproject.com.mybury.presentation.MainActivity
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.SearchViewModel
 
 @AndroidEntryPoint
@@ -104,18 +104,18 @@ class SearchFragment : Fragment() {
 
         viewModel.searchSate.observe(viewLifecycleOwner) {
             when (it!!) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     binding.searchResultIsBlankView.visibility = View.VISIBLE
 
                 }
-                BaseViewModel.LoadState.RESTART -> {
+                LoadState.RESTART -> {
                     search(binding.searchEditTextView.text.toString())
                 }
             }

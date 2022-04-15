@@ -28,6 +28,7 @@ import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -36,6 +37,7 @@ import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
+import womenproject.com.mybury.util.observeNonNull
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -80,7 +82,7 @@ open class BucketWriteFragment : BaseFragment() {
     private fun initDataBinding() {
         loadArgument()
         setUpViewModelObservers()
-        categoryViewModel.getCategoryList()
+        categoryViewModel.loadCategoryList()
     }
 
     open fun loadArgument() {
@@ -127,18 +129,18 @@ open class BucketWriteFragment : BaseFragment() {
     private fun setBackClickListener() = View.OnClickListener { actionByBackButton() }
 
     private fun setUpViewModelObservers() {
-        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observeNonNull(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.RESTART -> {
-                    categoryViewModel.getCategoryList()
+                LoadState.RESTART -> {
+                    categoryViewModel.loadCategoryList()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog {
                         backBtnOnClickListener()

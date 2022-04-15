@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.zinc.data.model.DomainUseUserIdRequest
-import com.zinc.data.model.SignUpCheckRequest
-import com.zinc.domain.usecase.login.LoadLoginTokenUseCase
-import com.zinc.domain.usecase.login.SignUpCheckUseCase
-import com.zinc.domain.usecase.login.SignUpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import womanproject.com.mybury.domain.usecase.login.LoadLoginTokenUseCase
+import womanproject.com.mybury.domain.usecase.login.SignUpCheckUseCase
+import womanproject.com.mybury.domain.usecase.login.SignUpUseCase
+import womenproject.com.mybury.data.model.DomainUseUserIdRequest
+import womenproject.com.mybury.data.model.SignUpCheckRequest
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 

@@ -12,6 +12,7 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
@@ -57,14 +58,14 @@ class DdayBucketListFragment : BaseFragment() {
     private fun setUpObservers() {
         bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                     getDdayList()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     NetworkFailDialog().show(requireActivity().supportFragmentManager)
                 }
@@ -116,7 +117,7 @@ class DdayBucketListFragment : BaseFragment() {
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        bucketListViewModel.setBucketCancel(info.id)
+        bucketListViewModel.bucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->

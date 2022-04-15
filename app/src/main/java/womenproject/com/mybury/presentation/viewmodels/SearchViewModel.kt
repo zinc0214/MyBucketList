@@ -11,6 +11,7 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.SearchRequest
 import womenproject.com.mybury.data.SearchResultType
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject

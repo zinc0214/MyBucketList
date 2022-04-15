@@ -16,12 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
-import womenproject.com.mybury.presentation.viewmodels.CategoryEditViewModel
 import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
@@ -36,8 +35,6 @@ class CategoryEditFragment : BaseFragment(),
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var binding: FragmentCategoryEditBinding
 
-    private val bucketInfoViewModel by viewModels<BucketInfoViewModel>()
-    private val categoryEditViewModel by viewModels<CategoryEditViewModel>()
     private val categoryViewModel by viewModels<CategoryViewModel>()
 
     private val removedList = hashSetOf<String>()
@@ -88,22 +85,22 @@ class CategoryEditFragment : BaseFragment(),
         binding.fragment = this
 
         setUpViewModelObservers()
-        categoryViewModel.getCategoryList()
+        categoryViewModel.loadCategoryList()
     }
 
     private fun setUpViewModelObservers() {
         categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.RESTART -> {
-                    categoryViewModel.getCategoryList()
+                LoadState.RESTART -> {
+                    categoryViewModel.loadCategoryList()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog {
                         backBtnOnClickListener()
@@ -122,7 +119,6 @@ class CategoryEditFragment : BaseFragment(),
             isKeyBoardShown = false
         }
     }
-
 
     private fun initOriginCategory(categoryList: List<Category>) {
         categoryList.forEach {
@@ -170,7 +166,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     private fun editCategoryItem(category: Category, newName: String) {
-        categoryEditViewModel.editCategoryItem(
+        categoryViewModel.editCategoryItem(
             category,
             newName,
             object : BaseViewModel.Simple3CallBack {
@@ -195,7 +191,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     private fun addNewCategory(name: String) {
-        categoryEditViewModel.addCategoryItem(name, object : BaseViewModel.Simple3CallBack {
+        categoryViewModel.addCategoryItem(name, object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 addNewCategory(name)
             }
@@ -218,7 +214,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     fun setCategoryDeleteListener() {
-        categoryEditViewModel.removeCategoryItem(
+        categoryViewModel.removeCategoryItem(
             removedList,
             object : BaseViewModel.Simple3CallBack {
                 override fun restart() {
@@ -247,7 +243,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     fun setCategoryStatusChange() {
-        categoryEditViewModel.changeCategoryStatus(
+        categoryViewModel.changeCategoryStatus(
             changeCategoryList,
             object : BaseViewModel.Simple3CallBack {
                 override fun start() {

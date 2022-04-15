@@ -17,6 +17,7 @@ import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import javax.inject.Inject
 
@@ -63,7 +64,6 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         fun fail()
         fun restart()
     }
-
 
     interface Simple3CallBack {
         fun start()
@@ -119,7 +119,4 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
             }
     }
 
-    enum class LoadState {
-        START, RESTART, SUCCESS, FAIL
-    }
 }

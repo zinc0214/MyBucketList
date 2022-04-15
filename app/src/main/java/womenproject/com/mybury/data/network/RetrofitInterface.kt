@@ -55,11 +55,7 @@ interface RetrofitInterface {
         @Query("sort") sort: String
     ): Observable<BucketList>
 
-    @GET("/category")
-    fun requestCategoryBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Query("categoryId") categoryId: String
-    ): Observable<BucketList>
+
 
     @GET("/bucketlist/{bucketId}")
     fun requestDetailBucketList(

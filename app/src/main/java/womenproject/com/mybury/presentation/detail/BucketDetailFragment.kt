@@ -20,6 +20,7 @@ import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.isAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.Preference.Companion.setAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.UseUserIdRequest
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -292,19 +293,19 @@ class BucketDetailFragment : Fragment() {
         }
     }
 
-    private val bucketListCancelObserver = Observer<BaseViewModel.LoadState> {
+    private val bucketListCancelObserver = Observer<LoadState> {
         when (it) {
-            BaseViewModel.LoadState.FAIL -> {
+            LoadState.FAIL -> {
                 stopLoading()
                 Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             }
-            BaseViewModel.LoadState.RESTART -> {
-                bucketListViewModel.setBucketCancel(bucketItemId)
+            LoadState.RESTART -> {
+                bucketListViewModel.bucketCancel(bucketItemId)
             }
-            BaseViewModel.LoadState.START -> {
+            LoadState.START -> {
                 startLoading()
             }
-            BaseViewModel.LoadState.SUCCESS -> {
+            LoadState.SUCCESS -> {
                 stopLoading()
                 loadBucketDetailInfo()
             }
@@ -346,7 +347,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private val bucketCancelListener = View.OnClickListener {
-        bucketListViewModel.setBucketCancel(bucketItemId)
+        bucketListViewModel.bucketCancel(bucketItemId)
     }
 
     private fun succeddBucketListAction() {
