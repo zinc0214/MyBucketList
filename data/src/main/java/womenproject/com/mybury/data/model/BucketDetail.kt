@@ -9,20 +9,20 @@ data class BucketDetailItem(
     val userCount: Int = 0,
     val goalCount: Int = 0,
     val dDate: String?,
-    val dDay: Int,
+    val dDay: Int?,
     val imgUrl1: String? = null,
     val imgUrl2: String? = null,
     val imgUrl3: String? = null,
     val retcode: String
-) : java.io.Serializable{
+) : java.io.Serializable {
 
     fun isDone() = goalCount <= userCount
 
-    fun isDdayShowable() = isDone().not() && dDay > 0
+    fun isDdayShowable() = isDone().not() && isDdayMinus()
 
-    fun ddayText() = if (dDay >= 0) dDay.toString() else dDay.toString().replace("-", "")
+    fun ddayText() = if (isDdayMinus()) dDay.toString() else dDay.toString().replace("-", "")
 
-    fun isDdayMinus() = dDay >= 0
+    fun isDdayMinus() = dDay != null
 
     fun isCategoryShowable() = category != "없음" && category.isNotBlank()
 
