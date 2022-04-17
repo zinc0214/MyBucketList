@@ -15,6 +15,7 @@ import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
@@ -24,8 +25,9 @@ class BucketListByFilterFragment : BaseFragment() {
 
     private lateinit var binding: FragmentBucketListByCategoryBinding
     private lateinit var filterType: String
+
     private val viewModel by viewModels<BucketListViewModel>()
-    private val bucketListViewModel by viewModels<BucketListViewModel>()
+    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +66,7 @@ class BucketListByFilterFragment : BaseFragment() {
     }
 
     private fun setUpObservers() {
-        bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
+        viewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
             when (it) {
                 LoadState.FAIL,
                 LoadState.RESTART -> {
@@ -84,7 +86,7 @@ class BucketListByFilterFragment : BaseFragment() {
         viewModel.homeBucketList.observe(viewLifecycleOwner) {
             it?.let {
                 binding.bucketList.adapter =
-                    CategoryBucketListAdapter(it.bucketlists, showSnackBar)
+                    CategoryBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
             }
         }
 
@@ -102,7 +104,7 @@ class BucketListByFilterFragment : BaseFragment() {
     }
 
     private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        bucketListViewModel.bucketCancel(info.id)
+        viewModel.bucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->

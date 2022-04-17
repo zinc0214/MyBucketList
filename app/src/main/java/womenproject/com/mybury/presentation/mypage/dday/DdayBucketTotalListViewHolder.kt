@@ -6,15 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.databinding.DdayBucketListBinding
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 
 /**
  * Created by HanAYeon on 2019. 1. 22..
  */
 
-class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding,
-                                    private val showSnackBar: ((BucketItem) -> Unit)) : RecyclerView.ViewHolder(binding.root) {
+class DdayBucketTotalListViewHolder(
+    private val binding: DdayBucketListBinding,
+    private val showSnackBar: ((BucketItem) -> Unit)
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(bucketItemList: DdayBucketList, context: Context) {
+    fun bind(bucketItemList: DdayBucketList, viewModel: BucketDetailViewModel, context: Context) {
         binding.apply {
             bucketItemList.day.apply {
                 isOverDday = this < 0
@@ -23,7 +26,8 @@ class DdayBucketTotalListViewHolder(private val binding: DdayBucketListBinding,
 
             ddayEachBucketItemList.layoutManager = LinearLayoutManager(context)
             ddayEachBucketItemList.hasFixedSize()
-            ddayEachBucketItemList.adapter = DdayBucketEachListAdapter(bucketItemList.bucketlists, showSnackBar)
+            ddayEachBucketItemList.adapter =
+                DdayBucketEachListAdapter(bucketItemList.bucketlists, viewModel, showSnackBar)
 
             executePendingBindings()
         }

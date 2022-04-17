@@ -14,6 +14,7 @@ import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import womenproject.com.mybury.util.observeNonNull
@@ -26,6 +27,7 @@ class BucketListByCategoryFragment : BaseFragment() {
     private lateinit var binding: FragmentBucketListByCategoryBinding
 
     private val bucketInfoViewModel by viewModels<BucketListViewModel>()
+    private val bucketDetailViewModel by viewModels<BucketDetailViewModel>()
 
 
     override fun onCreateView(
@@ -103,7 +105,7 @@ class BucketListByCategoryFragment : BaseFragment() {
 
         bucketInfoViewModel.categoryBucketList.observeNonNull(viewLifecycleOwner) {
             binding.bucketList.adapter =
-                CategoryBucketListAdapter(it.bucketlists, showSnackBar)
+                CategoryBucketListAdapter(it.bucketlists, bucketDetailViewModel, showSnackBar)
         }
     }
 

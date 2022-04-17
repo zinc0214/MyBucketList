@@ -3,7 +3,7 @@ package womenproject.com.mybury.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UseUserIdRequest(
+data class UserIdRequest(
     val userId: String
 )
 

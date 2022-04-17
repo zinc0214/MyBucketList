@@ -19,6 +19,7 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
@@ -36,6 +37,7 @@ class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
 
     private val viewModel by viewModels<BucketListViewModel>()
+    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     private var currentBucketSize = 0
 
@@ -124,7 +126,7 @@ class MainFragment : BaseFragment() {
                         bucketList.visibility = View.VISIBLE
                         endImage.visibility = View.VISIBLE
                         bucketList.adapter =
-                            MainBucketListAdapter(it.bucketlists, showSnackBar)
+                            MainBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
                     }
                 }
                 if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {

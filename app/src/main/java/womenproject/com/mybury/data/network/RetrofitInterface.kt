@@ -117,14 +117,6 @@ interface RetrofitInterface {
         @Part noImg3: MultipartBody.Part
     ): Observable<SimpleResponse>
 
-
-    @HTTP(method = "DELETE", path = "/bucketlist/{bucketId}", hasBody = true)
-    suspend fun deleteBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body userId: UseUserIdRequest,
-        @Path("bucketId") bucketId: String
-    ): SimpleResponse
-
     @POST("/category")
     fun addNewCategoryItem(
         @Header("X-Auth-Token") token: String,

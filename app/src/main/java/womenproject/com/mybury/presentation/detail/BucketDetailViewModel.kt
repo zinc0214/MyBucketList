@@ -11,12 +11,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import womanproject.com.mybury.domain.usecase.detail.DeleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.detail.LoadBucketDetailItemUseCase
 import womenproject.com.mybury.data.BucketRequest
 import womenproject.com.mybury.data.StatusChangeBucketRequest
-import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.model.BucketDetailItem
 import womenproject.com.mybury.data.model.LoadState
+import womenproject.com.mybury.data.model.UserIdRequest
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
@@ -27,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BucketDetailViewModel @Inject constructor(
-    private val loadBucketDetailItemUseCase: LoadBucketDetailItemUseCase
+    private val loadBucketDetailItemUseCase: LoadBucketDetailItemUseCase,
+    private val deleteBucketUseCase: DeleteBucketUseCase
 ) : BaseViewModel() {
 
     private val _loadBucketDetail = MutableLiveData<BucketDetailItem>()
@@ -45,7 +47,6 @@ class BucketDetailViewModel @Inject constructor(
     private val _isReDoSuccess = MutableLiveData<Boolean>()
     val isReDoSuccess: LiveData<Boolean> = _isReDoSuccess
 
-    @SuppressLint("CheckResult")
     fun loadBucketDetail(bucketId: String) {
 
         if (accessToken == null || userId == null) {
@@ -112,33 +113,32 @@ class BucketDetailViewModel @Inject constructor(
             }
     }
 
-    fun deleteBucketListener(userId: UseUserIdRequest, bucketId: String) {
-        if (accessToken == null) {
+    fun deleteBucketListener(bucketId: String) {
+        if (accessToken == null || userId == null) {
             _showLoading.value = false
             _isDeleteSuccess.value = false
             return
         }
 
+        val userIdRequest = UserIdRequest(userId)
         _showLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                apiInterface.deleteBucket(accessToken, userId, bucketId).apply {
-                    withContext(Dispatchers.Main) {
-                        when (this@apply.retcode) {
-                            "200" -> {
-                                _isDeleteSuccess.value = true
-                            }
-                            "301" -> {
-                                getRefreshToken()
+
+        viewModelScope.launch {
+            runCatching {
+                deleteBucketUseCase(accessToken, userIdRequest, bucketId).apply {
+                    when (this@apply.retcode) {
+                        "200" -> {
+                            _isDeleteSuccess.value = true
+                        }
+                        "301" -> {
+                            getRefreshToken {
                                 _isDeleteSuccess.value = false
                             }
-                            else -> _isDeleteSuccess.value = false
                         }
-                        _showLoading.value = false
                     }
                 }
-            } catch (e: Throwable) {
-                e.printStackTrace()
+            }.getOrElse {
+                _showLoading.value = false
             }
         }
     }

@@ -16,6 +16,7 @@ import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
@@ -31,6 +32,7 @@ class DdayBucketListFragment : BaseFragment() {
     private lateinit var binding: FragmentDdayListBinding
     private val viewModel by viewModels<DdayBucketTotalListViewModel>()
     private val bucketListViewModel by viewModels<BucketListViewModel>()
+    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +95,7 @@ class DdayBucketListFragment : BaseFragment() {
                     binding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(
                         context,
                         bucketList as List<DdayBucketList>,
+                        detailViewModel,
                         showSnackBar
                     )
                 }

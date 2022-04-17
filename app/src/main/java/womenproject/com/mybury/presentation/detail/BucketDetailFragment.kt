@@ -15,10 +15,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.isAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.Preference.Companion.setAlreadyBucketRetryGuideShow
-import womenproject.com.mybury.data.UseUserIdRequest
 import womenproject.com.mybury.data.model.BucketDetailItem
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
@@ -279,8 +277,7 @@ class BucketDetailFragment : Fragment() {
 
 
     private fun goToDeleteBucket() {
-        val userId = UseUserIdRequest(Preference.getUserId(requireContext()))
-        bucketDetailViewModel.deleteBucketListener(userId, bucketItemId)
+        bucketDetailViewModel.deleteBucketListener(bucketItemId)
         viewDataBinding.detailMoreLayout.visibility = View.GONE
     }
 
@@ -416,8 +413,7 @@ class BucketDetailFragment : Fragment() {
         }
     }
 
-    inner class RedoBucketDialog(private val confirmAction: () -> Unit) :
-        BaseNormalDialogFragment() {
+    class RedoBucketDialog(private val confirmAction: () -> Unit) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "다시 도전하기"

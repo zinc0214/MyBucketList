@@ -53,4 +53,11 @@ interface MyBuryApi {
         @Path("bucketId") bucketId: String,
         @Query("userId") userId: String
     ): BucketDetailItem
+
+    @HTTP(method = "DELETE", path = "/bucketlist/{bucketId}", hasBody = true)
+    suspend fun deleteBucket(
+        @Header("X-Auth-Token") token: String,
+        @Body userId: UserIdRequest,
+        @Path("bucketId") bucketId: String
+    ): SimpleResponse
 }

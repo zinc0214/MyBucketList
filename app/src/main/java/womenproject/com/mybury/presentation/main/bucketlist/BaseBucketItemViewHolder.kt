@@ -34,13 +34,15 @@ open class BaseBucketItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var isForDday = false
+    private lateinit var viewModel : BucketDetailViewModel
 
     fun bind(
-        bucketListener: View.OnClickListener,
         bucketItemInfo: BucketItem,
         isForDday: Boolean = false,
         isShowDday: Boolean = false,
-        isLastItem: Boolean = false
+        isLastItem: Boolean = false,
+        viewModel : BucketDetailViewModel,
+        bucketListener: View.OnClickListener
     ) {
         this.isForDday = isForDday
 
@@ -49,6 +51,7 @@ open class BaseBucketItemViewHolder(
         }
         setUI(bucketItemInfo, bucketListener, isShowDday, isLastItem)
         binding.executePendingBindings()
+        this.viewModel = viewModel
     }
 
     private fun onBucketSuccessFinalButtonClickListener(info: BucketItem) {
@@ -171,7 +174,6 @@ open class BaseBucketItemViewHolder(
     }
 
     private fun bucketSuccess(bucketItemInfo: BucketItem) {
-        val viewModel = BucketDetailViewModel()
         viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
             override fun restart() {
                 bucketSuccess(bucketItemInfo)

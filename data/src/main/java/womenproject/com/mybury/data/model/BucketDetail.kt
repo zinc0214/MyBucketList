@@ -1,8 +1,5 @@
 package womenproject.com.mybury.data.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class BucketDetailItem(
     var title: String,
     val memo: String = "",
@@ -17,8 +14,7 @@ data class BucketDetailItem(
     val imgUrl2: String? = null,
     val imgUrl3: String? = null,
     val retcode: String
-) {
-
+) : java.io.Serializable{
 
     fun isDone() = goalCount <= userCount
 
@@ -32,11 +28,10 @@ data class BucketDetailItem(
 
     fun isCountBucket() = goalCount > 1 && goalCount > userCount
 
-    fun isNormalBucket() = !isDone().not() && userCount == 0
+    fun isNormalBucket() = isDone().not() && userCount == 0 && goalCount == 1
 
-    fun isCommentShowable() : Boolean {
+    fun isCommentShowable(): Boolean {
         val hasNoImg = imgUrl1.isNullOrBlank() && imgUrl2.isNullOrBlank() && imgUrl3.isNullOrBlank()
         return hasNoImg && isCountBucket().not() && isDone().not() && memo.isBlank()
     }
-
 }

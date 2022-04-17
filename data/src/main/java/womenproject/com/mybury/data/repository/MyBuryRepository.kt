@@ -38,4 +38,10 @@ interface MyBuryRepository {
         bucketId: String,
         userId: String
     ): BucketDetailItem
+
+    suspend fun deleteBucket(
+        token: String,
+        userId: UserIdRequest,
+        bucketId: String
+    ): SimpleResponse
 }
