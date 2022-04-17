@@ -9,6 +9,10 @@ fun String.showToast(context: Context) {
     Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
 }
 
+fun Context.showToast(string: String) {
+    Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
+}
+
 fun Context.isConnectionOn(): Boolean {
     val connectivityManager =
         this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

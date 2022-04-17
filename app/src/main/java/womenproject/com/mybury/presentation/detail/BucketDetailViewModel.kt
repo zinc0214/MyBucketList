@@ -11,9 +11,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import womanproject.com.mybury.domain.usecase.detail.LoadBucketDetailItemUseCase
 import womenproject.com.mybury.data.BucketRequest
 import womenproject.com.mybury.data.StatusChangeBucketRequest
 import womenproject.com.mybury.data.UseUserIdRequest
+import womenproject.com.mybury.data.model.BucketDetailItem
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
@@ -23,90 +26,93 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class BucketDetailViewModel @Inject constructor(): BaseViewModel() {
+class BucketDetailViewModel @Inject constructor(
+    private val loadBucketDetailItemUseCase: LoadBucketDetailItemUseCase
+) : BaseViewModel() {
+
+    private val _loadBucketDetail = MutableLiveData<BucketDetailItem>()
+    private val _loadBucketState = MutableLiveData<LoadState>()
 
     private val _showLoading = MutableLiveData<Boolean>()
     private val _isDeleteSuccess = MutableLiveData<Boolean>()
     private val _isReDoSuccess = MutableLiveData<Boolean>()
 
+
+    val loadBucketDetail: LiveData<BucketDetailItem> = _loadBucketDetail
+    val loadBucketState : LiveData<LoadState> = _loadBucketState
     val showLoading: LiveData<Boolean> = _showLoading
     val isDeleteSuccess: LiveData<Boolean> = _isDeleteSuccess
     val isReDoSuccess: LiveData<Boolean> = _isReDoSuccess
 
     @SuppressLint("CheckResult")
-    fun loadBucketDetail(callback: MoreCallBackAny, bucketId: String) {
-        callback.start()
-        if(accessToken==null || userId==null) {
-            callback.fail()
+    fun loadBucketDetail(bucketId: String) {
+
+        if (accessToken == null || userId == null) {
+            _loadBucketState.value = LoadState.FAIL
             return
         }
 
-        apiInterface.requestDetailBucketList(accessToken, bucketId, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when (detailBucketItem.retcode) {
+        _loadBucketState.value = LoadState.START
+
+        viewModelScope.launch {
+            runCatching {
+                loadBucketDetailItemUseCase(accessToken, bucketId, userId).apply {
+                    when (this@apply.retcode) {
                         "200" -> {
-                            callback.success(detailBucketItem)
+                            _loadBucketDetail.value = this@apply
+                            _loadBucketState.value = LoadState.SUCCESS
                         }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
+                        "301" -> {
+                            getRefreshToken {
+                                _loadBucketState.value = it
                             }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
+                        }
                     }
-
-                }) {
-                    Log.e("myBury", "loadBucketDetail Fail : $it")
-                    callback.fail()
                 }
-
+            }.getOrElse {
+                _loadBucketState.value = LoadState.FAIL
+            }
+        }
     }
 
     @SuppressLint("CheckResult")
     fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
         val bucketRequest = BucketRequest(bucketId)
-        if(accessToken==null) {
+        if (accessToken == null) {
             callback.fail()
             return
         }
 
         callback.start()
         apiInterface.postCompleteBucket(accessToken, bucketRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ detailBucketItem ->
-                    when (detailBucketItem.retcode) {
-                        "200" -> {
-                            callback.success()
-                        }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-
-                        })
-                        else -> callback.fail()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ detailBucketItem ->
+                when (detailBucketItem.retcode) {
+                    "200" -> {
+                        callback.success()
                     }
+                    "301" -> getRefreshToken(object : SimpleCallBack {
+                        override fun success() {
+                            callback.restart()
+                        }
 
-                }) {
-                    Log.e("myBury", "postCompleteBucket Fail : $it")
-                    callback.fail()
+                        override fun fail() {
+                            callback.fail()
+                        }
+
+                    })
+                    else -> callback.fail()
                 }
+
+            }) {
+                Log.e("myBury", "postCompleteBucket Fail : $it")
+                callback.fail()
+            }
     }
 
     fun deleteBucketListener(userId: UseUserIdRequest, bucketId: String) {
-        if(accessToken==null) {
+        if (accessToken == null) {
             _showLoading.value = false
             _isDeleteSuccess.value = false
             return
@@ -141,7 +147,7 @@ class BucketDetailViewModel @Inject constructor(): BaseViewModel() {
 
 
     fun redoBucketList(bucketId: String) {
-        if(accessToken==null) {
+        if (accessToken == null) {
             _showLoading.value = false
             _isReDoSuccess.value = false
             return

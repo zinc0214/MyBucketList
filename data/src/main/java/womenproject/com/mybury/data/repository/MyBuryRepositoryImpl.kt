@@ -50,4 +50,12 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): DomainBucketList {
         return myBuryApi.loadBucketListByCategory(token, categoryId)
     }
+
+    override suspend fun loadDetailBucketInfo(
+        token: String,
+        bucketId: String,
+        userId: String
+    ): BucketDetailItem {
+        return myBuryApi.loadDetailBucketInfo(token, bucketId, userId)
+    }
 }

@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.navigation.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.data.model.BucketDetailItem
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
@@ -13,7 +13,7 @@ import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {
 
-    lateinit var bucketItem: DetailBucketItem
+    lateinit var bucketItem: BucketDetailItem
     lateinit var bucketId: String
 
     override fun initForUpdate() {
@@ -21,7 +21,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
         loadArgument()
 
         viewModel.bucketItem = bucketItem
-        if(alreadyImgList.isNullOrEmpty()) {
+        if(alreadyImgList.isEmpty()) {
             alreadyImgList = setImgList(bucketItem)
         }
 
@@ -118,7 +118,7 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
     }
 
-    private fun setImgList(bucketInfo: DetailBucketItem): MutableMap<Int, String?> {
+    private fun setImgList(bucketInfo: BucketDetailItem): MutableMap<Int, String?> {
         val imgList = mutableMapOf<Int, String?>()
         imgList[0] = bucketInfo.imgUrl1
         imgList[1] = bucketInfo.imgUrl2

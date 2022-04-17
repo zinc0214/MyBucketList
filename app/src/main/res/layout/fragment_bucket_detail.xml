@@ -63,7 +63,7 @@
 
         <variable
             name="detailInfo"
-            type="womenproject.com.mybury.data.DetailBucketItem" />
+            type="womenproject.com.mybury.data.model.BucketDetailItem" />
 
         <variable
             name="comment"

@@ -3,7 +3,7 @@ package womenproject.com.mybury.presentation.dialog
 import android.view.View
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 
-class LoadFailDialog(val onConfirmClicked: (() -> Unit)? = null) : BaseNormalDialogFragment() {
+class LoadFailDialog(private val onConfirmClicked: (() -> Unit)? = null) : BaseNormalDialogFragment() {
 
     init {
         TITLE_MSG = "데이터 로드 실패"

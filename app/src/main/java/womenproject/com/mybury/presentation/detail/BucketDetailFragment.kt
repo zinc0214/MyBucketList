@@ -10,32 +10,34 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.DetailBucketItem
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.isAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.Preference.Companion.setAlreadyBucketRetryGuideShow
 import womenproject.com.mybury.data.UseUserIdRequest
+import womenproject.com.mybury.data.model.BucketDetailItem
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.util.Converter.Companion.dpToPx
 import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
+import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 import java.util.*
 
 @AndroidEntryPoint
 class BucketDetailFragment : Fragment() {
 
     lateinit var viewDataBinding: FragmentBucketDetailBinding
-    lateinit var bucketItem: DetailBucketItem
+    lateinit var bucketItem: BucketDetailItem
 
     private lateinit var bucketItemId: String
     private var isLoadForSucceed = false
@@ -69,34 +71,7 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun loadBucketDetailInfo() {
-        bucketDetailViewModel.loadBucketDetail(object : BaseViewModel.MoreCallBackAny {
-            override fun restart() {
-                loadBucketDetailInfo()
-            }
-
-            override fun start() {
-                if (!isLoadForSucceed) {
-                    startLoading()
-                }
-
-            }
-
-            override fun success(value: Any) {
-                bucketItem = value as DetailBucketItem
-                setUpViews()
-                if (!isLoadForSucceed) {
-                    stopLoading()
-                }
-
-            }
-
-            override fun fail() {
-                if (!isLoadForSucceed) {
-                    stopLoading()
-                }
-            }
-
-        }, bucketItemId)
+        bucketDetailViewModel.loadBucketDetail(bucketItemId)
     }
 
     private fun setUpViews() {
@@ -185,16 +160,16 @@ class BucketDetailFragment : Fragment() {
 
     }
 
-    private fun setImgList(bucketInfo: DetailBucketItem): ArrayList<String> {
+    private fun setImgList(bucketInfo: BucketDetailItem): ArrayList<String> {
         val imgList = arrayListOf<String>()
         if (!bucketInfo.imgUrl1.isNullOrBlank()) {
-            imgList.add(bucketInfo.imgUrl1)
+            imgList.add(bucketInfo.imgUrl1!!)
         }
         if (!bucketInfo.imgUrl2.isNullOrBlank()) {
-            imgList.add(bucketInfo.imgUrl2)
+            imgList.add(bucketInfo.imgUrl2!!)
         }
         if (!bucketInfo.imgUrl3.isNullOrBlank()) {
-            imgList.add(bucketInfo.imgUrl3)
+            imgList.add(bucketInfo.imgUrl3!!)
         }
         return imgList
     }
@@ -255,62 +230,77 @@ class BucketDetailFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        bucketDetailViewModel.isDeleteSuccess.observe(viewLifecycleOwner, isDeleteSuccessObserver)
-        bucketDetailViewModel.showLoading.observe(viewLifecycleOwner, isShowLoading)
-        bucketDetailViewModel.isReDoSuccess.observe(viewLifecycleOwner, isRedoSuccessObserver)
-        bucketListViewModel.bucketCancelLoadState.observe(
-            viewLifecycleOwner,
-            bucketListCancelObserver
-        )
-    }
-
-    private val isDeleteSuccessObserver = Observer<Boolean> {
-        if (it == true) {
-            stopLoading()
-            Toast.makeText(requireContext(), "버킷리스트가 삭제 되었습니다.", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressed()
-        } else {
-            stopLoading()
-            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        bucketDetailViewModel.loadBucketDetail.observeNonNull(viewLifecycleOwner) {
+            bucketItem = it
+            setUpViews()
         }
-    }
 
-    private val isRedoSuccessObserver = Observer<Boolean> {
-        if (it == true) {
-            stopLoading()
-            loadBucketDetailInfo()
-        } else {
-            stopLoading()
-            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        bucketDetailViewModel.loadBucketState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    startLoading()
+                }
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog {
+                        requireActivity().onBackPressed()
+                    }.show(parentFragmentManager)
+                }
+                LoadState.RESTART -> {
+                    loadBucketDetailInfo()
+                }
+            }
         }
-    }
 
-    private val isShowLoading = Observer<Boolean> {
-        if (it == true) {
-            startLoading()
-        } else {
-            stopLoading()
-        }
-    }
-
-    private val bucketListCancelObserver = Observer<LoadState> {
-        when (it) {
-            LoadState.FAIL -> {
+        bucketDetailViewModel.isDeleteSuccess.observe(viewLifecycleOwner) {
+            if (it == true) {
                 stopLoading()
-                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                requireContext().showToast("버킷리스트가 삭제 되었습니다.")
+                requireActivity().onBackPressed()
+            } else {
+                stopLoading()
+                requireContext().showToast("다시 시도해주세요.")
             }
-            LoadState.RESTART -> {
-                bucketListViewModel.bucketCancel(bucketItemId)
-            }
-            LoadState.START -> {
+        }
+
+        bucketDetailViewModel.showLoading.observe(viewLifecycleOwner){
+            if (it == true) {
                 startLoading()
+            } else {
+                stopLoading()
             }
-            LoadState.SUCCESS -> {
+        }
+
+        bucketDetailViewModel.isReDoSuccess.observe(viewLifecycleOwner) {
+            if (it == true) {
                 stopLoading()
                 loadBucketDetailInfo()
+            } else {
+                stopLoading()
+                requireContext().showToast("다시 시도해주세요.")
             }
-            else -> {
-                // do Nothing
+        }
+
+        bucketListViewModel.bucketCancelLoadState.observeNonNull(
+            viewLifecycleOwner) {
+            when (it) {
+                LoadState.FAIL -> {
+                    stopLoading()
+                    requireContext().showToast("다시 시도해주세요.")
+                }
+                LoadState.RESTART -> {
+                    bucketListViewModel.bucketCancel(bucketItemId)
+                }
+                LoadState.START -> {
+                    startLoading()
+                }
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    loadBucketDetailInfo()
+                }
             }
         }
     }

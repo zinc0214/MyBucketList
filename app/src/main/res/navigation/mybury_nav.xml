@@ -102,7 +102,7 @@
         <argument
             android:name="bucket"
             android:defaultValue="@null"
-            app:argType="womenproject.com.mybury.data.DetailBucketItem"
+            app:argType="womenproject.com.mybury.data.model.BucketDetailItem"
             app:nullable="true" />
 
         <argument

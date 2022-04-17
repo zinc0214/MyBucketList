@@ -46,4 +46,11 @@ interface MyBuryApi {
         @Header("X-Auth-Token") token: String,
         @Query("categoryId") categoryId: String
     ): DomainBucketList
+
+    @GET("/bucketlist/{bucketId}")
+    suspend fun loadDetailBucketInfo(
+        @Header("X-Auth-Token") token: String,
+        @Path("bucketId") bucketId: String,
+        @Query("userId") userId: String
+    ): BucketDetailItem
 }

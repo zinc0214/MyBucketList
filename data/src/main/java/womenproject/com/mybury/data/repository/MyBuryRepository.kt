@@ -32,4 +32,10 @@ interface MyBuryRepository {
         token: String,
         categoryId: String
     ): DomainBucketList
+
+    suspend fun loadDetailBucketInfo(
+        token: String,
+        bucketId: String,
+        userId: String
+    ): BucketDetailItem
 }

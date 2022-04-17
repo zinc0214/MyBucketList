@@ -29,7 +29,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val accessToken = getAccessToken(getAppContext())
-    val refreshToken = getRefreshToken(getAppContext())
+    private val refreshToken = getRefreshToken(getAppContext())
     val userId = getUserId(getAppContext())
 
     override fun onCleared() {
