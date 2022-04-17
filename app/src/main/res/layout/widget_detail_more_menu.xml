@@ -6,17 +6,8 @@
     <data>
 
         <variable
-            name="updateOnClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="deleteOnClickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="redoClickListener"
-            type="android.view.View.OnClickListener" />
-
+            name="view"
+            type="womenproject.com.mybury.presentation.detail.BucketDetailFragment" />
 
     </data>
 
@@ -50,7 +41,7 @@
                 android:layout_height="32dp"
                 android:background="@drawable/write_dialog_item_background"
                 android:gravity="center_vertical"
-                android:onClick="@{updateOnClickListener}"
+                android:onClick="@{v -> view.goToBucketUpdate()}"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="수정"
@@ -65,7 +56,7 @@
                 android:layout_marginTop="6dp"
                 android:background="@drawable/write_dialog_item_background"
                 android:gravity="center_vertical"
-                android:onClick="@{deleteOnClickListener}"
+                android:onClick="@{v -> view.showDeleteBucketDialog()}"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="삭제"
@@ -80,7 +71,7 @@
                 android:layout_marginTop="6dp"
                 android:background="@drawable/write_dialog_item_background"
                 android:gravity="center_vertical"
-                android:onClick="@{redoClickListener}"
+                android:onClick="@{v -> view.showRedoBucketDialog()}"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:text="다시 도전하기"

@@ -47,7 +47,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         return !isConnected
     }
 
-    fun setAccessToken(accessToken : String, refreshToken : String) {
+    fun setAccessToken(accessToken: String, refreshToken: String) {
         setAccessToken(getAppContext(), accessToken)
         setRefreshToken(getAppContext(), refreshToken)
     }
@@ -108,6 +108,22 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
                 }
             }) {
                 result(LoadState.FAIL)
+            }
+    }
+
+    @SuppressLint("CheckResult")
+    fun getRefreshToken() {
+        val newTokenRequest = NewTokenRequest(userId, refreshToken)
+        apiInterface.getRefershToken(newTokenRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                if (response.retcode == "200") {
+                    setAccessToken(getAppContext(), response.accessToken)
+                    setRefreshToken(getAppContext(), response.refreshToken)
+                }
+            }) {
+
             }
     }
 

@@ -31,17 +31,18 @@ class BucketDetailViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val _loadBucketDetail = MutableLiveData<BucketDetailItem>()
+    val loadBucketDetail: LiveData<BucketDetailItem> = _loadBucketDetail
+
     private val _loadBucketState = MutableLiveData<LoadState>()
+    val loadBucketState: LiveData<LoadState> = _loadBucketState
 
     private val _showLoading = MutableLiveData<Boolean>()
-    private val _isDeleteSuccess = MutableLiveData<Boolean>()
-    private val _isReDoSuccess = MutableLiveData<Boolean>()
-
-
-    val loadBucketDetail: LiveData<BucketDetailItem> = _loadBucketDetail
-    val loadBucketState : LiveData<LoadState> = _loadBucketState
     val showLoading: LiveData<Boolean> = _showLoading
+
+    private val _isDeleteSuccess = MutableLiveData<Boolean>()
     val isDeleteSuccess: LiveData<Boolean> = _isDeleteSuccess
+
+    private val _isReDoSuccess = MutableLiveData<Boolean>()
     val isReDoSuccess: LiveData<Boolean> = _isReDoSuccess
 
     @SuppressLint("CheckResult")
@@ -124,16 +125,13 @@ class BucketDetailViewModel @Inject constructor(
                 apiInterface.deleteBucket(accessToken, userId, bucketId).apply {
                     withContext(Dispatchers.Main) {
                         when (this@apply.retcode) {
-                            "200" -> _isDeleteSuccess.value = true
-                            "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    deleteBucketListener(userId, bucketId)
-                                }
-
-                                override fun fail() {
-                                    _isDeleteSuccess.value = false
-                                }
-                            })
+                            "200" -> {
+                                _isDeleteSuccess.value = true
+                            }
+                            "301" -> {
+                                getRefreshToken()
+                                _isDeleteSuccess.value = false
+                            }
                             else -> _isDeleteSuccess.value = false
                         }
                         _showLoading.value = false
