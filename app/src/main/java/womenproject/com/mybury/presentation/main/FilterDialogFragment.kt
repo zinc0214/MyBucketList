@@ -26,82 +26,9 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     override val layoutResourceId: Int
         get() = R.layout.dialog_main_filter
 
-    private var started = false
-    private var complete = false
     private var sortType: SortFilter = SortFilter.createdDt
+    private var showType: ShowFilter? = ShowFilter.all
     private var dday = false
-
-    override fun initDataBinding() {
-        viewDataBinding.fragment = this
-        viewDataBinding.filterSetClickListener = createOnClickFilterSetListener()
-        viewDataBinding.filterBoxListener = setOnCheckBoxChangedListener()
-        initShowFilter()
-        initListUpFilter()
-        initSortListener()
-        initShowDdayState()
-    }
-
-    private fun initShowFilter() {
-        val filter = getFilterForShow(requireContext())
-
-        when (filter) {
-            "all" -> {
-                viewDataBinding.startedCheckBox.isChecked = true
-                viewDataBinding.completeCheckBox.isChecked = true
-                started = true
-                complete = true
-            }
-            "started" -> {
-                viewDataBinding.startedCheckBox.isChecked = true
-                viewDataBinding.completeCheckBox.isChecked = false
-                started = true
-                complete = false
-            }
-            "completed" -> {
-                viewDataBinding.startedCheckBox.isChecked = false
-                viewDataBinding.completeCheckBox.isChecked = true
-                started = false
-                complete = true
-            }
-        }
-    }
-
-
-    private fun initListUpFilter() {
-        when (getFilterListUp(requireContext())) {
-            "updatedDt" -> {
-                viewDataBinding.radioBtnUpdate.isChecked = true
-            }
-            "createdDt" -> {
-                viewDataBinding.radioBtnCreate.isChecked = true
-            }
-            "custom" -> {
-                viewDataBinding.radioBtnCustom.isChecked = true
-            }
-        }
-    }
-
-    private fun initSortListener() {
-        viewDataBinding.sortRadioGroup.setOnCheckedChangeListener { _, id ->
-            when (id) {
-                R.id.radio_btn_update -> {
-                    sortType = SortFilter.updatedDt
-                }
-                R.id.radio_btn_create -> {
-                    sortType = SortFilter.createdDt
-                }
-                R.id.radio_btn_custom -> {
-                    sortType = SortFilter.custom
-                }
-            }
-        }
-    }
-
-    private fun initShowDdayState() {
-        val filter = getShowDdayFilter(requireContext())
-        viewDataBinding.showDdayState.isChecked = filter
-        dday = filter
-    }
 
     override fun onResume() {
         super.onResume()
@@ -111,14 +38,34 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
         dialog?.window!!.setLayout(dialogWidth, dialogHeight)
     }
 
-    private fun createOnClickFilterSetListener(): View.OnClickListener {
-        return View.OnClickListener {
-            dialogDismiss()
-        }
+    override fun initDataBinding() {
+        viewDataBinding.fragment = this
+        viewDataBinding.filterSetClickListener = createOnClickFilterSetListener()
+        viewDataBinding.filterBoxListener = setOnCheckBoxChangedListener()
+
+        initFilter()
+        initSortListener()
+    }
+
+    private fun initFilter() {
+        val showFilter = getShowFilterType(getFilterForShow(requireContext()) ?: "all")
+        val sortFilter = getSortFilterType(getFilterListUp(requireContext()) ?: "updatedDt")
+
+        viewDataBinding.showFilter = showFilter
+        viewDataBinding.sortFilter = sortFilter
+        viewDataBinding.isDdayShow = getShowDdayFilter(requireContext())
+
+        sortType = sortFilter
+        showType = showFilter
+    }
+
+
+    private fun createOnClickFilterSetListener() = View.OnClickListener {
+        dialogDismiss()
     }
 
     private fun dialogDismiss() {
-        if (!started && !complete) {
+        if (showType == null) {
             Toast.makeText(context, "표시할 버킷리스트가 최소 하나는 있어야합니다.", Toast.LENGTH_SHORT).show()
         } else {
             setShowFilter()
@@ -133,20 +80,39 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     private fun setOnCheckBoxChangedListener() = View.OnClickListener {
         viewDataBinding.apply {
             when (it) {
-                startedCheckBox -> started = startedCheckBox.isChecked
-                completeCheckBox -> complete = completeCheckBox.isChecked
+                startedCheckBox -> updateShowFilter()
+                completeCheckBox -> updateShowFilter()
                 showDdayState -> dday = showDdayState.isChecked
             }
         }
     }
 
+    private fun updateShowFilter() {
+        viewDataBinding.apply {
+            showType = if(startedCheckBox.isChecked && completeCheckBox.isChecked) {
+                ShowFilter.all
+            } else if(startedCheckBox.isChecked) {
+                ShowFilter.started
+            } else if(completeCheckBox.isChecked){
+                ShowFilter.completed
+            } else {
+                null
+            }
+        }
+    }
+    private fun initSortListener() {
+        viewDataBinding.sortRadioGroup.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                R.id.radio_btn_update -> sortType = SortFilter.updatedDt
+                R.id.radio_btn_create -> sortType = SortFilter.createdDt
+                R.id.radio_btn_custom -> sortType = SortFilter.custom
+            }
+        }
+    }
+
     private fun setShowFilter() {
-        if (started && complete) {
-            setFilerForShow(requireContext(), ShowFilter.all)
-        } else if (started) {
-            setFilerForShow(requireContext(), ShowFilter.started)
-        } else if (complete) {
-            setFilerForShow(requireContext(), ShowFilter.completed)
+        showType?.let {
+            setFilerForShow(requireContext(), it)
         }
     }
 
@@ -156,6 +122,35 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
 
     private fun setShowDdayState() {
         setShowDdayFilter(requireContext(), dday)
+    }
+
+
+    private fun getShowFilterType(sortTypeString: String): ShowFilter {
+        return when (sortTypeString) {
+            "all" -> {
+                ShowFilter.all
+            }
+            "completed" -> {
+                ShowFilter.completed
+            }
+            else -> {
+                ShowFilter.started
+            }
+        }
+    }
+
+    private fun getSortFilterType(sortTypeString: String): SortFilter {
+        return when (sortTypeString) {
+            "updatedDt" -> {
+                SortFilter.updatedDt
+            }
+            "createdDt" -> {
+                SortFilter.createdDt
+            }
+            else -> {
+                SortFilter.custom
+            }
+        }
     }
 
 }
