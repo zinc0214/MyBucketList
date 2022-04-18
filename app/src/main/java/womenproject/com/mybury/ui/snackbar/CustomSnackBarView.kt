@@ -17,10 +17,10 @@ class CustomSnackBarView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), ContentViewCallback {
 
-    lateinit var titleView: TextView
-    lateinit var countView: TextView
-    lateinit var cancelView: TextView
-    lateinit var cardView: CardView
+    var titleView: TextView
+    var countView: TextView
+    var cancelView: TextView
+    var cardView: CardView
 
     init {
         View.inflate(context, R.layout.widget_main_snack_bar_view, this)

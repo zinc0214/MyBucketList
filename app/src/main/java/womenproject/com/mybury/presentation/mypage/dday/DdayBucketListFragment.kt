@@ -119,7 +119,7 @@ class DdayBucketListFragment : BaseFragment() {
         getDdayList()
     }
 
-    private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
+    private fun bucketCancelListener(info: BucketItem) {
         bucketListViewModel.bucketCancel(info.id)
     }
 
@@ -129,7 +129,7 @@ class DdayBucketListFragment : BaseFragment() {
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
-        MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
+        MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
     }
 
 }

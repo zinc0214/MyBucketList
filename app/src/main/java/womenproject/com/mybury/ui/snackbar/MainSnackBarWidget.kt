@@ -30,7 +30,7 @@ class MainSnackBarWidget(
     companion object {
 
         fun make(
-                view: View, title: String, count: String, listener: View.OnClickListener
+            view: View, title: String, count: String, cancelListener: () -> Unit
         ): MainSnackBarWidget? {
 
             val parent = view.findSuitableParent() ?: throw IllegalArgumentException(
@@ -44,7 +44,8 @@ class MainSnackBarWidget(
                     titleView.text = "\"${title}"
                     countView.text = count
                     cancelView.setOnClickListener {
-                        listener.onClick(view)
+                        Log.e("ayhan", "cancelView")
+                        cancelListener.invoke()
                         cancelView.isEnabled = false
 
                     }

@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -243,6 +244,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     fun setCategoryStatusChange() {
+        Log.e("ayhan", "changeCategoryList : $changeCategoryList")
         categoryViewModel.changeCategoryStatus(
             changeCategoryList,
             object : BaseViewModel.Simple3CallBack {
