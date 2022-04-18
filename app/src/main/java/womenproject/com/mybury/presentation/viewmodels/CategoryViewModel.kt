@@ -1,7 +1,6 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -50,7 +49,7 @@ class CategoryViewModel @Inject constructor(
                     }
                 }
             }.getOrElse {
-                Log.e("ayhan", "error : ${it.message}")
+
                 _categoryLoadState.value = LoadState.FAIL
             }
         }

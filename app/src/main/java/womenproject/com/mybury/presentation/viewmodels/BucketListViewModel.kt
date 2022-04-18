@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -72,7 +71,6 @@ class BucketListViewModel @Inject constructor(
                                 _bucketListLoadState.value = LoadState.FAIL
                             }
                         }
-                        Log.e("ayhan", "_homeBucketList : ${_homeBucketList.value}")
                     }
                 }
             }.getOrElse {

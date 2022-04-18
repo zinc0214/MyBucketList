@@ -44,7 +44,6 @@ class MainSnackBarWidget(
                     titleView.text = "\"${title}"
                     countView.text = count
                     cancelView.setOnClickListener {
-                        Log.e("ayhan", "cancelView")
                         cancelListener.invoke()
                         cancelView.isEnabled = false
 
