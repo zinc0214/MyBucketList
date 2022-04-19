@@ -86,7 +86,9 @@ class BucketListByFilterFragment : BaseFragment() {
         viewModel.homeBucketList.observe(viewLifecycleOwner) {
             it?.let {
                 binding.bucketList.adapter =
-                    CategoryBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
+                    CategoryBucketListAdapter(detailViewModel, showSnackBar).apply {
+                        updateBucketList(it.bucketlists)
+                    }
             }
         }
 

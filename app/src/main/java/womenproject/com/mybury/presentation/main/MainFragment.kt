@@ -38,6 +38,7 @@ class MainFragment : BaseFragment() {
 
     private val viewModel by viewModels<BucketListViewModel>()
     private val detailViewModel by viewModels<BucketDetailViewModel>()
+    private lateinit var bucketListAdapter: MainBucketListAdapter
 
     private var currentBucketSize = 0
 
@@ -64,8 +65,11 @@ class MainFragment : BaseFragment() {
         binding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         binding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
+        bucketListAdapter = MainBucketListAdapter(detailViewModel, showSnackBar)
+
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
+        binding.bucketList.adapter = bucketListAdapter
 
         setUpObservers()
         getMainBucketList()
@@ -125,8 +129,7 @@ class MainFragment : BaseFragment() {
                         blankImg.visibility = View.GONE
                         bucketList.visibility = View.VISIBLE
                         endImage.visibility = View.VISIBLE
-                        bucketList.adapter =
-                            MainBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
+                        bucketListAdapter.updateBucketList(it.bucketlists)
                     }
                 }
                 if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {

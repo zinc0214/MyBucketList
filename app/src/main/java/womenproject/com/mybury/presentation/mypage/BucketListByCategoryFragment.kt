@@ -105,7 +105,9 @@ class BucketListByCategoryFragment : BaseFragment() {
 
         bucketInfoViewModel.categoryBucketList.observeNonNull(viewLifecycleOwner) {
             binding.bucketList.adapter =
-                CategoryBucketListAdapter(it.bucketlists, bucketDetailViewModel, showSnackBar)
+                CategoryBucketListAdapter(bucketDetailViewModel, showSnackBar).apply {
+                    updateBucketList(it.bucketlists)
+                }
         }
     }
 

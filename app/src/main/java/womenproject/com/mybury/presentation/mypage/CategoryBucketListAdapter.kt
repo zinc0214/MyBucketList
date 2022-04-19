@@ -7,14 +7,16 @@ import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 
 
-class CategoryBucketListAdapter(bucketList: List<BucketItem>,
-                                viewModel: BucketDetailViewModel,
-                                showSnackBar: ((BucketItem) -> Unit)) : MainBucketListAdapter(bucketList, viewModel, showSnackBar) {
+class CategoryBucketListAdapter(
+    viewModel: BucketDetailViewModel,
+    showSnackBar: ((BucketItem) -> Unit)
+) : MainBucketListAdapter(viewModel, showSnackBar) {
 
     override fun createOnClickBucketListener(bucket: BucketItem): View.OnClickListener {
 
         return View.OnClickListener {
-            val directions = BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
+            val directions =
+                BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
             directions.bucketId = bucket.id
             it.findNavController().navigate(directions)
 

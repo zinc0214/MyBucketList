@@ -19,10 +19,11 @@ import womenproject.com.mybury.presentation.main.MainFragmentDirections
  */
 
 open class MainBucketListAdapter(
-    val bucketList: List<BucketItem>,
     val viewModel: BucketDetailViewModel,
     private val showSnackBar: ((BucketItem) -> Unit)
 ) : RecyclerView.Adapter<ViewHolder>() {
+
+    private  var bucketList: List<BucketItem> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
         return bucketList[position].bucketType().int()
@@ -73,5 +74,9 @@ open class MainBucketListAdapter(
         return bucketList.size
     }
 
+    fun updateBucketList(bucketList: List<BucketItem>,) {
+        this.bucketList = bucketList
+        notifyDataSetChanged()
+    }
 
 }
