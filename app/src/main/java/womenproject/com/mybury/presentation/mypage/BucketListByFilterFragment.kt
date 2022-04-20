@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
@@ -15,10 +16,15 @@ import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
+import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
+import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 
 @AndroidEntryPoint
 class BucketListByFilterFragment : BaseFragment() {
@@ -28,6 +34,7 @@ class BucketListByFilterFragment : BaseFragment() {
 
     private val viewModel by viewModels<BucketListViewModel>()
     private val detailViewModel by viewModels<BucketDetailViewModel>()
+    private lateinit var adapter: MainBucketListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +70,38 @@ class BucketListByFilterFragment : BaseFragment() {
                 else -> "완료"
             }
         binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
+
+        adapter = MainBucketListAdapter(object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions =
+                    BucketListByFilterFragmentDirections.actionFilterBucketListToDetail()
+                directions.bucketId = itemInfo.id
+                this@BucketListByFilterFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                detailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+                    override fun restart() {
+                        requireContext().showToast("다시 시도해주세요.")
+                    }
+
+                    override fun start() {
+
+                    }
+
+                    override fun success() {
+                        showSnackBar.invoke(itemInfo)
+                    }
+
+                    override fun fail() {
+                        requireContext().showToast("다시 시도해주세요.")
+                    }
+
+                }, itemInfo.id)
+            }
+        })
+
+        binding.bucketList.adapter = adapter
     }
 
     private fun setUpObservers() {
@@ -83,19 +122,17 @@ class BucketListByFilterFragment : BaseFragment() {
             }
         }
 
-        viewModel.homeBucketList.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.bucketList.adapter =
-                    CategoryBucketListAdapter(detailViewModel, showSnackBar).apply {
-                        updateBucketList(it.bucketlists)
-                    }
-            }
+        viewModel.homeBucketList.observeNonNull(viewLifecycleOwner) {
+            adapter.updateBucketList(it.bucketlists)
         }
 
+        loadFilterBucketList()
+    }
+
+    private fun loadFilterBucketList() {
         getFilterListUp(requireContext())?.let { filterListUp ->
             viewModel.getHomeBucketList(filterType, filterListUp)
         }
-
     }
 
     private fun initBucketListUI() {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
@@ -19,11 +20,14 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
+import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import womenproject.com.mybury.util.showToast
 import java.util.*
 
 
@@ -65,7 +69,35 @@ class MainFragment : BaseFragment() {
         binding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         binding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
-        bucketListAdapter = MainBucketListAdapter(detailViewModel, showSnackBar)
+        bucketListAdapter = MainBucketListAdapter(object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
+                directions.bucketId = itemInfo.id
+                this@MainFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                detailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
+                    override fun restart() {
+                        requireContext().showToast("다시 시도해주세요.")
+                    }
+
+                    override fun start() {
+
+                    }
+
+                    override fun success() {
+                        showSnackBar.invoke(itemInfo)
+                    }
+
+                    override fun fail() {
+                        requireContext().showToast("다시 시도해주세요.")
+                    }
+
+                }, itemInfo.id)
+            }
+
+        })
 
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
