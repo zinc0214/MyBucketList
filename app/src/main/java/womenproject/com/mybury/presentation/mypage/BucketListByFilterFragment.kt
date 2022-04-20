@@ -31,7 +31,6 @@ class BucketListByFilterFragment : BaseFragment() {
     private lateinit var filterType: String
 
     private val viewModel by viewModels<BucketListViewModel>()
-    private lateinit var adapter: MainBucketListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,21 +66,6 @@ class BucketListByFilterFragment : BaseFragment() {
                 else -> "완료"
             }
         binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
-
-        adapter = MainBucketListAdapter(object : BucketItemHandler {
-            override fun bucketSelect(itemInfo: BucketItem) {
-                val directions =
-                    BucketListByFilterFragmentDirections.actionFilterBucketListToDetail()
-                directions.bucketId = itemInfo.id
-                this@BucketListByFilterFragment.findNavController().navigate(directions)
-            }
-
-            override fun bucketComplete(itemInfo: BucketItem) {
-                viewModel.setBucketComplete(itemInfo)
-            }
-        })
-
-        binding.bucketList.adapter = adapter
     }
 
     private fun setUpObservers() {
@@ -103,7 +87,7 @@ class BucketListByFilterFragment : BaseFragment() {
         }
 
         viewModel.homeBucketList.observeNonNull(viewLifecycleOwner) {
-            adapter.updateBucketList(it.bucketlists)
+            setUpBucketListAdapter(it.bucketlists)
         }
 
         viewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
@@ -144,4 +128,18 @@ class BucketListByFilterFragment : BaseFragment() {
         MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
     }
 
+    private fun setUpBucketListAdapter(bucketList: List<BucketItem>) {
+        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions =
+                    BucketListByFilterFragmentDirections.actionFilterBucketListToDetail()
+                directions.bucketId = itemInfo.id
+                this@BucketListByFilterFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                viewModel.setBucketComplete(itemInfo)
+            }
+        })
+    }
 }

@@ -27,7 +27,6 @@ class BucketListByCategoryFragment : BaseFragment() {
 
     private lateinit var selectCategory: CategoryInfo
     private lateinit var binding: FragmentBucketListByCategoryBinding
-    private lateinit var adapter: MainBucketListAdapter
 
     private val bucketInfoViewModel by viewModels<BucketListViewModel>()
 
@@ -67,22 +66,6 @@ class BucketListByCategoryFragment : BaseFragment() {
 
         binding.headerLayout.title = selectCategory.name
         binding.headerLayout.backBtnOnClickListener = backBtnOnClickListener()
-
-        adapter = MainBucketListAdapter(object : BucketItemHandler {
-            override fun bucketSelect(itemInfo: BucketItem) {
-                val directions =
-                    BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
-                directions.bucketId = itemInfo.id
-                this@BucketListByCategoryFragment.findNavController().navigate(directions)
-            }
-
-            override fun bucketComplete(itemInfo: BucketItem) {
-                bucketInfoViewModel.setBucketComplete(itemInfo)
-            }
-
-        })
-
-        binding.bucketList.adapter = adapter
     }
 
     private fun setUpObservers() {
@@ -121,7 +104,7 @@ class BucketListByCategoryFragment : BaseFragment() {
         }
 
         bucketInfoViewModel.categoryBucketList.observeNonNull(viewLifecycleOwner) {
-            adapter.updateBucketList(it.bucketlists)
+            setBucketListAdapter(it.bucketlists)
         }
 
         bucketInfoViewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
@@ -149,5 +132,20 @@ class BucketListByCategoryFragment : BaseFragment() {
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
         MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
+    }
+
+    private fun setBucketListAdapter(bucketList: List<BucketItem>) {
+        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions =
+                    BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
+                directions.bucketId = itemInfo.id
+                this@BucketListByCategoryFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                bucketInfoViewModel.setBucketComplete(itemInfo)
+            }
+        })
     }
 }

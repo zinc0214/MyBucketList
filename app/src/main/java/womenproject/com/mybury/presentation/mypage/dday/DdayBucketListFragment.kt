@@ -35,7 +35,6 @@ class DdayBucketListFragment : BaseFragment() {
     private lateinit var binding: FragmentDdayListBinding
     private val viewModel by viewModels<DdayBucketTotalListViewModel>()
     private val bucketListViewModel by viewModels<BucketListViewModel>()
-    private lateinit var adatper: DdayBucketTotalListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,23 +56,6 @@ class DdayBucketListFragment : BaseFragment() {
         binding.ddayEachBucketList.hasFixedSize()
         binding.backBtnOnClickListener = backBtnOnClickListener()
         binding.filterClickListener = filterOnClickListener()
-
-        adatper = DdayBucketTotalListAdapter(
-            bucketItemHandler = object : BucketItemHandler {
-                override fun bucketSelect(itemInfo: BucketItem) {
-                    val directions =
-                        DdayBucketListFragmentDirections.actionDdayBucketToBucketDetail()
-                    directions.bucketId = itemInfo.id
-                    this@DdayBucketListFragment.findNavController().navigate(directions)
-                }
-
-                override fun bucketComplete(itemInfo: BucketItem) {
-                    bucketListViewModel.setBucketComplete(itemInfo)
-                }
-
-            })
-
-        binding.ddayEachBucketList.adapter = adatper
         getDdayList()
     }
 
@@ -121,7 +103,7 @@ class DdayBucketListFragment : BaseFragment() {
 
                 override fun success(bucketList: List<Any>) {
                     stopLoading()
-                    adatper.updateBucketList(bucketList as List<DdayBucketList>)
+                    setUpBucketListAdapter(bucketList as List<DdayBucketList>)
                 }
 
                 override fun fail() {
@@ -154,6 +136,22 @@ class DdayBucketListFragment : BaseFragment() {
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
         MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
+    }
+
+    private fun setUpBucketListAdapter(ddayBucketList: List<DdayBucketList>) {
+        binding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(ddayBucketList,
+            bucketItemHandler = object : BucketItemHandler {
+                override fun bucketSelect(itemInfo: BucketItem) {
+                    val directions =
+                        DdayBucketListFragmentDirections.actionDdayBucketToBucketDetail()
+                    directions.bucketId = itemInfo.id
+                    this@DdayBucketListFragment.findNavController().navigate(directions)
+                }
+
+                override fun bucketComplete(itemInfo: BucketItem) {
+                    bucketListViewModel.setBucketComplete(itemInfo)
+                }
+            })
     }
 
 }

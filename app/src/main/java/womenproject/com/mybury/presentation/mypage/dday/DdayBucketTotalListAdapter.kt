@@ -12,11 +12,11 @@ import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
  */
 
 class DdayBucketTotalListAdapter(
+    private var bucketList: List<DdayBucketList>,
     private val bucketItemHandler: BucketItemHandler
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var currentViewHolderTotal: DdayBucketTotalListViewHolder
-    private var bucketList: List<DdayBucketList> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -36,11 +36,6 @@ class DdayBucketTotalListAdapter(
 
     override fun getItemCount(): Int {
         return bucketList.size
-    }
-
-    fun updateBucketList(bucketList: List<DdayBucketList>) {
-        this.bucketList = bucketList
-        notifyDataSetChanged()
     }
 
 }

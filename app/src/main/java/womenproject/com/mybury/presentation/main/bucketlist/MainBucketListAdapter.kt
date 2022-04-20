@@ -14,11 +14,10 @@ import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
  * Created by HanAYeon on 2018. 11. 27..
  */
 
-open class MainBucketListAdapter(
+class MainBucketListAdapter(
+    private var bucketList: List<BucketItem>,
     private val bucketItemHandler: BucketItemHandler
 ) : RecyclerView.Adapter<ViewHolder>() {
-
-    private var bucketList: List<BucketItem> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
         return bucketList[position].bucketType().int()
@@ -55,14 +54,7 @@ open class MainBucketListAdapter(
         }
     }
 
-
     override fun getItemCount(): Int {
         return bucketList.size
     }
-
-    fun updateBucketList(bucketList: List<BucketItem>) {
-        this.bucketList = bucketList
-        notifyDataSetChanged()
-    }
-
 }

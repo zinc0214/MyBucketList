@@ -38,9 +38,7 @@ import java.util.*
 class MainFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMainBinding
-
     private val viewModel by viewModels<BucketListViewModel>()
-    private lateinit var bucketListAdapter: MainBucketListAdapter
 
     private var currentBucketSize = 0
 
@@ -67,22 +65,8 @@ class MainFragment : BaseFragment() {
         binding.mainBottomSheet.writeClickListener = createOnClickWriteListener()
         binding.mainBottomSheet.myPageClickListener = createOnClickMyPageListener()
 
-        bucketListAdapter = MainBucketListAdapter(object : BucketItemHandler {
-            override fun bucketSelect(itemInfo: BucketItem) {
-                val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
-                directions.bucketId = itemInfo.id
-                this@MainFragment.findNavController().navigate(directions)
-            }
-
-            override fun bucketComplete(itemInfo: BucketItem) {
-                viewModel.setBucketComplete(itemInfo)
-            }
-
-        })
-
         binding.bucketList.layoutManager = layoutManager
         binding.bucketList.hasFixedSize()
-        binding.bucketList.adapter = bucketListAdapter
 
         setUpObservers()
         getMainBucketList()
@@ -142,7 +126,7 @@ class MainFragment : BaseFragment() {
                         blankImg.visibility = View.GONE
                         bucketList.visibility = View.VISIBLE
                         endImage.visibility = View.VISIBLE
-                        bucketListAdapter.updateBucketList(it.bucketlists)
+                        updateListAdapter(it.bucketlists)
                     }
                 }
                 if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
@@ -160,6 +144,20 @@ class MainFragment : BaseFragment() {
                 getMainBucketList()
             }
         }
+    }
+
+    private fun updateListAdapter(bucketList: List<BucketItem>) {
+        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
+                directions.bucketId = itemInfo.id
+                this@MainFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                viewModel.setBucketComplete(itemInfo)
+            }
+        })
     }
 
     private fun getMainBucketList() {
