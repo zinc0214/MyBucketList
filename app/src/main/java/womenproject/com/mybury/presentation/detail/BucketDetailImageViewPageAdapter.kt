@@ -52,13 +52,8 @@ class BucketDetailImageViewPageAdapter(private val context: Context, private val
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-
         container.removeView(`object` as View?)
-
     }
-
-
-
 }
 
 

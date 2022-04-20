@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.intro
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -17,15 +16,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
-import womenproject.com.mybury.data.Preference.Companion.getUserId
-import womenproject.com.mybury.data.UseUserIdRequest
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.APIClient
 import womenproject.com.mybury.data.network.RetrofitInterface
 import womenproject.com.mybury.databinding.LayoutSplashWithLoginBinding
@@ -36,6 +32,7 @@ import womenproject.com.mybury.presentation.main.WarningDialogFragment
 import womenproject.com.mybury.presentation.viewmodels.CheckForLoginResult
 import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
+import womenproject.com.mybury.util.observeNonNull
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -111,6 +108,22 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
                 }
             }
         }
+        viewModel.loadLoginTokenResult.observeNonNull(this) {
+            when(it) {
+                LoadState.SUCCESS -> {
+                    goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
+                }
+                LoadState.RESTART -> {
+                CanNotGoMainDialog().show(supportFragmentManager, "tag")
+            }
+                LoadState.FAIL -> {
+                    WarningDialogFragment { finish() }.show(supportFragmentManager, "tag")
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        }
     }
 
     private inner class splashHandler : Runnable {
@@ -134,28 +147,8 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
         finish()
     }
 
-    @SuppressLint("CheckResult")
     private fun initToken() {
-
-        val getTokenRequest = UseUserIdRequest(getUserId(this))
-
-        apiInterface.getLoginToken(getTokenRequest)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                if (response.retcode == "200") {
-                    Preference.setAccessToken(this, response.accessToken)
-                    Preference.setRefreshToken(this, response.refreshToken)
-                    goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
-                } else {
-                    CanNotGoMainDialog().show(supportFragmentManager, "tag")
-                }
-            }) {
-                WarningDialogFragment {
-                    finish()
-                }.show(supportFragmentManager, "tag")
-                Log.e("myBury", "getLoginToken Fail : $it")
-            }
+        viewModel.getLoginToken()
     }
 
     private fun signIn() {

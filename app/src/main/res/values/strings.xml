@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">마이버리</string>
 
-    <!-- API URL-->
+    <!-- Common -->
+    <string name="goToBack">뒤로가기</string>
+    <string name="showMoreMenu">옵션 더보기</string>
 
     <string name="visible_bucket">표시할 버킷리스트</string>
     <string name="doing_bucket">진행중인 버킷리스트</string>
@@ -56,4 +58,12 @@
     <string name="close_desc">닫기</string>
     <string name="search_list">리스트를 검색하세요</string>
     <string name="search_no_result_desc">일치하는 리스트가 없습니다.</string>
+    <string name="bucketComplete">달성완료</string>
+
+    <!-- 상세 -->
+    <string name="showMoreMemo">메모 더보기</string>
+    <string name="bucketCountToMinus">버킷리스트 카운트 -1</string>
+    <string name="bucketCountToPlus">버킷리스트 카운트 +1</string>
+    <string name="bucketSuccess">달성 완료</string>
+
 </resources>

@@ -10,6 +10,7 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketType
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.main.MainFragmentDirections
 
 
@@ -19,6 +20,7 @@ import womenproject.com.mybury.presentation.main.MainFragmentDirections
 
 open class MainBucketListAdapter(
     val bucketList: List<BucketItem>,
+    val viewModel: BucketDetailViewModel,
     private val showSnackBar: ((BucketItem) -> Unit)
 ) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -49,9 +51,10 @@ open class MainBucketListAdapter(
             }
             is BaseBucketItemViewHolder -> {
                 holder.bind(
-                    createOnClickBucketListener(bucketList[position]),
-                    bucketList[position],
-                    false
+                    bucketItemInfo = bucketList[position],
+                    isForDday = false,
+                    viewModel = viewModel,
+                    bucketListener = createOnClickBucketListener(bucketList[position])
                 )
             }
         }

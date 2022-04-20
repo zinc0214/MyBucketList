@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.data.AddBucketItem
-import womenproject.com.mybury.data.DetailBucketItem
+import womenproject.com.mybury.data.model.BucketDetailItem
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.util.fileToMultipartFile
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BucketWriteViewModel @Inject constructor(): BaseViewModel() {
 
-    var bucketItem: DetailBucketItem? = null
+    var bucketItem: BucketDetailItem? = null
     val isOpenVisible = BuildConfig.DEBUG
 
     @SuppressLint("CheckResult")
@@ -109,9 +109,9 @@ class BucketWriteViewModel @Inject constructor(): BaseViewModel() {
         var image2: MultipartBody.Part? = null
         var image3: MultipartBody.Part? = null
 
-        var removeImg1 = (alreadyImgList[0]==null).stringToMultipartFile("removeImg1")
-        var removeImg2 =(alreadyImgList[1]==null).stringToMultipartFile("removeImg2")
-        var removeImg3 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg3")
+        val removeImg1 = (alreadyImgList[0]==null).stringToMultipartFile("removeImg1")
+        val removeImg2 =(alreadyImgList[1]==null).stringToMultipartFile("removeImg2")
+        val removeImg3 =(alreadyImgList[2]==null).stringToMultipartFile("removeImg3")
 
         for (i in 0 until imgList.size) {
             if (imgList[i] != null && imgList[i] is File) {

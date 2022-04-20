@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketListOrder
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject

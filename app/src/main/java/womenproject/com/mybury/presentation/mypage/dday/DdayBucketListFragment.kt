@@ -12,9 +12,11 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.DdayBucketList
 import womenproject.com.mybury.data.Preference.Companion.getDdayFilterForShow
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
@@ -30,6 +32,7 @@ class DdayBucketListFragment : BaseFragment() {
     private lateinit var binding: FragmentDdayListBinding
     private val viewModel by viewModels<DdayBucketTotalListViewModel>()
     private val bucketListViewModel by viewModels<BucketListViewModel>()
+    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,14 +60,14 @@ class DdayBucketListFragment : BaseFragment() {
     private fun setUpObservers() {
         bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                     getDdayList()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     NetworkFailDialog().show(requireActivity().supportFragmentManager)
                 }
@@ -92,6 +95,7 @@ class DdayBucketListFragment : BaseFragment() {
                     binding.ddayEachBucketList.adapter = DdayBucketTotalListAdapter(
                         context,
                         bucketList as List<DdayBucketList>,
+                        detailViewModel,
                         showSnackBar
                     )
                 }
@@ -115,8 +119,8 @@ class DdayBucketListFragment : BaseFragment() {
         getDdayList()
     }
 
-    private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        bucketListViewModel.setBucketCancel(info.id)
+    private fun bucketCancelListener(info: BucketItem) {
+        bucketListViewModel.bucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
@@ -125,7 +129,7 @@ class DdayBucketListFragment : BaseFragment() {
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
-        MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
+        MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
     }
 
 }

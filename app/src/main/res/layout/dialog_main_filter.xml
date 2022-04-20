@@ -4,6 +4,10 @@
 
     <data>
 
+        <import type="womenproject.com.mybury.data.ShowFilter" />
+
+        <import type="womenproject.com.mybury.data.SortFilter" />
+
         <variable
             name="fragment"
             type="womenproject.com.mybury.presentation.main.FilterDialogFragment" />
@@ -15,6 +19,18 @@
         <variable
             name="filterBoxListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="showFilter"
+            type="womenproject.com.mybury.data.ShowFilter" />
+
+        <variable
+            name="sortFilter"
+            type="womenproject.com.mybury.data.SortFilter" />
+
+        <variable
+            name="isDdayShow"
+            type="Boolean" />
 
 
     </data>
@@ -51,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/filter_checkbox"
+            android:checked="@{showFilter == ShowFilter.started || showFilter == ShowFilter.all}"
             android:onClick="@{filterBoxListener}"
             android:text="@string/doing_bucket" />
 
@@ -62,6 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:button="@drawable/filter_checkbox"
+            android:checked="@{showFilter == ShowFilter.completed || showFilter == ShowFilter.all}"
             android:onClick="@{filterBoxListener}"
             android:text="@string/done_bucket" />
 
@@ -92,6 +110,7 @@
                 style="@style/FilterDialogSubTextStyle"
                 android:layout_width="wrap_content"
                 android:button="@drawable/filter_radio_btn"
+                android:checked="@{sortFilter == SortFilter.updatedDt}"
                 android:text="@string/sort_by_update" />
 
             <RadioButton
@@ -100,6 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="14dp"
                 android:button="@drawable/filter_radio_btn"
+                android:checked="@{sortFilter == SortFilter.createdDt}"
                 android:text="@string/sort_by_create" />
 
             <RadioButton
@@ -108,6 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="14dp"
                 android:button="@drawable/filter_radio_btn"
+                android:checked="@{sortFilter == SortFilter.custom}"
                 android:text="@string/sort_by_customer" />
 
         </RadioGroup>
@@ -133,6 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/filter_checkbox"
+            android:checked="@{isDdayShow == true}"
             android:onClick="@{filterBoxListener}"
             android:text="@string/show_dday_state" />
 

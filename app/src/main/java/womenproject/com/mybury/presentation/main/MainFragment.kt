@@ -16,12 +16,12 @@ import womenproject.com.mybury.data.Preference.Companion.getCloseAlarm3Days
 import womenproject.com.mybury.data.Preference.Companion.getEnableShowAlarm
 import womenproject.com.mybury.data.Preference.Companion.getFilterForShow
 import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
-import womenproject.com.mybury.presentation.viewmodels.BucketInfoViewModel
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import java.util.*
@@ -36,8 +36,8 @@ class MainFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMainBinding
 
-    private val viewModel by viewModels<BucketInfoViewModel>()
-    private val bucketListViewModel by viewModels<BucketListViewModel>()
+    private val viewModel by viewModels<BucketListViewModel>()
+    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     private var currentBucketSize = 0
 
@@ -74,17 +74,17 @@ class MainFragment : BaseFragment() {
     private fun setUpObservers() {
         viewModel.bucketListLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
-                BaseViewModel.LoadState.RESTART -> {
+                LoadState.RESTART -> {
                     getMainBucketList()
                 }
                 else -> {
@@ -93,16 +93,16 @@ class MainFragment : BaseFragment() {
             }
         }
 
-        bucketListViewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
+        viewModel.bucketCancelLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                     getMainBucketList()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
@@ -126,7 +126,7 @@ class MainFragment : BaseFragment() {
                         bucketList.visibility = View.VISIBLE
                         endImage.visibility = View.VISIBLE
                         bucketList.adapter =
-                            MainBucketListAdapter(it.bucketlists, showSnackBar)
+                            MainBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
                     }
                 }
                 if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
@@ -202,8 +202,8 @@ class MainFragment : BaseFragment() {
         it.findNavController().navigate(directions)
     }
 
-    private fun bucketCancelListener(info: BucketItem) = View.OnClickListener {
-        bucketListViewModel.setBucketCancel(info.id)
+    private fun bucketCancelListener(info: BucketItem) {
+        viewModel.bucketCancel(info.id)
     }
 
     private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
@@ -212,7 +212,7 @@ class MainFragment : BaseFragment() {
 
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
-        MainSnackBarWidget.make(view, info.title, countText, bucketCancelListener(info))?.show()
+        MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
     }
 
     override fun onDestroyView() {

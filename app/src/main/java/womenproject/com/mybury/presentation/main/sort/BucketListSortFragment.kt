@@ -15,9 +15,9 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.SortFilter
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.MainActivity
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
 import womenproject.com.mybury.presentation.viewmodels.BucketSortViewModel
 import womenproject.com.mybury.ui.ItemDragListener
@@ -68,17 +68,17 @@ class BucketListSortFragment : Fragment(),
     private fun setUpObservers() {
         viewModel.bucketLoadState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     "다시 시도해주세요.".showToast(requireContext())
                 }
-                BaseViewModel.LoadState.RESTART -> {
+                LoadState.RESTART -> {
                     getMainBucketList()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                 }
                 else -> {
@@ -89,17 +89,17 @@ class BucketListSortFragment : Fragment(),
 
         viewModel.bucketUpdateState.observe(viewLifecycleOwner) {
             when (it) {
-                BaseViewModel.LoadState.START -> {
+                LoadState.START -> {
                     startLoading()
                 }
-                BaseViewModel.LoadState.FAIL -> {
+                LoadState.FAIL -> {
                     stopLoading()
                     "다시 시도해주세요.".showToast(requireContext())
                 }
-                BaseViewModel.LoadState.RESTART -> {
+                LoadState.RESTART -> {
                     updateBucketOrder()
                 }
-                BaseViewModel.LoadState.SUCCESS -> {
+                LoadState.SUCCESS -> {
                     stopLoading()
                     successUpdateBucketOrder()
                 }

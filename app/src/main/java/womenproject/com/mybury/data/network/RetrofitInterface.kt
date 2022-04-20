@@ -18,10 +18,6 @@ import womenproject.com.mybury.data.*
 interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
-    @POST("/signin")
-    fun getLoginToken(@Body email: UseUserIdRequest): Observable<GetTokenResponse>
-
-    @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/refresh_token")
     fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
@@ -55,11 +51,7 @@ interface RetrofitInterface {
         @Query("sort") sort: String
     ): Observable<BucketList>
 
-    @GET("/category")
-    fun requestCategoryBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Query("categoryId") categoryId: String
-    ): Observable<BucketList>
+
 
     @GET("/bucketlist/{bucketId}")
     fun requestDetailBucketList(
@@ -124,14 +116,6 @@ interface RetrofitInterface {
         @Part image3: MultipartBody.Part? = null,
         @Part noImg3: MultipartBody.Part
     ): Observable<SimpleResponse>
-
-
-    @HTTP(method = "DELETE", path = "/bucketlist/{bucketId}", hasBody = true)
-    suspend fun deleteBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body userId: UseUserIdRequest,
-        @Path("bucketId") bucketId: String
-    ): SimpleResponse
 
     @POST("/category")
     fun addNewCategoryItem(

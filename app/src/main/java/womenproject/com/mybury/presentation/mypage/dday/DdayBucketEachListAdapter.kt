@@ -9,6 +9,7 @@ import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketType
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.databinding.ItemDdayBucketSucceedBinding
+import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder
 
 /**
@@ -17,6 +18,7 @@ import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHo
 
 class DdayBucketEachListAdapter(
     val bucketList: List<BucketItem>,
+    val viewModel: BucketDetailViewModel,
     private val showSnackBar: ((BucketItem) -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
@@ -47,9 +49,10 @@ class DdayBucketEachListAdapter(
         when (holder) {
             is BaseBucketItemViewHolder -> {
                 holder.bind(
-                    createOnClickBucketListener(bucketList[position]),
-                    bucketList[position],
-                    true
+                    bucketItemInfo = bucketList[position],
+                    isShowDday = true,
+                    viewModel = viewModel,
+                    bucketListener = createOnClickBucketListener(bucketList[position]),
                 )
             }
             is DdaySucceedBucketItemViewHolder -> {

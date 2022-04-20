@@ -1,9 +1,9 @@
 package womenproject.com.mybury.data
 
 import android.os.Parcelable
-import com.zinc.data.model.DomainBucketItem
-import com.zinc.data.model.DomainCategory
 import kotlinx.android.parcel.Parcelize
+import womenproject.com.mybury.data.model.DomainBucketItem
+import womenproject.com.mybury.data.model.DomainCategory
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
