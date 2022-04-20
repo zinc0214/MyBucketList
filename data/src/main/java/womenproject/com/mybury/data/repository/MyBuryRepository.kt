@@ -44,4 +44,9 @@ interface MyBuryRepository {
         userId: UserIdRequest,
         bucketId: String
     ): SimpleResponse
+
+    suspend fun completeBucket(
+        token: String,
+        bucketCompleteRequest: BucketRequest
+    ): SimpleResponse
 }

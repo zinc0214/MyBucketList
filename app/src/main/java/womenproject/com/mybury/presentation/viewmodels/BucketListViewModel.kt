@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,9 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import womanproject.com.mybury.domain.usecase.category.LoadBucketListByCategoryUseCase
+import womanproject.com.mybury.domain.usecase.detail.CompleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.home.CancelBucketItemUseCase
 import womanproject.com.mybury.domain.usecase.home.LoadHomeBucketListUseCase
+import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.model.BucketRequest
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.model.StatusChangeBucketRequest
 import womenproject.com.mybury.data.toBucketData
@@ -25,7 +29,8 @@ import javax.inject.Inject
 class BucketListViewModel @Inject constructor(
     private val loadHomeBucketListUseCase: LoadHomeBucketListUseCase,
     private val cancelBucketItemUseCase: CancelBucketItemUseCase,
-    private val loadBucketListByCategoryUseCase: LoadBucketListByCategoryUseCase
+    private val loadBucketListByCategoryUseCase: LoadBucketListByCategoryUseCase,
+    private val completeBucketUseCase: CompleteBucketUseCase
 ) : BaseViewModel() {
 
     private val _bucketListLoadState = MutableLiveData<LoadState>()
@@ -39,6 +44,9 @@ class BucketListViewModel @Inject constructor(
 
     private val _categoryBucketList = MutableLiveData<BucketList>()
     val categoryBucketList: LiveData<BucketList> = _categoryBucketList
+
+    private val _completeBucketState = MutableLiveData<Pair<Boolean, BucketItem?>>()
+    val completeBucketState: LiveData<Pair<Boolean, BucketItem?>> = _completeBucketState
 
     fun getHomeBucketList(filter: String, sort: String) {
         if (accessToken == null || userId == null) {
@@ -137,6 +145,39 @@ class BucketListViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun setBucketComplete(bucketInfo: BucketItem) {
+        val bucketRequest = BucketRequest(bucketInfo.id)
+        if (accessToken == null) {
+            _completeBucketState.value = false to null
+            return
+        }
+
+        viewModelScope.launch {
+            runCatching {
+                completeBucketUseCase(accessToken, bucketRequest).apply {
+                    Log.e("ayhan", "response : ${this}")
+                    when (this@apply.retcode) {
+                        "200" -> {
+                            _completeBucketState.value = true to bucketInfo
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                _completeBucketState.value = false to null
+                            }
+
+                            override fun fail() {
+                                _completeBucketState.value = false to null
+                            }
+                        })
+                        else -> _completeBucketState.value = false to null
+                    }
+                }
+            }.getOrElse {
+                _completeBucketState.value =  false to null
             }
         }
     }

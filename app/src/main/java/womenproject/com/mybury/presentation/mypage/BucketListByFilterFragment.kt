@@ -16,8 +16,6 @@ import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
@@ -33,7 +31,6 @@ class BucketListByFilterFragment : BaseFragment() {
     private lateinit var filterType: String
 
     private val viewModel by viewModels<BucketListViewModel>()
-    private val detailViewModel by viewModels<BucketDetailViewModel>()
     private lateinit var adapter: MainBucketListAdapter
 
     override fun onCreateView(
@@ -80,24 +77,7 @@ class BucketListByFilterFragment : BaseFragment() {
             }
 
             override fun bucketComplete(itemInfo: BucketItem) {
-                detailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-                    override fun restart() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                    override fun start() {
-
-                    }
-
-                    override fun success() {
-                        showSnackBar.invoke(itemInfo)
-                    }
-
-                    override fun fail() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                }, itemInfo.id)
+                viewModel.setBucketComplete(itemInfo)
             }
         })
 
@@ -124,6 +104,15 @@ class BucketListByFilterFragment : BaseFragment() {
 
         viewModel.homeBucketList.observeNonNull(viewLifecycleOwner) {
             adapter.updateBucketList(it.bucketlists)
+        }
+
+        viewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar.invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                loadFilterBucketList()
+            }
         }
 
         loadFilterBucketList()

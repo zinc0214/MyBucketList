@@ -35,3 +35,7 @@ data class BucketDetailItem(
         return hasNoImg && isCountBucket().not() && isDone().not() && memo.isBlank()
     }
 }
+
+data class BucketRequest(
+    var bucketlistId: String
+)

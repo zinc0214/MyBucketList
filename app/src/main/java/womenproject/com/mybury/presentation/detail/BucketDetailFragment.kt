@@ -6,7 +6,6 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,7 +21,6 @@ import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketDetailBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
@@ -225,6 +223,23 @@ class BucketDetailFragment : Fragment() {
                 }
             }
         }
+
+        bucketDetailViewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.FAIL -> {
+                    requireContext().showToast("다시 시도해주세요.")
+                }
+                LoadState.RESTART -> {
+                    bucketComplete()
+                }
+                LoadState.START -> {
+
+                }
+                LoadState.SUCCESS -> {
+                    loadBucketDetailInfo()
+                }
+            }
+        }
     }
 
     fun goToBack() {
@@ -292,24 +307,7 @@ class BucketDetailFragment : Fragment() {
             bucketFinalSucceedAction()
         }
 
-        bucketDetailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                bucketComplete()
-            }
-
-            override fun start() {
-
-            }
-
-            override fun success() {
-                loadBucketDetailInfo()
-            }
-
-            override fun fail() {
-                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-        }, bucketItemId)
+        bucketDetailViewModel.setBucketComplete(bucketItemId)
 
     }
 

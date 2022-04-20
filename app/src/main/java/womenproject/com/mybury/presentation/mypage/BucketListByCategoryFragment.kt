@@ -15,8 +15,6 @@ import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
@@ -32,8 +30,6 @@ class BucketListByCategoryFragment : BaseFragment() {
     private lateinit var adapter: MainBucketListAdapter
 
     private val bucketInfoViewModel by viewModels<BucketListViewModel>()
-    private val bucketDetailViewModel by viewModels<BucketDetailViewModel>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,23 +77,7 @@ class BucketListByCategoryFragment : BaseFragment() {
             }
 
             override fun bucketComplete(itemInfo: BucketItem) {
-                bucketDetailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-                    override fun restart() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                    override fun start() {
-                    }
-
-                    override fun success() {
-                        showSnackBar.invoke(itemInfo)
-                    }
-
-                    override fun fail() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                }, itemInfo.id)
+                bucketInfoViewModel.setBucketComplete(itemInfo)
             }
 
         })
@@ -142,6 +122,15 @@ class BucketListByCategoryFragment : BaseFragment() {
 
         bucketInfoViewModel.categoryBucketList.observeNonNull(viewLifecycleOwner) {
             adapter.updateBucketList(it.bucketlists)
+        }
+
+        bucketInfoViewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar.invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                getBucketListByCategory()
+            }
         }
     }
 

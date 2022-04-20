@@ -20,13 +20,12 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import womenproject.com.mybury.util.observeNonNull
 import womenproject.com.mybury.util.showToast
 import java.util.*
 
@@ -41,7 +40,6 @@ class MainFragment : BaseFragment() {
     private lateinit var binding: FragmentMainBinding
 
     private val viewModel by viewModels<BucketListViewModel>()
-    private val detailViewModel by viewModels<BucketDetailViewModel>()
     private lateinit var bucketListAdapter: MainBucketListAdapter
 
     private var currentBucketSize = 0
@@ -77,24 +75,7 @@ class MainFragment : BaseFragment() {
             }
 
             override fun bucketComplete(itemInfo: BucketItem) {
-                detailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-                    override fun restart() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                    override fun start() {
-
-                    }
-
-                    override fun success() {
-                        showSnackBar.invoke(itemInfo)
-                    }
-
-                    override fun fail() {
-                        requireContext().showToast("다시 시도해주세요.")
-                    }
-
-                }, itemInfo.id)
+                viewModel.setBucketComplete(itemInfo)
             }
 
         })
@@ -168,6 +149,15 @@ class MainFragment : BaseFragment() {
                     showDdayPopup()
                 }
                 currentBucketSize = it.bucketlists.size
+            }
+        }
+
+        viewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar.invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                getMainBucketList()
             }
         }
     }

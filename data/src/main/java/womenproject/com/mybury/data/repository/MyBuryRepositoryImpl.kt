@@ -66,4 +66,11 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.deleteBucket(token, userId, bucketId)
     }
+
+    override suspend fun completeBucket(
+        token: String,
+        bucketCompleteRequest: BucketRequest
+    ): SimpleResponse {
+        return myBuryApi.completeBucket(token, bucketCompleteRequest)
+    }
 }

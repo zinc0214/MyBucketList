@@ -1,6 +1,5 @@
 package womenproject.com.mybury.data.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,5 +21,5 @@ data class DomainBucketItem(
 @Serializable
 data class StatusChangeBucketRequest(
     val userId: String?,
-    @SerialName("bucketlistId") var bucketListId: String
+    val bucketlistId: String
 )

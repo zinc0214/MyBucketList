@@ -42,24 +42,6 @@ interface RetrofitInterface {
         @Part defaultImg: MultipartBody.Part
     ): Observable<SimpleResponse>
 
-
-    @GET("/home")
-    fun requestHomeBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String,
-        @Query("filter") filter: String,
-        @Query("sort") sort: String
-    ): Observable<BucketList>
-
-
-
-    @GET("/bucketlist/{bucketId}")
-    fun requestDetailBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Path("bucketId") bucketId: String,
-        @Query("userId") userId: String
-    ): Observable<DetailBucketItem>
-
     @POST("/complete")
     fun postCompleteBucket(
         @Header("X-Auth-Token") token: String,

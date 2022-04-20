@@ -17,12 +17,12 @@ import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentDdayListBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import womenproject.com.mybury.util.observeNonNull
 import womenproject.com.mybury.util.showToast
 
 /**
@@ -35,7 +35,6 @@ class DdayBucketListFragment : BaseFragment() {
     private lateinit var binding: FragmentDdayListBinding
     private val viewModel by viewModels<DdayBucketTotalListViewModel>()
     private val bucketListViewModel by viewModels<BucketListViewModel>()
-    private val detailViewModel by viewModels<BucketDetailViewModel>()
     private lateinit var adatper: DdayBucketTotalListAdapter
 
     override fun onCreateView(
@@ -69,23 +68,7 @@ class DdayBucketListFragment : BaseFragment() {
                 }
 
                 override fun bucketComplete(itemInfo: BucketItem) {
-                    detailViewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-                        override fun restart() {
-                            requireContext().showToast("다시 시도해주세요.")
-                        }
-
-                        override fun start() {
-                        }
-
-                        override fun success() {
-                            showSnackBar.invoke(itemInfo)
-                        }
-
-                        override fun fail() {
-                            requireContext().showToast("다시 시도해주세요.")
-                        }
-
-                    }, itemInfo.id)
+                    bucketListViewModel.setBucketComplete(itemInfo)
                 }
 
             })
@@ -111,6 +94,15 @@ class DdayBucketListFragment : BaseFragment() {
                 else -> {
                     // do Nothing
                 }
+            }
+        }
+
+        bucketListViewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar.invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                getDdayList()
             }
         }
     }

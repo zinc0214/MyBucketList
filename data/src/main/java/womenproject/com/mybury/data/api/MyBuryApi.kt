@@ -60,4 +60,10 @@ interface MyBuryApi {
         @Body userId: UserIdRequest,
         @Path("bucketId") bucketId: String
     ): SimpleResponse
+
+    @POST("/complete")
+    suspend fun completeBucket(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketRequest: BucketRequest
+    ): SimpleResponse
 }
