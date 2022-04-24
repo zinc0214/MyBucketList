@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,6 +18,7 @@ import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.model.StatusChangeBucketRequest
 import womenproject.com.mybury.data.toBucketData
 import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.util.SingleLiveEvent
 import javax.inject.Inject
 
 /**
@@ -45,7 +45,7 @@ class BucketListViewModel @Inject constructor(
     private val _categoryBucketList = MutableLiveData<BucketList>()
     val categoryBucketList: LiveData<BucketList> = _categoryBucketList
 
-    private val _completeBucketState = MutableLiveData<Pair<Boolean, BucketItem?>>()
+    private val _completeBucketState = SingleLiveEvent<Pair<Boolean, BucketItem?>>()
     val completeBucketState: LiveData<Pair<Boolean, BucketItem?>> = _completeBucketState
 
     fun getHomeBucketList(filter: String, sort: String) {
@@ -159,25 +159,15 @@ class BucketListViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 completeBucketUseCase(accessToken, bucketRequest).apply {
-                    Log.e("ayhan", "response : ${this}")
                     when (this@apply.retcode) {
                         "200" -> {
                             _completeBucketState.value = true to bucketInfo
                         }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                _completeBucketState.value = false to null
-                            }
-
-                            override fun fail() {
-                                _completeBucketState.value = false to null
-                            }
-                        })
                         else -> _completeBucketState.value = false to null
                     }
                 }
             }.getOrElse {
-                _completeBucketState.value =  false to null
+                _completeBucketState.value = false to null
             }
         }
     }

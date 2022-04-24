@@ -2,7 +2,8 @@ package womenproject.com.mybury.presentation.main.bucketlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.BucketType
@@ -15,12 +16,11 @@ import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
  */
 
 class MainBucketListAdapter(
-    private var bucketList: List<BucketItem>,
     private val bucketItemHandler: BucketItemHandler
-) : RecyclerView.Adapter<ViewHolder>() {
+) : ListAdapter<BucketItem, ViewHolder>(diffUtil) {
 
     override fun getItemViewType(position: Int): Int {
-        return bucketList[position].bucketType().int()
+        return getItem(position).bucketType().int()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,15 +38,14 @@ class MainBucketListAdapter(
         }
     }
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is SucceedBucketItemViewHolder -> {
-                holder.bind(bucketItemHandler, bucketList[position])
+                holder.bind(bucketItemHandler, getItem(position))
             }
             is BaseBucketItemViewHolder -> {
                 holder.bind(
-                    bucketItemInfo = bucketList[position],
+                    bucketItemInfo = getItem(position),
                     isForDday = false,
                     bucketItemHandler = bucketItemHandler
                 )
@@ -54,7 +53,17 @@ class MainBucketListAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return bucketList.size
+    fun replaceItems(items: List<BucketItem>) {
+        submitList(items)
+    }
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<BucketItem>() {
+            override fun areContentsTheSame(oldItem: BucketItem, newItem: BucketItem) =
+                oldItem.userCount == newItem.userCount
+
+            override fun areItemsTheSame(oldItem: BucketItem, newItem: BucketItem) =
+                oldItem == newItem
+        }
     }
 }

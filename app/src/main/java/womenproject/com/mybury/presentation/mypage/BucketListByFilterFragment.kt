@@ -129,7 +129,7 @@ class BucketListByFilterFragment : BaseFragment() {
     }
 
     private fun setUpBucketListAdapter(bucketList: List<BucketItem>) {
-        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
+        binding.bucketList.adapter = MainBucketListAdapter(object : BucketItemHandler {
             override fun bucketSelect(itemInfo: BucketItem) {
                 val directions =
                     BucketListByFilterFragmentDirections.actionFilterBucketListToDetail()
@@ -140,6 +140,8 @@ class BucketListByFilterFragment : BaseFragment() {
             override fun bucketComplete(itemInfo: BucketItem) {
                 viewModel.setBucketComplete(itemInfo)
             }
-        })
+        }).apply {
+            replaceItems(bucketList)
+        }
     }
 }

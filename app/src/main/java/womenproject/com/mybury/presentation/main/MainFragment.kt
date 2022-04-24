@@ -51,8 +51,8 @@ class MainFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initBucketListUI()
     }
 
@@ -138,7 +138,7 @@ class MainFragment : BaseFragment() {
 
         viewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
             if (it.first && it.second != null) {
-                showSnackBar.invoke(it.second!!)
+                showSnackBar().invoke(it.second!!)
             } else {
                 requireContext().showToast("다시 시도해주세요.")
                 getMainBucketList()
@@ -147,7 +147,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun updateListAdapter(bucketList: List<BucketItem>) {
-        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
+        binding.bucketList.adapter = MainBucketListAdapter(object : BucketItemHandler {
             override fun bucketSelect(itemInfo: BucketItem) {
                 val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
                 directions.bucketId = itemInfo.id
@@ -157,7 +157,9 @@ class MainFragment : BaseFragment() {
             override fun bucketComplete(itemInfo: BucketItem) {
                 viewModel.setBucketComplete(itemInfo)
             }
-        })
+        }).apply {
+            replaceItems(bucketList)
+        }
     }
 
     private fun getMainBucketList() {
@@ -229,7 +231,7 @@ class MainFragment : BaseFragment() {
         viewModel.bucketCancel(info.id)
     }
 
-    private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
+    private fun showSnackBar() = { info: BucketItem ->
         showCancelSnackBar(requireView(), info)
     }
 

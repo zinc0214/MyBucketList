@@ -42,12 +42,6 @@ interface RetrofitInterface {
         @Part defaultImg: MultipartBody.Part
     ): Observable<SimpleResponse>
 
-    @POST("/complete")
-    fun postCompleteBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: BucketRequest
-    ): Observable<SimpleResponse>
-
     @POST("/redo")
     suspend fun postRedoBucket(
         @Header("X-Auth-Token") token: String,

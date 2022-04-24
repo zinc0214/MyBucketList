@@ -27,6 +27,7 @@ class BucketListByCategoryFragment : BaseFragment() {
 
     private lateinit var selectCategory: CategoryInfo
     private lateinit var binding: FragmentBucketListByCategoryBinding
+    private var mainBucketListAdapter: MainBucketListAdapter? = null
 
     private val bucketInfoViewModel by viewModels<BucketListViewModel>()
 
@@ -135,17 +136,21 @@ class BucketListByCategoryFragment : BaseFragment() {
     }
 
     private fun setBucketListAdapter(bucketList: List<BucketItem>) {
-        binding.bucketList.adapter = MainBucketListAdapter(bucketList, object : BucketItemHandler {
-            override fun bucketSelect(itemInfo: BucketItem) {
-                val directions =
-                    BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
-                directions.bucketId = itemInfo.id
-                this@BucketListByCategoryFragment.findNavController().navigate(directions)
-            }
+        if (mainBucketListAdapter == null) {
+            mainBucketListAdapter = MainBucketListAdapter(object : BucketItemHandler {
+                override fun bucketSelect(itemInfo: BucketItem) {
+                    val directions =
+                        BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
+                    directions.bucketId = itemInfo.id
+                    this@BucketListByCategoryFragment.findNavController().navigate(directions)
+                }
 
-            override fun bucketComplete(itemInfo: BucketItem) {
-                bucketInfoViewModel.setBucketComplete(itemInfo)
-            }
-        })
+                override fun bucketComplete(itemInfo: BucketItem) {
+                    bucketInfoViewModel.setBucketComplete(itemInfo)
+                }
+            })
+            binding.bucketList.adapter = mainBucketListAdapter
+        }
+        mainBucketListAdapter?.replaceItems(bucketList)
     }
 }

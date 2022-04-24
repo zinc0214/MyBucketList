@@ -148,7 +148,7 @@ open class BaseBucketItemViewHolder(
         binding.bucketClickListener = View.OnClickListener {
             bucketItemHandler.bucketSelect(bucketItemInfo)
         }
-        binding.completeCircleView.setBucketSuccessListener {
+        binding.completeCircleView.bucketSuccessListener = View.OnClickListener {
             setOnClickBucketCompleteLayoutListener(bucketItemInfo, bucketItemHandler)
         }
         if (Preference.getShowDdayFilter(binding.root.context) || isShowDday) {
