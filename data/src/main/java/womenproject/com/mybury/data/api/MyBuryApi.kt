@@ -1,5 +1,6 @@
 package womenproject.com.mybury.data.api
 
+import okhttp3.MultipartBody
 import retrofit2.http.*
 import womenproject.com.mybury.data.model.*
 
@@ -19,7 +20,7 @@ interface MyBuryApi {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/signin")
-    suspend fun getLoginToken(@Body email: DomainUseUserIdRequest): DomainTokenResponse
+    suspend fun getLoginToken(@Body email: UseUserIdRequest): GetTokenResponse
 
     @GET("/home")
     suspend fun loadHomeBucketList(
@@ -65,5 +66,15 @@ interface MyBuryApi {
     suspend fun completeBucket(
         @Header("X-Auth-Token") token: String,
         @Body bucketRequest: BucketRequest
+    ): SimpleResponse
+
+    @POST("/profile")
+    @Multipart
+    suspend fun updateProfile(
+        @Header("X-Auth-Token") token: String,
+        @Part userId: MultipartBody.Part,
+        @Part name: MultipartBody.Part,
+        @Part file: MultipartBody.Part? = null,
+        @Part defaultImg: MultipartBody.Part
     ): SimpleResponse
 }

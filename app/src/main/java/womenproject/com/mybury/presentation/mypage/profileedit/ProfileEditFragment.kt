@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat.getColor
 import androidx.databinding.DataBindingUtil
@@ -22,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
 import womenproject.com.mybury.data.MyPageInfo
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentProfileEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
@@ -29,13 +29,15 @@ import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
+import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 import java.io.File
 import kotlin.random.Random
 
 @AndroidEntryPoint
 class ProfileEditFragment : BaseFragment() {
 
-    private lateinit var binding :FragmentProfileEditBinding
+    private lateinit var binding: FragmentProfileEditBinding
     private val viewModel by viewModels<MyPageViewModel>()
 
     private lateinit var imm: InputMethodManager
@@ -54,13 +56,18 @@ class ProfileEditFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DataBindingUtil.inflate(inflater,  R.layout.fragment_profile_edit, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_profile_edit, container, false)
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initDataBinding()
     }
 
@@ -75,7 +82,7 @@ class ProfileEditFragment : BaseFragment() {
 
         val goToActionCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(isCancelConfirm) {
+                if (isCancelConfirm) {
                     isEnabled = false
                     requireActivity().onBackPressed()
                 } else {
@@ -93,7 +100,31 @@ class ProfileEditFragment : BaseFragment() {
         binding.saveBtnOnClickListener = saveBtnOnClickListener
         binding.nicknameEditText.addTextChangedListener(addTextChangedListener())
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
+    }
 
+    private fun setUpObservers() {
+        viewModel.updateProfileEvent.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                    startLoading()
+                }
+                LoadState.RESTART -> {
+                    setMyProfileInfo()
+                }
+                LoadState.SUCCESS -> {
+                    requireContext().showToast("프로필이 수정되었습니다.")
+                    lastNickname = binding.nicknameEditText.text.toString()
+                    defaultImg = lastImg
+                    setSaveBtnEnabled()
+                    cancelClickAction()
+                    stopLoading()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                }
+            }
+        }
     }
 
     private fun addTextChangedListener(): TextWatcher {
@@ -122,8 +153,8 @@ class ProfileEditFragment : BaseFragment() {
             setDefaultImg()
         } else {
             Glide.with(this).load(imgUrl)
-                    .override(100, 100)
-                    .into(binding.profileImg)
+                .override(100, 100)
+                .into(binding.profileImg)
         }
 
 
@@ -150,6 +181,7 @@ class ProfileEditFragment : BaseFragment() {
                 lastImg = info.imageUrl.toString()
                 defaultImg = info.imageUrl.toString()
                 setUpView()
+                setUpObservers()
                 seyMyProfileImg(info.imageUrl)
 
             }
@@ -163,33 +195,7 @@ class ProfileEditFragment : BaseFragment() {
     }
 
     private fun setMyProfileInfo() {
-
-        viewModel.setProfileData(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                setMyProfileInfo()
-            }
-
-            override fun start() {
-                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-                startLoading()
-            }
-
-            override fun success() {
-                Toast.makeText(requireContext(), "프로필이 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                stopLoading()
-
-                lastNickname = binding.nicknameEditText.text.toString()
-                defaultImg = lastImg
-
-                setSaveBtnEnabled()
-                cancelClickAction()
-            }
-
-            override fun fail() {
-                stopLoading()
-            }
-
-        }, binding.nicknameEditText.text.toString(), imgUrl, useDetailImg)
+        viewModel.updateProfileData(binding.nicknameEditText.text.toString(), useDetailImg, imgUrl)
     }
 
     private fun setSaveBtnEnabled() {
@@ -240,8 +246,10 @@ class ProfileEditFragment : BaseFragment() {
     }
 
     private val profileImageEditClickLister = View.OnClickListener {
-        WriteMemoImgAddDialogFragment(AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
-                checkAddImgAbleListener, imgAddListener).show(requireActivity().supportFragmentManager, "tag")
+        WriteMemoImgAddDialogFragment(
+            AddContentType.PROFILE, checkBaseProfileImgUsable, baseProfileUseListener,
+            checkAddImgAbleListener, imgAddListener
+        ).show(requireActivity().supportFragmentManager, "tag")
     }
 
     private fun cancelClickListener() = View.OnClickListener {
@@ -272,7 +280,12 @@ class ProfileEditFragment : BaseFragment() {
             try {
                 if (heightDiff < 500) {
                     binding.nicknameEditText.clearFocus()
-                    binding.nicknameEditText.setTextColor(getColor(requireContext(), R.color._888888))
+                    binding.nicknameEditText.setTextColor(
+                        getColor(
+                            requireContext(),
+                            R.color._888888
+                        )
+                    )
                     binding.badgeLayout.visibility = View.VISIBLE
                     isKeyboardUp = false
                 } else {
@@ -312,6 +325,6 @@ class ProfileEditFragment : BaseFragment() {
     }
 
     private fun <T> LiveData<T>.observe(block: (T) -> Unit) =
-            observe(this@ProfileEditFragment, { block(it) })
+        observe(this@ProfileEditFragment, { block(it) })
 
 }

@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import womanproject.com.mybury.domain.usecase.login.LoadLoginTokenUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpCheckUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpUseCase
-import womenproject.com.mybury.data.model.DomainUseUserIdRequest
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.model.SignUpCheckRequest
+import womenproject.com.mybury.data.model.UseUserIdRequest
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -65,7 +65,8 @@ class LoginViewModel @Inject constructor(
                     val response = this
                     when (response.retcode) {
                         "200" -> {
-                            _signUpResult.value = SignUpResult.Success(response.userId)
+                            setUserId(response.userId)
+                            _signUpResult.value = SignUpResult.Success
                         }
                         "401" -> {
                             _signUpResult.value = SignUpResult.EmailExisted
@@ -83,14 +84,14 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getLoginToken() {
-        if(userId == null) {
+        if (userId == null) {
             _loadLoginTokenResult.value = LoadState.FAIL
             return
         }
 
         viewModelScope.launch {
             runCatching {
-                val getTokenRequest = DomainUseUserIdRequest(userId)
+                val getTokenRequest = UseUserIdRequest(userId)
                 loadLoginTokenUseCase.invoke(getTokenRequest).apply {
                     if (this.retcode == "200") {
                         _loadLoginTokenResult.value = LoadState.SUCCESS
@@ -118,10 +119,7 @@ sealed class CheckForLoginResult {
 }
 
 sealed class SignUpResult {
-    data class Success(
-        val userId: String
-    ) : SignUpResult()
-
+    object Success : SignUpResult()
     object EmailExisted : SignUpResult()
     object Fail : SignUpResult()
 }

@@ -1,16 +1,18 @@
 package womenproject.com.mybury.presentation.viewmodels
 
 import android.annotation.SuppressLint
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
+import womanproject.com.mybury.domain.usecase.my.UpdateProfileUseCase
 import womenproject.com.mybury.data.MyPageInfo
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.util.fileToMultipartFile
-import womenproject.com.mybury.util.stringToMultipartFile
 import java.io.File
 import javax.inject.Inject
 
@@ -19,110 +21,87 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(): BaseViewModel() {
+class MyPageViewModel @Inject constructor(
+    private val updateProfileUseCase: UpdateProfileUseCase
+) : BaseViewModel() {
 
     private val _myPageInfo = MutableLiveData<MyPageInfo>()
+    private val _updateProfileEvent = MutableLiveData<LoadState>()
+    val updateProfileEvent: LiveData<LoadState> get() = _updateProfileEvent
 
     @SuppressLint("CheckResult")
     fun getMyPageData(callback: MoreCallBackAny) {
 
-        if(accessToken==null || userId==null) {
+        if (accessToken == null || userId == null) {
             callback.fail()
             return
         }
         callback.start()
 
         apiInterface.loadMyPageData(accessToken, userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    callback.fail()
-                }
-                .subscribe({ response ->
-                    when (response.retcode) {
-                        "200" -> {
-                            _myPageInfo.value = response
-                            callback.success(response)
-                        }
-                        "301" -> getRefreshToken(object : SimpleCallBack {
-                            override fun success() {
-                                callback.restart()
-                            }
-
-                            override fun fail() {
-                                callback.fail()
-                            }
-                        })
-                        else -> callback.fail()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                callback.fail()
+            }
+            .subscribe({ response ->
+                when (response.retcode) {
+                    "200" -> {
+                        _myPageInfo.value = response
+                        callback.success(response)
                     }
-                }) {
-                    callback.fail()
+                    "301" -> getRefreshToken(object : SimpleCallBack {
+                        override fun success() {
+                            callback.restart()
+                        }
+
+                        override fun fail() {
+                            callback.fail()
+                        }
+                    })
+                    else -> callback.fail()
                 }
+            }) {
+                callback.fail()
+            }
     }
 
+    fun updateProfileData(
+        _nickName: String,
+        _useDefaultImg: Boolean,
+        _profileImg: File?,
+    ) {
 
-    @SuppressLint("CheckResult")
-    fun setProfileData(callback: Simple3CallBack, _nickName: String, _profileImg: File?, _useDefaultImg: Boolean) {
-
-        if(accessToken==null || userId==null) {
-            callback.fail()
+        if (accessToken == null || userId == null) {
+            _updateProfileEvent.value = LoadState.FAIL
             return
         }
 
-        callback.start()
-        val p_userId = userId.stringToMultipartFile("userId")
-        val nickName = _nickName.stringToMultipartFile("name")
-        val defaultImg = _useDefaultImg.stringToMultipartFile("defaultImg")
-        val profileImg = _profileImg?.fileToMultipartFile("multipartFile")
+        _updateProfileEvent.value = LoadState.START
 
-        if (_profileImg == null) {
-            apiInterface.postCreateProfile(accessToken, p_userId, nickName, defaultImg)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when (response.retcode) {
-                            "200" -> callback.success()
-                            "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    callback.restart()
-                                }
+        viewModelScope.launch {
+            runCatching {
+                updateProfileUseCase.invoke(
+                    accessToken, userId, _nickName, _useDefaultImg, _profileImg
+                ).apply {
+                    when (this.retcode) {
+                        "200" -> _updateProfileEvent.value = LoadState.SUCCESS
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                _updateProfileEvent.value = LoadState.RESTART
+                            }
 
-                                override fun fail() {
-                                    callback.fail()
-                                }
-
-                            })
-                            else -> callback.fail()
-                        }
-                    }) {
-                        Log.e("myBury", "createAccountFail: $it")
-                        callback.fail()
+                            override fun fail() {
+                                _updateProfileEvent.value = LoadState.FAIL
+                            }
+                        })
+                        else -> _updateProfileEvent.value = LoadState.FAIL
                     }
-        } else {
-            apiInterface.postCreateProfile(accessToken, p_userId, nickName, profileImg!!, defaultImg)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response ->
-                        when (response.retcode) {
-                            "200" -> callback.success()
-                            "301" -> getRefreshToken(object : SimpleCallBack {
-                                override fun success() {
-                                    callback.restart()
-                                }
-
-                                override fun fail() {
-                                    callback.fail()
-                                }
-
-                            })
-                            else -> callback.fail()
-                        }
-                    }) {
-                        Log.e("myBury", "createAccountFail: $it")
-                        callback.fail()
-                    }
+                }
+            }.getOrElse {
+                _updateProfileEvent.value = LoadState.FAIL
+            }
         }
-
     }
 
 }

@@ -28,17 +28,7 @@ interface RetrofitInterface {
         @Header("X-Auth-Token") token: String,
         @Part userId: MultipartBody.Part,
         @Part name: MultipartBody.Part,
-        @Part file: MultipartBody.Part,
-        @Part defaultImg: MultipartBody.Part
-    ): Observable<SimpleResponse>
-
-    // 프로필 이미지가 없는 경우
-    @POST("/profile")
-    @Multipart
-    fun postCreateProfile(
-        @Header("X-Auth-Token") token: String,
-        @Part userId: MultipartBody.Part,
-        @Part name: MultipartBody.Part,
+        @Part file: MultipartBody.Part ?= null,
         @Part defaultImg: MultipartBody.Part
     ): Observable<SimpleResponse>
 

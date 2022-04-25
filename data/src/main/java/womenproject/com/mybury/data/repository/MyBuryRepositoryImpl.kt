@@ -1,5 +1,6 @@
 package womenproject.com.mybury.data.repository
 
+import okhttp3.MultipartBody
 import womenproject.com.mybury.data.api.MyBuryApi
 import womenproject.com.mybury.data.model.*
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class MyBuryRepositoryImpl @Inject constructor(
         return myBuryApi.signUp(email)
     }
 
-    override suspend fun getLoginToken(usrdId: DomainUseUserIdRequest): DomainTokenResponse {
+    override suspend fun getLoginToken(usrdId: UseUserIdRequest): GetTokenResponse {
         return myBuryApi.getLoginToken(usrdId)
     }
 
@@ -72,5 +73,15 @@ class MyBuryRepositoryImpl @Inject constructor(
         bucketCompleteRequest: BucketRequest
     ): SimpleResponse {
         return myBuryApi.completeBucket(token, bucketCompleteRequest)
+    }
+
+    override suspend fun updateProfile(
+        token: String,
+        userId: MultipartBody.Part,
+        name: MultipartBody.Part,
+        file: MultipartBody.Part?,
+        defaultImg: MultipartBody.Part
+    ): SimpleResponse {
+        return myBuryApi.updateProfile(token, userId, name, file, defaultImg)
     }
 }

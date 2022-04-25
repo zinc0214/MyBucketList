@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.intro
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
@@ -25,9 +24,7 @@ import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.CanNotGoMainDialog
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
 import womenproject.com.mybury.presentation.dialog.UserAlreadyExist
 import womenproject.com.mybury.presentation.viewmodels.LoginViewModel
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
@@ -44,9 +41,10 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     lateinit var binding: ActivityCreateAccountBinding
     private var file: File? = null
-    private var useDefaulProfileImg = false
+    private var useDefaultProfileImg = false
 
     private val viewModel by viewModels<LoginViewModel>()
+    private val myPageViewModel by viewModels<MyPageViewModel>()
 
     override fun onResume() {
         super.onResume()
@@ -78,15 +76,14 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
             root.viewTreeObserver.addOnGlobalLayoutListener(setOnSoftKeyboardChangedListener())
 
             profileImg.setImageResource(R.drawable.default_profile_my)
-            useDefaulProfileImg = true
+            useDefaultProfileImg = true
         }
     }
 
     private fun setUpObservers() {
         viewModel.signUpResult.observe(this) {
             when (it) {
-                is SignUpResult.Success -> {
-                    Preference.setUserId(this, it.userId)
+                SignUpResult.Success -> {
                     viewModel.getLoginToken()
                 }
                 SignUpResult.EmailExisted -> {
@@ -107,6 +104,16 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
                 }
             }
         }
+        myPageViewModel.updateProfileEvent.observeNonNull(this) {
+            when (it) {
+                LoadState.START -> {
+                    // do nothing
+                }
+                LoadState.RESTART -> signInAccount()
+                LoadState.SUCCESS -> goToNext()
+                LoadState.FAIL -> CreateProfileFail().show(supportFragmentManager)
+            }
+        }
     }
 
     private val checkBaseProfileImgUsable: () -> Boolean = {
@@ -120,7 +127,7 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         } else {
             binding.profileImg.setImageResource(R.drawable.default_profile_my)
         }
-        useDefaulProfileImg = true
+        useDefaultProfileImg = true
         binding.executePendingBindings()
     }
 
@@ -130,7 +137,7 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     private val imgAddListener: (File, Uri) -> Unit = { file: File, uri: Uri ->
         this.file = file
-        useDefaulProfileImg = false
+        useDefaultProfileImg = false
         Glide.with(this).load(uri).centerCrop().into(binding.profileImg)
     }
 
@@ -195,32 +202,13 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         CancelDialog().show(supportFragmentManager, "tag")
     }
 
-
-    @SuppressLint("CheckResult")
     private fun signInAccount() {
-
-        val myPageViewModel = MyPageViewModel()
-
-        myPageViewModel.setProfileData(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                signInAccount()
-            }
-
-            override fun start() {
-
-            }
-
-            override fun success() {
-                goToNext()
-            }
-
-            override fun fail() {
-                NetworkFailDialog().show(supportFragmentManager)
-            }
-
-        }, binding.nicknameEditText.text.toString(), file, useDefaulProfileImg)
+        myPageViewModel.updateProfileData(
+            binding.nicknameEditText.text.toString(),
+            useDefaultProfileImg,
+            file
+        )
     }
-
 
     private fun goToNext() {
         setMyBuryLoginComplete(context, true)
@@ -229,6 +217,25 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         context.startActivity(intent)
         finish()
     }
+
+    inner class CreateProfileFail : BaseNormalDialogFragment() {
+        init {
+            TITLE_MSG = "프로필 생성 실패"
+            CONTENT_MSG = "프로필 생성에 실패했습니다.\n 마이 > 프로필수정에서 다시 시도해주세요."
+            CANCEL_BUTTON_VISIBLE = false
+            GRADIENT_BUTTON_VISIBLE = true
+            CONFIRM_TEXT = "확인"
+            CANCEL_ABLE = false
+        }
+
+        override fun createOnClickConfirmListener(): View.OnClickListener {
+            return View.OnClickListener {
+                dismiss()
+                goToNext()
+            }
+        }
+    }
+
 }
 
 class CancelDialog : BaseNormalDialogFragment() {
@@ -255,7 +262,6 @@ class CancelDialog : BaseNormalDialogFragment() {
             requireActivity().finish()
         }
     }
-
 }
 
 

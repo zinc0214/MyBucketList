@@ -1,5 +1,6 @@
 package womenproject.com.mybury.data.repository
 
+import okhttp3.MultipartBody
 import womenproject.com.mybury.data.model.*
 
 interface MyBuryRepository {
@@ -9,7 +10,7 @@ interface MyBuryRepository {
 
     suspend fun signUp(email: SignUpCheckRequest): SignUpResponse
 
-    suspend fun getLoginToken(email: DomainUseUserIdRequest): DomainTokenResponse
+    suspend fun getLoginToken(email: UseUserIdRequest): GetTokenResponse
 
     suspend fun loadHomeBucketList(
         token: String,
@@ -48,5 +49,13 @@ interface MyBuryRepository {
     suspend fun completeBucket(
         token: String,
         bucketCompleteRequest: BucketRequest
+    ): SimpleResponse
+
+    suspend fun updateProfile(
+        token: String,
+        userId: MultipartBody.Part,
+        name: MultipartBody.Part,
+        file: MultipartBody.Part? = null,
+        defaultImg: MultipartBody.Part
     ): SimpleResponse
 }
