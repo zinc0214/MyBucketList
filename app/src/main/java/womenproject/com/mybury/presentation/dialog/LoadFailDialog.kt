@@ -16,9 +16,7 @@ class LoadFailDialog(private val onConfirmClicked: (() -> Unit)? = null) : BaseN
 
     override fun createOnClickConfirmListener(): View.OnClickListener {
         return View.OnClickListener {
-            onConfirmClicked?.let {
-                it.invoke()
-            }
+            onConfirmClicked?.invoke()
             dismiss()
         }
     }

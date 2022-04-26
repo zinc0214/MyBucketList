@@ -21,13 +21,6 @@ interface RetrofitInterface {
     @POST("/refresh_token")
     fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
-    @GET("/dDay")
-    fun requestDdayBucketListResult(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String,
-        @Query("filter") filter: String
-    ): Observable<DdayBucketListRespone>
-
     @POST("/write")
     @Multipart
     fun postAddBucketList(

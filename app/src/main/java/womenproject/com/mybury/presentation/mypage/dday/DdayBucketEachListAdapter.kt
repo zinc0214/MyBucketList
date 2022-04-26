@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketType
+import womenproject.com.mybury.data.model.BucketType
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.databinding.ItemDdayBucketSucceedBinding
 import womenproject.com.mybury.presentation.main.bucketlist.BaseBucketItemViewHolder

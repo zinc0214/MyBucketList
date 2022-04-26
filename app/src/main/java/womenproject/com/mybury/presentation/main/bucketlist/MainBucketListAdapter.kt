@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import womenproject.com.mybury.data.BucketItem
-import womenproject.com.mybury.data.BucketType
+import womenproject.com.mybury.data.model.BucketType
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
 import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
 

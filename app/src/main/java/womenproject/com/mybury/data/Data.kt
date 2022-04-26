@@ -2,6 +2,7 @@ package womenproject.com.mybury.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import womenproject.com.mybury.data.model.BucketType
 import womenproject.com.mybury.data.model.DomainBucketItem
 import womenproject.com.mybury.data.model.DomainCategory
 
@@ -65,18 +66,6 @@ fun List<DomainBucketItem>.toBucketData(): List<BucketItem> {
     }
     return list
 }
-
-data class DdayBucketListRespone(
-    val dDayBucketlists: List<DdayBucketList>,
-    val retcode: String
-)
-
-data class DdayBucketList(
-    val day: Int,
-    val bucketlists: List<BucketItem>,
-    var isLast: Boolean = false
-)
-
 
 @Parcelize
 data class BucketItem(
@@ -281,15 +270,4 @@ enum class SortFilter {
 
 enum class WebViewType {
     eula, privacy, openSource, notice
-}
-
-enum class BucketType {
-    SUCCEED_ITEM, COUNT_ITEM, BASE_ITEM;
-
-    fun int(): Int =
-        when (this) {
-            SUCCEED_ITEM -> 0
-            COUNT_ITEM -> 1
-            BASE_ITEM -> 2
-        }
 }

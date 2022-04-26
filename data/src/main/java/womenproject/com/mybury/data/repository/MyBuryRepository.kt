@@ -63,4 +63,10 @@ interface MyBuryRepository {
         token: String,
         bucketRequest: StatusChangeBucketRequest
     ): SimpleResponse
+
+    suspend fun loadDdayBucketList(
+        token: String,
+        userId: String,
+        filter: String
+    ): DdayBucketListResponse
 }

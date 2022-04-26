@@ -91,4 +91,12 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.redoBucket(token, bucketRequest)
     }
+
+    override suspend fun loadDdayBucketList(
+        token: String,
+        userId: String,
+        filter: String
+    ): DdayBucketListResponse {
+        return myBuryApi.loadDdayBucketList(token, userId, filter)
+    }
 }

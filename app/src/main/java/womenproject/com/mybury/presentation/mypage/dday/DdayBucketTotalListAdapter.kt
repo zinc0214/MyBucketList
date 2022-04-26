@@ -3,7 +3,7 @@ package womenproject.com.mybury.presentation.mypage.dday
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import womenproject.com.mybury.data.DdayBucketList
+import womenproject.com.mybury.data.model.DdayBucketList
 import womenproject.com.mybury.databinding.DdayBucketListBinding
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 

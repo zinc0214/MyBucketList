@@ -84,4 +84,11 @@ interface MyBuryApi {
         @Body bucketRequest: StatusChangeBucketRequest
     ): SimpleResponse
 
+    @GET("/dDay")
+    suspend fun loadDdayBucketList(
+        @Header("X-Auth-Token") token: String,
+        @Query("userId") userId: String,
+        @Query("filter") filter: String
+    ): DdayBucketListResponse
+
 }
