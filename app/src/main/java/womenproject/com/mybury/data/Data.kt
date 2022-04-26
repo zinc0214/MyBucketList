@@ -112,15 +112,6 @@ data class DetailBucketItem(
     val retcode: String
 ) : Parcelable
 
-data class AddBucketItem(
-    var title: String = "Title",
-    val open: Boolean = false,
-    val dDate: String,
-    val goalCount: Int = 0,
-    var memo: String = "",
-    val categoryId: String
-)
-
 @Parcelize
 data class Category(
     val name: String,

@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
@@ -26,18 +25,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.AddBucketItem
 import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.model.AddBucketItemContent
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketWriteBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ShowImgWideFragment
 import womenproject.com.mybury.ui.WriteImgLayout
 import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,11 +45,11 @@ import java.util.*
 open class BucketWriteFragment : BaseFragment() {
 
     var alreadyImgList = mutableMapOf<Int, String?>()
-    var addImgList = mutableMapOf<Int, String?>()
-    var addImgViewList = mutableMapOf<String, View>()
-    var imgList = mutableMapOf<String, Any?>()
+    private var addImgList = mutableMapOf<Int, String?>()
+    private var addImgViewList = mutableMapOf<String, View>()
+    private var imgList = mutableMapOf<String, Any?>()
     var currentCalendarDay: Date? = null
-    var currentCalendarText: String = ""
+    private var currentCalendarText: String = ""
     var selectCategory: Category? = null
     var goalCount = 1
 
@@ -74,8 +73,8 @@ open class BucketWriteFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initDataBinding()
     }
 
@@ -155,6 +154,32 @@ open class BucketWriteFragment : BaseFragment() {
             alreadyAdd()
             setUpView()
             setUpCategory(categoryList)
+        }
+
+        viewModel.addBucketLoadState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
+                    startLoading()
+                }
+                LoadState.RESTART -> {
+                    addBucket()
+                }
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    context?.showToast("버킷리스트를 등록했습니다.")
+                    isCancelConfirm = true
+                    if (isAdsShow || BuildConfig.DEBUG) {
+                        startAdMob()
+                    }
+                    requireActivity().onBackPressed()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                    context?.showToast("버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.")
+                }
+            }
         }
     }
 
@@ -292,35 +317,8 @@ open class BucketWriteFragment : BaseFragment() {
     private fun addBucket() {
         viewModel.uploadBucketList(
             getBucketItemInfo(),
-            getRealSendImgList(),
-            object : BaseViewModel.Simple3CallBack {
-                override fun restart() {
-                    addBucket()
-                }
-
-                override fun start() {
-                    imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
-                    imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
-                    startLoading()
-                }
-
-                override fun success() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷리스트를 등록했습니다.", Toast.LENGTH_SHORT).show()
-                    isCancelConfirm = true
-                    if (isAdsShow || BuildConfig.DEBUG) {
-                        startAdMob()
-                    }
-                    requireActivity().onBackPressed()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                    Toast.makeText(context, "버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-            })
+            getRealSendImgList()
+        )
     }
 
     fun getRealSendImgList(): ArrayList<Any?> {
@@ -611,7 +609,7 @@ open class BucketWriteFragment : BaseFragment() {
     }
 
 
-    fun getBucketItemInfo(): AddBucketItem {
+    fun getBucketItemInfo(): AddBucketItemContent {
         goalCount = if (goal_count_text.text.toString() == "설정") {
             1
         } else {
@@ -623,13 +621,12 @@ open class BucketWriteFragment : BaseFragment() {
             formDate = SimpleDateFormat("yyyy-MM-dd").format(it).toString()
         }
 
-        return AddBucketItem(
+        return AddBucketItemContent(
             binding.titleText.text.toString(), open,
             formDate, goalCount,
             binding.memoText.text.toString(), selectCategory?.id!!
         )
     }
-
 
     protected fun TextView.setEnableTextColor() {
         this.setTextColor(requireContext().resources.getColor(R.color._5a95ff))

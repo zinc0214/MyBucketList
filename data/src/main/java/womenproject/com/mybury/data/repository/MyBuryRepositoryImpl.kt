@@ -99,4 +99,24 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): DdayBucketListResponse {
         return myBuryApi.loadDdayBucketList(token, userId, filter)
     }
+
+    override suspend fun addBucketItem(
+        token: String,
+        title: MultipartBody.Part,
+        open: MultipartBody.Part,
+        dDate: MultipartBody.Part?,
+        goalCount: MultipartBody.Part,
+        memo: MultipartBody.Part,
+        categoryId: MultipartBody.Part,
+        userId: MultipartBody.Part,
+        image1: MultipartBody.Part?,
+        image2: MultipartBody.Part?,
+        image3: MultipartBody.Part?
+    ): SimpleResponse {
+        return myBuryApi.addBucketItem(
+            token, title, open, dDate,
+            goalCount, memo, categoryId, userId,
+            image1, image2, image3
+        )
+    }
 }

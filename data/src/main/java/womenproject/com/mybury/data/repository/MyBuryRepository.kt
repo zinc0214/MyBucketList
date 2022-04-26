@@ -1,6 +1,8 @@
 package womenproject.com.mybury.data.repository
 
 import okhttp3.MultipartBody
+import retrofit2.http.Header
+import retrofit2.http.Part
 import womenproject.com.mybury.data.model.*
 
 interface MyBuryRepository {
@@ -69,4 +71,18 @@ interface MyBuryRepository {
         userId: String,
         filter: String
     ): DdayBucketListResponse
+
+    suspend fun addBucketItem(
+        @Header("X-Auth-Token") token: String,
+        @Part title: MultipartBody.Part,
+        @Part open: MultipartBody.Part,
+        @Part dDate: MultipartBody.Part? = null,
+        @Part goalCount: MultipartBody.Part,
+        @Part memo: MultipartBody.Part,
+        @Part categoryId: MultipartBody.Part,
+        @Part userId: MultipartBody.Part,
+        @Part image1: MultipartBody.Part? = null,
+        @Part image2: MultipartBody.Part? = null,
+        @Part image3: MultipartBody.Part? = null
+    ): SimpleResponse
 }

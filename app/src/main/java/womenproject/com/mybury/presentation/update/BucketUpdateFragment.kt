@@ -20,7 +20,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
 
         loadArgument()
 
-        viewModel.bucketItem = bucketItem
         if(alreadyImgList.isEmpty()) {
             alreadyImgList = setImgList(bucketItem)
         }
