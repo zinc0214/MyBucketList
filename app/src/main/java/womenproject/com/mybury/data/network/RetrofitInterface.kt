@@ -19,25 +19,7 @@ interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/refresh_token")
-    fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
-
-    // 프로필 이미지가 있는 경우
-    @POST("/profile")
-    @Multipart
-    fun postCreateProfile(
-        @Header("X-Auth-Token") token: String,
-        @Part userId: MultipartBody.Part,
-        @Part name: MultipartBody.Part,
-        @Part file: MultipartBody.Part ?= null,
-        @Part defaultImg: MultipartBody.Part
-    ): Observable<SimpleResponse>
-
-    @POST("/redo")
-    suspend fun postRedoBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: StatusChangeBucketRequest
-    ): SimpleResponse
-
+    fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
     @GET("/dDay")
     fun requestDdayBucketListResult(

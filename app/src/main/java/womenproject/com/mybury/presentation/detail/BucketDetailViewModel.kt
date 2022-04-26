@@ -11,12 +11,8 @@ import kotlinx.coroutines.withContext
 import womanproject.com.mybury.domain.usecase.detail.CompleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.detail.DeleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.detail.LoadBucketDetailItemUseCase
-import womenproject.com.mybury.data.StatusChangeBucketRequest
-import womenproject.com.mybury.data.model.BucketDetailItem
-import womenproject.com.mybury.data.model.BucketRequest
-import womenproject.com.mybury.data.model.LoadState
-import womenproject.com.mybury.data.model.UserIdRequest
-import womenproject.com.mybury.data.network.apiInterface
+import womanproject.com.mybury.domain.usecase.detail.RedoBucketUseCase
+import womenproject.com.mybury.data.model.*
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -28,7 +24,8 @@ import javax.inject.Inject
 class BucketDetailViewModel @Inject constructor(
     private val loadBucketDetailItemUseCase: LoadBucketDetailItemUseCase,
     private val deleteBucketUseCase: DeleteBucketUseCase,
-    private val completeBucketUseCase: CompleteBucketUseCase
+    private val completeBucketUseCase: CompleteBucketUseCase,
+    private val redoBucketUseCase: RedoBucketUseCase
 ) : BaseViewModel() {
 
     private val _loadBucketDetail = MutableLiveData<BucketDetailItem>()
@@ -157,15 +154,16 @@ class BucketDetailViewModel @Inject constructor(
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                apiInterface.postRedoBucket(accessToken, bucketRequest).apply {
+            runCatching {
+                redoBucketUseCase(accessToken, bucketRequest).apply {
                     withContext(Dispatchers.Main) {
                         _isReDoSuccess.value = this@apply.retcode == "200"
                         _showLoading.value = false
                     }
                 }
-            } catch (e: Throwable) {
-                e.printStackTrace()
+            }.getOrElse {
+                _showLoading.value = false
+                _isReDoSuccess.value = false
             }
         }
     }

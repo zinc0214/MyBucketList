@@ -84,4 +84,11 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.updateProfile(token, userId, name, file, defaultImg)
     }
+
+    override suspend fun redoBucket(
+        token: String,
+        bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse {
+        return myBuryApi.redoBucket(token, bucketRequest)
+    }
 }

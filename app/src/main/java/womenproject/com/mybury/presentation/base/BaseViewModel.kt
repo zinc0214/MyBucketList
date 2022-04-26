@@ -86,7 +86,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken(a2CallBack: SimpleCallBack) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -102,7 +102,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken(result: (LoadState) -> Unit) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -119,7 +119,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken() {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->

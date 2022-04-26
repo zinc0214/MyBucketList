@@ -58,4 +58,9 @@ interface MyBuryRepository {
         file: MultipartBody.Part? = null,
         defaultImg: MultipartBody.Part
     ): SimpleResponse
+
+    suspend fun redoBucket(
+        token: String,
+        bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse
 }

@@ -77,4 +77,11 @@ interface MyBuryApi {
         @Part file: MultipartBody.Part? = null,
         @Part defaultImg: MultipartBody.Part
     ): SimpleResponse
+
+    @POST("/redo")
+    suspend fun redoBucket(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse
+
 }
