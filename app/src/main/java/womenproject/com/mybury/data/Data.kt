@@ -30,15 +30,6 @@ data class NewTokenRequest(
     val refreshToken: String?
 )
 
-data class BucketRequest(
-    var bucketlistId: String
-)
-
-data class StatusChangeBucketRequest(
-    val userId: String?,
-    var bucketlistId: String
-)
-
 data class SimpleResponse(
     val retcode: String
 )
@@ -134,11 +125,6 @@ fun List<DomainCategory>.toCategoryData(): List<Category> {
     }
     return list
 }
-
-data class AddCategoryRequest(
-    val userId: String,
-    val name: String
-)
 
 data class EditCategoryNameRequest(
     val userId: String,

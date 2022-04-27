@@ -101,4 +101,9 @@ interface MyBuryRepository {
         image3: MultipartBody.Part? = null,
         noImg3: MultipartBody.Part
     ): SimpleResponse
+
+    suspend fun addNewCategoryItem(
+        token: String,
+        categoryId: AddCategoryRequest
+    ): SimpleResponse
 }

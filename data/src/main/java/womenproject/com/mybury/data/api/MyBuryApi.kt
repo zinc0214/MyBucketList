@@ -126,4 +126,10 @@ interface MyBuryApi {
         @Part image3: MultipartBody.Part? = null,
         @Part noImg3: MultipartBody.Part
     ): SimpleResponse
+
+    @POST("/category")
+    suspend fun addNewCategoryItem(
+        @Header("X-Auth-Token") token: String,
+        @Body categoryId: AddCategoryRequest
+    ): SimpleResponse
 }

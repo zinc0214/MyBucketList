@@ -15,3 +15,9 @@ data class DomainCategory(
     val priority: Int = 0,
     val isDefault: String? = "N"
 )
+
+@Serializable
+data class AddCategoryRequest(
+    val userId: String,
+    val name: String
+)

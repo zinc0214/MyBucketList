@@ -143,4 +143,11 @@ class MyBuryRepositoryImpl @Inject constructor(
             image1, noImg1, image2, noImg2, image3, noImg3
         )
     }
+
+    override suspend fun addNewCategoryItem(
+        token: String,
+        categoryId: AddCategoryRequest
+    ): SimpleResponse {
+        return myBuryApi.addNewCategoryItem(token, categoryId)
+    }
 }
