@@ -55,7 +55,7 @@ open class BucketWriteFragment : BaseFragment() {
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
-    var isAdsShow = false
+    private var isAdsShow = false
 
     lateinit var binding: FragmentBucketWriteBinding
     val viewModel by viewModels<BucketWriteViewModel>()
@@ -629,11 +629,11 @@ open class BucketWriteFragment : BaseFragment() {
     }
 
     protected fun TextView.setEnableTextColor() {
-        this.setTextColor(requireContext().resources.getColor(R.color._5a95ff))
+        this.setTextColor(requireContext().resources.getColor(R.color._5a95ff, null))
     }
 
     private fun TextView.setDisableTextColor() {
-        this.setTextColor(requireContext().resources.getColor(R.color._888888))
+        this.setTextColor(requireContext().resources.getColor(R.color._888888, null))
     }
 
     protected fun ImageView.setImage(resource: Int) {
