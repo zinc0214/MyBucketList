@@ -1,8 +1,6 @@
 package womenproject.com.mybury.data.repository
 
 import okhttp3.MultipartBody
-import retrofit2.http.Header
-import retrofit2.http.Part
 import womenproject.com.mybury.data.model.*
 
 interface MyBuryRepository {
@@ -73,16 +71,34 @@ interface MyBuryRepository {
     ): DdayBucketListResponse
 
     suspend fun addBucketItem(
-        @Header("X-Auth-Token") token: String,
-        @Part title: MultipartBody.Part,
-        @Part open: MultipartBody.Part,
-        @Part dDate: MultipartBody.Part? = null,
-        @Part goalCount: MultipartBody.Part,
-        @Part memo: MultipartBody.Part,
-        @Part categoryId: MultipartBody.Part,
-        @Part userId: MultipartBody.Part,
-        @Part image1: MultipartBody.Part? = null,
-        @Part image2: MultipartBody.Part? = null,
-        @Part image3: MultipartBody.Part? = null
+        token: String,
+        title: MultipartBody.Part,
+        open: MultipartBody.Part,
+        dDate: MultipartBody.Part? = null,
+        goalCount: MultipartBody.Part,
+        memo: MultipartBody.Part,
+        categoryId: MultipartBody.Part,
+        userId: MultipartBody.Part,
+        image1: MultipartBody.Part? = null,
+        image2: MultipartBody.Part? = null,
+        image3: MultipartBody.Part? = null
+    ): SimpleResponse
+
+    suspend fun updateBucketList(
+        token: String,
+        bucketId: String,
+        title: MultipartBody.Part,
+        open: MultipartBody.Part,
+        dDate: MultipartBody.Part? = null,
+        goalCount: MultipartBody.Part,
+        memo: MultipartBody.Part,
+        categoryId: MultipartBody.Part,
+        userId: MultipartBody.Part,
+        image1: MultipartBody.Part? = null,
+        noImg1: MultipartBody.Part,
+        image2: MultipartBody.Part? = null,
+        noImg2: MultipartBody.Part,
+        image3: MultipartBody.Part? = null,
+        noImg3: MultipartBody.Part
     ): SimpleResponse
 }

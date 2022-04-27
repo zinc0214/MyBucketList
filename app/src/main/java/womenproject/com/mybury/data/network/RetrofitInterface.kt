@@ -1,7 +1,6 @@
 package womenproject.com.mybury.data.network
 
 import io.reactivex.Observable
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,43 +19,6 @@ interface RetrofitInterface {
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/refresh_token")
     fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
-
-    @POST("/write")
-    @Multipart
-    fun postAddBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Part title: MultipartBody.Part,
-        @Part open: MultipartBody.Part,
-        @Part dDate: MultipartBody.Part? = null,
-        @Part goalCount: MultipartBody.Part,
-        @Part memo: MultipartBody.Part,
-        @Part categoryId: MultipartBody.Part,
-        @Part userId: MultipartBody.Part,
-        @Part image1: MultipartBody.Part? = null,
-        @Part image2: MultipartBody.Part? = null,
-        @Part image3: MultipartBody.Part? = null
-    ): Observable<SimpleResponse>
-
-
-    @POST("/bucketlist/{bucketId}")
-    @Multipart
-    fun postUpdateBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Path("bucketId") bucketId: String,
-        @Part title: MultipartBody.Part,
-        @Part open: MultipartBody.Part,
-        @Part dDate: MultipartBody.Part? = null,
-        @Part goalCount: MultipartBody.Part,
-        @Part memo: MultipartBody.Part,
-        @Part categoryId: MultipartBody.Part,
-        @Part userId: MultipartBody.Part,
-        @Part image1: MultipartBody.Part? = null,
-        @Part noImg1: MultipartBody.Part,
-        @Part image2: MultipartBody.Part? = null,
-        @Part noImg2: MultipartBody.Part,
-        @Part image3: MultipartBody.Part? = null,
-        @Part noImg3: MultipartBody.Part
-    ): Observable<SimpleResponse>
 
     @POST("/category")
     fun addNewCategoryItem(

@@ -43,10 +43,19 @@ data class BucketRequest(
 )
 
 data class AddBucketItemInfo(
-    val content : AddBucketItemContent,
+    val content: AddBucketItemContent,
     val imgList: List<Any?>,
-    val userId : String,
-    val token : String
+    val userId: String,
+    val token: String
+)
+
+data class UpdateBucketItemInfo(
+    val bucketId: String,
+    val content: AddBucketItemContent,
+    val imgList: List<Any?>,
+    val alreadyImgList: MutableMap<Int, String?>,
+    val userId: String,
+    val token: String
 )
 
 @Serializable

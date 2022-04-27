@@ -6,9 +6,10 @@ import androidx.navigation.findNavController
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.model.BucketDetailItem
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.write.BucketWriteFragment
+import womenproject.com.mybury.util.observeNonNull
 import java.util.*
 
 class BucketUpdateFragment : BucketWriteFragment() {
@@ -19,8 +20,13 @@ class BucketUpdateFragment : BucketWriteFragment() {
     override fun initForUpdate() {
 
         loadArgument()
+        setUpViews()
+        setUpObservers()
+    }
 
-        if(alreadyImgList.isEmpty()) {
+    private fun setUpViews() {
+
+        if (alreadyImgList.isEmpty()) {
             alreadyImgList = setImgList(bucketItem)
         }
 
@@ -62,9 +68,9 @@ class BucketUpdateFragment : BucketWriteFragment() {
             binding.ddayImg.setImage(R.drawable.calendar_enable)
         }
 
-        if (bucketItem.goalCount != null && bucketItem.goalCount.toString() != "1") {
+        if (bucketItem.goalCount.toString() != "1") {
             binding.goalCountText.text = bucketItem.goalCount.toString()
-            goalCount = bucketItem.goalCount ?: 0
+            goalCount = bucketItem.goalCount
             binding.goalCountText.setEnableTextColor()
             binding.countImg.setImage(R.drawable.target_count_enable)
         }
@@ -82,39 +88,33 @@ class BucketUpdateFragment : BucketWriteFragment() {
         }
     }
 
-    override fun bucketAddOnClickListener(): View.OnClickListener {
-        return View.OnClickListener {
-            addBucket()
+    private fun setUpObservers() {
+        viewModel.updateBucketLoadState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
+                    imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
+                    startLoading()
+                }
+                LoadState.RESTART -> updateBucket()
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
+                    isCancelConfirm = true
+                    requireActivity().onBackPressed()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                    Toast.makeText(context, "버킷이 수정되지 못했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun addBucket() {
+    private fun updateBucket() {
         viewModel.updateBucketList(
-                bucketId, getBucketItemInfo(), alreadyImgList, getRealSendImgList(), object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                addBucket()
-            }
-
-            override fun start() {
-                imm.hideSoftInputFromWindow(binding.titleText.windowToken, 0)
-                imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
-                startLoading()
-
-            }
-
-            override fun success() {
-                stopLoading()
-                Toast.makeText(context, "버킷이 수정되었습니다", Toast.LENGTH_SHORT).show()
-                isCancelConfirm = true
-                requireActivity().onBackPressed()
-            }
-
-            override fun fail() {
-                stopLoading()
-                Toast.makeText(context, "버킷이 수정되지 못했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-        })
-
+            bucketId, getBucketItemInfo(), alreadyImgList, getRealSendImgList()
+        )
     }
 
     private fun setImgList(bucketInfo: BucketDetailItem): MutableMap<Int, String?> {
@@ -123,6 +123,12 @@ class BucketUpdateFragment : BucketWriteFragment() {
         imgList[1] = bucketInfo.imgUrl2
         imgList[2] = bucketInfo.imgUrl3
         return imgList
+    }
+
+    override fun bucketAddOnClickListener(): View.OnClickListener {
+        return View.OnClickListener {
+            updateBucket()
+        }
     }
 
     override fun setUpCategory(categoryList: ArrayList<Category>) {
@@ -148,7 +154,10 @@ class BucketUpdateFragment : BucketWriteFragment() {
         CancelDialog(cancelConfirm).show(requireActivity().supportFragmentManager, "tag")
     }
 
-    class CancelDialog(private val cancelConfirm: (Boolean) -> Unit) : BaseNormalDialogFragment() {
+    class CancelDialog(
+        private
+        val cancelConfirm: (Boolean) -> Unit
+    ) : BaseNormalDialogFragment() {
 
         init {
             TITLE_MSG = "수정을 취소하시겠습니까?"
@@ -166,7 +175,6 @@ class BucketUpdateFragment : BucketWriteFragment() {
             }
         }
 
-
         override fun createOnClickCancelListener(): View.OnClickListener {
             return View.OnClickListener {
                 dismiss()
@@ -174,5 +182,4 @@ class BucketUpdateFragment : BucketWriteFragment() {
             }
         }
     }
-
 }

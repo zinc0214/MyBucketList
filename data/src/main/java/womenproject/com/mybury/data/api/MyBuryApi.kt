@@ -106,4 +106,24 @@ interface MyBuryApi {
         @Part image2: MultipartBody.Part? = null,
         @Part image3: MultipartBody.Part? = null
     ): SimpleResponse
+
+    @POST("/bucketlist/{bucketId}")
+    @Multipart
+    suspend fun updateBucketList(
+        @Header("X-Auth-Token") token: String,
+        @Path("bucketId") bucketId: String,
+        @Part title: MultipartBody.Part,
+        @Part open: MultipartBody.Part,
+        @Part dDate: MultipartBody.Part? = null,
+        @Part goalCount: MultipartBody.Part,
+        @Part memo: MultipartBody.Part,
+        @Part categoryId: MultipartBody.Part,
+        @Part userId: MultipartBody.Part,
+        @Part image1: MultipartBody.Part? = null,
+        @Part noImg1: MultipartBody.Part,
+        @Part image2: MultipartBody.Part? = null,
+        @Part noImg2: MultipartBody.Part,
+        @Part image3: MultipartBody.Part? = null,
+        @Part noImg3: MultipartBody.Part
+    ): SimpleResponse
 }

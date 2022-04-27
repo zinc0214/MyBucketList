@@ -119,4 +119,28 @@ class MyBuryRepositoryImpl @Inject constructor(
             image1, image2, image3
         )
     }
+
+    override suspend fun updateBucketList(
+        token: String,
+        bucketId: String,
+        title: MultipartBody.Part,
+        open: MultipartBody.Part,
+        dDate: MultipartBody.Part?,
+        goalCount: MultipartBody.Part,
+        memo: MultipartBody.Part,
+        categoryId: MultipartBody.Part,
+        userId: MultipartBody.Part,
+        image1: MultipartBody.Part?,
+        noImg1: MultipartBody.Part,
+        image2: MultipartBody.Part?,
+        noImg2: MultipartBody.Part,
+        image3: MultipartBody.Part?,
+        noImg3: MultipartBody.Part
+    ): SimpleResponse {
+        return myBuryApi.updateBucketList(
+            token, bucketId,
+            title, open, dDate, goalCount, memo, categoryId, userId,
+            image1, noImg1, image2, noImg2, image3, noImg3
+        )
+    }
 }
