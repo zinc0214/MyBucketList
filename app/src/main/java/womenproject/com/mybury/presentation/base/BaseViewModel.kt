@@ -49,8 +49,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setAccessToken(accessToken: String, refreshToken: String) {
-        setAccessToken(getAppContext(), accessToken)
-        setRefreshToken(getAppContext(), refreshToken)
+
     }
 
     fun setUserId(userId: String) {

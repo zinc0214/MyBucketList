@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import womanproject.com.mybury.domain.usecase.login.LoadLoginTokenUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpCheckUseCase
 import womanproject.com.mybury.domain.usecase.login.SignUpUseCase
+import womenproject.com.mybury.data.model.GetTokenResponse
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.model.SignUpCheckRequest
 import womenproject.com.mybury.data.model.UseUserIdRequest
@@ -26,11 +27,11 @@ class LoginViewModel @Inject constructor(
     private val _checkForLoginResult = MutableLiveData<CheckForLoginResult>()
     val checkForLoginResult: LiveData<CheckForLoginResult> get() = _checkForLoginResult
 
-    private val _signUpResult = MutableLiveData<SignUpResult>()
-    val signUpResult: LiveData<SignUpResult> get() = _signUpResult
+    private val _signUpResult = MutableLiveData<Pair<SignUpResult, String>>()
+    val signUpResult: LiveData<Pair<SignUpResult, String>> get() = _signUpResult
 
-    private val _loadLoginTokenResult = MutableLiveData<LoadState>()
-    val loadLoginTokenResult: LiveData<LoadState> get() = _loadLoginTokenResult
+    private val _loadLoginTokenResult = MutableLiveData<Pair<LoadState, GetTokenResponse?>>()
+    val loadLoginTokenResult: LiveData<Pair<LoadState, GetTokenResponse?>> get() = _loadLoginTokenResult
 
     fun checkForIsFirstLogin(account: GoogleSignInAccount) {
         viewModelScope.launch {
@@ -65,44 +66,38 @@ class LoginViewModel @Inject constructor(
                     val response = this
                     when (response.retcode) {
                         "200" -> {
-                            setUserId(response.userId)
-                            _signUpResult.value = SignUpResult.Success
+                            _signUpResult.value = SignUpResult.Success to response.userId
                         }
                         "401" -> {
-                            _signUpResult.value = SignUpResult.EmailExisted
+                            _signUpResult.value = SignUpResult.EmailExisted to ""
                         }
                         else -> {
-                            _signUpResult.value = SignUpResult.Fail
+                            _signUpResult.value = SignUpResult.Fail to ""
                         }
                     }
                 }
             }.getOrElse {
                 Log.e("myBury", "PostSignUpResponse Fail: ${it.message}")
-                _signUpResult.value = SignUpResult.Fail
+                _signUpResult.value = SignUpResult.Fail to ""
             }
         }
     }
 
-    fun getLoginToken() {
-        if (userId == null) {
-            _loadLoginTokenResult.value = LoadState.FAIL
-            return
-        }
-
+    fun getLoginToken(userId : String) {
+        _loadLoginTokenResult.value = LoadState.START to null
         viewModelScope.launch {
             runCatching {
                 val getTokenRequest = UseUserIdRequest(userId)
                 loadLoginTokenUseCase.invoke(getTokenRequest).apply {
                     if (this.retcode == "200") {
-                        _loadLoginTokenResult.value = LoadState.SUCCESS
-                        setAccessToken(this.accessToken, this.refreshToken)
+                        _loadLoginTokenResult.value = LoadState.SUCCESS to this
 
                     } else {
-                        _loadLoginTokenResult.value = LoadState.RESTART
+                        _loadLoginTokenResult.value = LoadState.RESTART to null
                     }
                 }
             }.getOrElse {
-                _loadLoginTokenResult.value = LoadState.FAIL
+                _loadLoginTokenResult.value = LoadState.FAIL to null
             }
         }
     }

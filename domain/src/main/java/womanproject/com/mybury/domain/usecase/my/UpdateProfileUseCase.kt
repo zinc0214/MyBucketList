@@ -22,6 +22,6 @@ class UpdateProfileUseCase @Inject constructor(
         val defaultImg = _defaultImg.stringToMultipartFile("defaultImg")
         val profileImg = _file?.fileToMultipartFile("multipartFile")
 
-        return myBuryRepository.updateProfile(token, userId, nickName, profileImg, defaultImg)
+        return myBuryRepository.updateProfile(token, userId, nickName, defaultImg, profileImg)
     }
 }

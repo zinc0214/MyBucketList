@@ -67,12 +67,17 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun updateProfileData(
+        _token: String = "",
+        _userId : String = "",
         _nickName: String,
         _useDefaultImg: Boolean,
         _profileImg: File?,
     ) {
 
-        if (accessToken == null || userId == null) {
+        val useableToken = if (_token.isNotBlank() && _token.isNotEmpty()) _token else accessToken
+        val useableUserid = if(_userId.isNotBlank() && _userId.isNotEmpty()) _userId else userId
+
+        if (useableToken.isNullOrBlank() || useableUserid.isNullOrBlank()) {
             _updateProfileEvent.value = LoadState.FAIL
             return
         }
@@ -82,7 +87,7 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 updateProfileUseCase.invoke(
-                    accessToken, userId, _nickName, _useDefaultImg, _profileImg
+                    useableToken, useableUserid, _nickName, _useDefaultImg, _profileImg
                 ).apply {
                     when (this.retcode) {
                         "200" -> _updateProfileEvent.value = LoadState.SUCCESS

@@ -79,10 +79,10 @@ class MyBuryRepositoryImpl @Inject constructor(
         token: String,
         userId: MultipartBody.Part,
         name: MultipartBody.Part,
-        file: MultipartBody.Part?,
-        defaultImg: MultipartBody.Part
+        defaultImg: MultipartBody.Part,
+        multipartFile: MultipartBody.Part?
     ): SimpleResponse {
-        return myBuryApi.updateProfile(token, userId, name, file, defaultImg)
+        return myBuryApi.updateProfile(token, userId, name, defaultImg, multipartFile)
     }
 
     override suspend fun redoBucket(

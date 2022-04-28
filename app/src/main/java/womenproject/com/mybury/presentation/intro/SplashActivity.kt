@@ -6,6 +6,7 @@ import android.os.Handler
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
@@ -51,8 +52,18 @@ class SplashActivity : AppCompatActivity() {
 
     private fun setUpObservers() {
         viewModel.loadLoginTokenResult.observeNonNull(this) {
-            when (it) {
+            when (it.first) {
                 LoadState.SUCCESS -> {
+                    it.second?.let { token ->
+                        Preference.setAccessToken(
+                            MyBuryApplication.getAppContext(),
+                            token.accessToken
+                        )
+                        Preference.setRefreshToken(
+                            MyBuryApplication.getAppContext(),
+                            token.refreshToken
+                        )
+                    }
                     goToNext()
                 }
                 LoadState.RESTART -> {
@@ -84,7 +95,7 @@ class SplashActivity : AppCompatActivity() {
     private fun initToken() {
         val userId = Preference.getUserId(this)
         userId?.let {
-            viewModel.getLoginToken()
+            viewModel.getLoginToken(it)
         }
     }
 }

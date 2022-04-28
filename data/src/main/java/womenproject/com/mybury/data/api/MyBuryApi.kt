@@ -74,8 +74,8 @@ interface MyBuryApi {
         @Header("X-Auth-Token") token: String,
         @Part userId: MultipartBody.Part,
         @Part name: MultipartBody.Part,
-        @Part file: MultipartBody.Part? = null,
-        @Part defaultImg: MultipartBody.Part
+        @Part defaultImg: MultipartBody.Part,
+        @Part multipartFile: MultipartBody.Part? = null
     ): SimpleResponse
 
     @POST("/redo")

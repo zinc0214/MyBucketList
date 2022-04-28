@@ -9,16 +9,19 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.getMyBuryLoginComplete
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
+import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.ActivityCreateAccountBinding
 import womenproject.com.mybury.presentation.MainActivity
@@ -46,6 +49,9 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
     private val viewModel by viewModels<LoginViewModel>()
     private val myPageViewModel by viewModels<MyPageViewModel>()
 
+    private var userId: String = ""
+    private var token: String = ""
+
     override fun onResume() {
         super.onResume()
 
@@ -67,6 +73,8 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     private fun setUpViews() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
+        val animation = AnimationUtils.loadAnimation(this, R.anim.rotate)
+        binding.loadingLayout.loadingImg.animation = animation
         binding.apply {
             topLayout.title = "프로필생성"
             topLayout.setBackBtnOnClickListener { onBackPressed() }
@@ -82,9 +90,11 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
 
     private fun setUpObservers() {
         viewModel.signUpResult.observe(this) {
-            when (it) {
+            when (it.first) {
                 SignUpResult.Success -> {
-                    viewModel.getLoginToken()
+                    userId = it.second
+                    setUserId(context, userId)
+                    viewModel.getLoginToken(userId)
                 }
                 SignUpResult.EmailExisted -> {
                     UserAlreadyExist().show(supportFragmentManager, "tag")
@@ -95,11 +105,31 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
             }
         }
         viewModel.loadLoginTokenResult.observeNonNull(this) {
-            when (it) {
+            when (it.first) {
                 LoadState.SUCCESS -> {
-                    signInAccount()
+                    stopLoading()
+                    it.second?.let { token ->
+                        this.token = token.accessToken
+                        Preference.setAccessToken(
+                            MyBuryApplication.getAppContext(),
+                            token.accessToken
+                        )
+                        Preference.setRefreshToken(
+                            MyBuryApplication.getAppContext(),
+                            token.refreshToken
+                        )
+                        createProfile()
+                    }
                 }
-                else -> {
+                LoadState.START -> {
+                    startLoading()
+                }
+                LoadState.RESTART -> {
+                    stopLoading()
+                    viewModel.getLoginToken(userId)
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
                     CanNotGoMainDialog().show(supportFragmentManager, "tag")
                 }
             }
@@ -107,11 +137,20 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         myPageViewModel.updateProfileEvent.observeNonNull(this) {
             when (it) {
                 LoadState.START -> {
-                    // do nothing
+                    startLoading()
                 }
-                LoadState.RESTART -> signInAccount()
-                LoadState.SUCCESS -> goToNext()
-                LoadState.FAIL -> CreateProfileFail().show(supportFragmentManager)
+                LoadState.RESTART -> {
+                    stopLoading()
+                    createProfile()
+                }
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    goToHome()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                    CreateProfileFail().show(supportFragmentManager)
+                }
             }
         }
     }
@@ -202,15 +241,26 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         CancelDialog().show(supportFragmentManager, "tag")
     }
 
-    private fun signInAccount() {
+    private fun createProfile() {
         myPageViewModel.updateProfileData(
-            binding.nicknameEditText.text.toString(),
-            useDefaultProfileImg,
-            file
+            _token = token,
+            _userId = userId,
+            _nickName = binding.nicknameEditText.text.toString(),
+            _useDefaultImg = useDefaultProfileImg,
+            _profileImg = file
         )
     }
 
-    private fun goToNext() {
+    fun startLoading() {
+        binding.loadingLayout.layout.visibility = View.VISIBLE
+    }
+
+    fun stopLoading() {
+        binding.loadingLayout.layout.visibility = View.GONE
+    }
+
+
+    private fun goToHome() {
         setMyBuryLoginComplete(context, true)
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -221,7 +271,7 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
     inner class CreateProfileFail : BaseNormalDialogFragment() {
         init {
             TITLE_MSG = "프로필 생성 실패"
-            CONTENT_MSG = "프로필 생성에 실패했습니다.\n 마이 > 프로필수정에서 다시 시도해주세요."
+            CONTENT_MSG = "프로필 생성에 실패했습니다.\n 다시 시도해주세요."
             CANCEL_BUTTON_VISIBLE = false
             GRADIENT_BUTTON_VISIBLE = true
             CONFIRM_TEXT = "확인"
@@ -231,7 +281,7 @@ class CreateAccountActivity @Inject constructor() : BaseActiviy() {
         override fun createOnClickConfirmListener(): View.OnClickListener {
             return View.OnClickListener {
                 dismiss()
-                goToNext()
+                Preference.allClear(requireContext())
             }
         }
     }

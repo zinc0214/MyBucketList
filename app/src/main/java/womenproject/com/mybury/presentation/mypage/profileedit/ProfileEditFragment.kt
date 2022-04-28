@@ -195,7 +195,10 @@ class ProfileEditFragment : BaseFragment() {
     }
 
     private fun setMyProfileInfo() {
-        viewModel.updateProfileData(binding.nicknameEditText.text.toString(), useDetailImg, imgUrl)
+        viewModel.updateProfileData(
+            _nickName = binding.nicknameEditText.text.toString(),
+            _profileImg = imgUrl,
+            _useDefaultImg = useDetailImg)
     }
 
     private fun setSaveBtnEnabled() {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,137 +13,147 @@
             layout="@layout/layout_top_back_btn" />
 
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="117dp"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="117dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RelativeLayout
+                    android:id="@+id/profile_img_view_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="36dp"
+                    android:background="@drawable/shape_00ffffff_r26_strk_06_e8e8e8"
+                    android:padding="0.5dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/profile_img_view"
+                        android:layout_width="@dimen/image_width"
+                        android:layout_height="@dimen/image_width"
+                        android:layout_centerHorizontal="true"
+                        android:shadowColor="@color/_ffffff"
+                        app:cardBackgroundColor="@color/_ffffff"
+                        app:cardCornerRadius="26dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/profileImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/default_profile_my" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/profile_edit_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_img_view_layout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/shape_ffffff_r16_strk_06_5a95ff"
+                    android:gravity="center"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="7dp"
+                    android:text="프로필 사진 수정"
+                    android:textColor="@color/_5a95ff"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/nickname_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_edit_btn"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:text="닉네임을 입력해주세요"
+                    android:textColor="@color/_b4b4b4"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/nickname_edit_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="37dp"
+                    android:layout_below="@+id/nickname_text"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/profile_edit_text_background"
+                    android:cursorVisible="false"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:maxLength="15"
+                    android:maxLines="1"
+                    android:textColor="@color/_434343"
+                    android:textColorHint="@color/_b4b4b4"
+                    android:textSize="14sp" />
 
-                    <RelativeLayout
-                        android:id="@+id/profile_img_view_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="36dp"
-                        android:background="@drawable/shape_00ffffff_r26_strk_06_e8e8e8"
-                        android:padding="0.5dp">
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/profile_img_view"
-                            android:layout_width="@dimen/image_width"
-                            android:layout_height="@dimen/image_width"
-                            android:layout_centerHorizontal="true"
-                            android:shadowColor="@color/_ffffff"
-                            app:cardBackgroundColor="@color/_ffffff"
-                            app:cardCornerRadius="26dp"
-                            app:cardElevation="0dp">
+                <RelativeLayout
+                    android:id="@+id/startMyBuryLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/nickname_edit_text"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="30dp">
 
-                            <ImageView
-                                android:id="@+id/profileImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/default_profile_my" />
-
-                        </androidx.cardview.widget.CardView>
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/profile_edit_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/profile_img_view_layout"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:background="@drawable/shape_ffffff_r16_strk_06_5a95ff"
-                        android:gravity="center"
-                        android:paddingStart="20dp"
-                        android:paddingTop="7dp"
-                        android:paddingEnd="20dp"
-                        android:paddingBottom="7dp"
-                        android:text="프로필 사진 수정"
-                        android:textColor="@color/_5a95ff"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/nickname_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/profile_edit_btn"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="25dp"
-                        android:text="닉네임을 입력해주세요"
-                        android:textColor="@color/_b4b4b4"
-                        android:textSize="12sp" />
-
-                    <EditText
-                        android:maxLength="15"
-                        android:id="@+id/nickname_edit_text"
+                    <Button
+                        android:id="@+id/start_mybury_btn"
                         android:layout_width="match_parent"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginEnd="50dp"
-                        android:layout_height="37dp"
-                        android:layout_below="@+id/nickname_text"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/profile_edit_text_background"
-                        android:cursorVisible="false"
-                        android:gravity="center"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textColor="@color/_434343"
-                        android:textColorHint="@color/_b4b4b4"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="66dp"
+                        android:background="@drawable/start_mybury_background"
+                        android:enabled="false"
+                        android:text="마이버리 시작하기"
+                        android:textColor="@color/_ffffff"
                         android:textSize="14sp" />
 
 
-                    <RelativeLayout
-                        android:id="@+id/startMyBuryLayout"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/start_img"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/nickname_edit_text"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginEnd="50dp"
-                        android:layout_marginBottom="30dp">
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bury_profile" />
 
-                        <Button
-                            android:id="@+id/start_mybury_btn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="66dp"
-                            android:background="@drawable/start_mybury_background"
-                            android:enabled="false"
-                            android:text="마이버리 시작하기"
-                            android:textColor="@color/_ffffff"
-                            android:textSize="14sp" />
-
-
-                        <ImageView
-                            android:id="@+id/start_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/bury_profile" />
-
-                        <ImageView
-                            android:id="@+id/comment_img"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="24dp"
-                            android:layout_toEndOf="@+id/start_img"
-                            android:background="@drawable/bury_speech_01" />
-
-                    </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/comment_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_toEndOf="@+id/start_img"
+                        android:background="@drawable/bury_speech_01" />
 
                 </RelativeLayout>
-            </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/widget_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

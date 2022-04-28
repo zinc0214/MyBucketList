@@ -55,8 +55,8 @@ interface MyBuryRepository {
         token: String,
         userId: MultipartBody.Part,
         name: MultipartBody.Part,
-        file: MultipartBody.Part? = null,
-        defaultImg: MultipartBody.Part
+        defaultImg: MultipartBody.Part,
+        multipartFile: MultipartBody.Part? = null,
     ): SimpleResponse
 
     suspend fun redoBucket(
