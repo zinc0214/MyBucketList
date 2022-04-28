@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
+import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.MyBuryApplication.Companion.context
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
@@ -104,13 +105,23 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
                     Preference.setUserId(this, it.userId)
                     Preference.setMyBuryLoginComplete(this, it.isLoginComplete)
                     Preference.setAccountEmail(this, it.userEmail)
-                    initToken()
+                    initToken(it.userId)
                 }
             }
         }
         viewModel.loadLoginTokenResult.observeNonNull(this) {
-            when(it) {
+            when(it.first) {
                 LoadState.SUCCESS -> {
+                    it.second?.let { token ->
+                        Preference.setAccessToken(
+                            MyBuryApplication.getAppContext(),
+                            token.accessToken
+                        )
+                        Preference.setRefreshToken(
+                            MyBuryApplication.getAppContext(),
+                            token.refreshToken
+                        )
+                    }
                     goToMainActivity()// 이미 로그인 된 적이 있다. user_id 를 받아온다
                 }
                 LoadState.RESTART -> {
@@ -147,8 +158,8 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
         finish()
     }
 
-    private fun initToken() {
-        viewModel.getLoginToken()
+    private fun initToken(userId : String) {
+        viewModel.getLoginToken(userId)
     }
 
     private fun signIn() {
@@ -158,7 +169,7 @@ class SplashLoginActivity @Inject constructor(): AppCompatActivity() {
 
     private fun signOut() {
         auth.signOut()
-
+        Preference.allClear(context)
         googleSignInClient.signOut().addOnCompleteListener(this) {
             //로그인 초기화 완료
             signIn()

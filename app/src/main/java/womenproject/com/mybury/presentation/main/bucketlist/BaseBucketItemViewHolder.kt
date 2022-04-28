@@ -10,7 +10,6 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import womenproject.com.mybury.MyBuryApplication.Companion.context
@@ -18,8 +17,6 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.databinding.ItemBucketDoingSimpleBinding
-import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.ui.loadingbutton.animatedDrawables.ProgressType
 import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
 import womenproject.com.mybury.util.Converter.Companion.dpToPx
@@ -29,36 +26,36 @@ import womenproject.com.mybury.util.Converter.Companion.dpToPx
  */
 
 open class BaseBucketItemViewHolder(
-    private val binding: ItemBucketDoingSimpleBinding,
-    private val showSnackBar: ((BucketItem) -> Unit)? = null
+    private val binding: ItemBucketDoingSimpleBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var isForDday = false
-    private lateinit var viewModel : BucketDetailViewModel
 
     fun bind(
         bucketItemInfo: BucketItem,
         isForDday: Boolean = false,
         isShowDday: Boolean = false,
         isLastItem: Boolean = false,
-        viewModel : BucketDetailViewModel,
-        bucketListener: View.OnClickListener
+        bucketItemHandler: BucketItemHandler
     ) {
         this.isForDday = isForDday
 
         if (isForDday) {
             setDdayColor()
         }
-        setUI(bucketItemInfo, bucketListener, isShowDday, isLastItem)
+        setUI(bucketItemInfo, bucketItemHandler, isShowDday, isLastItem)
         binding.executePendingBindings()
-        this.viewModel = viewModel
     }
 
-    private fun onBucketSuccessFinalButtonClickListener(info: BucketItem) {
+    private fun startBucketCompleteAnimation(
+        info: BucketItem,
+        animFinished: () -> Unit
+    ) {
         val animFadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 
+        binding.bucketItemLayout.isEnabled = false
         binding.apply {
-            binding.successCircleView.circularProgressBar.run {
+            binding.completeCircleView.circularProgressBar.run {
                 progressType = ProgressType.INDETERMINATE
                 startAnimation()
                 progressAnimator(this).start()
@@ -66,7 +63,7 @@ open class BaseBucketItemViewHolder(
                     bucketItemLayout.isClickable = false
                     postDelayed({
                         setFinalSuccessUIButton()
-                        addBucketSuccessCount(info)
+                        addBucketCompleteCount(info)
                     }, 500)
                     postDelayed({
                         revertAnimation()
@@ -92,7 +89,8 @@ open class BaseBucketItemViewHolder(
                     }, 1000)
                 }
             }
-            executePendingBindings()
+            binding.bucketItemLayout.isEnabled = true
+            animFinished.invoke()
         }
     }
 
@@ -115,43 +113,43 @@ open class BaseBucketItemViewHolder(
 
     private fun setFinalSuccessUIButton() {
         if (isForDday) {
-            binding.successCircleView.successImg.backgroundTintList =
+            binding.completeCircleView.successImg.backgroundTintList =
                 context.getColorStateList(R.color._ffca5a)
         } else {
-            binding.successCircleView.successImg.backgroundTintList =
+            binding.completeCircleView.successImg.backgroundTintList =
                 context.getColorStateList(R.color._efefef)
         }
     }
 
     private fun setFinalSuccessUIBackground() {
-        binding.successCircleView.successImg.setBackgroundResource(R.drawable.check_complete)
-        binding.successCircleView.successImg.backgroundTintList =
+        binding.completeCircleView.successImg.setBackgroundResource(R.drawable.check_complete)
+        binding.completeCircleView.successImg.backgroundTintList =
             context.getColorStateList(R.color._d8d7d7)
         binding.bucketTitle.setTextColor(context.resources.getColor(R.color._434343))
         binding.bucketTitle.alpha = 0.6f
-        binding.successCircleView.circularProgressBar.visibility = View.GONE
+        binding.completeCircleView.circularProgressBar.visibility = View.GONE
         binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_e8e8e8)
         binding.progressLayout.visibility = View.GONE
     }
 
     private fun setDoneSuccessUIButton() {
-        binding.successCircleView.successImg.backgroundTintList =
+        binding.completeCircleView.successImg.backgroundTintList =
             context.getColorStateList(R.color._e8e8e8)
         binding.bucketItemImage.setBackgroundResource(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 
     private fun setUI(
         bucketItemInfo: BucketItem,
-        bucketListener: View.OnClickListener,
+        bucketItemHandler: BucketItemHandler,
         isShowDday: Boolean,
         isLastItem: Boolean
     ) {
         binding.bucketInfo = bucketItemInfo
-        binding.bucketClickListener = bucketListener
-        binding.successCircleView.setBucketSuccessListener {
-            setOnClickBucketSuccessLayoutListener(
-                bucketItemInfo
-            )
+        binding.bucketClickListener = View.OnClickListener {
+            bucketItemHandler.bucketSelect(bucketItemInfo)
+        }
+        binding.completeCircleView.bucketSuccessListener = View.OnClickListener {
+            setOnClickBucketCompleteLayoutListener(bucketItemInfo, bucketItemHandler)
         }
         if (Preference.getShowDdayFilter(binding.root.context) || isShowDday) {
             binding.ddayTextView.visibility =
@@ -162,44 +160,26 @@ open class BaseBucketItemViewHolder(
 
         binding.userCount.text = setCountText(bucketItemInfo.userCount, bucketItemInfo.goalCount)
 
-        if(isLastItem){
-            val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        if (isLastItem) {
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             lp.setMargins(dpToPx(8))
             binding.bucketItemLayout.layoutParams = lp
         }
     }
 
-    private fun setOnClickBucketSuccessLayoutListener(bucketItemInfo: BucketItem) {
-        bucketSuccess(bucketItemInfo)
+    private fun setOnClickBucketCompleteLayoutListener(
+        bucketItemInfo: BucketItem,
+        bucketItemHandler: BucketItemHandler
+    ) {
+        startBucketCompleteAnimation(bucketItemInfo) {
+            bucketItemHandler.bucketComplete(bucketItemInfo)
+        }
     }
 
-    private fun bucketSuccess(bucketItemInfo: BucketItem) {
-        viewModel.setBucketComplete(object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                bucketSuccess(bucketItemInfo)
-            }
-
-            override fun start() {
-                binding.bucketItemLayout.isEnabled = false
-            }
-
-            override fun success() {
-                onBucketSuccessFinalButtonClickListener(bucketItemInfo)
-                binding.bucketItemLayout.isEnabled = true
-                showSnackBar?.invoke(bucketItemInfo)
-                return
-            }
-
-            override fun fail() {
-                binding.bucketItemLayout.isEnabled = true
-                Toast.makeText(context, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-
-        }, bucketItemInfo.id)
-
-    }
-
-    private fun addBucketSuccessCount(info: BucketItem) {
+    private fun addBucketCompleteCount(info: BucketItem) {
         if (info.goalCount <= 1) return
 
         binding.userCount.text = setCountText(info.userCount + 1, info.goalCount)
@@ -211,7 +191,7 @@ open class BaseBucketItemViewHolder(
     private fun setDdayColor() {
         binding.bucketItemImage.setBackgroundResource(R.drawable.bucket_dday_click_background)
         binding.bucketSucceedImage.setBackgroundResource(R.drawable.shape_efefef_r4_strk_e8e8e8)
-        binding.successCircleView.circularProgressBar.spinningBarColor =
+        binding.completeCircleView.circularProgressBar.spinningBarColor =
             context.getColor(R.color._ffca5a)
         binding.horizontalProgressBar.progressDrawable =
             context.getDrawable(R.drawable.dday_horizontal_progressbar)
@@ -245,4 +225,9 @@ open class BaseBucketItemViewHolder(
         animation.interpolator = DecelerateInterpolator()
         animation.start()
     }
+}
+
+interface BucketItemHandler {
+    fun bucketSelect(itemInfo: BucketItem)
+    fun bucketComplete(itemInfo: BucketItem)
 }

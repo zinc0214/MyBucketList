@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
@@ -14,21 +15,21 @@ import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
+import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
+import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 
 @AndroidEntryPoint
 class BucketListByCategoryFragment : BaseFragment() {
 
     private lateinit var selectCategory: CategoryInfo
-
     private lateinit var binding: FragmentBucketListByCategoryBinding
+    private var mainBucketListAdapter: MainBucketListAdapter? = null
 
     private val bucketInfoViewModel by viewModels<BucketListViewModel>()
-    private val bucketDetailViewModel by viewModels<BucketDetailViewModel>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,8 +105,16 @@ class BucketListByCategoryFragment : BaseFragment() {
         }
 
         bucketInfoViewModel.categoryBucketList.observeNonNull(viewLifecycleOwner) {
-            binding.bucketList.adapter =
-                CategoryBucketListAdapter(it.bucketlists, bucketDetailViewModel, showSnackBar)
+            setBucketListAdapter(it.bucketlists)
+        }
+
+        bucketInfoViewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar.invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                getBucketListByCategory()
+            }
         }
     }
 
@@ -124,5 +133,24 @@ class BucketListByCategoryFragment : BaseFragment() {
     private fun showCancelSnackBar(view: View, info: BucketItem) {
         val countText = if (info.goalCount > 1) "\" ${info.userCount}회 완료" else " \" 완료"
         MainSnackBarWidget.make(view, info.title, countText) { bucketCancelListener(info) }?.show()
+    }
+
+    private fun setBucketListAdapter(bucketList: List<BucketItem>) {
+        if (mainBucketListAdapter == null) {
+            mainBucketListAdapter = MainBucketListAdapter(object : BucketItemHandler {
+                override fun bucketSelect(itemInfo: BucketItem) {
+                    val directions =
+                        BucketListByCategoryFragmentDirections.actionCategoryBucketListToDetail()
+                    directions.bucketId = itemInfo.id
+                    this@BucketListByCategoryFragment.findNavController().navigate(directions)
+                }
+
+                override fun bucketComplete(itemInfo: BucketItem) {
+                    bucketInfoViewModel.setBucketComplete(itemInfo)
+                }
+            })
+            binding.bucketList.adapter = mainBucketListAdapter
+        }
+        mainBucketListAdapter?.replaceItems(bucketList)
     }
 }

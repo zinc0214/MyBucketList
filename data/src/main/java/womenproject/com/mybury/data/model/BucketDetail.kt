@@ -1,5 +1,7 @@
 package womenproject.com.mybury.data.model
 
+import kotlinx.serialization.Serializable
+
 data class BucketDetailItem(
     var title: String,
     val memo: String = "",
@@ -35,3 +37,33 @@ data class BucketDetailItem(
         return hasNoImg && isCountBucket().not() && isDone().not() && memo.isBlank()
     }
 }
+
+data class BucketRequest(
+    var bucketlistId: String
+)
+
+data class AddBucketItemInfo(
+    val content: AddBucketItemContent,
+    val imgList: List<Any?>,
+    val userId: String,
+    val token: String
+)
+
+data class UpdateBucketItemInfo(
+    val bucketId: String,
+    val content: AddBucketItemContent,
+    val imgList: List<Any?>,
+    val alreadyImgList: MutableMap<Int, String?>,
+    val userId: String,
+    val token: String
+)
+
+@Serializable
+data class AddBucketItemContent(
+    var title: String,
+    val open: Boolean = false,
+    val dDate: String,
+    val goalCount: Int = 0,
+    var memo: String = "",
+    val categoryId: String
+)

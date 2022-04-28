@@ -9,20 +9,22 @@ import womenproject.com.mybury.databinding.ItemBucketSucceedBinding
 class SucceedBucketItemViewHolder(private val binding: ItemBucketSucceedBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(bucketListener: View.OnClickListener, bucketItemInfo: BucketItem) {
+    fun bind(bucketItemHandler: BucketItemHandler, bucketItemInfo: BucketItem) {
         binding.apply {
 
-            setUI(bucketItemInfo, bucketListener)
+            setUI(bucketItemHandler, bucketItemInfo)
             executePendingBindings()
         }
     }
 
-    private fun setUI(bucketItemInfo: BucketItem, bucketListener: View.OnClickListener) {
+    private fun setUI(bucketItemHandler: BucketItemHandler, bucketItemInfo: BucketItem) {
         binding.apply {
             ddayTextView.visibility =
                 if (Preference.getShowDdayFilter(binding.root.context)) View.VISIBLE else View.GONE
             bucketTitleText = bucketItemInfo.title
-            bucketClickListener = bucketListener
+            bucketClickListener = View.OnClickListener {
+                bucketItemHandler.bucketSelect(bucketItemInfo)
+            }
         }
     }
 }
