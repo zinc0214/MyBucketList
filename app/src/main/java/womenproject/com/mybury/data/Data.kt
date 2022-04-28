@@ -2,6 +2,7 @@ package womenproject.com.mybury.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import womenproject.com.mybury.data.model.BucketType
 import womenproject.com.mybury.data.model.DomainBucketItem
 import womenproject.com.mybury.data.model.DomainCategory
 
@@ -27,15 +28,6 @@ data class GetTokenResponse(
 data class NewTokenRequest(
     val userId: String?,
     val refreshToken: String?
-)
-
-data class BucketRequest(
-    var bucketlistId: String
-)
-
-data class StatusChangeBucketRequest(
-    val userId: String?,
-    var bucketlistId: String
 )
 
 data class SimpleResponse(
@@ -65,18 +57,6 @@ fun List<DomainBucketItem>.toBucketData(): List<BucketItem> {
     }
     return list
 }
-
-data class DdayBucketListRespone(
-    val dDayBucketlists: List<DdayBucketList>,
-    val retcode: String
-)
-
-data class DdayBucketList(
-    val day: Int,
-    val bucketlists: List<BucketItem>,
-    var isLast: Boolean = false
-)
-
 
 @Parcelize
 data class BucketItem(
@@ -123,15 +103,6 @@ data class DetailBucketItem(
     val retcode: String
 ) : Parcelable
 
-data class AddBucketItem(
-    var title: String = "Title",
-    val open: Boolean = false,
-    val dDate: String,
-    val goalCount: Int = 0,
-    var memo: String = "",
-    val categoryId: String
-)
-
 @Parcelize
 data class Category(
     val name: String,
@@ -154,11 +125,6 @@ fun List<DomainCategory>.toCategoryData(): List<Category> {
     }
     return list
 }
-
-data class AddCategoryRequest(
-    val userId: String,
-    val name: String
-)
 
 data class EditCategoryNameRequest(
     val userId: String,
@@ -281,15 +247,4 @@ enum class SortFilter {
 
 enum class WebViewType {
     eula, privacy, openSource, notice
-}
-
-enum class BucketType {
-    SUCCEED_ITEM, COUNT_ITEM, BASE_ITEM;
-
-    fun int(): Int =
-        when (this) {
-            SUCCEED_ITEM -> 0
-            COUNT_ITEM -> 1
-            BASE_ITEM -> 2
-        }
 }

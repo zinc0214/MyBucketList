@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
@@ -19,11 +20,13 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.detail.BucketDetailViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
+import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
+import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 import java.util.*
 
 
@@ -35,9 +38,7 @@ import java.util.*
 class MainFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMainBinding
-
     private val viewModel by viewModels<BucketListViewModel>()
-    private val detailViewModel by viewModels<BucketDetailViewModel>()
 
     private var currentBucketSize = 0
 
@@ -50,8 +51,8 @@ class MainFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initBucketListUI()
     }
 
@@ -125,8 +126,7 @@ class MainFragment : BaseFragment() {
                         blankImg.visibility = View.GONE
                         bucketList.visibility = View.VISIBLE
                         endImage.visibility = View.VISIBLE
-                        bucketList.adapter =
-                            MainBucketListAdapter(it.bucketlists, detailViewModel, showSnackBar)
+                        updateListAdapter(it.bucketlists)
                     }
                 }
                 if (it.popupYn && isOpenablePopup() && getEnableShowAlarm(requireActivity())) {
@@ -134,6 +134,31 @@ class MainFragment : BaseFragment() {
                 }
                 currentBucketSize = it.bucketlists.size
             }
+        }
+
+        viewModel.completeBucketState.observeNonNull(viewLifecycleOwner) {
+            if (it.first && it.second != null) {
+                showSnackBar().invoke(it.second!!)
+            } else {
+                requireContext().showToast("다시 시도해주세요.")
+                getMainBucketList()
+            }
+        }
+    }
+
+    private fun updateListAdapter(bucketList: List<BucketItem>) {
+        binding.bucketList.adapter = MainBucketListAdapter(object : BucketItemHandler {
+            override fun bucketSelect(itemInfo: BucketItem) {
+                val directions = MainFragmentDirections.actionMainBucketToBucketDetail()
+                directions.bucketId = itemInfo.id
+                this@MainFragment.findNavController().navigate(directions)
+            }
+
+            override fun bucketComplete(itemInfo: BucketItem) {
+                viewModel.setBucketComplete(itemInfo)
+            }
+        }).apply {
+            replaceItems(bucketList)
         }
     }
 
@@ -206,7 +231,7 @@ class MainFragment : BaseFragment() {
         viewModel.bucketCancel(info.id)
     }
 
-    private val showSnackBar: (BucketItem) -> Unit = { info: BucketItem ->
+    private fun showSnackBar() = { info: BucketItem ->
         showCancelSnackBar(requireView(), info)
     }
 

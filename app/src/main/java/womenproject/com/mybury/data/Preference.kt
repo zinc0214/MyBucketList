@@ -58,9 +58,8 @@ class Preference {
 
         fun getUserId(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(USER_ID, "")
+            return sp.getString(USER_ID, null)
         }
-
 
         fun setAccessToken(context: Context, token: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -71,9 +70,8 @@ class Preference {
 
         fun getAccessToken(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(ACCESS_TOKEN, "")
+            return sp.getString(ACCESS_TOKEN, null)
         }
-
 
         fun setRefreshToken(context: Context, token: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -84,9 +82,17 @@ class Preference {
 
         fun getRefreshToken(context: Context): String? {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
-            return sp.getString(REFRESH_TOKEN, "")
+            return sp.getString(REFRESH_TOKEN, null)
         }
 
+        fun clearAllLocalInfo(context: Context) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            val editor = sp.edit()
+            editor.remove(REFRESH_TOKEN)
+            editor.remove(ACCESS_TOKEN)
+            editor.remove(USER_ID)
+            editor.apply()
+        }
 
         fun setFilerForShow(context: Context, showFilter: ShowFilter) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -183,7 +189,7 @@ class Preference {
             editor.apply()
         }
 
-        fun isAlreadyBucketRetryGuideShow(context: Context) : Boolean{
+        fun isAlreadyBucketRetryGuideShow(context: Context): Boolean {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getBoolean(IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE, false)
             return data
@@ -192,6 +198,7 @@ class Preference {
         fun allClear(context: Context) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val editor = sp.edit()
+            clearAllLocalInfo(context)
             editor.clear()
             editor.apply()
         }

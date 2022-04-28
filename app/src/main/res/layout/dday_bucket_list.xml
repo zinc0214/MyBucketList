@@ -5,10 +5,6 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="womenproject.com.mybury.presentation.viewmodels.DdayBucketTotalListViewModel" />
-
-        <variable
             name="ddayText"
             type="String" />
 

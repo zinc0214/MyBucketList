@@ -16,6 +16,7 @@ import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
+import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import javax.inject.Inject
@@ -48,8 +49,11 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setAccessToken(accessToken: String, refreshToken: String) {
-        setAccessToken(getAppContext(), accessToken)
-        setRefreshToken(getAppContext(), refreshToken)
+
+    }
+
+    fun setUserId(userId: String) {
+        setUserId(getAppContext(), userId)
     }
 
     interface SimpleCallBack {
@@ -81,7 +85,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken(a2CallBack: SimpleCallBack) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -97,7 +101,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken(result: (LoadState) -> Unit) {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -114,7 +118,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     @SuppressLint("CheckResult")
     fun getRefreshToken() {
         val newTokenRequest = NewTokenRequest(userId, refreshToken)
-        apiInterface.getRefershToken(newTokenRequest)
+        apiInterface.getRefreshToken(newTokenRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->

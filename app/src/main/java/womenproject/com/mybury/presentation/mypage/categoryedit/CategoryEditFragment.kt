@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -25,6 +24,8 @@ import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
+import womenproject.com.mybury.util.observeNonNull
+import womenproject.com.mybury.util.showToast
 
 @AndroidEntryPoint
 class CategoryEditFragment : BaseFragment(),
@@ -112,6 +113,23 @@ class CategoryEditFragment : BaseFragment(),
             }
         }
 
+        categoryViewModel.addCategoryItemState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    initDataBinding()
+                    imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                }
+                LoadState.RESTART, LoadState.FAIL -> {
+                    stopLoading()
+                    context?.showToast("카테고리 추가에 실패했습니다.\n다시 시도해주세요.")
+                }
+
+            }
+        }
+
         categoryViewModel.categoryList.observe(viewLifecycleOwner) {
             initOriginCategory(it as List<Category>)
             changeCategoryList = it as ArrayList<Category>
@@ -191,26 +209,7 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     private fun addNewCategory(name: String) {
-        categoryViewModel.addCategoryItem(name, object : BaseViewModel.Simple3CallBack {
-            override fun restart() {
-                addNewCategory(name)
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success() {
-                stopLoading()
-                initDataBinding()
-                imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-            }
-
-            override fun fail() {
-                stopLoading()
-            }
-
-        })
+        categoryViewModel.addCategoryItem(name)
     }
 
     fun setCategoryDeleteListener() {
@@ -226,7 +225,7 @@ class CategoryEditFragment : BaseFragment(),
                 }
 
                 override fun success() {
-                    Toast.makeText(context, "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    context?.showToast("카테고리가 삭제되었습니다.")
                     stopLoading()
                     initDataBinding()
                     removedList.clear()
@@ -234,8 +233,7 @@ class CategoryEditFragment : BaseFragment(),
                 }
 
                 override fun fail() {
-                    Toast.makeText(context, "카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                        .show()
+                    context?.showToast("카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.")
                     stopLoading()
                 }
 
@@ -251,14 +249,13 @@ class CategoryEditFragment : BaseFragment(),
                 }
 
                 override fun success() {
-                    Toast.makeText(context, "카테고리 순서가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    context?.showToast("카테고리 순서가 변경되었습니다.")
                     stopLoading()
                     onBackPressedFragment()
                 }
 
                 override fun fail() {
-                    Toast.makeText(context, "카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.", Toast.LENGTH_SHORT)
-                        .show()
+                    context?.showToast("카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.")
                     stopLoading()
                 }
 

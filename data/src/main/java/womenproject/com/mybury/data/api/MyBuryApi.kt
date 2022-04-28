@@ -1,5 +1,6 @@
 package womenproject.com.mybury.data.api
 
+import okhttp3.MultipartBody
 import retrofit2.http.*
 import womenproject.com.mybury.data.model.*
 
@@ -19,7 +20,7 @@ interface MyBuryApi {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/signin")
-    suspend fun getLoginToken(@Body email: DomainUseUserIdRequest): DomainTokenResponse
+    suspend fun getLoginToken(@Body email: UseUserIdRequest): GetTokenResponse
 
     @GET("/home")
     suspend fun loadHomeBucketList(
@@ -59,5 +60,76 @@ interface MyBuryApi {
         @Header("X-Auth-Token") token: String,
         @Body userId: UserIdRequest,
         @Path("bucketId") bucketId: String
+    ): SimpleResponse
+
+    @POST("/complete")
+    suspend fun completeBucket(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketRequest: BucketRequest
+    ): SimpleResponse
+
+    @POST("/profile")
+    @Multipart
+    suspend fun updateProfile(
+        @Header("X-Auth-Token") token: String,
+        @Part userId: MultipartBody.Part,
+        @Part name: MultipartBody.Part,
+        @Part defaultImg: MultipartBody.Part,
+        @Part multipartFile: MultipartBody.Part? = null
+    ): SimpleResponse
+
+    @POST("/redo")
+    suspend fun redoBucket(
+        @Header("X-Auth-Token") token: String,
+        @Body bucketRequest: StatusChangeBucketRequest
+    ): SimpleResponse
+
+    @GET("/dDay")
+    suspend fun loadDdayBucketList(
+        @Header("X-Auth-Token") token: String,
+        @Query("userId") userId: String,
+        @Query("filter") filter: String
+    ): DdayBucketListResponse
+
+    @POST("/write")
+    @Multipart
+    suspend fun addBucketItem(
+        @Header("X-Auth-Token") token: String,
+        @Part title: MultipartBody.Part,
+        @Part open: MultipartBody.Part,
+        @Part dDate: MultipartBody.Part? = null,
+        @Part goalCount: MultipartBody.Part,
+        @Part memo: MultipartBody.Part,
+        @Part categoryId: MultipartBody.Part,
+        @Part userId: MultipartBody.Part,
+        @Part image1: MultipartBody.Part? = null,
+        @Part image2: MultipartBody.Part? = null,
+        @Part image3: MultipartBody.Part? = null
+    ): SimpleResponse
+
+    @POST("/bucketlist/{bucketId}")
+    @Multipart
+    suspend fun updateBucketList(
+        @Header("X-Auth-Token") token: String,
+        @Path("bucketId") bucketId: String,
+        @Part title: MultipartBody.Part,
+        @Part open: MultipartBody.Part,
+        @Part dDate: MultipartBody.Part? = null,
+        @Part goalCount: MultipartBody.Part,
+        @Part memo: MultipartBody.Part,
+        @Part categoryId: MultipartBody.Part,
+        @Part userId: MultipartBody.Part,
+        @Part image1: MultipartBody.Part? = null,
+        @Part noImg1: MultipartBody.Part,
+        @Part image2: MultipartBody.Part? = null,
+        @Part noImg2: MultipartBody.Part,
+        @Part image3: MultipartBody.Part? = null,
+        @Part noImg3: MultipartBody.Part
+    ): SimpleResponse
+
+    @POST("/category")
+    suspend fun addNewCategoryItem(
+        @Header("X-Auth-Token") token: String,
+        @Body categoryId: AddCategoryRequest
     ): SimpleResponse
 }

@@ -1,24 +1,18 @@
 package womenproject.com.mybury.presentation.detail
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import womanproject.com.mybury.domain.usecase.detail.CompleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.detail.DeleteBucketUseCase
 import womanproject.com.mybury.domain.usecase.detail.LoadBucketDetailItemUseCase
-import womenproject.com.mybury.data.BucketRequest
-import womenproject.com.mybury.data.StatusChangeBucketRequest
-import womenproject.com.mybury.data.model.BucketDetailItem
-import womenproject.com.mybury.data.model.LoadState
-import womenproject.com.mybury.data.model.UserIdRequest
-import womenproject.com.mybury.data.network.apiInterface
+import womanproject.com.mybury.domain.usecase.detail.RedoBucketUseCase
+import womenproject.com.mybury.data.model.*
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -29,7 +23,9 @@ import javax.inject.Inject
 @HiltViewModel
 class BucketDetailViewModel @Inject constructor(
     private val loadBucketDetailItemUseCase: LoadBucketDetailItemUseCase,
-    private val deleteBucketUseCase: DeleteBucketUseCase
+    private val deleteBucketUseCase: DeleteBucketUseCase,
+    private val completeBucketUseCase: CompleteBucketUseCase,
+    private val redoBucketUseCase: RedoBucketUseCase
 ) : BaseViewModel() {
 
     private val _loadBucketDetail = MutableLiveData<BucketDetailItem>()
@@ -37,6 +33,9 @@ class BucketDetailViewModel @Inject constructor(
 
     private val _loadBucketState = MutableLiveData<LoadState>()
     val loadBucketState: LiveData<LoadState> = _loadBucketState
+
+    private val _completeBucketState = MutableLiveData<LoadState>()
+    val completeBucketState: LiveData<LoadState> = _completeBucketState
 
     private val _showLoading = MutableLiveData<Boolean>()
     val showLoading: LiveData<Boolean> = _showLoading
@@ -77,40 +76,38 @@ class BucketDetailViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("CheckResult")
-    fun setBucketComplete(callback: Simple3CallBack, bucketId: String) {
+    fun setBucketComplete(bucketId: String) {
         val bucketRequest = BucketRequest(bucketId)
         if (accessToken == null) {
-            callback.fail()
+            _completeBucketState.value = LoadState.FAIL
             return
         }
 
-        callback.start()
-        apiInterface.postCompleteBucket(accessToken, bucketRequest)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ detailBucketItem ->
-                when (detailBucketItem.retcode) {
-                    "200" -> {
-                        callback.success()
+        _completeBucketState.value = LoadState.START
+
+        viewModelScope.launch {
+            runCatching {
+                completeBucketUseCase(accessToken, bucketRequest).apply {
+                    when (this@apply.retcode) {
+                        "200" -> {
+                            _completeBucketState.value = LoadState.SUCCESS
+                        }
+                        "301" -> getRefreshToken(object : SimpleCallBack {
+                            override fun success() {
+                                _completeBucketState.value = LoadState.RESTART
+                            }
+
+                            override fun fail() {
+                                _completeBucketState.value = LoadState.FAIL
+                            }
+                        })
+                        else -> _completeBucketState.value = LoadState.FAIL
                     }
-                    "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callback.restart()
-                        }
-
-                        override fun fail() {
-                            callback.fail()
-                        }
-
-                    })
-                    else -> callback.fail()
                 }
-
-            }) {
-                Log.e("myBury", "postCompleteBucket Fail : $it")
-                callback.fail()
+            }.getOrElse {
+                _completeBucketState.value = LoadState.FAIL
             }
+        }
     }
 
     fun deleteBucketListener(bucketId: String) {
@@ -126,6 +123,8 @@ class BucketDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 deleteBucketUseCase(accessToken, userIdRequest, bucketId).apply {
+
+                    Log.e("myBury", "delete : $this")
                     when (this@apply.retcode) {
                         "200" -> {
                             _isDeleteSuccess.value = true
@@ -155,15 +154,16 @@ class BucketDetailViewModel @Inject constructor(
         val bucketRequest = StatusChangeBucketRequest(userId, bucketId)
 
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                apiInterface.postRedoBucket(accessToken, bucketRequest).apply {
+            runCatching {
+                redoBucketUseCase(accessToken, bucketRequest).apply {
                     withContext(Dispatchers.Main) {
                         _isReDoSuccess.value = this@apply.retcode == "200"
                         _showLoading.value = false
                     }
                 }
-            } catch (e: Throwable) {
-                e.printStackTrace()
+            }.getOrElse {
+                _showLoading.value = false
+                _isReDoSuccess.value = false
             }
         }
     }

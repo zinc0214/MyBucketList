@@ -19,6 +19,7 @@ import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.allClear
+import womenproject.com.mybury.data.Preference.Companion.clearAllLocalInfo
 import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
@@ -149,6 +150,7 @@ class LoginInfoFragment : BaseFragment() {
 
         googleSignInClient.signOut().addOnCompleteListener(requireActivity()) {
             setMyBuryLoginComplete(requireContext(), false)
+            clearAllLocalInfo(requireContext())
             LogoutSuccess().show(requireActivity().supportFragmentManager)
         }
     }

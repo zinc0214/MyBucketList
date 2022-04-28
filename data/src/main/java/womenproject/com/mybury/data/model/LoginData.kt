@@ -32,12 +32,12 @@ data class SignUpResponse(
 )
 
 @Serializable
-data class DomainUseUserIdRequest(
+data class UseUserIdRequest(
     val userId: String
 )
 
 @Serializable
-data class DomainTokenResponse(
+data class GetTokenResponse(
     val accessToken: String,
     val refreshToken: String,
     val retcode: String

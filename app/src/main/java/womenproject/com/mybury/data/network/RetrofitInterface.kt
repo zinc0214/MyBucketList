@@ -1,7 +1,6 @@
 package womenproject.com.mybury.data.network
 
 import io.reactivex.Observable
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,109 +18,7 @@ interface RetrofitInterface {
 
     @Headers("Accept: application/json", "Content-Type: application/json")
     @POST("/refresh_token")
-    fun getRefershToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
-
-    // 프로필 이미지가 있는 경우
-    @POST("/profile")
-    @Multipart
-    fun postCreateProfile(
-        @Header("X-Auth-Token") token: String,
-        @Part userId: MultipartBody.Part,
-        @Part name: MultipartBody.Part,
-        @Part file: MultipartBody.Part,
-        @Part defaultImg: MultipartBody.Part
-    ): Observable<SimpleResponse>
-
-    // 프로필 이미지가 없는 경우
-    @POST("/profile")
-    @Multipart
-    fun postCreateProfile(
-        @Header("X-Auth-Token") token: String,
-        @Part userId: MultipartBody.Part,
-        @Part name: MultipartBody.Part,
-        @Part defaultImg: MultipartBody.Part
-    ): Observable<SimpleResponse>
-
-
-    @GET("/home")
-    fun requestHomeBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String,
-        @Query("filter") filter: String,
-        @Query("sort") sort: String
-    ): Observable<BucketList>
-
-
-
-    @GET("/bucketlist/{bucketId}")
-    fun requestDetailBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Path("bucketId") bucketId: String,
-        @Query("userId") userId: String
-    ): Observable<DetailBucketItem>
-
-    @POST("/complete")
-    fun postCompleteBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: BucketRequest
-    ): Observable<SimpleResponse>
-
-    @POST("/redo")
-    suspend fun postRedoBucket(
-        @Header("X-Auth-Token") token: String,
-        @Body bucketRequest: StatusChangeBucketRequest
-    ): SimpleResponse
-
-
-    @GET("/dDay")
-    fun requestDdayBucketListResult(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String,
-        @Query("filter") filter: String
-    ): Observable<DdayBucketListRespone>
-
-    @POST("/write")
-    @Multipart
-    fun postAddBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Part title: MultipartBody.Part,
-        @Part open: MultipartBody.Part,
-        @Part dDate: MultipartBody.Part? = null,
-        @Part goalCount: MultipartBody.Part,
-        @Part memo: MultipartBody.Part,
-        @Part categoryId: MultipartBody.Part,
-        @Part userId: MultipartBody.Part,
-        @Part image1: MultipartBody.Part? = null,
-        @Part image2: MultipartBody.Part? = null,
-        @Part image3: MultipartBody.Part? = null
-    ): Observable<SimpleResponse>
-
-
-    @POST("/bucketlist/{bucketId}")
-    @Multipart
-    fun postUpdateBucketList(
-        @Header("X-Auth-Token") token: String,
-        @Path("bucketId") bucketId: String,
-        @Part title: MultipartBody.Part,
-        @Part open: MultipartBody.Part,
-        @Part dDate: MultipartBody.Part? = null,
-        @Part goalCount: MultipartBody.Part,
-        @Part memo: MultipartBody.Part,
-        @Part categoryId: MultipartBody.Part,
-        @Part userId: MultipartBody.Part,
-        @Part image1: MultipartBody.Part? = null,
-        @Part noImg1: MultipartBody.Part,
-        @Part image2: MultipartBody.Part? = null,
-        @Part noImg2: MultipartBody.Part,
-        @Part image3: MultipartBody.Part? = null,
-        @Part noImg3: MultipartBody.Part
-    ): Observable<SimpleResponse>
-
-    @POST("/category")
-    fun addNewCategoryItem(
-        @Header("X-Auth-Token") token: String,
-        @Body categoryId: AddCategoryRequest
-    ): Observable<SimpleResponse>
+    fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
     @POST("/category/edit_name")
     fun editCategoryItemName(
