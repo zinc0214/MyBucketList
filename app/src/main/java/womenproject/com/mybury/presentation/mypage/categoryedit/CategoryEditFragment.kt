@@ -150,6 +150,27 @@ class CategoryEditFragment : BaseFragment(),
                 }
             }
         }
+
+        categoryViewModel.changeCategoryItemState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    startLoading()
+                }
+                LoadState.RESTART -> {
+                    setCategoryStatusChange()
+                    stopLoading()
+                }
+                LoadState.SUCCESS -> {
+                    context?.showToast("카테고리 순서가 변경되었습니다.")
+                    stopLoading()
+                    onBackPressedFragment()
+                }
+                LoadState.FAIL -> {
+                    context?.showToast("카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.")
+                    stopLoading()
+                }
+            }
+        }
     }
 
     private fun initOriginCategory(categoryList: List<Category>) {
@@ -233,31 +254,10 @@ class CategoryEditFragment : BaseFragment(),
             })
     }
 
-    fun setCategoryStatusChange() {
+    private fun setCategoryStatusChange() {
         categoryViewModel.changeCategoryStatus(
-            changeCategoryList,
-            object : BaseViewModel.Simple3CallBack {
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    context?.showToast("카테고리 순서가 변경되었습니다.")
-                    stopLoading()
-                    onBackPressedFragment()
-                }
-
-                override fun fail() {
-                    context?.showToast("카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.")
-                    stopLoading()
-                }
-
-                override fun restart() {
-                    setCategoryStatusChange()
-                    stopLoading()
-                }
-
-            })
+            changeCategoryList
+        )
     }
 
     override fun actionByBackButton() {

@@ -28,3 +28,9 @@ data class EditCategoryNameRequest(
     val id: String,
     val name: String
 )
+
+@Serializable
+data class ChangeCategoryStatusRequest(
+    val userId: String,
+    val categoryIdList: List<String>
+)

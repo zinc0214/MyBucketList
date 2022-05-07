@@ -10,12 +10,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import womanproject.com.mybury.domain.usecase.category.AddCategoryItemUseCase
+import womanproject.com.mybury.domain.usecase.category.ChangeCategoryListUseCase
 import womanproject.com.mybury.domain.usecase.category.EditCategoryItemNameUseCase
 import womanproject.com.mybury.domain.usecase.category.LoadCategoryListUseCase
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.data.ChangeCategoryStatusRequest
 import womenproject.com.mybury.data.RemoveCategoryRequest
 import womenproject.com.mybury.data.model.AddCategoryRequest
+import womenproject.com.mybury.data.model.ChangeCategoryStatusRequest
 import womenproject.com.mybury.data.model.EditCategoryNameRequest
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
@@ -28,7 +29,8 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
     private val loadCategoryListUseCase: LoadCategoryListUseCase,
     private val addCategoryItemUseCase: AddCategoryItemUseCase,
-    private val editCategoryItemNameUseCase : EditCategoryItemNameUseCase
+    private val editCategoryItemNameUseCase: EditCategoryItemNameUseCase,
+    private val changeCategoryListUseCase: ChangeCategoryListUseCase
 ) : BaseViewModel() {
 
     private val _categoryLoadState = MutableLiveData<LoadState>()
@@ -41,7 +43,10 @@ class CategoryViewModel @Inject constructor(
     val addCategoryItemState: LiveData<LoadState> = _addCategoryItemState
 
     private val _editCategoryItemNameState = MutableLiveData<LoadState>()
-    val editCategoryItemNameState : LiveData<LoadState> = _editCategoryItemNameState
+    val editCategoryItemNameState: LiveData<LoadState> = _editCategoryItemNameState
+
+    private val _changeCateogryItemState = MutableLiveData<LoadState>()
+    val changeCategoryItemState: LiveData<LoadState> = _changeCateogryItemState
 
     fun loadCategoryList() {
         if (accessToken == null || userId == null) {
@@ -154,7 +159,7 @@ class CategoryViewModel @Inject constructor(
             runCatching {
                 editCategoryItemNameUseCase.invoke(accessToken, request).apply {
                     Log.e("ayhan", "edit response : $this")
-                    when(this.retcode) {
+                    when (this.retcode) {
                         "200" -> _editCategoryItemNameState.value = LoadState.SUCCESS
                         else -> _editCategoryItemNameState.value = LoadState.FAIL
                     }
@@ -166,39 +171,30 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("CheckResult")
-    fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
+    fun changeCategoryStatus(list: List<Category>) {
         if (accessToken == null || userId == null) {
-            callBack.fail()
+            _changeCateogryItemState.value = LoadState.FAIL
             return
         }
 
-        var idList = arrayListOf<String>()
-        for (i in list) {
-            idList.add(i.id)
-        }
+        val idList = list.map { it.id }
         val request = ChangeCategoryStatusRequest(userId, idList)
-        callBack.start()
-        apiInterface.changeCategoryList(accessToken, request)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                when (it.retcode) {
-                    "200" -> callBack.success()
-                    "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callBack.restart()
-                        }
+        _changeCateogryItemState.value = LoadState.START
 
-                        override fun fail() {
-                            callBack.fail()
+        viewModelScope.launch {
+            runCatching {
+                changeCategoryListUseCase.invoke(accessToken, request).apply {
+                    when (this.retcode) {
+                        "200" -> _changeCateogryItemState.value = LoadState.SUCCESS
+                        "301" -> getRefreshToken { result ->
+                            _changeCateogryItemState.value = result
                         }
-                    })
-                    else -> callBack.fail()
+                        else -> _changeCateogryItemState.value = LoadState.FAIL
+                    }
                 }
-            }) {
-                callBack.fail()
+            }.getOrElse {
+                _changeCateogryItemState.value = LoadState.FAIL
             }
+        }
     }
-
 }

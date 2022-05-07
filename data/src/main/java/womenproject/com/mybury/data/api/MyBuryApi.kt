@@ -138,4 +138,11 @@ interface MyBuryApi {
         @Header("X-Auth-Token") token: String,
         @Body categoryId: EditCategoryNameRequest
     ): SimpleResponse
+
+    @POST("/category/edit_priority")
+    suspend fun changeCategoryList(
+        @Header("X-Auth-Token") token: String,
+        @Body categoryId: ChangeCategoryStatusRequest
+    ): SimpleResponse
+
 }
