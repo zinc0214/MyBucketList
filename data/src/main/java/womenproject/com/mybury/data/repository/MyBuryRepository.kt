@@ -106,4 +106,9 @@ interface MyBuryRepository {
         token: String,
         categoryId: AddCategoryRequest
     ): SimpleResponse
+
+    suspend fun editCategoryItemName(
+        token: String,
+        categoryId: EditCategoryNameRequest
+    ): SimpleResponse
 }

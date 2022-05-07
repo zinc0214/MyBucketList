@@ -20,12 +20,6 @@ interface RetrofitInterface {
     @POST("/refresh_token")
     fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
-    @POST("/category/edit_name")
-    fun editCategoryItemName(
-        @Header("X-Auth-Token") token: String,
-        @Body categoryId: EditCategoryNameRequest
-    ): Observable<SimpleResponse>
-
     @POST("/category/edit_priority")
     fun changeCategoryList(
         @Header("X-Auth-Token") token: String,

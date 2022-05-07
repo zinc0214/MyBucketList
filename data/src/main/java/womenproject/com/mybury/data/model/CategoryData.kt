@@ -21,3 +21,10 @@ data class AddCategoryRequest(
     val userId: String,
     val name: String
 )
+
+@Serializable
+data class EditCategoryNameRequest(
+    val userId: String,
+    val id: String,
+    val name: String
+)

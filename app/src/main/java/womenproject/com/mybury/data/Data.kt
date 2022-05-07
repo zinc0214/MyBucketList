@@ -126,12 +126,6 @@ fun List<DomainCategory>.toCategoryData(): List<Category> {
     return list
 }
 
-data class EditCategoryNameRequest(
-    val userId: String,
-    val id: String,
-    val name: String
-)
-
 data class ChangeCategoryStatusRequest(
     val userId: String,
     val categoryIdList: List<String>

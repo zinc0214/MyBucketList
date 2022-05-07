@@ -150,4 +150,11 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.addNewCategoryItem(token, categoryId)
     }
+
+    override suspend fun editCategoryItemName(
+        token: String,
+        categoryId: EditCategoryNameRequest
+    ): SimpleResponse {
+        return myBuryApi.editCategoryItemName(token, categoryId)
+    }
 }
