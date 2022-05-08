@@ -175,4 +175,8 @@ class MyBuryRepositoryImpl @Inject constructor(
     override suspend fun loadMyPageInfo(token: String, userId: String): OriginMyPageInfo {
         return myBuryApi.loadMyPageInfo(token, userId)
     }
+
+    override suspend fun deleteAccount(token: String, userIdRequest: UseUserIdRequest): SimpleResponse {
+        return myBuryApi.accountDelete(token, userIdRequest)
+    }
 }

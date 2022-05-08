@@ -126,4 +126,9 @@ interface MyBuryRepository {
         token: String,
         userId: String
     ): OriginMyPageInfo
+
+    suspend fun deleteAccount(
+        token: String,
+        userIdRequest: UseUserIdRequest
+    ): SimpleResponse
 }

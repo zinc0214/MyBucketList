@@ -1,6 +1,5 @@
 package womenproject.com.mybury.presentation.mypage.logininfo
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,23 +12,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import womenproject.com.mybury.MyBuryApplication
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.Preference.Companion.allClear
 import womenproject.com.mybury.data.Preference.Companion.clearAllLocalInfo
-import womenproject.com.mybury.data.Preference.Companion.getAccessToken
 import womenproject.com.mybury.data.Preference.Companion.getAccountEmail
 import womenproject.com.mybury.data.Preference.Companion.setMyBuryLoginComplete
-import womenproject.com.mybury.data.UseUserIdRequest
-import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentLoginInfoBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.intro.SplashLoginActivity
+import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import womenproject.com.mybury.util.observeNonNull
 
 /**
  * Created by HanAYeon on 2019-09-16.
@@ -39,7 +34,7 @@ import womenproject.com.mybury.presentation.intro.SplashLoginActivity
 class LoginInfoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginInfoBinding
-    private val viewModel by viewModels<BaseViewModel>()
+    private val myPageViewModel by viewModels<MyPageViewModel>()
 
     private var isSuccessDelete = false
     private lateinit var auth: FirebaseAuth
@@ -54,9 +49,10 @@ class LoginInfoFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initDataBinding()
+        setUpObservers()
     }
 
     private fun initDataBinding() {
@@ -65,7 +61,28 @@ class LoginInfoFragment : BaseFragment() {
         binding.activity = this
     }
 
-    fun getLoginText() = run { "${getAccountEmail(requireContext())} 계정으로\n로그인하였습니다." }
+    private fun setUpObservers() {
+        myPageViewModel.deleteAccountEvent.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    // DO Nothing...
+                }
+                LoadState.RESTART -> signOutMyBury()
+                LoadState.SUCCESS -> {
+                    allClear(requireContext())
+                    isSuccessDelete = true
+                }
+                LoadState.FAIL -> {
+                    LogoutOrSignOutFailed("계정삭제 실패").show(
+                        requireActivity().supportFragmentManager,
+                        "tag"
+                    )
+                }
+            }
+        }
+    }
+
+    fun getLoginText() = "${getAccountEmail(requireContext())} 계정으로\n로그인하였습니다."
 
     fun accountDeleteClickListener() {
         val startDeleting: () -> Unit = {
@@ -73,10 +90,12 @@ class LoginInfoFragment : BaseFragment() {
         }
 
         val animEnd: () -> Unit = {
-            val intent = Intent(context, SplashLoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            MyBuryApplication.context.startActivity(intent)
-            this.activity?.finish()
+            if (isSuccessDelete) {
+                val intent = Intent(context, SplashLoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                MyBuryApplication.context.startActivity(intent)
+                this.activity?.finish()
+            }
         }
 
         AccountDeleteDialogFragment(
@@ -90,49 +109,8 @@ class LoginInfoFragment : BaseFragment() {
         signOut()
     }
 
-    @SuppressLint("CheckResult")
     private fun signOutMyBury() {
-        val userIdRequest = UseUserIdRequest(Preference.getUserId(requireContext()))
-        val accessToken = getAccessToken(requireContext())
-        if (accessToken == null) {
-            LogoutOrSignOutFailed("계정삭제 실패").show(requireActivity().supportFragmentManager, "tag")
-            return
-        }
-
-        apiInterface.postSignOut(accessToken, userIdRequest)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                when (response.retcode) {
-                    "200" -> {
-                        allClear(requireContext())
-                        isSuccessDelete = true
-                    }
-                    "301" -> viewModel.getRefreshToken(object : BaseViewModel.SimpleCallBack {
-                        override fun success() {
-                            signOutMyBury()
-                        }
-
-                        override fun fail() {
-                            LogoutOrSignOutFailed("계정삭제 실패").show(
-                                requireActivity().supportFragmentManager,
-                                "tag"
-                            )
-                        }
-                    })
-                    else -> LogoutOrSignOutFailed("계정삭제 실패").show(
-                        requireActivity().supportFragmentManager,
-                        "tag"
-                    )
-                }
-
-            }) {
-                LogoutOrSignOutFailed("계정삭제 실패").show(
-                    requireActivity().supportFragmentManager,
-                    "tag"
-                )
-            }
-
+        myPageViewModel.deleteAccount()
     }
 
     private fun initGoogle() {
@@ -154,7 +132,6 @@ class LoginInfoFragment : BaseFragment() {
             LogoutSuccess().show(requireActivity().supportFragmentManager)
         }
     }
-
 }
 
 

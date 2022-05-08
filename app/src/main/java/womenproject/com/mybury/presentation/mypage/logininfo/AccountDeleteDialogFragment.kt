@@ -18,14 +18,14 @@ import womenproject.com.mybury.ui.loadingbutton.customView.ProgressButton
  * Created by HanAYeon on 2019. 1. 15..
  */
 
-class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
+open class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
                                   private val isAnimEnd: () -> Unit) : BaseDialogFragment<DialogAccountDelectBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.dialog_account_delect
 
 
-    val animFadeOut = AnimationUtils.loadAnimation(MyBuryApplication.context, R.anim.fade_out)
+    private val animFadeOut = AnimationUtils.loadAnimation(MyBuryApplication.context, R.anim.fade_out)
 
     override fun initDataBinding() {
 
@@ -64,8 +64,9 @@ class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
                 }, 2000)
                 postDelayed({
                     animFadeOut.duration = 1800
-                    viewDataBinding.endContentText.visibility=View.GONE
+                    viewDataBinding.endContentText.visibility = View.GONE
                     isAnimEnd.invoke()
+                    dismiss()
                 }, 2000)
             }
         }
@@ -73,20 +74,23 @@ class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
     }
 
 
-    open fun progressAnimator(progressButton: ProgressButton) = ValueAnimator.ofFloat(0F, 100F).apply {
-        duration = 800
-        startDelay = 0
-        addUpdateListener { animation ->
-            progressButton.setProgress(animation.animatedValue as Float)
+    private fun progressAnimator(progressButton: ProgressButton) =
+        ValueAnimator.ofFloat(0F, 100F).apply {
+            duration = 800
+            startDelay = 0
+            addUpdateListener { animation ->
+                progressButton.setProgress(animation.animatedValue as Float)
+            }
         }
-    }
 
-    open fun setFinalSuccessUIButton() {
-        viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList = MyBuryApplication.context.getColorStateList(R.color._a6c6ff)
+    private fun setFinalSuccessUIButton() {
+        viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList =
+            MyBuryApplication.context.getColorStateList(R.color._a6c6ff)
     }
 
 
     private fun setDoneSuccessUIButton() {
-        viewDataBinding.lastBucketItem.bucketItemImage.background = MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
+        viewDataBinding.lastBucketItem.bucketItemImage.background =
+            MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 }

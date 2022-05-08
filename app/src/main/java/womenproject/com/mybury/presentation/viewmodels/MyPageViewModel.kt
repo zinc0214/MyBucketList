@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import womanproject.com.mybury.domain.usecase.my.DeleteAccountUseCase
 import womanproject.com.mybury.domain.usecase.my.LoadMyPageInfoUseCase
 import womanproject.com.mybury.domain.usecase.my.UpdateProfileUseCase
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.model.LoadState
+import womenproject.com.mybury.data.model.UseUserIdRequest
 import womenproject.com.mybury.data.parseToCategoryInfos
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import java.io.File
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val loadMyPageInfoUseCase: LoadMyPageInfoUseCase,
-    private val updateProfileUseCase: UpdateProfileUseCase
+    private val updateProfileUseCase: UpdateProfileUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase
 ) : BaseViewModel() {
 
     private val _myPageInfo = MutableLiveData<MyPageInfo>()
@@ -32,6 +35,9 @@ class MyPageViewModel @Inject constructor(
 
     private val _updateProfileEvent = MutableLiveData<LoadState>()
     val updateProfileEvent: LiveData<LoadState> get() = _updateProfileEvent
+
+    private val _deleteAccountEvent = MutableLiveData<LoadState>()
+    val deleteAccountEvent : LiveData<LoadState> get() = _deleteAccountEvent
 
     fun getMyPageData() {
 
@@ -105,6 +111,30 @@ class MyPageViewModel @Inject constructor(
                 }
             }.getOrElse {
                 _updateProfileEvent.value = LoadState.FAIL
+            }
+        }
+    }
+
+    fun deleteAccount() {
+        if (accessToken.isNullOrBlank() || userId.isNullOrBlank()) {
+            _deleteAccountEvent.value = LoadState.FAIL
+            return
+        }
+
+        val userIdRequest = UseUserIdRequest(userId)
+        viewModelScope.launch {
+            runCatching {
+                deleteAccountUseCase.invoke(accessToken, userIdRequest).apply {
+                    when(this.retcode) {
+                        "200" -> _deleteAccountEvent.value = LoadState.SUCCESS
+                        "301" -> getRefreshToken {
+                            _deleteAccountEvent.value = it
+                        }
+                        else -> _deleteAccountEvent.value = LoadState.FAIL
+                    }
+                }
+            }.getOrElse {
+                _deleteAccountEvent.value = LoadState.FAIL
             }
         }
     }

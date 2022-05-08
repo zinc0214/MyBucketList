@@ -157,4 +157,9 @@ interface MyBuryApi {
         @Query("userId") userId: String
     ): OriginMyPageInfo
 
+    @HTTP(method = "DELETE", path = "/withdrawal", hasBody = true)
+    suspend fun accountDelete(
+        @Header("X-Auth-Token") token: String,
+        @Body userIdRequest: UseUserIdRequest
+    ): SimpleResponse
 }
