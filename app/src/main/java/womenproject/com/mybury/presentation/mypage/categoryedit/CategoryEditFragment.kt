@@ -18,7 +18,6 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
@@ -171,6 +170,24 @@ class CategoryEditFragment : BaseFragment(),
                 }
             }
         }
+
+        categoryViewModel.removeCategoryItemState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+                LoadState.RESTART -> removeCategoryItem()
+                LoadState.SUCCESS -> {
+                    context?.showToast("카테고리가 삭제되었습니다.")
+                    stopLoading()
+                    initDataBinding()
+                    removedList.clear()
+                    binding.cancelText.isEnabled = false
+                }
+                LoadState.FAIL -> {
+                    context?.showToast("카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.")
+                    stopLoading()
+                }
+            }
+        }
     }
 
     private fun initOriginCategory(categoryList: List<Category>) {
@@ -226,32 +243,8 @@ class CategoryEditFragment : BaseFragment(),
         categoryViewModel.addCategoryItem(name)
     }
 
-    fun setCategoryDeleteListener() {
-        categoryViewModel.removeCategoryItem(
-            removedList,
-            object : BaseViewModel.Simple3CallBack {
-                override fun restart() {
-                    setCategoryDeleteListener()
-                }
-
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    context?.showToast("카테고리가 삭제되었습니다.")
-                    stopLoading()
-                    initDataBinding()
-                    removedList.clear()
-                    binding.cancelText.isEnabled = false
-                }
-
-                override fun fail() {
-                    context?.showToast("카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.")
-                    stopLoading()
-                }
-
-            })
+    fun removeCategoryItem() {
+        categoryViewModel.removeCategoryItem(removedList)
     }
 
     private fun setCategoryStatusChange() {

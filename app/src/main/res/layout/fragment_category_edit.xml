@@ -55,7 +55,7 @@
                     style="@style/baseDialogButtonTextStyle"
                     android:background="@drawable/white_button_background"
                     android:enabled="false"
-                    android:onClick="@{()->fragment.setCategoryDeleteListener()}"
+                    android:onClick="@{()->fragment.removeCategoryItem()}"
                     android:text="삭제"
                     android:textColor="@color/enable_5a95ff_dddddd" />
 

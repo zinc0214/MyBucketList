@@ -164,4 +164,11 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.changeCategoryList(token, categoryId)
     }
+
+    override suspend fun removeCategoryItem(
+        token: String,
+        removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse {
+        return myBuryApi.removeCategoryItem(token, removeCategoryRequest)
+    }
 }

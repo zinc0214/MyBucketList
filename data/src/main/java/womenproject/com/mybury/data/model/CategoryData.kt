@@ -34,3 +34,9 @@ data class ChangeCategoryStatusRequest(
     val userId: String,
     val categoryIdList: List<String>
 )
+
+@Serializable
+data class RemoveCategoryRequest(
+    val userId: String,
+    val categoryIdList: List<String>
+)

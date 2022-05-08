@@ -145,4 +145,11 @@ interface MyBuryApi {
         @Body categoryId: ChangeCategoryStatusRequest
     ): SimpleResponse
 
+    @HTTP(method = "DELETE", path = "/category", hasBody = true)
+    suspend fun removeCategoryItem(
+        @Header("X-Auth-Token") token: String,
+        @Body removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse
+
+
 }

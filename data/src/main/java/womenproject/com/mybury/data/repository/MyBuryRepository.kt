@@ -117,4 +117,8 @@ interface MyBuryRepository {
         categoryId: ChangeCategoryStatusRequest
     ): SimpleResponse
 
+    suspend fun removeCategoryItem(
+        token: String,
+        removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse
 }

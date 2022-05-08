@@ -126,10 +126,6 @@ fun List<DomainCategory>.toCategoryData(): List<Category> {
     return list
 }
 
-data class RemoveCategoryRequest(
-    val userId: String,
-    val categoryIdList: List<String>
-)
 
 data class MyPageInfo(
     val name: String,
