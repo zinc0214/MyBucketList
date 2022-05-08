@@ -20,12 +20,6 @@ interface RetrofitInterface {
     @POST("/refresh_token")
     fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
-    @GET("/mypage")
-    fun loadMyPageData(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String
-    ): Observable<MyPageInfo>
-
     @HTTP(method = "DELETE", path = "/withdrawal", hasBody = true)
     fun postSignOut(
         @Header("X-Auth-Token") token: String,

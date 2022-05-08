@@ -171,4 +171,8 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.removeCategoryItem(token, removeCategoryRequest)
     }
+
+    override suspend fun loadMyPageInfo(token: String, userId: String): OriginMyPageInfo {
+        return myBuryApi.loadMyPageInfo(token, userId)
+    }
 }

@@ -20,12 +20,11 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.DefaulProfileImg
-import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentProfileEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
 import womenproject.com.mybury.presentation.base.BaseNormalDialogFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
 import womenproject.com.mybury.presentation.write.AddContentType
 import womenproject.com.mybury.presentation.write.WriteMemoImgAddDialogFragment
@@ -69,6 +68,7 @@ class ProfileEditFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataBinding()
+        setUpObservers()
     }
 
     private fun initDataBinding() {
@@ -103,6 +103,29 @@ class ProfileEditFragment : BaseFragment() {
     }
 
     private fun setUpObservers() {
+        viewModel.myPageInfo.observeNonNull(viewLifecycleOwner) {
+            binding.nicknameEditText.setText(it.name)
+            lastNickname = it.name
+            lastImg = it.imageUrl.toString()
+            defaultImg = it.imageUrl.toString()
+            setUpView()
+            seyMyProfileImg(it.imageUrl)
+        }
+
+        viewModel.loadMyPageInfoEvent.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+                LoadState.RESTART -> getMyProfileInfo()
+                LoadState.SUCCESS -> stopLoading()
+                LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog {
+                        onBackPressedFragment()
+                    }.show(requireActivity().supportFragmentManager, "LoadFailDialog")
+                }
+            }
+        }
+
         viewModel.updateProfileEvent.observeNonNull(viewLifecycleOwner) {
             when (it) {
                 LoadState.START -> {
@@ -156,49 +179,18 @@ class ProfileEditFragment : BaseFragment() {
                 .override(100, 100)
                 .into(binding.profileImg)
         }
-
-
     }
 
-
     private fun getMyProfileInfo() {
-
-        viewModel.getMyPageData(object : BaseViewModel.MoreCallBackAny {
-            override fun restart() {
-
-            }
-
-            override fun start() {
-                startLoading()
-            }
-
-            override fun success(value: Any) {
-                val info = value as MyPageInfo
-                stopLoading()
-
-                binding.nicknameEditText.setText(info.name)
-                lastNickname = info.name
-                lastImg = info.imageUrl.toString()
-                defaultImg = info.imageUrl.toString()
-                setUpView()
-                setUpObservers()
-                seyMyProfileImg(info.imageUrl)
-
-            }
-
-            override fun fail() {
-                stopLoading()
-            }
-
-        })
-
+        viewModel.getMyPageData()
     }
 
     private fun setMyProfileInfo() {
         viewModel.updateProfileData(
             _nickName = binding.nicknameEditText.text.toString(),
             _profileImg = imgUrl,
-            _useDefaultImg = useDetailImg)
+            _useDefaultImg = useDetailImg
+        )
     }
 
     private fun setSaveBtnEnabled() {

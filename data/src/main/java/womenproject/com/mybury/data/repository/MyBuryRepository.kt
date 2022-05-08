@@ -121,4 +121,9 @@ interface MyBuryRepository {
         token: String,
         removeCategoryRequest: RemoveCategoryRequest
     ): SimpleResponse
+
+    suspend fun loadMyPageInfo(
+        token: String,
+        userId: String
+    ): OriginMyPageInfo
 }

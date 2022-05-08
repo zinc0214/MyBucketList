@@ -151,5 +151,10 @@ interface MyBuryApi {
         @Body removeCategoryRequest: RemoveCategoryRequest
     ): SimpleResponse
 
+    @GET("/mypage")
+    suspend fun loadMyPageInfo(
+        @Header("X-Auth-Token") token: String,
+        @Query("userId") userId: String
+    ): OriginMyPageInfo
 
 }

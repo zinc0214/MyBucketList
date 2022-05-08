@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 import womenproject.com.mybury.data.model.BucketType
 import womenproject.com.mybury.data.model.DomainBucketItem
 import womenproject.com.mybury.data.model.DomainCategory
+import womenproject.com.mybury.data.model.OriginCategoryInfo
 
 /**
  * Created by HanAYeon on 2018. 11. 27..
@@ -133,10 +134,9 @@ data class MyPageInfo(
     val startedCount: Int = 0,
     val completedCount: Int = 0,
     val dDayCount: Int = 0,
-    val categoryList: List<CategoryInfo>,
-    val retcode: String
+    val categoryList: List<CategoryInfo>
 ) {
-    fun showableCategoryList() : List<CategoryInfo> {
+    fun showableCategoryList(): List<CategoryInfo> {
         return categoryList - categoryList.filter { it.count == 0 && it.name == "없음" }.toSet()
     }
 
@@ -145,6 +145,23 @@ data class MyPageInfo(
     fun completedCountText() = completedCount.toString()
 
     fun dDayCountText() = dDayCount.toString()
+}
+
+
+fun List<OriginCategoryInfo>.parseToCategoryInfos(): ArrayList<CategoryInfo> {
+    val categoryInfoList = arrayListOf<CategoryInfo>()
+    this.forEach {
+        categoryInfoList.add(
+            CategoryInfo(
+                name = it.name,
+                id = it.id,
+                count = it.count
+            )
+        )
+    }
+
+    return categoryInfoList
+
 }
 
 @Parcelize

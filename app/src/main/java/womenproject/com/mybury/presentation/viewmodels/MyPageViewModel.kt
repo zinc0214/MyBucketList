@@ -1,17 +1,15 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
+import womanproject.com.mybury.domain.usecase.my.LoadMyPageInfoUseCase
 import womanproject.com.mybury.domain.usecase.my.UpdateProfileUseCase
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.model.LoadState
-import womenproject.com.mybury.data.network.apiInterface
+import womenproject.com.mybury.data.parseToCategoryInfos
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import java.io.File
 import javax.inject.Inject
@@ -22,60 +20,62 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val loadMyPageInfoUseCase: LoadMyPageInfoUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase
 ) : BaseViewModel() {
 
     private val _myPageInfo = MutableLiveData<MyPageInfo>()
+    val myPageInfo: LiveData<MyPageInfo> get() = _myPageInfo
+
+    private val _loadMyPageInfoEvent = MutableLiveData<LoadState>()
+    val loadMyPageInfoEvent: LiveData<LoadState> get() = _loadMyPageInfoEvent
+
     private val _updateProfileEvent = MutableLiveData<LoadState>()
     val updateProfileEvent: LiveData<LoadState> get() = _updateProfileEvent
 
-    @SuppressLint("CheckResult")
-    fun getMyPageData(callback: MoreCallBackAny) {
+    fun getMyPageData() {
 
         if (accessToken == null || userId == null) {
-            callback.fail()
+            _loadMyPageInfoEvent.value = LoadState.FAIL
             return
         }
-        callback.start()
+        _loadMyPageInfoEvent.value = LoadState.START
 
-        apiInterface.loadMyPageData(accessToken, userId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                callback.fail()
-            }
-            .subscribe({ response ->
-                when (response.retcode) {
-                    "200" -> {
-                        _myPageInfo.value = response
-                        callback.success(response)
+        viewModelScope.launch {
+            runCatching {
+                loadMyPageInfoUseCase.invoke(accessToken, userId).apply {
+                    when (this.retcode) {
+                        "200" -> {
+                            _myPageInfo.value = MyPageInfo(
+                                name = this.name,
+                                imageUrl = this.imageUrl,
+                                startedCount = this.startedCount,
+                                completedCount = this.completedCount,
+                                dDayCount = this.dDayCount,
+                                categoryList = this.categoryList.parseToCategoryInfos()
+                            )
+                            _loadMyPageInfoEvent.value = LoadState.SUCCESS
+                        }
+                        "301" -> getRefreshToken {
+                            _loadMyPageInfoEvent.value = it
+                        }
+                        else -> _loadMyPageInfoEvent.value = LoadState.FAIL
                     }
-                    "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callback.restart()
-                        }
-
-                        override fun fail() {
-                            callback.fail()
-                        }
-                    })
-                    else -> callback.fail()
                 }
-            }) {
-                callback.fail()
             }
+        }
     }
 
     fun updateProfileData(
         _token: String = "",
-        _userId : String = "",
+        _userId: String = "",
         _nickName: String,
         _useDefaultImg: Boolean,
         _profileImg: File?,
     ) {
 
         val useableToken = if (_token.isNotBlank() && _token.isNotEmpty()) _token else accessToken
-        val useableUserid = if(_userId.isNotBlank() && _userId.isNotEmpty()) _userId else userId
+        val useableUserid = if (_userId.isNotBlank() && _userId.isNotEmpty()) _userId else userId
 
         if (useableToken.isNullOrBlank() || useableUserid.isNullOrBlank()) {
             _updateProfileEvent.value = LoadState.FAIL
