@@ -20,31 +20,6 @@ interface RetrofitInterface {
     @POST("/refresh_token")
     fun getRefreshToken(@Body refreshToken: NewTokenRequest): Observable<GetTokenResponse>
 
-    @POST("/category/edit_name")
-    fun editCategoryItemName(
-        @Header("X-Auth-Token") token: String,
-        @Body categoryId: EditCategoryNameRequest
-    ): Observable<SimpleResponse>
-
-    @POST("/category/edit_priority")
-    fun changeCategoryList(
-        @Header("X-Auth-Token") token: String,
-        @Body categoryId: ChangeCategoryStatusRequest
-    ): Observable<SimpleResponse>
-
-
-    @HTTP(method = "DELETE", path = "/category", hasBody = true)
-    fun removeCategoryItem(
-        @Header("X-Auth-Token") token: String,
-        @Body categoryId: RemoveCategoryRequest
-    ): Observable<SimpleResponse>
-
-    @GET("/mypage")
-    fun loadMyPageData(
-        @Header("X-Auth-Token") token: String,
-        @Query("userId") userId: String
-    ): Observable<MyPageInfo>
-
     @HTTP(method = "DELETE", path = "/withdrawal", hasBody = true)
     fun postSignOut(
         @Header("X-Auth-Token") token: String,

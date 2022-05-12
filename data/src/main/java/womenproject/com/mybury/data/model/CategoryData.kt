@@ -21,3 +21,22 @@ data class AddCategoryRequest(
     val userId: String,
     val name: String
 )
+
+@Serializable
+data class EditCategoryNameRequest(
+    val userId: String,
+    val id: String,
+    val name: String
+)
+
+@Serializable
+data class ChangeCategoryStatusRequest(
+    val userId: String,
+    val categoryIdList: List<String>
+)
+
+@Serializable
+data class RemoveCategoryRequest(
+    val userId: String,
+    val categoryIdList: List<String>
+)
