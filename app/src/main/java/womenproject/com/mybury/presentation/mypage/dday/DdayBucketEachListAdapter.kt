@@ -48,6 +48,7 @@ class DdayBucketEachListAdapter(
                 holder.bind(
                     bucketItemInfo = bucketList[position],
                     isShowDday = true,
+                    isForDday = true,
                     bucketItemHandler = bucketItemHandler
                 )
             }

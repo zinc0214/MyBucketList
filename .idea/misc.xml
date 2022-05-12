@@ -30,6 +30,7 @@
         <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_13_ffca5a.xml" value="0.335" />
         <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_e8e8e8.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/white_button_background.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_create_account.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15925925925925927" />
         <entry key="app/src/main/res/layout/dday_bucket_list.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/dialog_main_filter.xml" value="0.2520833333333333" />
@@ -41,6 +42,7 @@
         <entry key="app/src/main/res/layout/fragment_category_edit.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_dday_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_home_search.xml" value="0.26666666666666666" />
+        <entry key="app/src/main/res/layout/fragment_login_info.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.18067226890756302" />
         <entry key="app/src/main/res/layout/fragment_mybury_support.xml" value="0.15925925925925927" />
@@ -68,9 +70,11 @@
         <entry key="app/src/main/res/layout/layout_my_page_more_menu.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/layout_mypage_bottom_menu_sheet.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/layout_mypage_bottom_sheet_with_add_btn.xml" value="0.25729166666666664" />
+        <entry key="app/src/main/res/layout/layout_top_back_btn.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/mypage_scroll_layout.xml" value="0.26666666666666666" />
         <entry key="app/src/main/res/layout/widget_bucket_done_button.xml" value="0.25" />
         <entry key="app/src/main/res/layout/widget_detail_more_menu.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/layout/widget_loading.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/widget_main_snack_bar_view.xml" value="0.2140625" />
         <entry key="app/src/main/res/layout/widget_main_snack_view.xml" value="0.2140625" />
         <entry key="app/src/main/res/layout/widget_write_add_img.xml" value="0.1125" />

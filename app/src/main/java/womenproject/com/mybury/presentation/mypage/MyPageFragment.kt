@@ -20,12 +20,13 @@ import womenproject.com.mybury.R
 import womenproject.com.mybury.data.MyPageInfo
 import womenproject.com.mybury.data.ShowFilter
 import womenproject.com.mybury.data.WebViewType
+import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMyPageBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
-import womenproject.com.mybury.presentation.dialog.NetworkFailDialog
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.mypage.categoryedit.MyPageCategoryListAdapter
 import womenproject.com.mybury.presentation.viewmodels.MyPageViewModel
+import womenproject.com.mybury.util.observeNonNull
 import kotlin.random.Random
 
 /**
@@ -50,9 +51,10 @@ class MyPageFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        setUpObservers()
     }
 
     private fun setUpViews() {
@@ -61,43 +63,40 @@ class MyPageFragment : BaseFragment() {
             val argIsAdsShow = args.isAdsShow
             this.isAdsShow = argIsAdsShow
         }
-        setCategoryList()
     }
 
-    private fun setCategoryList() {
+    private fun setUpObservers() {
+        viewModel.myPageInfo.observeNonNull(viewLifecycleOwner) {
+            val layoutManager = LinearLayoutManager(context)
 
-        viewModel.getMyPageData(object : BaseViewModel.MoreCallBackAny {
-            override fun restart() {
-                setCategoryList()
+            binding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager =
+                layoutManager
+            binding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
+            binding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
+                MyPageCategoryListAdapter(it.showableCategoryList())
+
+            setUpView(it)
+        }
+
+        viewModel.loadMyPageInfoEvent.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+                LoadState.RESTART -> loadMyPageInfo()
+                LoadState.SUCCESS -> stopLoading()
+                LoadState.FAIL -> {
+                    stopLoading()
+                    LoadFailDialog {
+                        onBackPressedFragment()
+                    }.show(requireActivity().supportFragmentManager, "LoadFailDialog")
+                }
             }
+        }
 
-            override fun start() {
-                startLoading()
-            }
+        loadMyPageInfo()
+    }
 
-            override fun success(value: Any) {
-
-                val info = value as MyPageInfo
-                stopLoading()
-
-                val layoutManager = LinearLayoutManager(context)
-
-                binding.mypageScrollLayout.mypageCategoryRecyclerview.layoutManager =
-                    layoutManager
-                binding.mypageScrollLayout.mypageCategoryRecyclerview.hasFixedSize()
-                binding.mypageScrollLayout.mypageCategoryRecyclerview.adapter =
-                    MyPageCategoryListAdapter(info.showableCategoryList())
-
-                setUpView(info)
-            }
-
-
-            override fun fail() {
-                stopLoading()
-                NetworkFailDialog().show(requireActivity().supportFragmentManager, "tag")
-            }
-        })
-
+    private fun loadMyPageInfo() {
+        viewModel.getMyPageData()
     }
 
     private fun setUpView(_myPageInfo: MyPageInfo) {
@@ -181,7 +180,7 @@ class MyPageFragment : BaseFragment() {
         }
     }
 
-    fun writeClickListener(v : View) {
+    fun writeClickListener(v: View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToWrite()
         directions.isAdsShow = isAdsShow
@@ -193,43 +192,43 @@ class MyPageFragment : BaseFragment() {
         requireActivity().onBackPressed()
     }
 
-    fun goToDdayList(v : View) {
+    fun goToDdayList(v: View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToDday()
         v.findNavController().navigate(directions)
     }
 
-    fun goToCategoryEdit(v : View) {
+    fun goToCategoryEdit(v: View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToCategoryEdit()
         v.findNavController().navigate(directions)
     }
 
-    fun goToProfileEdit(v : View) {
+    fun goToProfileEdit(v: View) {
         popupClickListener()
         val directions = MyPageFragmentDirections.actionMyPageToProfileEdit()
         v.findNavController().navigate(directions)
     }
 
-    fun goToAppInfoPage(v : View) {
+    fun goToAppInfoPage(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToAppInfo()
         v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    fun goToLoginInfo(v : View) {
+    fun goToLoginInfo(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToLoginInfo()
         v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    fun goToAlarmSetting(v : View) {
+    fun goToAlarmSetting(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToAlarmSetting()
         v.findNavController().navigate(directions)
         popupClickListener()
     }
 
-    fun goToMyBurySupport(v : View) {
+    fun goToMyBurySupport(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToMyburySupport()
         v.findNavController().navigate(directions)
         popupClickListener()
@@ -245,19 +244,19 @@ class MyPageFragment : BaseFragment() {
         startActivity(Intent.createChooser(send, "마이버리 문의하기"))
     }
 
-    fun goToDoingBucketList(v : View) {
+    fun goToDoingBucketList(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.started.toString()
         v.findNavController().navigate(directions)
     }
 
-    fun goToDoneBucketList(v : View) {
+    fun goToDoneBucketList(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToBucketItemByFilter()
         directions.filter = ShowFilter.completed.toString()
         v.findNavController().navigate(directions)
     }
 
-    fun goToNoticeWebView(v : View) {
+    fun goToNoticeWebView(v: View) {
         val directions = MyPageFragmentDirections.actionMyPageToNotice()
         directions.type = WebViewType.notice.toString()
         v.findNavController().navigate(directions)

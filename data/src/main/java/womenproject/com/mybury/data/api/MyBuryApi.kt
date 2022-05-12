@@ -132,4 +132,34 @@ interface MyBuryApi {
         @Header("X-Auth-Token") token: String,
         @Body categoryId: AddCategoryRequest
     ): SimpleResponse
+
+    @POST("/category/edit_name")
+    suspend fun editCategoryItemName(
+        @Header("X-Auth-Token") token: String,
+        @Body categoryId: EditCategoryNameRequest
+    ): SimpleResponse
+
+    @POST("/category/edit_priority")
+    suspend fun changeCategoryList(
+        @Header("X-Auth-Token") token: String,
+        @Body categoryId: ChangeCategoryStatusRequest
+    ): SimpleResponse
+
+    @HTTP(method = "DELETE", path = "/category", hasBody = true)
+    suspend fun removeCategoryItem(
+        @Header("X-Auth-Token") token: String,
+        @Body removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse
+
+    @GET("/mypage")
+    suspend fun loadMyPageInfo(
+        @Header("X-Auth-Token") token: String,
+        @Query("userId") userId: String
+    ): OriginMyPageInfo
+
+    @HTTP(method = "DELETE", path = "/withdrawal", hasBody = true)
+    suspend fun accountDelete(
+        @Header("X-Auth-Token") token: String,
+        @Body userIdRequest: UseUserIdRequest
+    ): SimpleResponse
 }

@@ -150,4 +150,33 @@ class MyBuryRepositoryImpl @Inject constructor(
     ): SimpleResponse {
         return myBuryApi.addNewCategoryItem(token, categoryId)
     }
+
+    override suspend fun editCategoryItemName(
+        token: String,
+        categoryId: EditCategoryNameRequest
+    ): SimpleResponse {
+        return myBuryApi.editCategoryItemName(token, categoryId)
+    }
+
+    override suspend fun changeCategoryList(
+        token: String,
+        categoryId: ChangeCategoryStatusRequest
+    ): SimpleResponse {
+        return myBuryApi.changeCategoryList(token, categoryId)
+    }
+
+    override suspend fun removeCategoryItem(
+        token: String,
+        removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse {
+        return myBuryApi.removeCategoryItem(token, removeCategoryRequest)
+    }
+
+    override suspend fun loadMyPageInfo(token: String, userId: String): OriginMyPageInfo {
+        return myBuryApi.loadMyPageInfo(token, userId)
+    }
+
+    override suspend fun deleteAccount(token: String, userIdRequest: UseUserIdRequest): SimpleResponse {
+        return myBuryApi.accountDelete(token, userIdRequest)
+    }
 }

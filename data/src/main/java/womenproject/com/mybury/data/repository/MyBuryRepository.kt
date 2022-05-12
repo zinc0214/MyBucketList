@@ -106,4 +106,29 @@ interface MyBuryRepository {
         token: String,
         categoryId: AddCategoryRequest
     ): SimpleResponse
+
+    suspend fun editCategoryItemName(
+        token: String,
+        categoryId: EditCategoryNameRequest
+    ): SimpleResponse
+
+    suspend fun changeCategoryList(
+        token: String,
+        categoryId: ChangeCategoryStatusRequest
+    ): SimpleResponse
+
+    suspend fun removeCategoryItem(
+        token: String,
+        removeCategoryRequest: RemoveCategoryRequest
+    ): SimpleResponse
+
+    suspend fun loadMyPageInfo(
+        token: String,
+        userId: String
+    ): OriginMyPageInfo
+
+    suspend fun deleteAccount(
+        token: String,
+        userIdRequest: UseUserIdRequest
+    ): SimpleResponse
 }

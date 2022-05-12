@@ -16,7 +16,6 @@ import womenproject.com.mybury.data.Preference.Companion.getRefreshToken
 import womenproject.com.mybury.data.Preference.Companion.getUserId
 import womenproject.com.mybury.data.Preference.Companion.setAccessToken
 import womenproject.com.mybury.data.Preference.Companion.setRefreshToken
-import womenproject.com.mybury.data.Preference.Companion.setUserId
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.data.network.apiInterface
 import javax.inject.Inject
@@ -48,36 +47,14 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         return !isConnected
     }
 
-    fun setAccessToken(accessToken: String, refreshToken: String) {
-
-    }
-
-    fun setUserId(userId: String) {
-        setUserId(getAppContext(), userId)
-    }
-
     interface SimpleCallBack {
         fun success()
         fun fail()
     }
 
-    interface Simple3CallBack {
-        fun start()
-        fun success()
-        fun fail()
-        fun restart()
-    }
-
     interface MoreCallBackAny {
         fun start()
         fun success(value: Any)
-        fun fail()
-        fun restart()
-    }
-
-    interface MoreCallBackAnyList {
-        fun start()
-        fun success(value: List<Any>)
         fun fail()
         fun restart()
     }

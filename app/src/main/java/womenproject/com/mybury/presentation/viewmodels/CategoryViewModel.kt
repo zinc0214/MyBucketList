@@ -1,19 +1,15 @@
 package womenproject.com.mybury.presentation.viewmodels
 
-import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
-import womanproject.com.mybury.domain.usecase.category.AddCategoryItemUseCase
-import womanproject.com.mybury.domain.usecase.category.LoadCategoryListUseCase
-import womenproject.com.mybury.data.*
-import womenproject.com.mybury.data.model.AddCategoryRequest
-import womenproject.com.mybury.data.model.LoadState
-import womenproject.com.mybury.data.network.apiInterface
+import womanproject.com.mybury.domain.usecase.category.*
+import womenproject.com.mybury.data.Category
+import womenproject.com.mybury.data.model.*
+import womenproject.com.mybury.data.toCategoryData
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
 
@@ -21,7 +17,10 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val loadCategoryListUseCase: LoadCategoryListUseCase,
-    private val addCategoryItemUseCase: AddCategoryItemUseCase
+    private val addCategoryItemUseCase: AddCategoryItemUseCase,
+    private val editCategoryItemNameUseCase: EditCategoryItemNameUseCase,
+    private val changeCategoryListUseCase: ChangeCategoryListUseCase,
+    private val removeCategoryItemUseCase: RemoveCategoryItemUseCase
 ) : BaseViewModel() {
 
     private val _categoryLoadState = MutableLiveData<LoadState>()
@@ -33,11 +32,22 @@ class CategoryViewModel @Inject constructor(
     private val _addCategoryItemState = MutableLiveData<LoadState>()
     val addCategoryItemState: LiveData<LoadState> = _addCategoryItemState
 
+    private val _editCategoryItemNameState = MutableLiveData<LoadState>()
+    val editCategoryItemNameState: LiveData<LoadState> = _editCategoryItemNameState
+
+    private val _changeCategoryItemState = MutableLiveData<LoadState>()
+    val changeCategoryItemState: LiveData<LoadState> = _changeCategoryItemState
+
+    private val _removeCategoryItemState = MutableLiveData<LoadState>()
+    val removeCategoryItemState: LiveData<LoadState> = _removeCategoryItemState
+
     fun loadCategoryList() {
         if (accessToken == null || userId == null) {
-            _categoryLoadState.value = LoadState.START
+            _categoryLoadState.value = LoadState.FAIL
             return
         }
+
+        _categoryLoadState.value = LoadState.START
 
         viewModelScope.launch {
             runCatching {
@@ -55,46 +65,38 @@ class CategoryViewModel @Inject constructor(
                     }
                 }
             }.getOrElse {
-
                 _categoryLoadState.value = LoadState.FAIL
             }
         }
     }
 
-    @SuppressLint("CheckResult")
-    fun removeCategoryItem(categoryId: HashSet<String>, callBack: Simple3CallBack) {
+    fun removeCategoryItem(categoryIds: HashSet<String>) {
         if (accessToken == null || userId == null) {
-            callBack.fail()
+            _removeCategoryItemState.value = LoadState.FAIL
             return
         }
 
-        // 카테고리 제거
-        val list = ArrayList<String>()
-        for (i in categoryId) {
-            list.add(i)
-        }
-        val request = RemoveCategoryRequest(userId, list)
-        apiInterface.removeCategoryItem(accessToken, request)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                when {
-                    it.retcode == "200" -> callBack.success()
-                    it.retcode == "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callBack.restart()
-                        }
+        _removeCategoryItemState.value = LoadState.START
 
-                        override fun fail() {
-                            callBack.fail()
+        val idList = categoryIds.map { it }
+        val request = RemoveCategoryRequest(userId, idList)
+        viewModelScope.launch {
+            runCatching {
+                removeCategoryItemUseCase.invoke(accessToken, request).apply {
+                    when (this.retcode) {
+                        "200" -> _removeCategoryItemState.value = LoadState.SUCCESS
+                        "301" -> getRefreshToken { state ->
+                            _removeCategoryItemState.value = state
+
                         }
-                    })
-                    else -> callBack.fail()
+                        else -> _removeCategoryItemState.value = LoadState.FAIL
+                    }
                 }
-            }) {
-                callBack.fail()
-            }
 
+            }.getOrElse {
+                _removeCategoryItemState.value = LoadState.FAIL
+            }
+        }
     }
 
     fun addCategoryItem(categoryName: String) {
@@ -120,68 +122,65 @@ class CategoryViewModel @Inject constructor(
                                 _addCategoryItemState.value = LoadState.FAIL
                             }
                         })
-                        else -> _addCategoryItemState.value = LoadState.RESTART
+                        else -> _addCategoryItemState.value = LoadState.FAIL
                     }
                 }
             }.getOrElse {
-                _addCategoryItemState.value = LoadState.RESTART
+                _addCategoryItemState.value = LoadState.FAIL
             }
         }
     }
 
-    @SuppressLint("CheckResult")
-    fun editCategoryItem(category: Category, categoryName: String, callBack: Simple3CallBack) {
+    fun editCategoryItem(category: Category, categoryName: String) {
         if (accessToken == null || userId == null) {
-            callBack.fail()
+            Log.e("ayhan", "edit fail $accessToken, $userId")
+            _editCategoryItemNameState.value = LoadState.FAIL
             return
         }
 
-        callBack.start()
-
+        _editCategoryItemNameState.value = LoadState.START
         val request = EditCategoryNameRequest(userId, category.id, categoryName)
-        apiInterface.editCategoryItemName(accessToken, request)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                callBack.success()
-            }) {
-                callBack.fail()
+
+        viewModelScope.launch {
+            runCatching {
+                editCategoryItemNameUseCase.invoke(accessToken, request).apply {
+                    Log.e("ayhan", "edit response : $this")
+                    when (this.retcode) {
+                        "200" -> _editCategoryItemNameState.value = LoadState.SUCCESS
+                        else -> _editCategoryItemNameState.value = LoadState.FAIL
+                    }
+                }
+            }.getOrElse {
+                Log.e("ayhan", "edit fail ${it.message}")
+                _editCategoryItemNameState.value = LoadState.FAIL
             }
+        }
     }
 
-    @SuppressLint("CheckResult")
-    fun changeCategoryStatus(list: List<Category>, callBack: Simple3CallBack) {
+    fun changeCategoryStatus(list: List<Category>) {
         if (accessToken == null || userId == null) {
-            callBack.fail()
+            _changeCategoryItemState.value = LoadState.FAIL
             return
         }
 
-        var idList = arrayListOf<String>()
-        for (i in list) {
-            idList.add(i.id)
-        }
+        val idList = list.map { it.id }
         val request = ChangeCategoryStatusRequest(userId, idList)
-        callBack.start()
-        apiInterface.changeCategoryList(accessToken, request)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                when (it.retcode) {
-                    "200" -> callBack.success()
-                    "301" -> getRefreshToken(object : SimpleCallBack {
-                        override fun success() {
-                            callBack.restart()
-                        }
+        _changeCategoryItemState.value = LoadState.START
 
-                        override fun fail() {
-                            callBack.fail()
+        viewModelScope.launch {
+            runCatching {
+                changeCategoryListUseCase.invoke(accessToken, request).apply {
+                    when (this.retcode) {
+                        "200" -> _changeCategoryItemState.value = LoadState.SUCCESS
+                        "301" -> getRefreshToken { result ->
+                            _changeCategoryItemState.value = result
                         }
-                    })
-                    else -> callBack.fail()
+                        else -> _changeCategoryItemState.value = LoadState.FAIL
+                    }
                 }
-            }) {
-                callBack.fail()
+            }.getOrElse {
+                _changeCategoryItemState.value = LoadState.FAIL
             }
+        }
     }
-
 }

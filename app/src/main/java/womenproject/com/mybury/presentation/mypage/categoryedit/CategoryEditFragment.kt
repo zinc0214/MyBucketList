@@ -18,7 +18,6 @@ import womenproject.com.mybury.data.Category
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentCategoryEditBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
-import womenproject.com.mybury.presentation.base.BaseViewModel
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.CategoryViewModel
 import womenproject.com.mybury.ui.ItemCheckedListener
@@ -72,9 +71,10 @@ class CategoryEditFragment : BaseFragment(),
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initDataBinding()
+        setUpViewModelObservers()
     }
 
     private fun initDataBinding() {
@@ -82,15 +82,14 @@ class CategoryEditFragment : BaseFragment(),
 
         imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         binding.backLayout.title = "카테고리 편집"
-        binding.backLayout.setBackBtnOnClickListener { _ -> actionByBackButton() }
+        binding.backLayout.setBackBtnOnClickListener { actionByBackButton() }
         binding.fragment = this
 
-        setUpViewModelObservers()
         categoryViewModel.loadCategoryList()
     }
 
     private fun setUpViewModelObservers() {
-        categoryViewModel.categoryLoadState.observe(viewLifecycleOwner) {
+        categoryViewModel.categoryLoadState.observeNonNull(viewLifecycleOwner) {
             when (it) {
                 LoadState.START -> {
                     startLoading()
@@ -106,9 +105,6 @@ class CategoryEditFragment : BaseFragment(),
                     LoadFailDialog {
                         backBtnOnClickListener()
                     }.show(requireActivity().supportFragmentManager, "tag")
-                }
-                else -> {
-                    // Do Nothing
                 }
             }
         }
@@ -135,6 +131,62 @@ class CategoryEditFragment : BaseFragment(),
             changeCategoryList = it as ArrayList<Category>
             setCategoryAdapter()
             isKeyBoardShown = false
+        }
+
+        categoryViewModel.editCategoryItemNameState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    initDataBinding()
+                }
+                LoadState.FAIL -> {
+                    stopLoading()
+                    context?.showToast("카테고리 이름 수정에 실패했습니다.\n다시 시도해주세요.")
+                }
+                else -> {
+                    // Do Nothing
+                }
+            }
+        }
+
+        categoryViewModel.changeCategoryItemState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> {
+                    startLoading()
+                }
+                LoadState.RESTART -> {
+                    setCategoryStatusChange()
+                    stopLoading()
+                }
+                LoadState.SUCCESS -> {
+                    context?.showToast("카테고리 순서가 변경되었습니다.")
+                    stopLoading()
+                    onBackPressedFragment()
+                }
+                LoadState.FAIL -> {
+                    context?.showToast("카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.")
+                    stopLoading()
+                }
+            }
+        }
+
+        categoryViewModel.removeCategoryItemState.observeNonNull(viewLifecycleOwner) {
+            when (it) {
+                LoadState.START -> startLoading()
+                LoadState.RESTART -> removeCategoryItem()
+                LoadState.SUCCESS -> {
+                    context?.showToast("카테고리가 삭제되었습니다.")
+                    stopLoading()
+                    initDataBinding()
+                    removedList.clear()
+                    binding.cancelText.isEnabled = false
+                }
+                LoadState.FAIL -> {
+                    context?.showToast("카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.")
+                    stopLoading()
+                }
+            }
         }
     }
 
@@ -184,87 +236,21 @@ class CategoryEditFragment : BaseFragment(),
     }
 
     private fun editCategoryItem(category: Category, newName: String) {
-        categoryViewModel.editCategoryItem(
-            category,
-            newName,
-            object : BaseViewModel.Simple3CallBack {
-                override fun restart() {
-                    editCategoryItem(category, newName)
-                }
-
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    stopLoading()
-                    initDataBinding()
-                }
-
-                override fun fail() {
-                    stopLoading()
-                }
-
-            })
+        categoryViewModel.editCategoryItem(category, newName)
     }
 
     private fun addNewCategory(name: String) {
         categoryViewModel.addCategoryItem(name)
     }
 
-    fun setCategoryDeleteListener() {
-        categoryViewModel.removeCategoryItem(
-            removedList,
-            object : BaseViewModel.Simple3CallBack {
-                override fun restart() {
-                    setCategoryDeleteListener()
-                }
-
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    context?.showToast("카테고리가 삭제되었습니다.")
-                    stopLoading()
-                    initDataBinding()
-                    removedList.clear()
-                    binding.cancelText.isEnabled = false
-                }
-
-                override fun fail() {
-                    context?.showToast("카테고리 삭제에 실패했습니다.\n 다시 시도해주세요.")
-                    stopLoading()
-                }
-
-            })
+    fun removeCategoryItem() {
+        categoryViewModel.removeCategoryItem(removedList)
     }
 
-    fun setCategoryStatusChange() {
+    private fun setCategoryStatusChange() {
         categoryViewModel.changeCategoryStatus(
-            changeCategoryList,
-            object : BaseViewModel.Simple3CallBack {
-                override fun start() {
-                    startLoading()
-                }
-
-                override fun success() {
-                    context?.showToast("카테고리 순서가 변경되었습니다.")
-                    stopLoading()
-                    onBackPressedFragment()
-                }
-
-                override fun fail() {
-                    context?.showToast("카테고리 순서 변경에 실패했습니다.\n 다시 시도해주세요.")
-                    stopLoading()
-                }
-
-                override fun restart() {
-                    setCategoryStatusChange()
-                    stopLoading()
-                }
-
-            })
+            changeCategoryList
+        )
     }
 
     override fun actionByBackButton() {
