@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/check_complete.xml" value="0.16" />
         <entry key="app/src/main/res/drawable/close_button.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/complete_background.xml" value="0.16" />
+        <entry key="app/src/main/res/drawable/count_seekbar_select.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/dday_button.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/fragment_search.xml" value="0.112" />
         <entry key="app/src/main/res/drawable/mypage_category_background.xml" value="0.22" />
@@ -26,6 +27,7 @@
         <entry key="app/src/main/res/drawable/shape_efefef_r4_strk_e8e8e8.xml" value="0.16" />
         <entry key="app/src/main/res/drawable/shape_ffca5a_r4.xml" value="0.22" />
         <entry key="app/src/main/res/drawable/shape_ffffff_r12.xml" value="0.112" />
+        <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_06_5a95ff.xml" value="0.157" />
         <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_06_e8e8e8.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_13_ffca5a.xml" value="0.335" />
         <entry key="app/src/main/res/drawable/shape_ffffff_r4_strk_e8e8e8.xml" value="0.1275" />
@@ -34,6 +36,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15925925925925927" />
         <entry key="app/src/main/res/layout/dday_bucket_list.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/dialog_main_filter.xml" value="0.2520833333333333" />
+        <entry key="app/src/main/res/layout/dialog_write_fragment_goal_count.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bucket_detail.xml" value="0.24814814814814815" />
         <entry key="app/src/main/res/layout/fragment_bucket_edit.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_bucket_list_by_category.xml" value="0.25729166666666664" />
