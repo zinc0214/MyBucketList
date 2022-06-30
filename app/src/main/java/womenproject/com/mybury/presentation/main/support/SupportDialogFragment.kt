@@ -31,7 +31,7 @@ class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
     }
 
     override fun initDataBinding() {
-        viewDataBinding.apply {
+        binding.apply {
             button.setOnClickListener { goToPurchase() }
             detailButton.setOnClickListener { goToDetail() }
             supportNotShowButton.setOnClickListener {
@@ -41,7 +41,7 @@ class SupportDialogFragment : BaseDialogFragment<DialogSupportOnceBinding>() {
             }
 
             val desc: String = requireContext().getString(R.string.mybury_dialog_desc)
-            viewDataBinding.subDesc.text = Html.fromHtml(String.format(desc))
+            binding.subDesc.text = Html.fromHtml(String.format(desc))
         }
     }
 }

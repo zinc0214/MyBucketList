@@ -39,9 +39,9 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     }
 
     override fun initDataBinding() {
-        viewDataBinding.fragment = this
-        viewDataBinding.filterSetClickListener = createOnClickFilterSetListener()
-        viewDataBinding.filterBoxListener = setOnCheckBoxChangedListener()
+        binding.fragment = this
+        binding.filterSetClickListener = createOnClickFilterSetListener()
+        binding.filterBoxListener = setOnCheckBoxChangedListener()
 
         initFilter()
         initSortListener()
@@ -51,9 +51,9 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
         val showFilter = getShowFilterType(getFilterForShow(requireContext()) ?: "all")
         val sortFilter = getSortFilterType(getFilterListUp(requireContext()) ?: "updatedDt")
 
-        viewDataBinding.showFilter = showFilter
-        viewDataBinding.sortFilter = sortFilter
-        viewDataBinding.isDdayShow = getShowDdayFilter(requireContext())
+        binding.showFilter = showFilter
+        binding.sortFilter = sortFilter
+        binding.isDdayShow = getShowDdayFilter(requireContext())
 
         sortType = sortFilter
         showType = showFilter
@@ -78,7 +78,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     }
 
     private fun setOnCheckBoxChangedListener() = View.OnClickListener {
-        viewDataBinding.apply {
+        binding.apply {
             when (it) {
                 startedCheckBox -> updateShowFilter()
                 completeCheckBox -> updateShowFilter()
@@ -88,7 +88,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
     }
 
     private fun updateShowFilter() {
-        viewDataBinding.apply {
+        binding.apply {
             showType = if(startedCheckBox.isChecked && completeCheckBox.isChecked) {
                 ShowFilter.all
             } else if(startedCheckBox.isChecked) {
@@ -101,7 +101,7 @@ open class FilterDialogFragment(private var stateChangeListener: () -> Unit) :
         }
     }
     private fun initSortListener() {
-        viewDataBinding.sortRadioGroup.setOnCheckedChangeListener { _, id ->
+        binding.sortRadioGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 R.id.radio_btn_update -> sortType = SortFilter.updatedDt
                 R.id.radio_btn_create -> sortType = SortFilter.createdDt

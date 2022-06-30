@@ -25,10 +25,10 @@ class SupportFailDialogFragment(private val token: String, private val errorCode
     }
 
     override fun initDataBinding() {
-        viewDataBinding.errorCode = errorCode
+        binding.errorCode = errorCode
         //  viewDataBinding.goToEmailTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        viewDataBinding.goToEmailTextView.setOnClickListener { goToSendEmail() }
-        viewDataBinding.closeButton.setOnClickListener { dismiss() }
+        binding.goToEmailTextView.setOnClickListener { goToSendEmail() }
+        binding.closeButton.setOnClickListener { dismiss() }
     }
 
     private fun goToSendEmail() {

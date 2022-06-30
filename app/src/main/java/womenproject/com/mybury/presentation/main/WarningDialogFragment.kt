@@ -25,7 +25,7 @@ class WarningDialogFragment(private val confirmClick: () -> Unit) : BaseDialogFr
     }
 
     override fun initDataBinding() {
-        viewDataBinding.apply {
+        binding.apply {
             title = "마이버리 점검중"
             timeIsVisible = false
 

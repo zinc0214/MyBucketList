@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentManager
 
 abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
 
-    lateinit var viewDataBinding: T
+    lateinit var binding: T
 
     abstract val layoutResourceId : Int
 
@@ -32,14 +32,14 @@ abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
+        binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
 
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog!!.setCanceledOnTouchOutside(true)
 
         initDataBinding()
 
-        return viewDataBinding.root
+        return binding.root
     }
 
     fun show(fragmentManager: FragmentManager) {

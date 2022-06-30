@@ -26,7 +26,7 @@ class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : Ba
     }
 
     override fun initDataBinding() {
-        viewDataBinding.apply {
+        binding.apply {
             filterBoxClickListener = setOnCheckBoxChangedListener()
             filterSetClickListener = setOnFilterChangedListener()
         }
@@ -39,20 +39,20 @@ class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : Ba
 
         when (filter) {
             "all" -> {
-                viewDataBinding.plusCheckBox.isChecked = true
-                viewDataBinding.minusCheckBox.isChecked = true
+                binding.plusCheckBox.isChecked = true
+                binding.minusCheckBox.isChecked = true
                 plus = true
                 minus = true
             }
             "minus" -> {
-                viewDataBinding.plusCheckBox.isChecked = false
-                viewDataBinding.minusCheckBox.isChecked = true
+                binding.plusCheckBox.isChecked = false
+                binding.minusCheckBox.isChecked = true
                 plus = false
                 minus = true
             }
             "plus" -> {
-                viewDataBinding.plusCheckBox.isChecked = true
-                viewDataBinding.minusCheckBox.isChecked = false
+                binding.plusCheckBox.isChecked = true
+                binding.minusCheckBox.isChecked = false
                 plus = true
                 minus = false
             }
@@ -60,7 +60,7 @@ class DdayFilterDialogFragment(private var stateChangeListener: () -> Unit) : Ba
     }
 
     private fun setOnCheckBoxChangedListener() = View.OnClickListener {
-        viewDataBinding.apply {
+        binding.apply {
             when (it) {
                 plusCheckBox -> plus = plusCheckBox.isChecked
                 minusCheckBox -> minus = minusCheckBox.isChecked

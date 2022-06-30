@@ -559,10 +559,10 @@ open class BucketWriteFragment : BaseFragment() {
     }
 
     private fun goalCountSetListener(): View.OnClickListener {
-        val goalCountSetListener: (String) -> Unit = { count ->
-            binding.goalCountText.text = count
-            goalCount = count.toInt()
-            if (count.toInt() != 1) {
+        val goalCountSetListener: (Int) -> Unit = { count ->
+            binding.goalCountText.text = count.toString()
+            goalCount = count
+            if (count != 1) {
                 binding.goalCountText.setEnableTextColor()
                 binding.countImg.setImage(R.drawable.target_count_enable)
             } else {

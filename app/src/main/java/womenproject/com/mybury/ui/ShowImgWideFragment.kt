@@ -40,13 +40,13 @@ class ShowImgWideFragment() : BaseDialogFragment<LayoutImgWideBinding>() {
 
     override fun initDataBinding() {
         if(uri != null) {
-            viewDataBinding.imgView.setImageURI(uri)
+            binding.imgView.setImageURI(uri)
         } else {
-            Glide.with(requireContext()).load(url).centerCrop().into(viewDataBinding.imgView)
+            Glide.with(requireContext()).load(url).centerCrop().into(binding.imgView)
         }
 
 
-        viewDataBinding.swipeLayout.setOnSwipeBackListener(object : SwipeBackLayout.SwipeBackListener {
+        binding.swipeLayout.setOnSwipeBackListener(object : SwipeBackLayout.SwipeBackListener {
             override fun onViewPositionChanged(fractionAnchor: Float, fractionScreen: Float) {
                 if(fractionAnchor.toInt()==1 && fractionScreen.toInt()==1) {
                     dismiss()

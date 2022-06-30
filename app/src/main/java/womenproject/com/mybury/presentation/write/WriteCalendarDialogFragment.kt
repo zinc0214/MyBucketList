@@ -46,12 +46,12 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
         initCalendarDeco()
 
-        viewDataBinding.calendarView.setCurrentDate(calendarDay)
-        viewDataBinding.calendarView.setDateSelected(calendarDay, true)
+        binding.calendarView.setCurrentDate(calendarDay)
+        binding.calendarView.setDateSelected(calendarDay, true)
 
-        selectDay.year = viewDataBinding.calendarView.selectedDate.year
-        selectDay.month = viewDataBinding.calendarView.selectedDate.month
-        selectDay.date = viewDataBinding.calendarView.selectedDate.day
+        selectDay.year = binding.calendarView.selectedDate.year
+        selectDay.month = binding.calendarView.selectedDate.month
+        selectDay.date = binding.calendarView.selectedDate.day
 
         setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
         setCalendarViewListener()
@@ -59,28 +59,28 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     }
 
     private fun initCalendarDeco() {
-        viewDataBinding.calendarView.addDecorator(CurrentDateDecorator())
-        viewDataBinding.calendarView.setDateTextAppearance(R.style.CalendarDate)
-        viewDataBinding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
-        viewDataBinding.calendarView.topbarVisible = false
+        binding.calendarView.addDecorator(CurrentDateDecorator())
+        binding.calendarView.setDateTextAppearance(R.style.CalendarDate)
+        binding.calendarView.setWeekDayTextAppearance(R.style.CalendarWeek)
+        binding.calendarView.topbarVisible = false
 
-        viewDataBinding.dateTitle.setSelectDate(calendarDay.year, calendarDay.month + 1)
-        viewDataBinding.dateTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.dateTitle.setSelectDate(calendarDay.year, calendarDay.month + 1)
+        binding.dateTitle.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun setCalendarViewListener() {
 
-        colorizeDatePicker(viewDataBinding.datePicker)
-        dateTimePickerTextColour(viewDataBinding.datePicker, requireContext().getColor(R.color._5a95ff))
+        colorizeDatePicker(binding.datePicker)
+        dateTimePickerTextColour(binding.datePicker, requireContext().getColor(R.color._5a95ff))
 
-        viewDataBinding.calendarView.setOnDateChangedListener { widget, date, selected ->
+        binding.calendarView.setOnDateChangedListener { widget, date, selected ->
             if (date.year < 2219) {
                 setConfirmAble(date)
                 setCurrentDateTitle(date.year, date.month, date.day)
             }
         }
 
-        viewDataBinding.calendarView.setOnMonthChangedListener { widget, date ->
+        binding.calendarView.setOnMonthChangedListener { widget, date ->
             if (date.year < 2219) {
                 setConfirmAble(date)
                 setCurrentDateTitle(date.year, date.month, date.day)
@@ -99,19 +99,19 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
             setCurrentDateTitle(yearPicker.value, monthPicker.value, picker.value)
         }
 
-        viewDataBinding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
-        viewDataBinding.bottomSheet.cancelButtonClickListener = cancelOnClickListener()
-        viewDataBinding.dateTitle.setOnClickListener(selectTypeOnChangeListener())
+        binding.bottomSheet.confirmButtonClickListener = confirmOnClickListener()
+        binding.bottomSheet.cancelButtonClickListener = cancelOnClickListener()
+        binding.dateTitle.setOnClickListener(selectTypeOnChangeListener())
 
-        viewDataBinding.leftArrowClickListener = leftArrowOnClickListener()
-        viewDataBinding.rightArrowClickListener = rightArrowOnClickListener()
+        binding.leftArrowClickListener = leftArrowOnClickListener()
+        binding.rightArrowClickListener = rightArrowOnClickListener()
 
 
     }
 
 
     private fun setConfirmAble(date: CalendarDay) {
-        viewDataBinding.bottomSheet.confirmText.isEnabled = date.date >= today.date
+        binding.bottomSheet.confirmText.isEnabled = date.date >= today.date
     }
 
     private fun setCurrentDateTitle(dateYear: Int, dateMonth: Int, dateDay: Int) {
@@ -134,7 +134,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         selectDay.month = dateMonth
         selectDay.date = dateDay
 
-        viewDataBinding.dateTitle.setSelectDate(dateYear, dateMonth + 1)
+        binding.dateTitle.setSelectDate(dateYear, dateMonth + 1)
         dday = "$dateYear/$month/$day"
     }
 
@@ -163,10 +163,10 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         return View.OnClickListener {
 
             if (calendarVisible) {
-                viewDataBinding.calendarView.visibility = View.GONE
-                viewDataBinding.datePicker.visibility = View.VISIBLE
-                viewDataBinding.leftArrowImg.visibility = View.GONE
-                viewDataBinding.rightArrowImg.visibility = View.GONE
+                binding.calendarView.visibility = View.GONE
+                binding.datePicker.visibility = View.VISIBLE
+                binding.leftArrowImg.visibility = View.GONE
+                binding.rightArrowImg.visibility = View.GONE
 
                 yearPicker.value = selectDay.year
                 monthPicker.value = selectDay.month
@@ -174,13 +174,13 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
 
                 calendarVisible = false
             } else {
-                viewDataBinding.calendarView.visibility = View.VISIBLE
-                viewDataBinding.datePicker.visibility = View.GONE
-                viewDataBinding.leftArrowImg.visibility = View.VISIBLE
-                viewDataBinding.rightArrowImg.visibility = View.VISIBLE
+                binding.calendarView.visibility = View.VISIBLE
+                binding.datePicker.visibility = View.GONE
+                binding.leftArrowImg.visibility = View.VISIBLE
+                binding.rightArrowImg.visibility = View.VISIBLE
 
-                viewDataBinding.calendarView.setCurrentDate(selectDay)
-                viewDataBinding.calendarView.setDateSelected(selectDay, true)
+                binding.calendarView.setCurrentDate(selectDay)
+                binding.calendarView.setDateSelected(selectDay, true)
 
                 calendarVisible = true
             }
