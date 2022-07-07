@@ -38,8 +38,10 @@ class WriteGoalCountDialogFragment(
         imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         binding.goalCountEditText.apply {
             addTextChangedListener(addTextChangedListener())
-            filters = arrayOf(EditTextInputFilter("0", "1000000"))
-            setText(currentCount.toString())
+            filters = arrayOf(EditTextInputFilter("1", "1000000"))
+            if (currentCount > 1) {
+                setText(currentCount.toString())
+            }
             setOnKeyListener(setOnEditTextEnterListener())
             setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {

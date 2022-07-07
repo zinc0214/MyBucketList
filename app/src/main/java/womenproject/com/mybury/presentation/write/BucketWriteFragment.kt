@@ -51,7 +51,7 @@ open class BucketWriteFragment : BaseFragment() {
     var currentCalendarDay: Date? = null
     private var currentCalendarText: String = ""
     var selectCategory: Category? = null
-    var goalCount = 1
+    var goalCount = 0
 
     private var open = true
     private var categoryList = arrayListOf<Category>()
@@ -562,7 +562,7 @@ open class BucketWriteFragment : BaseFragment() {
         val goalCountSetListener: (Int) -> Unit = { count ->
             binding.goalCountText.text = count.toString()
             goalCount = count
-            if (count != 1) {
+            if (count > 1) {
                 binding.goalCountText.setEnableTextColor()
                 binding.countImg.setImage(R.drawable.target_count_enable)
             } else {
