@@ -383,7 +383,7 @@
                         android:id="@+id/goal_count_text"
                         style="@style/writeSettingListContentStyle"
                         android:enabled="false"
-                        android:text="설정" />
+                        android:text="1" />
 
                 </RelativeLayout>
 

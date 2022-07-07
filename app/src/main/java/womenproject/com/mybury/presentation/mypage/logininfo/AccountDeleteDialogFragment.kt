@@ -31,9 +31,9 @@ open class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
 
         dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
-        viewDataBinding.activity = this
-        viewDataBinding.lastBucketItem.bucketSuccessClickListener = onClickListener
-        viewDataBinding.lastBucketItem.bucketTitleText = "마이버리와 작별하기"
+        binding.activity = this
+        binding.lastBucketItem.bucketSuccessClickListener = onClickListener
+        binding.lastBucketItem.bucketTitleText = "마이버리와 작별하기"
 
     }
 
@@ -46,10 +46,10 @@ open class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
     }
 
     private val onClickListener = View.OnClickListener {
-        viewDataBinding.lastBucketItem.progressLayout.isEnabled = false
-        viewDataBinding.lastBucketItem.progressLayout.isClickable = false
+        binding.lastBucketItem.progressLayout.isEnabled = false
+        binding.lastBucketItem.progressLayout.isClickable = false
 
-        viewDataBinding.lastBucketItem.successButtonLayout.circularProgressBar.run {
+        binding.lastBucketItem.successButtonLayout.circularProgressBar.run {
             progressType = ProgressType.INDETERMINATE
             startAnimation()
             progressAnimator(this).start()
@@ -64,13 +64,13 @@ open class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
                 }, 2000)
                 postDelayed({
                     animFadeOut.duration = 1800
-                    viewDataBinding.endContentText.visibility = View.GONE
+                    binding.endContentText.visibility = View.GONE
                     isAnimEnd.invoke()
                     dismiss()
                 }, 2000)
             }
         }
-        viewDataBinding.executePendingBindings()
+        binding.executePendingBindings()
     }
 
 
@@ -84,13 +84,13 @@ open class AccountDeleteDialogFragment(private val startDeleting: () -> Unit,
         }
 
     private fun setFinalSuccessUIButton() {
-        viewDataBinding.lastBucketItem.successButtonLayout.successImg.backgroundTintList =
+        binding.lastBucketItem.successButtonLayout.successImg.backgroundTintList =
             MyBuryApplication.context.getColorStateList(R.color._a6c6ff)
     }
 
 
     private fun setDoneSuccessUIButton() {
-        viewDataBinding.lastBucketItem.bucketItemImage.background =
+        binding.lastBucketItem.bucketItemImage.background =
             MyBuryApplication.context.getDrawable(R.drawable.shape_ffffff_r4_strk_06_e8e8e8)
     }
 }

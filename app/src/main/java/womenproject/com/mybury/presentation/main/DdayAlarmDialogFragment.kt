@@ -23,7 +23,7 @@ class DdayAlarmDialogFragment(private var goToDday: () -> Unit) : BaseDialogFrag
     }
 
     override fun initDataBinding() {
-        viewDataBinding.apply {
+        binding.apply {
             setDoToDdayClickListener {
                 goToDday()
                 dismiss()
