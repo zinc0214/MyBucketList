@@ -56,29 +56,29 @@ class WriteMemoImgAddDialogFragment(
 
     private fun initStartView() {
         if (!checkAddImageListener.invoke()) {
-            viewDataBinding.addAlbumImgLayout.disableAdd()
-            viewDataBinding.addCamImgLayout.disableAdd()
+            binding.addAlbumImgLayout.disableAdd()
+            binding.addCamImgLayout.disableAdd()
         }
 
         if (!checkAddTypeAble.invoke()) {
-            viewDataBinding.addMemoLayout.disableAdd()
+            binding.addMemoLayout.disableAdd()
         }
 
         when (addType) {
             AddContentType.MEMO -> {
-                viewDataBinding.addMemoLayout.writeItemLayout.visibility = View.VISIBLE
-                viewDataBinding.setBaseProfileImg.writeItemLayout.visibility = View.GONE
+                binding.addMemoLayout.writeItemLayout.visibility = View.VISIBLE
+                binding.setBaseProfileImg.writeItemLayout.visibility = View.GONE
             }
             AddContentType.PROFILE -> {
-                viewDataBinding.setBaseProfileImg.writeItemLayout.visibility = View.VISIBLE
-                viewDataBinding.addMemoLayout.writeItemLayout.visibility = View.GONE
+                binding.setBaseProfileImg.writeItemLayout.visibility = View.VISIBLE
+                binding.addMemoLayout.writeItemLayout.visibility = View.GONE
             }
         }
     }
 
     override fun initDataBinding() {
 
-        viewDataBinding.apply {
+        binding.apply {
             addAlbumImgLayout.isAddable = true
             addCamImgLayout.isAddable = true
             addMemoLayout.isAddable = true
@@ -117,7 +117,7 @@ class WriteMemoImgAddDialogFragment(
 
 
     private val memoAddOnClickListener = View.OnClickListener {
-        if (viewDataBinding.addMemoLayout.isAddable!!) {
+        if (binding.addMemoLayout.isAddable!!) {
             addTypeClickListener.invoke()
             this.dismiss()
         } else {
@@ -133,7 +133,7 @@ class WriteMemoImgAddDialogFragment(
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
-            if (viewDataBinding.addAlbumImgLayout.isAddable!!) {
+            if (binding.addAlbumImgLayout.isAddable!!) {
                 if (checkAddImageListener.invoke()) {
                     goToAlbum()
                 }
@@ -146,7 +146,7 @@ class WriteMemoImgAddDialogFragment(
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
         if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
-            if (viewDataBinding.addCamImgLayout.isAddable!!) {
+            if (binding.addCamImgLayout.isAddable!!) {
                 if (checkAddImageListener.invoke()) {
                     takePhoto()
                 }

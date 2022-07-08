@@ -29,7 +29,7 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
 
 
     override fun initDataBinding() {
-        viewDataBinding.apply {
+        binding.apply {
             confirmButton = View.OnClickListener { addCategoryListener() }
             if (currentName.isNullOrBlank()) {
                 categoryName = "카테고리 이름"
@@ -43,10 +43,10 @@ class AddCategoryDialogFragment(private var currentList: List<Category>,
 
 
     private fun addCategoryListener() {
-        viewDataBinding.categoryEditText.text.apply {
+        binding.categoryEditText.text.apply {
             if (currentName != null && currentName == this.toString()) {
                 Toast.makeText(context, "이름이 변경되지 않았습니다.", Toast.LENGTH_SHORT).show()
-            } else if (currentName != null && currentName == viewDataBinding.categoryEditText.hint.toString() && this.isNullOrBlank()) {
+            } else if (currentName != null && currentName == binding.categoryEditText.hint.toString() && this.isNullOrBlank()) {
                 Toast.makeText(context, "이름이 변경되지 않았습니다.", Toast.LENGTH_SHORT).show()
             } else if (alreadyUseName(this.toString())) {
                 Toast.makeText(context, "중복된 이름입니다. 다른 카테고리명을 입력해주세요.", Toast.LENGTH_SHORT).show()

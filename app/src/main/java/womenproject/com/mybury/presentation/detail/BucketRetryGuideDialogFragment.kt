@@ -22,6 +22,6 @@ class BucketRetryGuideDialogFragment : BaseDialogFragment<FragmentBucketRetryGui
 
     @SuppressLint("ClickableViewAccessibility")
     override fun initDataBinding() {
-        viewDataBinding.contentLayout.setOnClickListener { dismiss() }
+        binding.contentLayout.setOnClickListener { dismiss() }
     }
 }

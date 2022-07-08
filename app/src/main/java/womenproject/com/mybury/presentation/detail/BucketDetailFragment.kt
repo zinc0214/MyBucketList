@@ -96,8 +96,11 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            viewDataBinding.memoArrow.visibility =
-                if (bucketItem.memo.lines().size >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
+            viewDataBinding.bucketMemo.post {
+                val lineCount: Int = viewDataBinding.bucketMemo.lineCount
+                viewDataBinding.memoArrow.visibility =
+                    if (lineCount >= 2 && !memoArrowIsClicked) View.VISIBLE else View.GONE
+            }
         }
 
     }
