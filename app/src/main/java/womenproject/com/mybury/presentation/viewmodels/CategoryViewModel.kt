@@ -6,9 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import womanproject.com.mybury.domain.usecase.category.*
+import womanproject.com.mybury.domain.usecase.category.AddCategoryItemUseCase
+import womanproject.com.mybury.domain.usecase.category.ChangeCategoryListUseCase
+import womanproject.com.mybury.domain.usecase.category.EditCategoryItemNameUseCase
+import womanproject.com.mybury.domain.usecase.category.LoadCategoryListUseCase
+import womanproject.com.mybury.domain.usecase.category.RemoveCategoryItemUseCase
 import womenproject.com.mybury.data.Category
-import womenproject.com.mybury.data.model.*
+import womenproject.com.mybury.data.model.AddCategoryRequest
+import womenproject.com.mybury.data.model.ChangeCategoryStatusRequest
+import womenproject.com.mybury.data.model.EditCategoryNameRequest
+import womenproject.com.mybury.data.model.LoadState
+import womenproject.com.mybury.data.model.RemoveCategoryRequest
 import womenproject.com.mybury.data.toCategoryData
 import womenproject.com.mybury.presentation.base.BaseViewModel
 import javax.inject.Inject
@@ -133,7 +141,7 @@ class CategoryViewModel @Inject constructor(
 
     fun editCategoryItem(category: Category, categoryName: String) {
         if (accessToken == null || userId == null) {
-            Log.e("ayhan", "edit fail $accessToken, $userId")
+            Log.e("mybury", "edit fail $accessToken, $userId")
             _editCategoryItemNameState.value = LoadState.FAIL
             return
         }
@@ -144,14 +152,14 @@ class CategoryViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 editCategoryItemNameUseCase.invoke(accessToken, request).apply {
-                    Log.e("ayhan", "edit response : $this")
+                    Log.e("mybury", "edit response : $this")
                     when (this.retcode) {
                         "200" -> _editCategoryItemNameState.value = LoadState.SUCCESS
                         else -> _editCategoryItemNameState.value = LoadState.FAIL
                     }
                 }
             }.getOrElse {
-                Log.e("ayhan", "edit fail ${it.message}")
+                Log.e("myvbury", "edit fail ${it.message}")
                 _editCategoryItemNameState.value = LoadState.FAIL
             }
         }

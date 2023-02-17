@@ -15,8 +15,22 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import com.android.billingclient.api.*
-import com.google.android.gms.ads.*
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.PurchaseHistoryResponseListener
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.SkuDetailsParams
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +53,7 @@ import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.showToast
-import java.util.*
+import java.util.Date
 
 
 /**
@@ -285,6 +299,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      * 리스트가 존재할 경우 실제 구매를 할 수 있다.
      */
     private fun purchaseItem(purchaseId: String) {
+        startLoading()
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
         billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
@@ -293,6 +308,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                     supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
                 if (purchasedItem == null) {
                     Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    stopLoading()
                     return@querySkuDetailsAsync
                 }
                 val purchaseItem = skuDetails.first { it.sku == purchaseId }
@@ -301,6 +317,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 billingClient.launchBillingFlow(this, flowParams)
             } else {
                 Log.e("mybury", "No sku found from query")
+                stopLoading()
             }
         }
     }
@@ -314,20 +331,22 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingResult: BillingResult,
         purchaseList: MutableList<Purchase>?
     ) {
-        if(purchaseList == null ) {
+        if (purchaseList == null) {
             purchaseFail.invoke()
         }
+        startLoading()
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
-                    // TODO : 이 시점에 토큰을 서버에 전달한다.
                     purchaseAlways(it.purchaseToken)
                 }
             }
+
             BillingClient.BillingResponseCode.USER_CANCELED -> {
                 Log.d("mybury", "You've cancelled the Google play billing process...")
                 "결제가 취소되었습니다".showToast(this)
                 purchaseFail.invoke()
+                stopLoading()
             }
         }
     }
@@ -452,6 +471,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                                 })
                         }
                     }
+
                     else -> {
                         Log.e("mybury", "FAIL : ${billingResult.responseCode}")
                         previousToken = purchaseToken
@@ -476,9 +496,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                     }
                 }
             }
-
-            stopLoading()
-
         }
     }
 
@@ -511,4 +528,5 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
-val AD_UNIT_ID = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-6302671173915322/9547430142"
+val AD_UNIT_ID =
+    if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-6302671173915322/9547430142"
