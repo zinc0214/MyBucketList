@@ -28,7 +28,7 @@ import womenproject.com.mybury.util.Converter.Companion.dpToPx
 import womenproject.com.mybury.util.ScreenUtils.Companion.getScreenWidth
 import womenproject.com.mybury.util.observeNonNull
 import womenproject.com.mybury.util.showToast
-import java.util.*
+import java.util.Random
 
 @AndroidEntryPoint
 class BucketDetailFragment : Fragment() {
@@ -319,11 +319,11 @@ class BucketDetailFragment : Fragment() {
         viewDataBinding.successLottieView.playAnimation()
 
         viewDataBinding.successLottieView.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
                 // do nothing
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 viewDataBinding.successLottieView.visibility = View.GONE
                 if (isAlreadyBucketRetryGuideShow(requireContext()) || BuildConfig.DEBUG) {
                     BucketRetryGuideDialogFragment().show(
@@ -334,14 +334,13 @@ class BucketDetailFragment : Fragment() {
                 }
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
                 // do nothing
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 // do nothing
             }
-
         })
 
     }

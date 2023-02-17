@@ -1,4 +1,5 @@
 import dependencies.Dep
+import dependencies.Versions
 
 plugins {
     id("com.android.library")
@@ -6,11 +7,10 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
-        minSdk = 24
-        targetSdk = 31
+        minSdk = Versions.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

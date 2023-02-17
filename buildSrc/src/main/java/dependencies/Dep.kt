@@ -1,11 +1,10 @@
 package dependencies
 
 object Versions {
-    const val compileSdk = 31
-    const val buildTools = "31.0.0"
+    const val compileSdk = 33
 
     const val minSdk = 23
-    const val targetSdk = 31
+    const val targetSdk = 33
     const val versionCode = 27
     const val versionName = "1.5.7"
 }
@@ -32,7 +31,7 @@ object Dep {
         const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 
         object Lifecycle {
-            private const val lifecycleVersion = "2.3.1"
+            private const val lifecycleVersion = "2.4.0"
             const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
             const val runTime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
