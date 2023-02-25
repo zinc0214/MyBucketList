@@ -152,7 +152,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("myBury", adError.message)
+                    Log.d("myBury", "Ad Load Fail : ${adError.message}, ${adError}")
                     mInterstitialAd = null
                 }
             })
@@ -172,7 +172,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 }
             }
 
-            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                 Log.d("myBury", "Ad failed to show.")
             }
 
@@ -265,7 +265,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     // 이전에 구매한 정보 확인
     fun queryPurchasedHistory() {
         if (!billingClient.isReady) {
-            Log.e("ayhan", "queryPurchases: BillingClient is not ready")
+            Log.e("mybury", "queryPurchases: BillingClient is not ready")
         }
         // Query for existing subscription products that have been purchased.
         billingClient.queryPurchasesAsync(
@@ -273,10 +273,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 .build()
         ) { billingResult, purchaseList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                Log.e("ayhan", "queryPurchases purchaseList : $purchaseList")
+                //Log.e("ayhan", "queryPurchases purchaseList : $purchaseList")
 
             } else {
-                Log.e("ayhan", billingResult.debugMessage)
+                //Log.e("ayhan", billingResult.debugMessage)
             }
         }
     }
@@ -285,9 +285,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      * 구매 가능 목록 호출
      */
     fun queryProductDetails(items: List<PurchasableItem>) {
-
         val purchaseItems = items.filter { it.isPurchasable }
-        Log.e("ayhan", "purchaseItems  :$purchaseItems")
 
         val productList: ArrayList<QueryProductDetailsParams.Product> = ArrayList()
         purchaseItems.forEach { item ->
@@ -368,8 +366,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 return
             }
         }
-
-        Log.e("ayhan", "purchaseItem2 : billingResult ${billingResult.responseCode}")
     }
 
     /**
@@ -440,7 +436,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         val purchaseToken = purchase.purchaseToken
         val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
-            Log.e("ayhan", "handlePurchase : ${billingResult.responseCode}")
             startLoading()
 
             if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
@@ -450,9 +445,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 previousToken = purchaseToken
                 when (billingResult.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
-                        Log.e("ayhan", "handlePurchase : purchasedItem 1 ${purchasedItem}")
                         if (purchasedItem != null) {
-                            Log.e("ayhan", "handlePurchase : purchasedItem ${purchasedItem}")
                             supportViewModel.purchasedItem(purchasedItem?.id!!, purchaseToken, "Y",
                                 {
                                     // if success
