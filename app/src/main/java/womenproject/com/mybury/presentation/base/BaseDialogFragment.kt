@@ -16,21 +16,19 @@ import androidx.fragment.app.FragmentManager
  */
 
 
-
 abstract class BaseDialogFragment<T : ViewDataBinding> : DialogFragment() {
 
     lateinit var binding: T
 
-    abstract val layoutResourceId : Int
+    abstract val layoutResourceId: Int
 
     abstract fun initDataBinding()
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
 

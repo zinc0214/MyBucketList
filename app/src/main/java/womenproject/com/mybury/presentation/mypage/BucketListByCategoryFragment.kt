@@ -75,12 +75,16 @@ class BucketListByCategoryFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
+                    getBucketListByCategory()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                 }
+
                 else -> {
                     // do Nothing
                 }
@@ -92,12 +96,15 @@ class BucketListByCategoryFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                 }
+
                 LoadState.RESTART -> {
                     getBucketListByCategory()
                 }

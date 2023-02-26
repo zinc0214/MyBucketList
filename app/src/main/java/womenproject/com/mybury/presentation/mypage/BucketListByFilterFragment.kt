@@ -76,9 +76,12 @@ class BucketListByFilterFragment : BaseFragment() {
                     stopLoading()
                     LoadFailDialog { }
                 }
-                LoadState.START,
-                LoadState.SUCCESS -> {
+                LoadState.START -> {
                     startLoading()
+                }
+                LoadState.SUCCESS -> {
+                    stopLoading()
+                    loadFilterBucketList()
                 }
                 else -> {
                     // do Nothing

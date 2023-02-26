@@ -25,22 +25,23 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/shape_ffffff_r4"
         android:gravity="center"
+        android:minWidth="320dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/textLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="34dp"
             android:layout_marginLeft="28dp"
+            android:layout_marginTop="26dp"
             android:layout_marginRight="28dp"
+            android:layout_marginBottom="34dp"
             android:orientation="vertical">
 
             <TextView
@@ -53,10 +54,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:lineSpacingExtra="6sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17dp"
+                android:lineSpacingExtra="6sp"
                 android:text="@{content}"
                 android:textAlignment="center"
                 android:textColor="@color/_888888"
@@ -77,25 +78,25 @@
 
             <LinearLayout
                 android:id="@+id/base_layout"
-                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/shape_fafafa_bottom_r_4"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/cancel_text"
                     style="@style/baseDialogButtonTextStyle"
+                    android:background="@drawable/dialog_bottom_sheet_left_background"
                     android:onClick="@{cancelButtonClickListener}"
                     android:text="@string/dialog_cancel"
-                    android:background="@drawable/dialog_bottom_sheet_left_background"
                     android:textColor="@color/_b4b4b4" />
 
                 <TextView
                     android:id="@+id/confirm_text"
                     style="@style/baseDialogButtonTextStyle"
-                    android:onClick="@{confirmButtonClickListener}"
                     android:background="@drawable/dialog_bottom_sheet_right_background"
+                    android:onClick="@{confirmButtonClickListener}"
                     android:text="@string/dialog_confirm"
                     android:textColor="@color/_5a95ff" />
 
