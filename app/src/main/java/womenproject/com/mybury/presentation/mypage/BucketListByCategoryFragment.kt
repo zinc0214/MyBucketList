@@ -15,6 +15,7 @@ import womenproject.com.mybury.data.CategoryInfo
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketListByCategoryBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
 import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
@@ -103,6 +104,7 @@ class BucketListByCategoryFragment : BaseFragment() {
 
                 LoadState.FAIL -> {
                     stopLoading()
+                    LoadFailDialog { }
                 }
 
                 LoadState.RESTART -> {

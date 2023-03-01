@@ -37,7 +37,7 @@ class MyPageViewModel @Inject constructor(
     val updateProfileEvent: LiveData<LoadState> get() = _updateProfileEvent
 
     private val _deleteAccountEvent = MutableLiveData<LoadState>()
-    val deleteAccountEvent : LiveData<LoadState> get() = _deleteAccountEvent
+    val deleteAccountEvent: LiveData<LoadState> get() = _deleteAccountEvent
 
     fun getMyPageData() {
 
@@ -62,12 +62,16 @@ class MyPageViewModel @Inject constructor(
                             )
                             _loadMyPageInfoEvent.value = LoadState.SUCCESS
                         }
+
                         "301" -> getRefreshToken {
                             _loadMyPageInfoEvent.value = it
                         }
+
                         else -> _loadMyPageInfoEvent.value = LoadState.FAIL
                     }
                 }
+            }.getOrElse {
+                _loadMyPageInfoEvent.value = LoadState.FAIL
             }
         }
     }
@@ -106,6 +110,7 @@ class MyPageViewModel @Inject constructor(
                                 _updateProfileEvent.value = LoadState.FAIL
                             }
                         })
+
                         else -> _updateProfileEvent.value = LoadState.FAIL
                     }
                 }
@@ -125,11 +130,12 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 deleteAccountUseCase.invoke(accessToken, userIdRequest).apply {
-                    when(this.retcode) {
+                    when (this.retcode) {
                         "200" -> _deleteAccountEvent.value = LoadState.SUCCESS
                         "301" -> getRefreshToken {
                             _deleteAccountEvent.value = it
                         }
+
                         else -> _deleteAccountEvent.value = LoadState.FAIL
                     }
                 }

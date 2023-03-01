@@ -145,6 +145,7 @@ class ProfileEditFragment : BaseFragment() {
                 }
                 LoadState.FAIL -> {
                     stopLoading()
+                    requireContext().showToast("프로필 수정에 실패했습니다. 다시 시도해주세요.")
                 }
             }
         }
