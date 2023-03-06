@@ -63,7 +63,7 @@ import java.util.Date
  */
 
 @AndroidEntryPoint
-class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener{
+class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
 
     private lateinit var binding: ActivityMainBinding
     private val supportViewModel by viewModels<MyBurySupportViewModel>()
@@ -111,6 +111,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             supportInfo?.supportItems?.forEach {
                 it.isPurchasable = true
             }
+            stopLoading()
         }
 
         supportViewModel.supportPrice.observe(this) { price ->
@@ -200,11 +201,18 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
 
     fun startLoading() {
-        binding.loadingLayout.layout.visibility = View.VISIBLE
+        if (binding.loadingLayout.layout.visibility == View.GONE) {
+            binding.loadingLayout.layout.visibility = View.VISIBLE
+            binding.drawerLayout.isClickable = false
+        }
     }
 
     fun stopLoading() {
-        binding.loadingLayout.layout.visibility = View.GONE
+        if (binding.loadingLayout.layout.visibility == View.VISIBLE) {
+            binding.loadingLayout.layout.visibility = View.GONE
+            binding.drawerLayout.isClickable = true
+        }
+
     }
 
 
@@ -302,8 +310,8 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 .build()
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, mutableList ->
-            if(billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                if(mutableList.isEmpty()) {
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                if (mutableList.isEmpty()) {
                     "다시 시도해주세요.".showToast(this)
                 } else {
                     productDetailsList.addAll(mutableList)
@@ -332,9 +340,10 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      * 리스트가 존재할 경우 실제 구매를 할 수 있다.
      */
     private fun purchaseItem(purchaseId: String) {
+        startLoading()
         val productDetails = productDetailsList.find { it.productId == purchaseId }
         if (productDetails == null) {
-            Toast.makeText(this, "purchaseItem2 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -357,7 +366,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         // Launch the billing flow
         val billingResult = billingClient.launchBillingFlow(this, billingFlowParams)
-        if(billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
             purchasedItem =
                 supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
             if (purchasedItem == null) {
@@ -396,9 +405,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             }
 
             else -> {
-               "다시 시도해주세요.".showToast(this)
+                "다시 시도해주세요.".showToast(this)
                 purchaseFail.invoke()
-                stopLoading()
+                //  stopLoading()
             }
         }
     }
@@ -436,10 +445,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         val purchaseToken = purchase.purchaseToken
         val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
-            startLoading()
-
             if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-                stopLoading()
                 purchaseFail.invoke()
             } else {
                 previousToken = purchaseToken
@@ -449,14 +455,12 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                             supportViewModel.purchasedItem(purchasedItem?.id!!, purchaseToken, "Y",
                                 {
                                     // if success
-                                    stopLoading()
                                     showSupportPurchaseSuccessDialog()
                                     purchaseSuccess.invoke()
                                     supportViewModel.getPurchasableItem()
                                 },
                                 {
                                     // if fail
-                                    stopLoading()
                                     showSupportPurchaseFailDialog(
                                         purchaseToken,
                                         billingResult.responseCode.toString()
@@ -464,15 +468,11 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                                     purchaseFail.invoke()
                                 })
                         } else {
-                            stopLoading()
                             purchaseFail.invoke()
                         }
                     }
 
                     else -> {
-                        Log.e("mybury", "FAIL : ${billingResult.responseCode}")
-                        previousToken = purchaseToken
-
                         purchasedItem?.let {
                             supportViewModel.purchasedItem(it.id, purchaseToken, "N", {
                                 showSupportPurchaseFailDialog(

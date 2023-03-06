@@ -2,26 +2,32 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true">
 
-            <fragment
-                android:id="@+id/nav_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/mybury_nav" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <fragment
+                    android:id="@+id/nav_fragment"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/mybury_nav" />
+
+            </LinearLayout>
+
+        </androidx.drawerlayout.widget.DrawerLayout>
 
         <include
             android:id="@+id/loading_layout"
@@ -29,8 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:visibility="gone" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </layout>
