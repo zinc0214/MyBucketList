@@ -1,25 +1,20 @@
-package womenproject.com.mybury.ui
+package womenproject.com.mybury.presentation.main.sort
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-// RecyclerView의 Adapter와 ItemTouchHelper.Callback을 연결시켜 주는 리스너
-interface ItemTouchHelperListener2 {
+interface BucketItemTouchHelperListener {
     fun onItemMove(from_position: Int, to_position: Int): Boolean
 }
 
-// ItemTouchHelper.Callback 클래스를 상속
-class ItemTouchHelperCallback2(val listener: ItemTouchHelperListener2)
-    : ItemTouchHelper.Callback() {
-    // 활성화된 이동 방향을 정의하는 플래그를 반환하는 메소드
+class ItemTouchHelperCallback(val listener: BucketItemTouchHelperListener) :
+    ItemTouchHelper.Callback() {
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
         // 드래그 방향
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
-        // 스와이프 방향
-        val swipeFlags = ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         // 이동을 만드는 메소드
         return makeMovementFlags(dragFlags, 0)
     }

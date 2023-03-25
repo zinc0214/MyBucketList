@@ -20,7 +20,6 @@ import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.viewmodels.BucketSortViewModel
 import womenproject.com.mybury.ui.ItemDragListener
-import womenproject.com.mybury.ui.ItemTouchHelperCallback2
 import womenproject.com.mybury.util.showToast
 
 @AndroidEntryPoint
@@ -134,7 +133,7 @@ class BucketListSortFragment : Fragment() {
             adapter = editBucketListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback2(editBucketListAdapter))
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editBucketListAdapter))
         itemTouchHelper.attachToRecyclerView(binding.bucketEditListView)
     }
 

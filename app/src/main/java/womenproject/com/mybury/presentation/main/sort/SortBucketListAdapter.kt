@@ -9,13 +9,12 @@ import womenproject.com.mybury.databinding.ItemSortBaseBucketBinding
 import womenproject.com.mybury.databinding.ItemSortCountBucketBinding
 import womenproject.com.mybury.databinding.ItemSortDoneBucketBinding
 import womenproject.com.mybury.ui.ItemDragListener
-import womenproject.com.mybury.ui.ItemTouchHelperListener2
 import womenproject.com.mybury.util.Converter.Companion.dpToPx
 
 class SortBucketListAdapter(
     private val bucketList: MutableList<BucketItem> = mutableListOf(),
     private val dragListener: ItemDragListener,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemTouchHelperListener2 {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), BucketItemTouchHelperListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -107,20 +106,6 @@ class SortBucketListAdapter(
             }
         }
     }
-
-//    override fun onItemMoved(from: Int, to: Int) {
-//        val toReal = if (to == 0) 0 else to - 1
-//        if (from == toReal) {
-//            return
-//        }
-//
-//        val bucketList = bucketList as MutableList<BucketItem>
-//        val fromItem = bucketList.removeAt(from)
-//        bucketList.add(toReal, fromItem)
-//        notifyItemMoved(from, toReal)
-//
-//        itemMovedListener.moved(bucketList)
-//    }
 
     enum class ItemType {
         BLANK, BASE, COUNT, DONE;
