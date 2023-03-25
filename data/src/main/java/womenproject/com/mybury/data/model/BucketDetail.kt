@@ -8,6 +8,7 @@ data class BucketDetailItem(
     val open: Boolean = false,
     val category: String,
     val completedDt: String? = null,
+    val createdDt: String? = null,
     val userCount: Int = 0,
     val goalCount: Int = 0,
     val dDate: String?,
