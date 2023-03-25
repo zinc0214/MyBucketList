@@ -12,33 +12,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import womenproject.com.mybury.R
-import womenproject.com.mybury.data.BucketItem
 import womenproject.com.mybury.data.Preference
 import womenproject.com.mybury.data.SortFilter
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.MainActivity
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
-import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
 import womenproject.com.mybury.presentation.viewmodels.BucketSortViewModel
 import womenproject.com.mybury.ui.ItemDragListener
-import womenproject.com.mybury.ui.ItemMovedListener
+import womenproject.com.mybury.ui.ItemTouchHelperCallback2
 import womenproject.com.mybury.util.showToast
 
 @AndroidEntryPoint
-class BucketListSortFragment : Fragment(),
-    ItemDragListener,
-    ItemMovedListener {
+class BucketListSortFragment : Fragment() {
 
     private val viewModel by viewModels<BucketSortViewModel>()
     private lateinit var binding: FragmentBucketSortBinding
 
     private lateinit var itemTouchHelper: ItemTouchHelper
-    private var changeBucketList = listOf<BucketItem>()
-    private var originBucketList = listOf<BucketItem>()
-
     private var filterForShow: String? = null
     private var filterListUp: String? = null
+
+    private val editBucketListAdapter =
+        SortBucketListAdapter(dragListener = object : ItemDragListener {
+            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                itemTouchHelper.startDrag(viewHolder)
+            }
+        })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,16 +72,20 @@ class BucketListSortFragment : Fragment(),
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 LoadState.RESTART -> {
                     getMainBucketList()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                 }
+
                 else -> {
                     // Do Nothing
                 }
@@ -93,25 +97,28 @@ class BucketListSortFragment : Fragment(),
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 LoadState.RESTART -> {
                     updateBucketOrder()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                     successUpdateBucketOrder()
                 }
+
                 else -> {
                     // Do Nothing
                 }
             }
         }
         viewModel.allBucketResult.observe(viewLifecycleOwner) {
-            changeBucketList = it
-            originBucketList = it
+            editBucketListAdapter.updateBucketList(it)
             setUpViews()
         }
     }
@@ -122,37 +129,23 @@ class BucketListSortFragment : Fragment(),
     }
 
     private fun setBucketListAdapter() {
-        val editBucketListAdapter = SortBucketListAdapter(
-            changeBucketList,
-            this,
-            this
-        )
-
         binding.bucketEditListView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = editBucketListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editBucketListAdapter))
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback2(editBucketListAdapter))
         itemTouchHelper.attachToRecyclerView(binding.bucketEditListView)
     }
 
     private fun updateBucketOrder() {
-        viewModel.updateBucketListOrder(changeBucketList)
+        viewModel.updateBucketListOrder(editBucketListAdapter.getBucketList())
     }
 
     private fun successUpdateBucketOrder() {
         "버킷리스트가 새롭게 정렬되었습니다.".showToast(requireContext())
         Preference.setFilterListUp(requireContext(), SortFilter.custom)
         requireActivity().onBackPressed()
-    }
-
-    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        itemTouchHelper.startDrag(viewHolder)
-    }
-
-    override fun moved(list: List<Any>) {
-        changeBucketList = list as ArrayList<BucketItem>
     }
 
     private fun startLoading() {
@@ -168,5 +161,4 @@ class BucketListSortFragment : Fragment(),
             a.stopLoading()
         }
     }
-
 }
