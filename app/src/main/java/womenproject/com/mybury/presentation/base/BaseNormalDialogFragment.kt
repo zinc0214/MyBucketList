@@ -1,5 +1,6 @@
 package womenproject.com.mybury.presentation.base
 
+import android.app.ActionBar
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,6 +30,13 @@ open class BaseNormalDialogFragment : DialogFragment() {
     var CONFIRM_TEXT = "확인"
     var CANCEL_ABLE = true
 
+
+    override fun onResume() {
+        super.onResume()
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
+        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

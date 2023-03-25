@@ -84,6 +84,7 @@ class MyBurySupportFragment : BaseFragment() {
             supportPrice = supportInfo.totalPrice
 
             supportOnClickListener = View.OnClickListener {
+                startLoading()
                 isCurrentSupporting = true
                 purchaseItemListAdapter.selectedItemNum?.let { item ->
                     purchaseSelectItem(item.googleKey, {
@@ -91,8 +92,10 @@ class MyBurySupportFragment : BaseFragment() {
                         supportPrice = updatePrice.toString()
                         setCurrentSupportPrice(updatePrice)
                         isCurrentSupporting = false
+                        stopLoading()
                     }, {
                         isCurrentSupporting = false
+                        stopLoading()
                     })
                 }
             }

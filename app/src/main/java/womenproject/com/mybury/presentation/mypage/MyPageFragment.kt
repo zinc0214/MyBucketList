@@ -36,7 +36,8 @@ import kotlin.random.Random
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentMyPageBinding
+    private var _binding : FragmentMyPageBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModels<MyPageViewModel>()
 
@@ -47,7 +48,7 @@ class MyPageFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
         return binding.root
     }
 
@@ -63,6 +64,11 @@ class MyPageFragment : BaseFragment() {
             val argIsAdsShow = args.isAdsShow
             this.isAdsShow = argIsAdsShow
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setUpObservers() {

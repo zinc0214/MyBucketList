@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -80,6 +81,16 @@
                 android:text="@string/support_error_go_to_email"
                 android:textColor="@color/_5a95ff"
                 android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="6sp"
+                android:text="@{`(에러코드 : `+errorCode+`)`}"
+                android:textColor="@color/_888888"
+                android:textSize="14sp"
+                tools:text="(에러코드 : 10)" />
         </LinearLayout>
 
         <ImageView

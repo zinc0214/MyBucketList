@@ -18,6 +18,7 @@ import womenproject.com.mybury.data.SortFilter
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentBucketSortBinding
 import womenproject.com.mybury.presentation.MainActivity
+import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.mypage.categoryedit.ItemTouchHelperCallback
 import womenproject.com.mybury.presentation.viewmodels.BucketSortViewModel
 import womenproject.com.mybury.ui.ItemDragListener
@@ -73,7 +74,7 @@ class BucketListSortFragment : Fragment(),
                 }
                 LoadState.FAIL -> {
                     stopLoading()
-                    "다시 시도해주세요.".showToast(requireContext())
+                    LoadFailDialog { }
                 }
                 LoadState.RESTART -> {
                     getMainBucketList()
@@ -94,7 +95,7 @@ class BucketListSortFragment : Fragment(),
                 }
                 LoadState.FAIL -> {
                     stopLoading()
-                    "다시 시도해주세요.".showToast(requireContext())
+                    LoadFailDialog { }
                 }
                 LoadState.RESTART -> {
                     updateBucketOrder()

@@ -1,6 +1,7 @@
 package womenproject.com.mybury.presentation.write
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.res.Resources
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
@@ -41,6 +42,13 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     private lateinit var monthPicker: NumberPicker
     private lateinit var yearPicker: NumberPicker
 
+
+    override fun onResume() {
+        super.onResume()
+        val dialogWidth = resources.getDimensionPixelSize(R.dimen.writeFragmentWidth)
+        val dialogHeight = ActionBar.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(dialogWidth, dialogHeight)
+    }
 
     override fun initDataBinding() {
 

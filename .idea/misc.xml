@@ -37,7 +37,7 @@
         <entry key="app/src/main/res/layout/dday_bucket_list.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/dialog_main_filter.xml" value="0.2520833333333333" />
         <entry key="app/src/main/res/layout/dialog_write_fragment_goal_count.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_bucket_detail.xml" value="0.24814814814814815" />
+        <entry key="app/src/main/res/layout/fragment_bucket_detail.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bucket_edit.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_bucket_list_by_category.xml" value="0.25729166666666664" />
         <entry key="app/src/main/res/layout/fragment_bucket_sort.xml" value="0.26666666666666666" />
@@ -128,7 +128,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

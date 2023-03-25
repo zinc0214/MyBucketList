@@ -143,11 +143,11 @@ internal fun heightAnimator(view: View, initial: Int, final: Int) =
 
 internal fun morphListener(morphStartFn: () -> Unit, morphEndFn: () -> Unit) =
     object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             morphEndFn()
         }
 
-        override fun onAnimationStart(animation: Animator?) {
+        override fun onAnimationStart(animation: Animator) {
             morphStartFn()
         }
     }
@@ -162,7 +162,7 @@ internal fun CircularProgressAnimatedDrawable.drawProgress(canvas: Canvas) {
 
 internal fun applyAnimationEndListener(animator: Animator, onAnimationEndListener: () -> Unit) =
     animator.addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             onAnimationEndListener()
         }
     })

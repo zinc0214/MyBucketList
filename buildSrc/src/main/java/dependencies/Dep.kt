@@ -1,13 +1,12 @@
 package dependencies
 
 object Versions {
-    const val compileSdk = 31
-    const val buildTools = "31.0.0"
+    const val compileSdk = 32
 
     const val minSdk = 23
-    const val targetSdk = 31
-    const val versionCode = 27
-    const val versionName = "1.5.7"
+    const val targetSdk = 32
+    const val versionCode = 29
+    const val versionName = "1.5.9"
 }
 
 object Dep {
@@ -32,7 +31,7 @@ object Dep {
         const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 
         object Lifecycle {
-            private const val lifecycleVersion = "2.3.1"
+            private const val lifecycleVersion = "2.4.0"
             const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
             const val runTime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
@@ -117,7 +116,7 @@ object Dep {
     }
 
     object InAllBilling {
-        private const val version = "3.0.2"
+        private const val version = "5.1.0"
         const val core = "com.android.billingclient:billing:$version"
         const val coreKtx = "com.android.billingclient:billing-ktx:$version"
     }

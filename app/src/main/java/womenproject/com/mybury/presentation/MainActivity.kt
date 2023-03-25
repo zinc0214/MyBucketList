@@ -15,8 +15,24 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import com.android.billingclient.api.*
-import com.google.android.gms.ads.*
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchaseHistoryRecord
+import com.android.billingclient.api.PurchaseHistoryResponseListener
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchaseHistoryParams
+import com.android.billingclient.api.QueryPurchasesParams
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +55,7 @@ import womenproject.com.mybury.presentation.mypage.MyPageFragmentDirections
 import womenproject.com.mybury.presentation.viewmodels.MyBurySupportViewModel
 import womenproject.com.mybury.util.ScreenUtils.Companion.setStatusBar
 import womenproject.com.mybury.util.showToast
-import java.util.*
+import java.util.Date
 
 
 /**
@@ -60,9 +76,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     private var isAdShow = true
 
     private lateinit var billingClient: BillingClient
-
-    private val purchasableItemIds = ArrayList<String>()
-    private val purchasedItemIds = ArrayList<String>()
+    private var productDetailsList = mutableListOf<ProductDetails>()
     private var purchasedItem: PurchasableItem? = null
     private var previousToken = ""
 
@@ -97,6 +111,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             supportInfo?.supportItems?.forEach {
                 it.isPurchasable = true
             }
+            stopLoading()
         }
 
         supportViewModel.supportPrice.observe(this) { price ->
@@ -119,7 +134,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     private fun initAdmob() {
-        MobileAds.initialize(this) {}
+        MobileAds.initialize(this)
         loadAd()
     }
 
@@ -138,7 +153,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("myBury", adError.message)
+                    Log.d("myBury", "Ad Load Fail : ${adError.message}, ${adError}")
                     mInterstitialAd = null
                 }
             })
@@ -158,7 +173,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 }
             }
 
-            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                 Log.d("myBury", "Ad failed to show.")
             }
 
@@ -186,11 +201,18 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
 
     fun startLoading() {
-        binding.loadingLayout.layout.visibility = View.VISIBLE
+        if (binding.loadingLayout.layout.visibility == View.GONE) {
+            binding.loadingLayout.layout.visibility = View.VISIBLE
+            binding.drawerLayout.isClickable = false
+        }
     }
 
     fun stopLoading() {
-        binding.loadingLayout.layout.visibility = View.GONE
+        if (binding.loadingLayout.layout.visibility == View.VISIBLE) {
+            binding.loadingLayout.layout.visibility = View.GONE
+            binding.drawerLayout.isClickable = true
+        }
+
     }
 
 
@@ -232,13 +254,13 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      */
     private fun initBillingClient(items: List<PurchasableItem>) {
         billingClient =
-            BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build()
+            BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    getAcknowledgePurchasedItem()
+                    queryPurchasedHistory()
+                    queryProductDetails(items)
                     getAllPurchasedItem()
-                    setPurchasableList(items)
                 }
             }
 
@@ -248,59 +270,109 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         })
     }
 
+    // 이전에 구매한 정보 확인
+    fun queryPurchasedHistory() {
+        if (!billingClient.isReady) {
+            Log.e("mybury", "queryPurchases: BillingClient is not ready")
+        }
+        // Query for existing subscription products that have been purchased.
+        billingClient.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP)
+                .build()
+        ) { billingResult, purchaseList ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                //Log.e("ayhan", "queryPurchases purchaseList : $purchaseList")
+
+            } else {
+                //Log.e("ayhan", billingResult.debugMessage)
+            }
+        }
+    }
+
+    /**
+     * 구매 가능 목록 호출
+     */
+    fun queryProductDetails(items: List<PurchasableItem>) {
+        val purchaseItems = items.filter { it.isPurchasable }
+
+        val productList: ArrayList<QueryProductDetailsParams.Product> = ArrayList()
+        purchaseItems.forEach { item ->
+            productList.add(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(item.googleKey)
+                    .setProductType(BillingClient.ProductType.INAPP)
+                    .build()
+            )
+        }
+        val queryProductDetailsParams =
+            QueryProductDetailsParams.newBuilder()
+                .setProductList(productList)
+                .build()
+
+        billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, mutableList ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                if (mutableList.isEmpty()) {
+                    "다시 시도해주세요.".showToast(this)
+                } else {
+                    productDetailsList.addAll(mutableList)
+                }
+            } else {
+                "다시 시도해주세요.".showToast(this)
+            }
+
+        }
+    }
+
+
     /**
      * 최근에 결제한 아이템을 확인하는 목적
      * checkPurchaseHistory function 과 다르게  consumeAsync 를 통해 구매된 상품도 확인할 수 있다.
      * !!주의!! 아이템 Id 로만 가져오기 때문에 여러번 구매하더라도 가장 최근의 제품만 가져온다.
      */
     fun getAllPurchasedItem() {
-        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP, this)
+        val params = QueryPurchaseHistoryParams.newBuilder()
+            .setProductType(BillingClient.ProductType.INAPP)
+        billingClient.queryPurchaseHistoryAsync(params.build(), this)
     }
-
-    /**
-     * 구매 가능한 리스트의 아이템을 추가한다.
-     */
-    private fun setPurchasableList(list: List<PurchasableItem>) {
-
-        // Google PlayConsole 의 상품Id 와 동일하게 적어준다
-        list.forEach { item ->
-            if (purchasedItemIds.none { it == item.googleKey }) {
-                purchasableItemIds.add(item.googleKey)
-            }
-        }
-        purchasedItemCheck()
-    }
-
-    private fun purchasedItemCheck() {
-        purchasedItemIds.forEach { purchasedId ->
-            supportInfo?.supportItems?.filter { it.googleKey == purchasedId }?.forEach {
-                it.isPurchasable = false
-            }
-        }
-    }
-
 
     /**
      * 아이템을 구매하기 위해서는 구매가능한 아이템 리스트와 확인이 필요하다.
      * 리스트가 존재할 경우 실제 구매를 할 수 있다.
      */
     private fun purchaseItem(purchaseId: String) {
-        val params = SkuDetailsParams.newBuilder()
-        params.setSkusList(purchasableItemIds).setType(BillingClient.SkuType.INAPP)
-        billingClient.querySkuDetailsAsync(params.build()) { result, skuDetails ->
-            if (result.responseCode == BillingClient.BillingResponseCode.OK && !skuDetails.isNullOrEmpty()) {
-                purchasedItem =
-                    supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
-                if (purchasedItem == null) {
-                    Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    return@querySkuDetailsAsync
-                }
-                val purchaseItem = skuDetails.first { it.sku == purchaseId }
-                val flowParams =
-                    BillingFlowParams.newBuilder().setSkuDetails(purchaseItem).build()
-                billingClient.launchBillingFlow(this, flowParams)
-            } else {
-                Log.e("mybury", "No sku found from query")
+        startLoading()
+        val productDetails = productDetailsList.find { it.productId == purchaseId }
+        if (productDetails == null) {
+            Toast.makeText(this, "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val selectedOfferToken =
+            productDetails.subscriptionOfferDetails?.get(0)?.offerToken.orEmpty()
+        val productDetailsParamsList = listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                .setProductDetails(productDetails)
+                // to get an offer token, call ProductDetails.subscriptionOfferDetails()
+                // for a list of offers that are available to the user
+                .setOfferToken(selectedOfferToken)
+                .build()
+        )
+
+        val billingFlowParams = BillingFlowParams.newBuilder()
+            .setProductDetailsParamsList(productDetailsParamsList)
+            .build()
+
+
+        // Launch the billing flow
+        val billingResult = billingClient.launchBillingFlow(this, billingFlowParams)
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+            purchasedItem =
+                supportInfo?.supportItems?.firstOrNull { it.googleKey == purchaseId }
+            if (purchasedItem == null) {
+                "다시 시도해주세요.".showToast(this)
+                stopLoading()
+                return
             }
         }
     }
@@ -314,20 +386,28 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingResult: BillingResult,
         purchaseList: MutableList<Purchase>?
     ) {
-        if(purchaseList == null ) {
+        if (purchaseList == null) {
             purchaseFail.invoke()
         }
+        startLoading()
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 purchaseList?.forEach {
-                    // TODO : 이 시점에 토큰을 서버에 전달한다.
-                    purchaseAlways(it.purchaseToken)
+                    handlePurchase(it)
                 }
             }
+
             BillingClient.BillingResponseCode.USER_CANCELED -> {
                 Log.d("mybury", "You've cancelled the Google play billing process...")
                 "결제가 취소되었습니다".showToast(this)
                 purchaseFail.invoke()
+                stopLoading()
+            }
+
+            else -> {
+                "다시 시도해주세요.".showToast(this)
+                purchaseFail.invoke()
+                //  stopLoading()
             }
         }
     }
@@ -360,74 +440,13 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         }
     }
 
-    /**
-     * 이미 결제한 적이 있는 아이템을 보여주지 않아야 하는 경우 또는
-     * 선택을 비활성화 시켜야 하는 경우 등에 사용할 function
-     * acknowledgePurchase 을 통해 구매된 제품만 확인할 수 있다.
-     */
-    fun getAcknowledgePurchasedItem() {
-
-        // BillingClient 의 준비가 되지않은 상태라면 돌려보낸다
-        if (!billingClient.isReady) {
-            return
-        }
-
-        val recentSupport = supportInfo?.recentSupport ?: return
-
-        // 인앱결제된 내역을 확인한다
-        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (result.purchasesList == null) {
-            Log.d("mybury", "No existing in app purchases found.")
-            return
-        } else {
-            startLoading()
-            result.purchasesList?.forEach {
-                //결제된 내역에 대한 처리
-                //만약 여기의 토큰값이 서버에 있는 "실패토큰" 목록에 있고, pusrchaseState= 2 이면 진짜로 실패한 것으로 여긴다.
-            }
-
-            // 만약 purchasesList 의 토큰값과 일치하는 값이 있다면 "실패한 아이템" 이 존재하는 것으로 확인
-            // 이 아이템의 purchaseState 가 2이면 실패로 표기 그 외의 경우에는 넘어간다.
-            recentSupport.forEach { supportedItem ->
-                val purchasedFailItem =
-                    result.purchasesList?.firstOrNull { it.purchaseToken == supportedItem.token }
-                if (purchasedFailItem == null) {
-                    if (supportedItem.susYn == "N") {
-                        // 없는 것으로 간주. 아무것도 하지 않는다.
-                        acknowledgePurchaseItemIsNullList.add(supportedItem.token)
-                    }
-                    stopLoading()
-                } else {
-                    // 실패한 것오로 간주
-                    if (purchasedFailItem.purchaseState == 2) {
-                        supportViewModel.editSuccessItem(supportedItem.token, "N", {
-                            stopLoading()
-                        }, {
-                            stopLoading()
-                        })
-                    } else {
-                        supportViewModel.editSuccessItem(supportedItem.token, "Y", {
-                            stopLoading()
-                            "누락된 후원 정보가 갱신되었습니다.".showToast(this)
-                            supportViewModel.updateSupportPrice()
-                        }, {
-                            stopLoading()
-                        })
-                    }
-                }
-            }
-            stopLoading()
-        }
-    }
-
     // 소비성 (계속 구매 가능한) 제품 구매시
-    private fun purchaseAlways(purchaseToken: String) {
+    private fun handlePurchase(purchase: Purchase) {
+        val purchaseToken = purchase.purchaseToken
         val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(purchaseToken).build()
         billingClient.consumeAsync(consumeParams) { billingResult, _ ->
-            startLoading()
-
             if (previousToken == purchaseToken && billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-                stopLoading()
+                purchaseFail.invoke()
             } else {
                 previousToken = purchaseToken
                 when (billingResult.responseCode) {
@@ -436,26 +455,24 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                             supportViewModel.purchasedItem(purchasedItem?.id!!, purchaseToken, "Y",
                                 {
                                     // if success
-                                    stopLoading()
                                     showSupportPurchaseSuccessDialog()
                                     purchaseSuccess.invoke()
                                     supportViewModel.getPurchasableItem()
                                 },
                                 {
                                     // if fail
-                                    stopLoading()
                                     showSupportPurchaseFailDialog(
                                         purchaseToken,
                                         billingResult.responseCode.toString()
                                     )
                                     purchaseFail.invoke()
                                 })
+                        } else {
+                            purchaseFail.invoke()
                         }
                     }
-                    else -> {
-                        Log.e("mybury", "FAIL : ${billingResult.responseCode}")
-                        previousToken = purchaseToken
 
+                    else -> {
                         purchasedItem?.let {
                             supportViewModel.purchasedItem(it.id, purchaseToken, "N", {
                                 showSupportPurchaseFailDialog(
@@ -476,23 +493,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                     }
                 }
             }
-
-            stopLoading()
-
-        }
-    }
-
-    // 일회성 제품 구매시
-    private fun purchaseOnce(purchaseToken: String) {
-        val params = AcknowledgePurchaseParams.newBuilder()
-            .setPurchaseToken(purchaseToken)
-            .build()
-        billingClient.acknowledgePurchase(params) { billingResult ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                // do something
-            } else {
-                Log.e("TAG", "FAIL : ${billingResult.responseCode}")
-            }
         }
     }
 
@@ -511,4 +511,5 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 }
 
-val AD_UNIT_ID = if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-6302671173915322/9547430142"
+val AD_UNIT_ID =
+    if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-6302671173915322/9547430142"
