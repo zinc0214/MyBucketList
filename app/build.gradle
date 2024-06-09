@@ -5,11 +5,11 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -36,9 +36,6 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-    androidExtensions {
-        experimental = true
-    }
     buildFeatures {
         viewBinding true
         dataBinding true
@@ -46,6 +43,7 @@ android {
     kapt {
         correctErrorTypes true
     }
+    namespace 'womenproject.com.mybury'
 }
 
 dependencies {
@@ -115,7 +113,7 @@ dependencies {
     implementation Dep.flexbox
 
     implementation Dep.Dagger.Hilt.android
-    implementation 'androidx.paging:paging-common-ktx:3.0.0'
+    implementation 'androidx.paging:paging-common-ktx:3.2.1'
     kapt Dep.Dagger.Hilt.compiler
 
     // test
