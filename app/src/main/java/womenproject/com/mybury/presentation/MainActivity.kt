@@ -27,7 +27,6 @@ import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchaseHistoryParams
-import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -258,7 +257,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    queryPurchasedHistory()
                     queryProductDetails(items)
                     getAllPurchasedItem()
                 }
@@ -268,25 +266,6 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 Log.e("mybury", "Service Disconnected.")
             }
         })
-    }
-
-    // 이전에 구매한 정보 확인
-    fun queryPurchasedHistory() {
-        if (!billingClient.isReady) {
-            Log.e("mybury", "queryPurchases: BillingClient is not ready")
-        }
-        // Query for existing subscription products that have been purchased.
-        billingClient.queryPurchasesAsync(
-            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP)
-                .build()
-        ) { billingResult, purchaseList ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                //Log.e("ayhan", "queryPurchases purchaseList : $purchaseList")
-
-            } else {
-                //Log.e("ayhan", billingResult.debugMessage)
-            }
-        }
     }
 
     /**
@@ -311,6 +290,7 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, mutableList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                Log.e("ayhan", "queryProductDetailsAsync : $mutableList")
                 if (mutableList.isEmpty()) {
                     "다시 시도해주세요.".showToast(this)
                 } else {
@@ -347,15 +327,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
             return
         }
 
-        val selectedOfferToken =
-            productDetails.subscriptionOfferDetails?.get(0)?.offerToken.orEmpty()
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
-                // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
                 .setProductDetails(productDetails)
-                // to get an offer token, call ProductDetails.subscriptionOfferDetails()
-                // for a list of offers that are available to the user
-                .setOfferToken(selectedOfferToken)
                 .build()
         )
 

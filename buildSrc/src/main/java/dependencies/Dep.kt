@@ -108,7 +108,7 @@ object Dep {
     }
 
     object InAllBilling {
-        private const val version = "5.1.0"
+        private const val version = "7.0.0"
         const val core = "com.android.billingclient:billing:$version"
         const val coreKtx = "com.android.billingclient:billing-ktx:$version"
     }
