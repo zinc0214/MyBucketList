@@ -7,4 +7,3 @@ object Versions {
     const val versionCode = 32
     const val versionName = "1.7.1"
 }
-
