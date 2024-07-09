@@ -1,4 +1,3 @@
-import dependencies.Dep
 import dependencies.Versions
 
 plugins {
@@ -32,15 +31,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    namespace = "com.zinc.domain"
 }
 
 dependencies {
     implementation(project(":data"))
 
-    implementation(Dep.AndroidX.coreKtx)
-    implementation(Dep.AndroidX.appcompat)
+    implementation(libs.androidx.appcompat)
 
-    implementation(Dep.Dagger.dagger)
-    implementation(Dep.Kotlin.stdlibJvm)
-    implementation(Dep.Kotlin.coroutines.core)
+    implementation(libs.dagger)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.core)
 }

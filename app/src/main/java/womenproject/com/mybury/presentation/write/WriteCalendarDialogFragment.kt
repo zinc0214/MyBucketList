@@ -13,12 +13,11 @@ import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import kotlinx.android.synthetic.main.dialog_write_fragment_calendar.*
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogWriteFragmentCalendarBinding
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.CurrentDateDecorator
-import java.util.*
+import java.util.Date
 
 
 /**
@@ -26,7 +25,10 @@ import java.util.*
  */
 
 @SuppressLint("ValidFragment")
-class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) -> Unit, private var calendarDay: Date) : BaseDialogFragment<DialogWriteFragmentCalendarBinding>() {
+class WriteCalendarDialogFragment(
+    private var ddaySetListener: (String, Date) -> Unit,
+    private var calendarDay: Date
+) : BaseDialogFragment<DialogWriteFragmentCalendarBinding>() {
 
     override val layoutResourceId: Int
         get() = R.layout.dialog_write_fragment_calendar
@@ -61,7 +63,7 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
         selectDay.month = binding.calendarView.selectedDate.month
         selectDay.date = binding.calendarView.selectedDate.day
 
-        setCurrentDateTitle(calendarDay.year+1900, calendarDay.month, calendarDay.date)
+        setCurrentDateTitle(calendarDay.year + 1900, calendarDay.month, calendarDay.date)
         setCalendarViewListener()
 
     }
@@ -196,15 +198,15 @@ class WriteCalendarDialogFragment(private var ddaySetListener: (String, Date) ->
     }
 
 
-    private fun leftArrowOnClickListener() : View.OnClickListener {
+    private fun leftArrowOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            calendarView.goToPrevious()
+            binding.calendarView.goToPrevious()
         }
     }
 
-    private fun rightArrowOnClickListener() : View.OnClickListener {
+    private fun rightArrowOnClickListener(): View.OnClickListener {
         return View.OnClickListener {
-            calendarView.goToNext()
+            binding.calendarView.goToNext()
         }
     }
 

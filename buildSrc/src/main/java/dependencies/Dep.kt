@@ -1,17 +1,17 @@
 package dependencies
 
 object Versions {
-    const val compileSdk = 32
+    const val compileSdk = 34
 
     const val minSdk = 23
     const val targetSdk = 32
-    const val versionCode = 29
-    const val versionName = "1.5.9"
+    const val versionCode = 31
+    const val versionName = "1.7.0"
 }
 
 object Dep {
     object GradlePlugin {
-        private const val androidStudioGradlePluginVersion = "7.0.3"
+        private const val androidStudioGradlePluginVersion = "8.3.0"
         const val android = "com.android.tools.build:gradle:$androidStudioGradlePluginVersion"
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val kotlinSerialization =
@@ -20,21 +20,14 @@ object Dep {
     }
 
     object AndroidX {
-        object activity {
-            const val activityVersion = "1.3.1"
-            const val activity = "androidx.activity:activity:$activityVersion"
-            const val ktx = "androidx.activity:activity-ktx:$activityVersion"
-        }
-
-        const val appcompat = "androidx.appcompat:appcompat:1.4.1"
-        const val coreKtx = "androidx.core:core-ktx:1.7.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.6.1"
+        const val coreKtx = "androidx.core:core-ktx:1.13.0"
         const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
+        const val paging = "androidx.paging:paging-common-ktx:3.3.0"
 
         object Lifecycle {
             private const val lifecycleVersion = "2.4.0"
             const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-            const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-            const val runTime = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
             const val extension = "androidx.lifecycle:lifecycle-extensions:2.2.0"
         }
 
@@ -45,11 +38,11 @@ object Dep {
 
         object RecyclerView {
             const val core = "androidx.recyclerview:recyclerview:1.2.1"
-            const val selection = "androidx.recyclerview:recyclerview-selection:1.1.0"
+         //   const val selection = "androidx.recyclerview:recyclerview-selection:1.1.0"
         }
 
         object Navigation {
-            private const val version = "2.4.0"
+            private const val version = "2.7.7"
             const val fragment = "androidx.navigation:navigation-fragment-ktx:$version"
             const val ui = "androidx.navigation:navigation-ui-ktx:$version"
 
@@ -58,9 +51,8 @@ object Dep {
     }
 
     object Dagger {
-        const val version = "2.39.1"
+        const val version = "2.51"
         const val dagger = "com.google.dagger:dagger:$version"
-        const val compiler = "com.google.dagger:dagger-compiler:$version"
 
         object Hilt {
             const val android = "com.google.dagger:hilt-android:$version"
@@ -70,7 +62,7 @@ object Dep {
 
 
     object Kotlin {
-        const val version = "1.5.31"
+        const val version = "1.9.22"
         const val stdlibJvm = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 
         object coroutines {
@@ -78,7 +70,6 @@ object Dep {
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
             const val android =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-            const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
         }
 
         const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
@@ -93,7 +84,8 @@ object Dep {
     object Retrofit {
         private const val version = "2.9.0"
         const val core = "com.squareup.retrofit2:retrofit:$version"
-        const val serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+        const val serialization =
+            "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
         const val converter = "com.squareup.retrofit2:converter-gson:$version"
         const val rxJava = "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     }
@@ -116,7 +108,7 @@ object Dep {
     }
 
     object InAllBilling {
-        private const val version = "5.1.0"
+        private const val version = "7.0.0"
         const val core = "com.android.billingclient:billing:$version"
         const val coreKtx = "com.android.billingclient:billing-ktx:$version"
     }
@@ -129,10 +121,11 @@ object Dep {
         const val runner = "androidx.test:runner:1.4.0"
     }
 
-    const val glide = "com.github.bumptech.glide:glide:4.12.0"
+    const val glide = "com.github.bumptech.glide:glide:4.16.0"
     const val calendarview = "com.prolificinteractive:material-calendarview:1.4.3"
     const val jsoup = "org.jsoup:jsoup:1.14.3"
     const val lottie = "com.airbnb.android:lottie:3.0.7"
     const val flexbox = "com.google.android.flexbox:flexbox:3.0.0"
+    const val cropper = "com.theartofdev.edmodo:android-image-cropper:2.8.0"
 }
 

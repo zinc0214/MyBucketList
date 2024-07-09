@@ -2,7 +2,26 @@ package womenproject.com.mybury.data.repository
 
 import okhttp3.MultipartBody
 import womenproject.com.mybury.data.api.MyBuryApi
-import womenproject.com.mybury.data.model.*
+import womenproject.com.mybury.data.model.AddCategoryRequest
+import womenproject.com.mybury.data.model.BucketCategory
+import womenproject.com.mybury.data.model.BucketDetailItem
+import womenproject.com.mybury.data.model.BucketRequest
+import womenproject.com.mybury.data.model.ChangeCategoryStatusRequest
+import womenproject.com.mybury.data.model.DdayBucketListResponse
+import womenproject.com.mybury.data.model.DomainBucketList
+import womenproject.com.mybury.data.model.EditCategoryNameRequest
+import womenproject.com.mybury.data.model.GetTokenResponse
+import womenproject.com.mybury.data.model.OriginMyPageInfo
+import womenproject.com.mybury.data.model.RefreshTokenRequest
+import womenproject.com.mybury.data.model.RefreshTokenResponse
+import womenproject.com.mybury.data.model.RemoveCategoryRequest
+import womenproject.com.mybury.data.model.SignUpCheckRequest
+import womenproject.com.mybury.data.model.SignUpCheckResponse
+import womenproject.com.mybury.data.model.SignUpResponse
+import womenproject.com.mybury.data.model.SimpleResponse
+import womenproject.com.mybury.data.model.StatusChangeBucketRequest
+import womenproject.com.mybury.data.model.UseUserIdRequest
+import womenproject.com.mybury.data.model.UserIdRequest
 import javax.inject.Inject
 
 class MyBuryRepositoryImpl @Inject constructor(
@@ -21,8 +40,8 @@ class MyBuryRepositoryImpl @Inject constructor(
         return myBuryApi.signUp(email)
     }
 
-    override suspend fun getLoginToken(usrdId: UseUserIdRequest): GetTokenResponse {
-        return myBuryApi.getLoginToken(usrdId)
+    override suspend fun getLoginToken(email: UseUserIdRequest): GetTokenResponse {
+        return myBuryApi.getLoginToken(email)
     }
 
     override suspend fun loadHomeBucketList(

@@ -8,16 +8,13 @@ import womenproject.com.mybury.databinding.ItemBlankBinding
 import womenproject.com.mybury.databinding.ItemSortBaseBucketBinding
 import womenproject.com.mybury.databinding.ItemSortCountBucketBinding
 import womenproject.com.mybury.databinding.ItemSortDoneBucketBinding
-import womenproject.com.mybury.ui.ItemActionListener
 import womenproject.com.mybury.ui.ItemDragListener
-import womenproject.com.mybury.ui.ItemMovedListener
 import womenproject.com.mybury.util.Converter.Companion.dpToPx
 
 class SortBucketListAdapter(
-    private val bucketList: List<BucketItem>,
+    private val bucketList: MutableList<BucketItem> = mutableListOf(),
     private val dragListener: ItemDragListener,
-    private val itemMovedListener: ItemMovedListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), BucketItemTouchHelperListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -32,6 +29,7 @@ class SortBucketListAdapter(
                     dragListener
                 )
             }
+
             ItemType.COUNT -> {
                 SortCountBucketViewHolder(
                     ItemSortCountBucketBinding.inflate(
@@ -42,6 +40,7 @@ class SortBucketListAdapter(
                     dragListener
                 )
             }
+
             ItemType.DONE -> {
                 SortDoneBucketViewHolder(
                     ItemSortDoneBucketBinding.inflate(
@@ -52,6 +51,7 @@ class SortBucketListAdapter(
                     dragListener
                 )
             }
+
             else -> {
                 BlankViewHolder(
                     ItemBlankBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -61,7 +61,7 @@ class SortBucketListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if(position == bucketList.size) {
+        if (position == bucketList.size) {
             return 3
         }
         val currentItemInfo = bucketList[position]
@@ -70,9 +70,11 @@ class SortBucketListAdapter(
             currentItemInfo.goalCount == currentItemInfo.userCount -> {
                 ItemType.DONE
             }
+
             currentItemInfo.goalCount > 1 -> {
                 ItemType.COUNT
             }
+
             else -> {
                 ItemType.BASE
             }
@@ -90,30 +92,19 @@ class SortBucketListAdapter(
             is SortBaseBucketViewHolder -> {
                 holder.bind(bucketList[position])
             }
+
             is SortCountBucketViewHolder -> {
                 holder.bind(bucketList[position])
             }
+
             is SortDoneBucketViewHolder -> {
                 holder.bind(bucketList[position])
             }
+
             is BlankViewHolder -> {
                 holder.bind(dpToPx(60))
             }
         }
-    }
-
-    override fun onItemMoved(from: Int, to: Int) {
-        val toReal = if (to == 0) 0 else to - 1
-        if (from == toReal) {
-            return
-        }
-
-        val bucketList = bucketList as MutableList<BucketItem>
-        val fromItem = bucketList.removeAt(from)
-        bucketList.add(toReal, fromItem)
-        notifyItemMoved(from, toReal)
-
-        itemMovedListener.moved(bucketList)
     }
 
     enum class ItemType {
@@ -137,4 +128,22 @@ class SortBucketListAdapter(
             else -> ItemType.BLANK
         }
     }
+
+    override fun onItemMove(from_position: Int, to_position: Int): Boolean {
+        if(to_position > bucketList.lastIndex) return false
+        val item = bucketList[from_position]
+        // 리스트 갱신
+        bucketList.removeAt(from_position)
+        bucketList.add(to_position, item)
+
+        notifyItemMoved(from_position, to_position)
+        return true
+    }
+
+    fun updateBucketList(updateList: List<BucketItem>) {
+        bucketList.clear()
+        bucketList.addAll(updateList)
+    }
+
+    fun getBucketList() = bucketList
 }

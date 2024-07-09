@@ -220,7 +220,7 @@ class CategoryEditFragment : BaseFragment(),
             adapter = editCategoryListAdapter
         }
 
-        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(editCategoryListAdapter))
+        itemTouchHelper = ItemTouchHelper(CategoryItemTouchHelperCallback(editCategoryListAdapter))
         itemTouchHelper.attachToRecyclerView(binding.categoryListRecyclerView)
     }
 

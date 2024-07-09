@@ -1,18 +1,16 @@
-import dependencies.Dep
-
 buildscript {
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3"
-        classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
-        classpath Dep.GradlePlugin.kotlinSerialization
-        classpath Dep.GradlePlugin.hilt
+        classpath libs.gradle.android
+        classpath libs.gradle.kotlin
+        classpath libs.androidx.navigation.safe.args.gradle.plugin
+        classpath libs.google.services
+        classpath libs.firebase.crashlytics.gradle
+        classpath libs.gradle.kotlin.serialization
+        classpath libs.gradle.hilt
     }
 }
 

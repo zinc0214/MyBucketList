@@ -22,7 +22,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_bucket_write.*
 import womenproject.com.mybury.BuildConfig
 import womenproject.com.mybury.R
 import womenproject.com.mybury.data.Category
@@ -133,12 +132,15 @@ open class BucketWriteFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.RESTART -> {
                     categoryViewModel.loadCategoryList()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog {
@@ -163,9 +165,11 @@ open class BucketWriteFragment : BaseFragment() {
                     imm.hideSoftInputFromWindow(binding.memoText.windowToken, 0)
                     startLoading()
                 }
+
                 LoadState.RESTART -> {
                     addBucket()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                     context?.showToast("버킷리스트를 등록했습니다.")
@@ -175,6 +179,7 @@ open class BucketWriteFragment : BaseFragment() {
                     }
                     requireActivity().onBackPressed()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     context?.showToast("버킷리스트 등록에 실패했습니다. 잠시 후 다시 시도해주세요.")
@@ -362,6 +367,7 @@ open class BucketWriteFragment : BaseFragment() {
                 MotionEvent.ACTION_DOWN -> {
                     binding.memoImgText.typeface = Typeface.DEFAULT_BOLD
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     binding.memoImgText.typeface = Typeface.DEFAULT
                 }
@@ -379,6 +385,7 @@ open class BucketWriteFragment : BaseFragment() {
                     binding.memoLayout.background =
                         requireContext().getDrawable(R.drawable.shape_dfdfdf_r4)
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     binding.memoLayout.background =
                         requireContext().getDrawable(R.drawable.shape_f3f3f3_r4)
@@ -610,10 +617,10 @@ open class BucketWriteFragment : BaseFragment() {
 
 
     fun getBucketItemInfo(): AddBucketItemContent {
-        goalCount = if (goal_count_text.text.toString() == "설정") {
+        goalCount = if (binding.goalCountText.text.toString() == "설정") {
             1
         } else {
-            goal_count_text.text.toString().toInt()
+            binding.goalCountText.text.toString().toInt()
         }
 
         var formDate = ""
