@@ -95,8 +95,8 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     private val dragRange: Int
         get() {
             when (dragEdge) {
-                SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> return verticalDragRange
-                SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> return horizontalDragRange
+                DragEdge.TOP, DragEdge.BOTTOM -> return verticalDragRange
+                DragEdge.LEFT, DragEdge.RIGHT -> return horizontalDragRange
                 else -> return verticalDragRange
             }
         }
@@ -164,7 +164,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     private fun chkDragable() {
-        setOnTouchListener { view, motionEvent ->
+        setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 lastY = motionEvent.rawY
                 lastX = motionEvent.rawX
@@ -179,11 +179,11 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
                 lastX = newX
 
                 when (dragEdge) {
-                    SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> {
+                    DragEdge.TOP, DragEdge.BOTTOM -> {
                         setEnablePullToBack(offsetY > offsetX)
                         setEnablePullToBack(offsetY < offsetX)
                     }
-                    SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> setEnablePullToBack(offsetY < offsetX)
+                    DragEdge.LEFT, DragEdge.RIGHT -> setEnablePullToBack(offsetY < offsetX)
                 }
             }
 
@@ -261,8 +261,8 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         }
 
         if (childCount > 0) {
-            val measureWidth = View.MeasureSpec.makeMeasureSpec(measuredWidth - paddingLeft - paddingRight, View.MeasureSpec.EXACTLY)
-            val measureHeight = View.MeasureSpec.makeMeasureSpec(measuredHeight - paddingTop - paddingBottom, View.MeasureSpec.EXACTLY)
+            val measureWidth = MeasureSpec.makeMeasureSpec(measuredWidth - paddingLeft - paddingRight, MeasureSpec.EXACTLY)
+            val measureHeight = MeasureSpec.makeMeasureSpec(measuredHeight - paddingTop - paddingBottom, MeasureSpec.EXACTLY)
             getChildAt(0).measure(measureWidth, measureHeight)
         }
     }
@@ -273,8 +273,8 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         horizontalDragRange = w
 
         when (dragEdge) {
-            SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> finishAnchor = if (finishAnchor > 0) finishAnchor else verticalDragRange * BACK_FACTOR
-            SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> finishAnchor = if (finishAnchor > 0) finishAnchor else horizontalDragRange * BACK_FACTOR
+            DragEdge.TOP, DragEdge.BOTTOM -> finishAnchor = if (finishAnchor > 0) finishAnchor else verticalDragRange * BACK_FACTOR
+            DragEdge.LEFT, DragEdge.RIGHT -> finishAnchor = if (finishAnchor > 0) finishAnchor else horizontalDragRange * BACK_FACTOR
         }
     }
 
@@ -401,8 +401,8 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
         override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
             when (dragEdge) {
-                SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> draggingOffset = Math.abs(top)
-                SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> draggingOffset = Math.abs(left)
+                DragEdge.TOP, DragEdge.BOTTOM -> draggingOffset = Math.abs(top)
+                DragEdge.LEFT, DragEdge.RIGHT -> draggingOffset = Math.abs(left)
                 else -> {
                 }
             }
@@ -437,19 +437,19 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
             val finalLeft: Int
             val finalTop: Int
             when (dragEdge) {
-                SwipeBackLayout.DragEdge.LEFT -> {
+                DragEdge.LEFT -> {
                     finalLeft = if (isBack) horizontalDragRange else 0
                     smoothScrollToX(finalLeft)
                 }
-                SwipeBackLayout.DragEdge.RIGHT -> {
+                DragEdge.RIGHT -> {
                     finalLeft = if (isBack) -horizontalDragRange else 0
                     smoothScrollToX(finalLeft)
                 }
-                SwipeBackLayout.DragEdge.TOP -> {
+                DragEdge.TOP -> {
                     finalTop = if (isBack) verticalDragRange else 0
                     smoothScrollToY(finalTop)
                 }
-                SwipeBackLayout.DragEdge.BOTTOM -> {
+                DragEdge.BOTTOM -> {
                     finalTop = if (isBack) -verticalDragRange else 0
                     smoothScrollToY(finalTop)
                 }
@@ -460,10 +460,10 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private fun backBySpeed(xvel: Float, yvel: Float): Boolean {
         when (dragEdge) {
-            SwipeBackLayout.DragEdge.TOP, SwipeBackLayout.DragEdge.BOTTOM -> if (Math.abs(yvel) > Math.abs(xvel) && Math.abs(yvel) > AUTO_FINISHED_SPEED_LIMIT) {
+            DragEdge.TOP, DragEdge.BOTTOM -> if (Math.abs(yvel) > Math.abs(xvel) && Math.abs(yvel) > AUTO_FINISHED_SPEED_LIMIT) {
                 return if (dragEdge == DragEdge.TOP) !canChildScrollUp() else !canChildScrollDown()
             }
-            SwipeBackLayout.DragEdge.LEFT, SwipeBackLayout.DragEdge.RIGHT -> if (Math.abs(xvel) > Math.abs(yvel) && Math.abs(xvel) > AUTO_FINISHED_SPEED_LIMIT) {
+            DragEdge.LEFT, DragEdge.RIGHT -> if (Math.abs(xvel) > Math.abs(yvel) && Math.abs(xvel) > AUTO_FINISHED_SPEED_LIMIT) {
                 return if (dragEdge == DragEdge.LEFT) !canChildScrollLeft() else !canChildScrollRight()
             }
         }

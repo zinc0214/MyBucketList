@@ -1,4 +1,3 @@
-import dependencies.Dep
 import dependencies.Versions
 
 plugins {
@@ -51,75 +50,75 @@ dependencies {
     implementation project(path: ':data')
 
     // AndroidX
-    implementation Dep.AndroidX.appcompat
-    implementation Dep.AndroidX.constraintlayout
-    implementation Dep.AndroidX.Lifecycle.extension
-    implementation Dep.AndroidX.UI.material
-    implementation Dep.AndroidX.UI.cardView
-    implementation Dep.AndroidX.RecyclerView.core
-    implementation Dep.AndroidX.paging
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.extensions
+    implementation libs.material
+    implementation libs.androidx.cardview
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.paging.common.ktx
 
     // calendarview
-    implementation Dep.calendarview
+    implementation libs.material.calendarview
 
     //glide
-    implementation Dep.glide
+    implementation libs.glide
 
     //retrofit
-    implementation Dep.Retrofit.core
-    implementation Dep.Retrofit.converter
-    implementation Dep.Retrofit.rxJava
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.adapter.rxjava2
 
     // okHttp
-    implementation Dep.OkHttp.loggingInterceptor
+    implementation libs.logging.interceptor
 
     // Reactivex
-    implementation Dep.Reactivex.rxkotlin
-    implementation Dep.Reactivex.rxandroid
+    implementation libs.rxkotlin
+    implementation libs.rxandroid
 
     //navigation
-    implementation Dep.AndroidX.Navigation.ui
-    implementation Dep.AndroidX.Navigation.fragment
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.navigation.fragment.ktx
 
     //google login
-    implementation Dep.Firebase.auth
-    implementation Dep.Gms.auth
+    implementation libs.firebase.auth
+    implementation libs.play.services.auth
 
     // firebase
-    implementation Dep.Firebase.analytics
-    implementation Dep.Firebase.crashlytics
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
 
     // Jsoup
-    implementation Dep.jsoup
+    implementation libs.jsoup
 
     // coroutine
-    implementation Dep.Kotlin.coroutines.android
-    implementation Dep.Kotlin.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.core
 
     // kotlin - ktx
-    implementation Dep.AndroidX.Lifecycle.viewModel
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
     // google abMob
-    implementation Dep.Gms.ads
-    implementation Dep.Gms.base
+    implementation libs.play.services.ads
+    implementation libs.play.services.base
 
     // in app billing
-    implementation Dep.InAllBilling.core
-    implementation Dep.InAllBilling.coreKtx
+    implementation libs.billing
+    implementation libs.billing.ktx
 
     //lottie
-    implementation Dep.lottie
+    implementation libs.lottie
 
     // flexbox
-    implementation Dep.flexbox
+    implementation libs.flexbox
 
-    implementation Dep.Dagger.Hilt.android
-    kapt Dep.Dagger.Hilt.compiler
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 
     // test
-    testImplementation Dep.Test.junit
-    androidTestImplementation Dep.Test.runner
-    androidTestImplementation Dep.Test.espressoCore
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.runner
+    androidTestImplementation libs.androidx.espresso.core
 
-    implementation Dep.cropper
+    implementation libs.android.image.cropper
 }
