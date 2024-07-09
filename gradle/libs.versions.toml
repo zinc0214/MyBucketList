@@ -36,6 +36,9 @@ retrofitVersion = "2.9.0"
 runner = "1.6.1"
 rxandroid = "2.1.0"
 rxkotlin = "2.2.0"
+json = "1.5.0"
+converter = "1.0.0"
+okhttp3 = "4.12.0"
 
 [libraries]
 ##################################
@@ -87,5 +90,8 @@ play-services-base = { module = "com.google.android.gms:play-services-base", ver
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 rxkotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rxkotlin" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "json" }
+kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "converter" }
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 
 [bundles]
