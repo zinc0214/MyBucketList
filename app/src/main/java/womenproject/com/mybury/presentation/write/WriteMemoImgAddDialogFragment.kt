@@ -11,9 +11,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -51,16 +54,42 @@ class WriteMemoImgAddDialogFragment(
     private var mCurrentPhotoPath: String? = null
 
 
+    private var imagePermitted = false
+    private var cameraPermitted = false
+
+
     override val layoutResourceId: Int
         get() = R.layout.dialog_memo_img_add
 
+    private val requestImagePermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                imagePermitted = true
+            } else {
+                showNoPermissionDialog(requireActivity() as BaseActiviy)
+            }
+        }
+
+    private val requestCameraPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                cameraPermitted = true
+            } else {
+                showNoPermissionDialog(requireActivity() as BaseActiviy)
+            }
+        }
+
     private fun initStartView() {
-        if (!checkAddImageListener.invoke()) {
+        if (!checkAddImageListener()) {
             binding.addAlbumImgLayout.disableAdd()
             binding.addCamImgLayout.disableAdd()
         }
 
-        if (!checkAddTypeAble.invoke()) {
+        if (!checkAddTypeAble()) {
             binding.addMemoLayout.disableAdd()
         }
 
@@ -69,6 +98,7 @@ class WriteMemoImgAddDialogFragment(
                 binding.addMemoLayout.writeItemLayout.visibility = View.VISIBLE
                 binding.setBaseProfileImg.writeItemLayout.visibility = View.GONE
             }
+
             AddContentType.PROFILE -> {
                 binding.setBaseProfileImg.writeItemLayout.visibility = View.VISIBLE
                 binding.addMemoLayout.writeItemLayout.visibility = View.GONE
@@ -99,14 +129,6 @@ class WriteMemoImgAddDialogFragment(
     }
 
 
-    companion object {
-
-        private val PICK_FROM_CAMERA = 1
-        private val PICK_FROM_ALBUM = 2
-        private val MULTIPLE_PERMISSIONS = 101
-
-    }
-
     override fun onResume() {
         super.onResume()
 
@@ -118,7 +140,7 @@ class WriteMemoImgAddDialogFragment(
 
     private val memoAddOnClickListener = View.OnClickListener {
         if (binding.addMemoLayout.isAddable!!) {
-            addTypeClickListener.invoke()
+            addTypeClickListener()
             this.dismiss()
         } else {
             Toast.makeText(context, "이미 메모가 있습니다.", Toast.LENGTH_SHORT).show()
@@ -127,33 +149,40 @@ class WriteMemoImgAddDialogFragment(
     }
 
     private val baseProfileImgClickListener = View.OnClickListener {
-        addTypeClickListener.invoke()
+        addTypeClickListener()
         this.dismiss()
     }
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
+        if (cameraPermitted || checkImagePermission(
+                this.requireContext(),
+                activity as BaseActiviy
+            )
+        ) {
+            Log.e("ayhan", "${binding.addAlbumImgLayout.isAddable}")
             if (binding.addAlbumImgLayout.isAddable!!) {
-                if (checkAddImageListener.invoke()) {
+                if (checkAddImageListener()) {
                     goToAlbum()
                 }
             } else {
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
-        if (checkPermissions(this.requireContext(), activity as BaseActiviy)) {
+        if (cameraPermitted || checkCameraPermission(
+                this.requireContext(),
+                activity as BaseActiviy
+            )
+        ) {
             if (binding.addCamImgLayout.isAddable!!) {
-                if (checkAddImageListener.invoke()) {
+                if (checkAddImageListener()) {
                     takePhoto()
                 }
             } else {
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 
@@ -202,59 +231,98 @@ class WriteMemoImgAddDialogFragment(
     }
 
 
-    private fun checkPermissions(context: Context, activity: BaseActiviy): Boolean {
-        if (ContextCompat.checkSelfPermission(
+    private fun checkImagePermission(context: Context, activity: BaseActiviy): Boolean {
+        val needPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        }
+        when {
+            ContextCompat.checkSelfPermission(
                 context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if ((ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )) ||
-                (ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity,
-                    Manifest.permission.CAMERA
-                ))
-            ) {
-                val permissionDialogFragment = PermissionDialogFragment()
-                permissionDialogFragment.show(activity.supportFragmentManager, "tag")
-            } else {
-                ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA),
-                    MULTIPLE_PERMISSIONS
+                needPermission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                imagePermitted = true
+                return true
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                needPermission
+            ) -> {
+                showNoPermissionDialog(activity)
+            }
+
+            else -> {
+                requestImagePermissionLauncher.launch(
+                    needPermission
                 )
             }
-            return false
         }
-        return true
+        return false
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            MULTIPLE_PERMISSIONS -> {
-                for (i in 0..grantResults.size) {
-                    if (grantResults[i] < 0) {
-                        showNoPermissionToastAndFinish()
-                        return
-                    }
-                }
+    private fun checkImagePermission13(context: Context, activity: BaseActiviy): Boolean {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                imagePermitted = true
+                return true
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) -> {
+                showNoPermissionDialog(activity)
+            }
+
+            else -> {
+                requestImagePermissionLauncher.launch(
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
             }
         }
+        return false
     }
 
+    private fun checkCameraPermission(context: Context, activity: BaseActiviy): Boolean {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                cameraPermitted = true
+                return true
+            }
 
-    private fun showNoPermissionToastAndFinish() {
-        Toast.makeText(context, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT)
-            .show()
-        requireActivity().finish()
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.CAMERA
+            ) -> {
+                showNoPermissionDialog(activity)
+            }
+
+            else -> {
+                requestCameraPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+        return false
     }
 
+    private fun showNoPermissionDialog(activity: BaseActiviy) {
+        val permissionDialogFragment = PermissionDialogFragment()
+        permissionDialogFragment.show(activity.supportFragmentManager, "tag")
+    }
+
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) {
             Toast.makeText(context, "취소 되었습니다.", Toast.LENGTH_SHORT).show()
@@ -268,6 +336,7 @@ class WriteMemoImgAddDialogFragment(
                 photoUri = data.data
                 cropImage()
             }
+
             PICK_FROM_CAMERA -> {
                 cropImage()
                 // 갤러리에 나타나게
@@ -276,6 +345,7 @@ class WriteMemoImgAddDialogFragment(
                     arrayOf(photoUri!!.path), null
                 ) { _, _ -> }
             }
+
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == Activity.RESULT_OK) {
@@ -284,7 +354,6 @@ class WriteMemoImgAddDialogFragment(
                         goToHome()
                     }
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val error = result.error
                     Toast.makeText(requireContext(), "이미지를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT)
                         .show()
                     this.dismiss()
@@ -338,5 +407,12 @@ class WriteMemoImgAddDialogFragment(
     private fun WidgetWriteFragmentAddItemBinding.disableAdd() {
         this.writeItemText.setTextColor(requireContext().getColor(R.color._b4b4b4))
         this.isAddable = false
+    }
+
+    companion object {
+        private val PICK_FROM_CAMERA = 1
+        private val PICK_FROM_ALBUM = 2
+        private val MULTIPLE_PERMISSIONS = 101
+
     }
 }
