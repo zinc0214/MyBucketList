@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "158987869075-1heptk7kr64ujvv0kjoi1p7ooe52oiht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "9bdb4b635135e675079b50842855d6e90e5cb1f0"
+          }
+        },
+        {
           "client_id": "158987869075-68gabg3d75114ht80jiuedp64i7dmd3f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -23,11 +31,35 @@
           }
         },
         {
-          "client_id": "158987869075-1heptk7kr64ujvv0kjoi1p7ooe52oiht.apps.googleusercontent.com",
+          "client_id": "158987869075-jvfk4636vnv2slvvjcp3df8rnou8bvls.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "womenproject.com.mybury",
-            "certificate_hash": "9bdb4b635135e675079b50842855d6e90e5cb1f0"
+            "certificate_hash": "aac0285c71078a95cf9bfb6588486f2e27375619"
+          }
+        },
+        {
+          "client_id": "158987869075-lkj2mi89cfvg7m2sbp27gapppvo65vtf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "badf3bf4d4719a1e6dc9c833250c04170f56e698"
+          }
+        },
+        {
+          "client_id": "158987869075-ov5ak6a3toqkg1on5s14p6gvg2hg57fl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "54def5958a52d1bd2f2bfa2c37c11b4ecfa8dd5e"
+          }
+        },
+        {
+          "client_id": "158987869075-pq3sm8588p2e6o4dcu7ou0tmvq0k0feg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "d86476fcb3ba18b6b341e40287bb4485fde0b83d"
           }
         },
         {
@@ -46,6 +78,13 @@
             {
               "client_id": "158987869075-hha77l14jsagc3itsij2c4dbe7m7stdt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "158987869075-91299us6o2brmhmv65bdt29fbp8cd694.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.myburyproject.MyBury"
+              }
             }
           ]
         }

@@ -1,4 +1,3 @@
-import dependencies.Dep
 import dependencies.Versions
 
 plugins {
@@ -39,21 +38,21 @@ android {
 }
 
 dependencies {
-    implementation(Dep.Kotlin.stdlibJvm)
-    implementation(Dep.Kotlin.coroutines.core)
-    implementation(Dep.Kotlin.serialization)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.serialization.json)
 
     // Dagger Hilt
-    implementation(Dep.Dagger.Hilt.android)
-    kapt(Dep.Dagger.Hilt.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
-    api(Dep.Retrofit.core)
-    implementation(Dep.Retrofit.core)
-    implementation(Dep.Retrofit.serialization)
-    implementation(Dep.Retrofit.converter)
+    api(libs.retrofit)
+    implementation(libs.retrofit)
+    implementation(libs.kotlinx.serialization.converter)
+    implementation(libs.converter.gson)
 
-    implementation(Dep.OkHttp.core)
-    implementation(Dep.OkHttp.loggingInterceptor)
+    implementation(libs.okhttp3)
+    implementation(libs.logging.interceptor)
 
 }
 
