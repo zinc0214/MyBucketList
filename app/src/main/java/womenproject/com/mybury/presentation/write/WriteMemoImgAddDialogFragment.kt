@@ -232,11 +232,14 @@ class WriteMemoImgAddDialogFragment(
 
 
     private fun checkImagePermission(context: Context, activity: BaseActiviy): Boolean {
-        val needPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_IMAGES
-        } else {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        }
+        val needPermission =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }
         when {
             ContextCompat.checkSelfPermission(
                 context,
@@ -257,33 +260,6 @@ class WriteMemoImgAddDialogFragment(
             else -> {
                 requestImagePermissionLauncher.launch(
                     needPermission
-                )
-            }
-        }
-        return false
-    }
-
-    private fun checkImagePermission13(context: Context, activity: BaseActiviy): Boolean {
-        when {
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.READ_MEDIA_IMAGES
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // You can use the API that requires the permission.
-                imagePermitted = true
-                return true
-            }
-
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                Manifest.permission.READ_MEDIA_IMAGES
-            ) -> {
-                showNoPermissionDialog(activity)
-            }
-
-            else -> {
-                requestImagePermissionLauncher.launch(
-                    Manifest.permission.READ_MEDIA_IMAGES
                 )
             }
         }
