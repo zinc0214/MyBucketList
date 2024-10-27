@@ -116,7 +116,7 @@ class CategoryEditFragment : BaseFragment(),
                 LoadState.SUCCESS -> {
                     stopLoading()
                     initDataBinding()
-                    imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
                 }
                 LoadState.RESTART, LoadState.FAIL -> {
                     stopLoading()
