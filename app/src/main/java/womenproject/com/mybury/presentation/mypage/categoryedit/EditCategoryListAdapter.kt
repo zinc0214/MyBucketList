@@ -10,20 +10,19 @@ import womenproject.com.mybury.ui.ItemCheckedListener
 import womenproject.com.mybury.ui.ItemDragListener
 import womenproject.com.mybury.ui.ItemMovedListener
 
-class EditCategoryListAdapter(private val bucketCategoryList: List<Category>,
-                              private val dragListener: ItemDragListener,
-                              private val checkedListener: ItemCheckedListener,
-                              private val itemMovedListener: ItemMovedListener,
-                              private val editCategoryName: (Category) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
-
-
-    private lateinit var editCategoryListViewHolder: EditCategoryListViewHolder
+class EditCategoryListAdapter(
+    private val bucketCategoryList: List<Category>,
+    private val dragListener: ItemDragListener,
+    private val checkedListener: ItemCheckedListener,
+    private val itemMovedListener: ItemMovedListener,
+    private val editCategoryName: (Category) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemActionListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        editCategoryListViewHolder = EditCategoryListViewHolder(ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-                dragListener, checkedListener, editCategoryName)
-        return editCategoryListViewHolder
+        return EditCategoryListViewHolder(
+            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            dragListener, checkedListener, editCategoryName
+        )
     }
 
     override fun getItemCount(): Int {
@@ -31,7 +30,7 @@ class EditCategoryListAdapter(private val bucketCategoryList: List<Category>,
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        editCategoryListViewHolder.bind(bucketCategoryList[position])
+        (holder as EditCategoryListViewHolder).bind(bucketCategoryList[position])
     }
 
     override fun onItemMoved(from: Int, to: Int) {

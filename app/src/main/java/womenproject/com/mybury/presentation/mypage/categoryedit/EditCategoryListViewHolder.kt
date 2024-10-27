@@ -2,6 +2,7 @@ package womenproject.com.mybury.presentation.mypage.categoryedit
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
@@ -25,12 +26,14 @@ class EditCategoryListViewHolder(
     fun bind(category: Category) {
         binding.apply {
 
+            val isDefaultItem = category.name == "없음"
+
+            Log.e("ayhan", "category : $category")
             bucketName = category.name
-            if (category.name == "없음") {
-                removeBox.isEnabled = false
-                removeBox.isChecked = false
-                editLayout.visibility = View.GONE
-            }
+            removeBox.isEnabled = !isDefaultItem
+            //  removeBox.isChecked = !isDefaultItem
+            editLayout.visibility = if (isDefaultItem) View.GONE else View.VISIBLE
+
             dragLayout.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     dragListener.onStartDrag(this@EditCategoryListViewHolder)
