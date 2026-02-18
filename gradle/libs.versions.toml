@@ -1,6 +1,6 @@
 [versions]
 adapterRxjava2 = "2.3.0"
-androidImageCropper = "2.8.0"
+androidImageCropper = "4.7.0"
 androidTooldBuild = "8.5.2"
 appcompat = "1.7.0"
 billing = "7.1.0"
@@ -45,7 +45,7 @@ okhttp3 = "4.12.0"
 #plugin
 ##################################
 adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "adapterRxjava2" }
-android-image-cropper = { module = "com.theartofdev.edmodo:android-image-cropper", version.ref = "androidImageCropper" }
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }

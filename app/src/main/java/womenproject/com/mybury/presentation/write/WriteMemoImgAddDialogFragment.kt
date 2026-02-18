@@ -4,36 +4,39 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActionBar
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import womenproject.com.mybury.R
 import womenproject.com.mybury.databinding.DialogMemoImgAddBinding
 import womenproject.com.mybury.databinding.WidgetWriteFragmentAddItemBinding
 import womenproject.com.mybury.presentation.base.BaseActiviy
 import womenproject.com.mybury.presentation.base.BaseDialogFragment
 import womenproject.com.mybury.ui.PermissionDialogFragment
+import womenproject.com.mybury.util.FileUtil.getFileFromUri
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 enum class AddContentType {
     MEMO, PROFILE
@@ -51,12 +54,36 @@ class WriteMemoImgAddDialogFragment(
 
     private var photoUri: Uri? = null
     private var currentImgFile: File? = null
-    private var mCurrentPhotoPath: String? = null
-
 
     private var imagePermitted = false
     private var cameraPermitted = false
 
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // Use the cropped image URI.
+            Log.e("ayhan", "croppedImageUri : ${result.cropRect}")
+            photoUri = result.uriContent
+            getFile(result)
+        } else {
+            val exception = result.error
+        }
+    }
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                photoUri?.let {
+                    cropImage(it)
+                }
+            }
+        }
+
+    private val imageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            result.data?.data?.let {
+                cropImage(it)
+            }
+        }
 
     override val layoutResourceId: Int
         get() = R.layout.dialog_memo_img_add
@@ -67,6 +94,7 @@ class WriteMemoImgAddDialogFragment(
         ) { isGranted: Boolean ->
             if (isGranted) {
                 imagePermitted = true
+                goToGallery()
             } else {
                 showNoPermissionDialog(requireActivity() as BaseActiviy)
             }
@@ -78,6 +106,7 @@ class WriteMemoImgAddDialogFragment(
         ) { isGranted: Boolean ->
             if (isGranted) {
                 cameraPermitted = true
+                takePhoto()
             } else {
                 showNoPermissionDialog(requireActivity() as BaseActiviy)
             }
@@ -154,15 +183,10 @@ class WriteMemoImgAddDialogFragment(
     }
 
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
-        if (cameraPermitted || checkImagePermission(
-                this.requireContext(),
-                activity as BaseActiviy
-            )
-        ) {
-            Log.e("ayhan", "${binding.addAlbumImgLayout.isAddable}")
+        if (checkImagePermission(this.requireContext(), activity as BaseActiviy)) {
             if (binding.addAlbumImgLayout.isAddable!!) {
                 if (checkAddImageListener()) {
-                    goToAlbum()
+                    goToGallery()
                 }
             } else {
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -171,11 +195,7 @@ class WriteMemoImgAddDialogFragment(
     }
 
     private val takePictureAndCropOnClickListener = View.OnClickListener {
-        if (cameraPermitted || checkCameraPermission(
-                this.requireContext(),
-                activity as BaseActiviy
-            )
-        ) {
+        if (checkCameraPermission(this.requireContext(), activity as BaseActiviy)) {
             if (binding.addCamImgLayout.isAddable!!) {
                 if (checkAddImageListener()) {
                     takePhoto()
@@ -185,51 +205,6 @@ class WriteMemoImgAddDialogFragment(
             }
         }
     }
-
-    private fun takePhoto() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        var photoFile: File? = null
-        try {
-            photoFile = createImageFile()
-        } catch (e: IOException) {
-            Toast.makeText(context, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            requireActivity().finish()
-            e.printStackTrace()
-        }
-
-        if (photoFile != null) {
-            photoUri = FileProvider.getUriForFile(
-                this.requireContext(),
-                "MyBuryApplication.provider",
-                photoFile
-            )
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            startActivityForResult(intent, PICK_FROM_CAMERA)
-        }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("HHmmss").format(Date())
-        val imageFileName = "mybury_" + timeStamp + "_"
-        val storageDir = File("${requireContext().getExternalFilesDir(null)}/mybury/")
-        if (!storageDir.exists()) {
-            storageDir.mkdirs()
-        }
-        val image = File.createTempFile(imageFileName, ".jpg", storageDir)
-        mCurrentPhotoPath = "file:" + image.absolutePath
-        return image
-    }
-
-    private fun goToAlbum() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        intent.putExtra("crop", true)
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(intent, PICK_FROM_ALBUM)
-    }
-
 
     private fun checkImagePermission(context: Context, activity: BaseActiviy): Boolean {
         val needPermission =
@@ -304,42 +279,9 @@ class WriteMemoImgAddDialogFragment(
             Toast.makeText(context, "취소 되었습니다.", Toast.LENGTH_SHORT).show()
             return
         }
-        when (requestCode) {
-            PICK_FROM_ALBUM -> {
-                if (data == null) {
-                    return
-                }
-                photoUri = data.data
-                cropImage()
-            }
-
-            PICK_FROM_CAMERA -> {
-                cropImage()
-                // 갤러리에 나타나게
-                MediaScannerConnection.scanFile(
-                    context,
-                    arrayOf(photoUri!!.path), null
-                ) { _, _ -> }
-            }
-
-            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                val result = CropImage.getActivityResult(data)
-                if (resultCode == Activity.RESULT_OK) {
-                    result.uri?.let {
-                        photoUri = result.uri
-                        goToHome()
-                    }
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Toast.makeText(requireContext(), "이미지를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT)
-                        .show()
-                    this.dismiss()
-                }
-            }
-        }
     }
 
     private fun goToHome() {
-        getFile()
         if (currentImgFile != null && photoUri != null) {
             imgAddListener.invoke(this.currentImgFile!!, this.photoUri!!)
         } else {
@@ -348,47 +290,124 @@ class WriteMemoImgAddDialogFragment(
         this.dismiss()
     }
 
-    private fun getFile() {
-        val src = BitmapFactory.decodeFile(photoUri?.path)
-        val resized = Bitmap.createScaledBitmap(src, 700, 700, true)
-        val file = saveBitmapAsFile(resized, photoUri?.path!!)
-        currentImgFile = file
+    private fun goToGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        intent.putExtra("crop", true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        imageLauncher.launch(intent)
     }
 
-    private fun saveBitmapAsFile(bitmap: Bitmap?, filePath: String): File {
-        val file = File(filePath)
-        var os: OutputStream
+    private fun takePhoto() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        var photoFile: File? = null
+
         try {
-            file.createNewFile()
-            os = FileOutputStream(file)
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, os)
-            os.close()
-        } catch (e: Exception) {
+            photoFile = createImageFile(requireContext())
+        } catch (e: IOException) {
+            Toast.makeText(
+                requireContext(),
+                "이미지를 가져오는데 실패했습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
             e.printStackTrace()
         }
-        return file
+
+        if (photoFile != null) {
+            photoUri = FileProvider.getUriForFile(
+                requireContext(),
+                "womenproject.com.mybury.fileprovider",
+                photoFile
+            )
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            cameraLauncher.launch(intent)
+        }
     }
 
+    private fun getFile(result: CropImageView.CropResult) {
+        if (photoUri == null) {
+            Toast.makeText(
+                requireContext(),
+                "이미지를 가져오는데 실패했습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+//            val imageInfo = result.uriContent?.let { uri ->
+//                UserSelectedImageInfo(
+//                    key = imageCount++,
+//                    uri = uri,
+//                    file = File(uri.path!!),
+//                    path = result.getUriFilePath(this).orEmpty()
+//                )
+//            }
+//            takePhotoAction.succeed(imageInfo!!)
+            handleImageResult(result)
+        }
+    }
 
-    private fun cropImage() {
-        CropImage.activity(photoUri).setGuidelines(CropImageView.Guidelines.ON)
-            .setAllowFlipping(false)
-            .setAspectRatio(1, 1)
-            .setScaleType(CropImageView.ScaleType.CENTER_CROP)
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            //사각형 모양으로 자른다
-            .start(requireContext(), this)
+    private fun handleImageResult(result: CropImageView.CropResult) {
+        if (result.isSuccessful) {
+            result.uriContent?.let { uri ->
+                try {
+                    val file = getFileFromUri(requireContext(), uri)
+                    if (file != null) {
+                        photoUri = uri
+                        currentImgFile = file
+                        goToHome()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "이미지 처리 중 오류가 발생했습니다", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun cropImage(photoUri: Uri) {
+        Log.e("ayhan", "cropImage : $photoUri")
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = photoUri,
+                cropImageOptions = CropImageOptions(
+                    maxZoom = 3,
+                    showCropLabel = true,
+                    showCropOverlay = true,
+                    guidelines = CropImageView.Guidelines.ON,
+                    outputCompressFormat = Bitmap.CompressFormat.JPEG,
+                    outputCompressQuality = 90,
+                    cropMenuCropButtonTitle = "저장",
+                    activityTitle = "이미지 자르기",
+                    aspectRatioX = 1,
+                    aspectRatioY = 1,
+                    fixAspectRatio = true,
+                    initialCropWindowPaddingRatio = 0f
+                )
+            )
+        )
+    }
+
+    private fun createImageFile(context: Context): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        storageDir?.mkdirs()
+
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
     }
 
     private fun WidgetWriteFragmentAddItemBinding.disableAdd() {
         this.writeItemText.setTextColor(requireContext().getColor(R.color._b4b4b4))
         this.isAddable = false
     }
-
-    companion object {
-        private val PICK_FROM_CAMERA = 1
-        private val PICK_FROM_ALBUM = 2
-        private val MULTIPLE_PERMISSIONS = 101
-
-    }
 }
+
+fun <T : Number> Context?.dp2px(dp: T, default: Int = 0) =
+    if (this == null) default else TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.toFloat(),
+        this.resources.displayMetrics
+    ).toInt()

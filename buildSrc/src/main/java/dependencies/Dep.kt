@@ -4,6 +4,6 @@ object Versions {
     const val compileSdk = 34
     const val minSdk = 23
     const val targetSdk = 34
-    const val versionCode = 37
-    const val versionName = "1.8.5"
+    const val versionCode = 38
+    const val versionName = "1.8.6"
 }
