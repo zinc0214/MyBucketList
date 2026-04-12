@@ -23,6 +23,7 @@ class Preference {
         private const val IS_SHOWN_ALARM = "is_shown_alarm"
         private const val CLOSE_SUPPORT_1_MONTH = "close_support_1_month"
         private const val IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE = "is_already_show_bucket_retry_guide"
+        private const val IS_GUIDE_SHOWN = "is_guide_shown"
 
         fun setAccountEmail(context: Context, email: String) {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
@@ -193,6 +194,16 @@ class Preference {
             val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
             val data = sp.getBoolean(IS_ALREADY_SHOW_BUCKET_RETRY_GUIDE, false)
             return data
+        }
+
+        fun setGuideShown(context: Context) {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            sp.edit().putBoolean(IS_GUIDE_SHOWN, true).apply()
+        }
+
+        fun isGuideShown(context: Context): Boolean {
+            val sp = context.getSharedPreferences(Preference, MODE_PRIVATE)
+            return sp.getBoolean(IS_GUIDE_SHOWN, false)
         }
 
         fun allClear(context: Context) {
