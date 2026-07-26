@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <!--
+        주의: <domain> 은 "호스트명"만 받는다.
+        scheme(http://), 포트(:8080), 경로를 붙이면 어떤 호스트와도 매칭되지 않고
+        조용히 무시된다. 그러면 base-config 기본값이 적용되는데,
+        targetSdk 28 이상에서 그 기본값은 cleartext 차단이다.
+        아래 scheme/포트가 붙은 항목들은 실제로는 동작하지 않으므로,
+        호스트명만 적은 항목이 반드시 함께 있어야 한다.
+    -->
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">https://www.my-bury.com/privacy_policy</domain>
         <domain includeSubdomains="true">https://www.my-bury.com/terms_of_use</domain>
         <domain includeSubdomains="true">http://161.33.152.101:8080</domain>
+        <domain includeSubdomains="true">161.33.152.101</domain>
         <domain includeSubdomains="true">www.my-bury.com</domain>
     </domain-config>
 </network-security-config>
