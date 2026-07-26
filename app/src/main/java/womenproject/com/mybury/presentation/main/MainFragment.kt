@@ -71,7 +71,7 @@ class MainFragment : BaseFragment() {
 
         setUpObservers()
         getMainBucketList()
-        showGuideIfNeeded()
+        //  showGuideIfNeeded() // TODO : 웨이버 진행 후 추가
     }
 
     private fun setUpObservers() {
@@ -80,16 +80,20 @@ class MainFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 LoadState.RESTART -> {
                     getMainBucketList()
                 }
+
                 else -> {
                     // do Nothing
                 }
@@ -101,14 +105,17 @@ class MainFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                     getMainBucketList()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 else -> {
                     // do Nothing
                 }
@@ -182,7 +189,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun showGuideIfNeeded() {
-        //    if (Preference.isGuideShown(requireContext())) return
+        if (Preference.isGuideShown(requireContext())) return
         Preference.setGuideShown(requireContext())
         val guideDialog = GuideDialogFragment.newInstance()
         guideDialog.setButtonActions(

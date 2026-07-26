@@ -3,11 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">https://www.my-bury.com/privacy_policy</domain>
         <domain includeSubdomains="true">https://www.my-bury.com/terms_of_use</domain>
-        <domain includeSubdomains="true">http://52.79.253.242</domain>
-        <domain includeSubdomains="true">http://3.35.4.45</domain>
-        <domain includeSubdomains="true">http://3.35.4.45:8080</domain>
-        <domain includeSubdomains="true">52.79.253.242</domain>
-        <domain includeSubdomains="true">3.35.4.45</domain>
+        <domain includeSubdomains="true">http://161.33.152.101:8080</domain>
         <domain includeSubdomains="true">www.my-bury.com</domain>
     </domain-config>
 </network-security-config>
