@@ -29,11 +29,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 
     namespace = "com.zinc.domain"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
 dependencies {
@@ -44,4 +47,8 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.kotlinx.coroutines.core)
+
+    // Util.kt uses okhttp 4.x extensions (asRequestBody / toMediaTypeOrNull). Retrofit only
+    // drags in okhttp 3.14.9 transitively, so declare the 4.x artifact explicitly.
+    implementation(libs.okhttp3)
 }
