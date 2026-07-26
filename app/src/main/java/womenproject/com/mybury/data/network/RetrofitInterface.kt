@@ -6,8 +6,24 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
-import womenproject.com.mybury.data.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Query
+import womenproject.com.mybury.data.BucketList
+import womenproject.com.mybury.data.BucketListOrder
+import womenproject.com.mybury.data.GetTokenResponse
+import womenproject.com.mybury.data.NewTokenRequest
+import womenproject.com.mybury.data.PurchasedItem
+import womenproject.com.mybury.data.PurchasedResult
+import womenproject.com.mybury.data.SearchRequest
+import womenproject.com.mybury.data.SearchResult
+import womenproject.com.mybury.data.SimpleResponse
+import womenproject.com.mybury.data.SupportInfo
+import womenproject.com.mybury.data.UseUserIdRequest
 
 
 /**
@@ -79,7 +95,7 @@ internal object APIClient {
             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
             retrofit = Retrofit.Builder()
-                .baseUrl("https://www.my-bury.com")
+                .baseUrl("http://161.33.152.101:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)

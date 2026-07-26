@@ -3,7 +3,7 @@
     "project_number": "158987869075",
     "firebase_url": "https://mybury-35e64.firebaseio.com",
     "project_id": "mybury-35e64",
-    "storage_bucket": "mybury-35e64.appspot.com"
+    "storage_bucket": "mybury-35e64.firebasestorage.app"
   },
   "client": [
     {
@@ -20,6 +20,14 @@
           "android_info": {
             "package_name": "womenproject.com.mybury",
             "certificate_hash": "9bdb4b635135e675079b50842855d6e90e5cb1f0"
+          }
+        },
+        {
+          "client_id": "158987869075-593g5l58rjbdv1c1bspi4h5pgpi1qmg4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "a11cb4907ff9ccb30f760e58ad007aedf810df2f"
           }
         },
         {
@@ -47,6 +55,14 @@
           }
         },
         {
+          "client_id": "158987869075-lrfquo4eibv680gcn8nteel7b0vrdq4f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "4ec208b14f6a3e4273be22bcbf1f73c7d219cf30"
+          }
+        },
+        {
           "client_id": "158987869075-ov5ak6a3toqkg1on5s14p6gvg2hg57fl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -60,6 +76,14 @@
           "android_info": {
             "package_name": "womenproject.com.mybury",
             "certificate_hash": "d86476fcb3ba18b6b341e40287bb4485fde0b83d"
+          }
+        },
+        {
+          "client_id": "158987869075-t9jdpjrfsdr373q785ua6ejhvhmnmugu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "womenproject.com.mybury",
+            "certificate_hash": "519570a303c5141d521c68d12ca6d1f750ecb267"
           }
         },
         {

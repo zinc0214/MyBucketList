@@ -20,6 +20,7 @@ import womenproject.com.mybury.data.Preference.Companion.getFilterListUp
 import womenproject.com.mybury.data.model.LoadState
 import womenproject.com.mybury.databinding.FragmentMainBinding
 import womenproject.com.mybury.presentation.base.BaseFragment
+import womenproject.com.mybury.presentation.dialog.GuideDialogFragment
 import womenproject.com.mybury.presentation.dialog.LoadFailDialog
 import womenproject.com.mybury.presentation.main.bucketlist.BucketItemHandler
 import womenproject.com.mybury.presentation.main.bucketlist.MainBucketListAdapter
@@ -27,7 +28,7 @@ import womenproject.com.mybury.presentation.viewmodels.BucketListViewModel
 import womenproject.com.mybury.ui.snackbar.MainSnackBarWidget
 import womenproject.com.mybury.util.observeNonNull
 import womenproject.com.mybury.util.showToast
-import java.util.*
+import java.util.Date
 
 
 /**
@@ -70,6 +71,7 @@ class MainFragment : BaseFragment() {
 
         setUpObservers()
         getMainBucketList()
+        //  showGuideIfNeeded() // TODO : 웨이버 진행 후 추가
     }
 
     private fun setUpObservers() {
@@ -78,16 +80,20 @@ class MainFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 LoadState.RESTART -> {
                     getMainBucketList()
                 }
+
                 else -> {
                     // do Nothing
                 }
@@ -99,14 +105,17 @@ class MainFragment : BaseFragment() {
                 LoadState.START -> {
                     startLoading()
                 }
+
                 LoadState.SUCCESS -> {
                     stopLoading()
                     getMainBucketList()
                 }
+
                 LoadState.FAIL -> {
                     stopLoading()
                     LoadFailDialog { }
                 }
+
                 else -> {
                     // do Nothing
                 }
@@ -177,6 +186,17 @@ class MainFragment : BaseFragment() {
         val currentTime = Date().time
         val daysOverTime = 1000 * 60 * 60 * 24 * 3 // 3일로  설정
         return currentTime - getCloseAlarm3Days(requireContext()) >= daysOverTime
+    }
+
+    private fun showGuideIfNeeded() {
+        if (Preference.isGuideShown(requireContext())) return
+        Preference.setGuideShown(requireContext())
+        val guideDialog = GuideDialogFragment.newInstance()
+        guideDialog.setButtonActions(
+            onExistingBucketClick = { /* 기존 버킷리스트로 시작 - 추후 구현 */ },
+            onNewStartClick = { /* 새롭게 시작 - 추후 구현 */ }
+        )
+        guideDialog.show(requireActivity().supportFragmentManager, "guide")
     }
 
     private fun showDdayPopup() {

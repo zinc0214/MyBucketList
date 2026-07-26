@@ -13,7 +13,7 @@ class CategoryItemTouchHelperCallback(val listener: ItemActionListener) : ItemTo
     }
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        listener.onItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+        listener.onItemMoved(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
         return true
     }
 

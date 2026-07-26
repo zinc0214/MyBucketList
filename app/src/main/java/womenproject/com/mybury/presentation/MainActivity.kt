@@ -20,13 +20,12 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchaseHistoryRecord
-import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.QueryPurchaseHistoryParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -62,7 +61,7 @@ import java.util.Date
  */
 
 @AndroidEntryPoint
-class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryResponseListener {
+class MainActivity : BaseActiviy(), PurchasesUpdatedListener {
 
     private lateinit var binding: ActivityMainBinding
     private val supportViewModel by viewModels<MyBurySupportViewModel>()
@@ -253,7 +252,12 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
      */
     private fun initBillingClient(items: List<PurchasableItem>) {
         billingClient =
-            BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build()
+            BillingClient.newBuilder(this)
+                .setListener(this)
+                .enablePendingPurchases(
+                    PendingPurchasesParams.newBuilder().enableOneTimeProducts().build()
+                )
+                .build()
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
@@ -288,13 +292,14 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
                 .setProductList(productList)
                 .build()
 
-        billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, mutableList ->
+        billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, result ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                Log.e("ayhan", "queryProductDetailsAsync : $mutableList")
-                if (mutableList.isEmpty()) {
+                val details = result.productDetailsList
+                Log.e("ayhan", "queryProductDetailsAsync : $details")
+                if (details.isEmpty()) {
                     "다시 시도해주세요.".showToast(this)
                 } else {
-                    productDetailsList.addAll(mutableList)
+                    productDetailsList.addAll(details)
                 }
             } else {
                 "다시 시도해주세요.".showToast(this)
@@ -305,14 +310,20 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
 
 
     /**
-     * 최근에 결제한 아이템을 확인하는 목적
-     * checkPurchaseHistory function 과 다르게  consumeAsync 를 통해 구매된 상품도 확인할 수 있다.
-     * !!주의!! 아이템 Id 로만 가져오기 때문에 여러번 구매하더라도 가장 최근의 제품만 가져온다.
+     * 누락된 후원 정보를 복구하기 위해 구매 내역을 확인한다.
+     *
+     * !!주의!! Billing 8.0 에서 queryPurchaseHistoryAsync 가 삭제되어 queryPurchasesAsync 로 대체했다.
+     * 기존 API 는 consume 된 상품까지 돌려줬지만, 이 API 는 아직 consume 되지 않은(=활성) 구매만 돌려준다.
+     * 즉 consume 까지 성공했으나 서버 반영만 실패한 건은 더 이상 여기서 복구되지 않는다.
+     * (consume 자체가 실패해 구매가 남아있는 건은 그대로 복구된다.)
      */
     fun getAllPurchasedItem() {
-        val params = QueryPurchaseHistoryParams.newBuilder()
+        val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.INAPP)
-        billingClient.queryPurchaseHistoryAsync(params.build(), this)
+            .build()
+        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+            onPurchasesQueried(billingResult, purchases)
+        }
     }
 
     /**
@@ -387,9 +398,9 @@ class MainActivity : BaseActiviy(), PurchasesUpdatedListener, PurchaseHistoryRes
     }
 
     // 최근 구매한 아이템을 알고자 할 때 사용
-    override fun onPurchaseHistoryResponse(
+    private fun onPurchasesQueried(
         billingResult: BillingResult,
-        purchaseHistoryList: MutableList<PurchaseHistoryRecord>?
+        purchaseHistoryList: List<Purchase>?
     ) {
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 

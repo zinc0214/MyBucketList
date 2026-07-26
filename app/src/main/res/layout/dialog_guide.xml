@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/topLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_membership"
+                android:orientation="vertical"
+                android:fitsSystemWindows="true">
+
+                <!-- Close button -->
+                <ImageButton
+                    android:id="@+id/btn_close"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="닫기"
+                    android:src="@drawable/btn_40_close" />
+
+                <!-- Logo background circle -->
+                <ImageView
+                    android:id="@+id/logo_container"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/playstore"
+                    android:elevation="2dp" />
+
+
+                <!-- "웨이버" badge -->
+                <TextView
+                    android:id="@+id/tv_waiver_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/shape_guide_waiver_badge"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="5dp"
+                    android:text="웨이버"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="14dp" />
+
+                <!-- Main title -->
+                <TextView
+                    android:id="@+id/tv_main_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="55dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:text="버킷리스트\n이제 함께 즐기세요"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="24dp" />
+
+            </LinearLayout>
+
+            <!-- Bottom white card -->
+            <LinearLayout
+                android:id="@+id/bottom_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/_ffffff"
+                android:orientation="vertical"
+                android:paddingBottom="74dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/topLayout">
+
+                <!-- Card subtitle -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="26dp"
+                    android:layout_marginTop="50dp"
+                    android:gravity="center"
+                    android:text="버킷리스트는 웨이버에서 계속돼요"
+                    android:textColor="@color/_222222"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="28dp"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="마이버리 데이터(버킷리스트)는\nN월 N일 기준으로 웨이버에 옮겨집니다."
+                    android:textColor="@color/_5a95ff"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="28dp"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    android:text="이후 마이버리에 작성한 내용은 저장되지 않아요.\n버킷리스트는 웨이버에서 이어서 작성해 주세요."
+                    android:textColor="@color/_888888"
+                    android:textSize="15dp" />
+
+
+                <!-- Primary button -->
+                <TextView
+                    android:id="@+id/btn_existing_bucket"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginHorizontal="28dp"
+                    android:layout_marginTop="36dp"
+                    android:background="@drawable/shape_guide_primary_btn"
+                    android:elevation="6dp"
+                    android:gravity="center"
+                    android:text="기존 버킷리스트로 시작하기"
+                    android:textColor="@color/_ffffff"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <!-- Secondary button -->
+                <TextView
+                    android:id="@+id/btn_new_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="28dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/shape_guide_new_start_btn"
+                    android:gravity="center"
+                    android:text="새롭게 시작하기"
+                    android:textColor="@color/_222222"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="190dp"
+                android:src="@drawable/waver_guide_img"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
