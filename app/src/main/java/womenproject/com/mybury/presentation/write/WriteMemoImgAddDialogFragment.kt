@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
@@ -59,17 +58,6 @@ class WriteMemoImgAddDialogFragment(
 
     override val layoutResourceId: Int
         get() = R.layout.dialog_memo_img_add
-
-    private val requestImagePermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                goToGallery()
-            } else {
-                showNoPermissionDialog(requireActivity() as BaseActiviy)
-            }
-        }
 
     private val requestCameraPermissionLauncher =
         registerForActivityResult(
@@ -146,15 +134,14 @@ class WriteMemoImgAddDialogFragment(
         this.dismiss()
     }
 
+    // 시스템 사진 선택 도구를 쓰므로 저장소/미디어 권한 확인이 필요 없다.
     private val getAlbumImgAndCropOnClickListener = View.OnClickListener {
-        if (checkImagePermission(this.requireContext(), activity as BaseActiviy)) {
-            if (binding.addAlbumImgLayout.isAddable!!) {
-                if (checkAddImageListener()) {
-                    goToGallery()
-                }
-            } else {
-                Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
+        if (binding.addAlbumImgLayout.isAddable!!) {
+            if (checkAddImageListener()) {
+                goToGallery()
             }
+        } else {
+            Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -168,39 +155,6 @@ class WriteMemoImgAddDialogFragment(
                 Toast.makeText(context, "더 이상 이미지를 추가하실 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun checkImagePermission(context: Context, activity: BaseActiviy): Boolean {
-        val needPermission =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Manifest.permission.READ_MEDIA_IMAGES
-            } else {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            }
-        when {
-            ContextCompat.checkSelfPermission(
-                context,
-                needPermission
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                return true
-            }
-
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                needPermission
-            ) -> {
-                showNoPermissionDialog(activity)
-            }
-
-            else -> {
-                requestImagePermissionLauncher.launch(
-                    needPermission
-                )
-            }
-        }
-        return false
     }
 
     private fun checkCameraPermission(context: Context, activity: BaseActiviy): Boolean {

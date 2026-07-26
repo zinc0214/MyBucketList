@@ -8,6 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -44,12 +45,12 @@ class CropImageActivity : AppCompatActivity() {
             }
         }
 
+    // 시스템 사진 선택 도구. 저장소/미디어 권한 없이 사용자가 고른 이미지에만 접근한다.
+    // (Photo Picker 미지원 기기에서는 ACTION_OPEN_DOCUMENT 로 자동 폴백된다.)
     private val imageLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                result.data?.data?.let {
-                    cropImage(it)
-                }
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                cropImage(uri)
             } else {
                 setResult(RESULT_CANCELED)
                 finish()
@@ -106,10 +107,9 @@ class CropImageActivity : AppCompatActivity() {
     }
 
     private fun goToGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        imageLauncher.launch(intent)
+        imageLauncher.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
     }
 
     private fun takePhoto() {
