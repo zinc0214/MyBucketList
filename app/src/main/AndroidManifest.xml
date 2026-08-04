@@ -11,14 +11,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.android.vending.BILLING" />
 
-    <!--
-        사진 선택은 시스템 사진 선택 도구(Photo Picker, ActivityResultContracts.PickVisualMedia)를
-        사용하므로 저장소/미디어 권한이 필요 없다.
-        READ_MEDIA_IMAGES / READ_MEDIA_VIDEO / READ_EXTERNAL_STORAGE / WRITE_EXTERNAL_STORAGE 를
-        다시 추가하면 Google Play 사진 및 동영상 권한 정책 위반으로 심사가 거부된다.
-        카메라 촬영본과 크롭 결과는 getExternalFilesDir() (앱 전용 영역)에 저장하므로 권한이 불필요하다.
-    -->
-
     <application
         android:name=".MyBuryApplication"
         android:allowBackup="true"
